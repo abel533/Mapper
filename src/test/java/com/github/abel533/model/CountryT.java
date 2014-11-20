@@ -1,16 +1,20 @@
 package com.github.abel533.model;
 
 import javax.persistence.Id;
+import javax.persistence.Transient;
 
 /**
  * Description: Country
  * Author: liuzh
  * Update: liuzh(2014-06-06 13:38)
  */
-public class Country {
+public class CountryT {
     @Id
     private Integer id;
+
     private String countryname;
+
+    @Transient
     private String countrycode;
 
     public Integer getId() {

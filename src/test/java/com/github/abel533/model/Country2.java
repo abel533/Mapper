@@ -33,6 +33,10 @@ public class Country2 {
         return countrycode;
     }
 
+    public void setCountrycode(String countrycode) {
+        this.countrycode = countrycode;
+    }
+
     @Override
     public String toString() {
         return "Country{" +
@@ -40,9 +44,5 @@ public class Country2 {
                 ", countryname='" + countryname + '\'' +
                 ", countrycode='" + countrycode + '\'' +
                 '}';
-    }
-
-    public void setCountrycode(String countrycode) {
-        this.countrycode = countrycode;
     }
 }
