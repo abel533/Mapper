@@ -1,7 +1,5 @@
 package com.github.abel533.mapper;
 
-import com.github.abel533.model.Country;
-
 import javax.persistence.*;
 import java.lang.reflect.Field;
 import java.util.*;
@@ -149,7 +147,27 @@ public class EntityHelper {
         List<EntityColumn> columnList = getColumns(entityClass);
         StringBuilder selectBuilder = new StringBuilder();
         for (EntityColumn entityColumn : columnList) {
-            selectBuilder.append(entityColumn.getColumn()).append(" ").append(entityColumn.getProperty().toUpperCase()).append(",");
+            selectBuilder.append(entityColumn.getColumn());
+            if (!entityColumn.getColumn().equalsIgnoreCase(entityColumn.getProperty())) {
+                selectBuilder.append(" ").append(entityColumn.getProperty().toUpperCase()).append(",");
+            } else {
+                selectBuilder.append(",");
+            }
+        }
+        return selectBuilder.substring(0, selectBuilder.length() - 1);
+    }
+
+    /**
+     * 获取查询的Select
+     *
+     * @param entityClass
+     * @return
+     */
+    public static String getAllColumns(Class<?> entityClass) {
+        List<EntityColumn> columnList = getColumns(entityClass);
+        StringBuilder selectBuilder = new StringBuilder();
+        for (EntityColumn entityColumn : columnList) {
+            selectBuilder.append(entityColumn.getColumn()).append(",");
         }
         return selectBuilder.substring(0, selectBuilder.length() - 1);
     }
@@ -295,12 +313,4 @@ public class EntityHelper {
         }
         return fieldList;
     }
-
-    public static void main(String[] args) {
-        List<Field> fieldList = getAllField(Country.class, null);
-        for (Field field : fieldList) {
-            System.out.println(field.getName());
-        }
-    }
-
 }

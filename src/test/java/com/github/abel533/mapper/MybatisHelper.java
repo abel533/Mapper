@@ -1,4 +1,4 @@
-package com.github.abel533;
+package com.github.abel533.mapper;
 
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.jdbc.ScriptRunner;

@@ -1,21 +1,23 @@
 package com.github.abel533.mapper;
 
 import org.apache.ibatis.builder.StaticSqlSource;
+import org.apache.ibatis.executor.keygen.KeyGenerator;
+import org.apache.ibatis.executor.keygen.NoKeyGenerator;
+import org.apache.ibatis.executor.keygen.SelectKeyGenerator;
 import org.apache.ibatis.mapping.*;
 import org.apache.ibatis.reflection.MetaObject;
 import org.apache.ibatis.reflection.factory.DefaultObjectFactory;
 import org.apache.ibatis.reflection.factory.ObjectFactory;
 import org.apache.ibatis.reflection.wrapper.DefaultObjectWrapperFactory;
 import org.apache.ibatis.reflection.wrapper.ObjectWrapperFactory;
+import org.apache.ibatis.scripting.defaults.RawSqlSource;
 import org.apache.ibatis.scripting.xmltags.*;
+import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.type.TypeHandlerRegistry;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static org.apache.ibatis.jdbc.SqlBuilder.*;
 
@@ -31,6 +33,10 @@ public class MapperHelper {
      * 缓存skip结果
      */
     private static final Map<String, Boolean> msIdSkip = new HashMap<String, Boolean>();
+    /**
+     * 缓存实体类类型
+     */
+    private static final Map<String, Class<?>> entityType = new HashMap<String, Class<?>>();
 
     /**
      * 定义要拦截的方法名
@@ -122,6 +128,9 @@ public class MapperHelper {
      */
     public static Class<?> getSelectReturnType(MappedStatement ms) {
         String msId = ms.getId();
+        if (entityType.get(msId) != null) {
+            return entityType.get(msId);
+        }
         Class<?> mapperClass = null;
         try {
             mapperClass = getMapperClass(msId);
@@ -134,7 +143,9 @@ public class MapperHelper {
             if (type instanceof ParameterizedType) {
                 ParameterizedType t = (ParameterizedType) type;
                 if (t.getRawType() == Mapper.class) {
-                    return (Class) t.getActualTypeArguments()[0];
+                    Class<?> returnType = (Class) t.getActualTypeArguments()[0];
+                    entityType.put(msId, returnType);
+                    return returnType;
                 }
             }
         }
@@ -146,11 +157,22 @@ public class MapperHelper {
         return msId.substring(msId.lastIndexOf(".") + 1);
     }
 
+    /**
+     * 重新设置SqlSource
+     *
+     * @param ms
+     * @param sqlSource
+     */
     private static void setSqlSource(MappedStatement ms, SqlSource sqlSource) {
         MetaObject msObject = forObject(ms);
         msObject.setValue("sqlSource", sqlSource);
     }
 
+    /**
+     * 修改select查询的SqlSource
+     *
+     * @param ms
+     */
     public static void selectSqlSource(MappedStatement ms) {
         String methodName = getMethodName(ms);
         Class<?> entityClass = getSelectReturnType(ms);
@@ -158,7 +180,7 @@ public class MapperHelper {
         if (methodName.equals(METHODS[0])) {
             DynamicSqlSource dynamicSqlSource = new DynamicSqlSource(ms.getConfiguration(), getSelectSqlNode(ms));
             setSqlSource(ms, dynamicSqlSource);
-        } else if (methodName.equals(METHODS[1])) {//静态sql - selectByPrimaryKey
+        } else if (methodName.equals(METHODS[1])) {//静态sql
             List<ParameterMapping> parameterMappings = getPrimaryKeyParameterMappings(ms);
             BEGIN();
             SELECT(EntityHelper.getSelectColumns(entityClass));
@@ -177,6 +199,11 @@ public class MapperHelper {
         }
     }
 
+    /**
+     * 修改insert插入的SqlSource
+     *
+     * @param ms
+     */
     public static void insertSqlSource(MappedStatement ms) {
         String methodName = getMethodName(ms);
         Class<?> entityClass = getSelectReturnType(ms);
@@ -184,19 +211,18 @@ public class MapperHelper {
         if (methodName.equals(METHODS[4])) {
             DynamicSqlSource dynamicSqlSource = new DynamicSqlSource(ms.getConfiguration(), getInsertSqlNode(ms));
             setSqlSource(ms, dynamicSqlSource);
-        } else {//静态sql - selectByPrimaryKey
-            List<ParameterMapping> parameterMappings = getColumnParameterMappings(ms);
-            BEGIN();
-            INSERT_INTO(EntityHelper.getTableName(entityClass));
-            List<EntityHelper.EntityColumn> columnList = EntityHelper.getColumns(entityClass);
-            for (EntityHelper.EntityColumn column : columnList) {
-                VALUES(column.getColumn(), "?");
-            }
-            StaticSqlSource sqlSource = new StaticSqlSource(ms.getConfiguration(), SQL(), parameterMappings);
-            setSqlSource(ms, sqlSource);
+        } else {//静态sql
+            //由于需要selectKey，这里也要改为动态sql
+            DynamicSqlSource dynamicSqlSource = new DynamicSqlSource(ms.getConfiguration(), getInsertAllSqlNode(ms));
+            setSqlSource(ms, dynamicSqlSource);
         }
     }
 
+    /**
+     * 修改update更新的SqlSource
+     *
+     * @param ms
+     */
     public static void updateSqlSource(MappedStatement ms) {
         String methodName = getMethodName(ms);
         Class<?> entityClass = getSelectReturnType(ms);
@@ -220,6 +246,11 @@ public class MapperHelper {
         }
     }
 
+    /**
+     * 修改delete删除的SqlSource
+     *
+     * @param ms
+     */
     public static void deleteSqlSource(MappedStatement ms) {
         Class<?> entityClass = getSelectReturnType(ms);
         List<ParameterMapping> parameterMappings = getPrimaryKeyParameterMappings(ms);
@@ -338,22 +369,98 @@ public class MapperHelper {
 
         List<EntityHelper.EntityColumn> columnList = EntityHelper.getColumns(entityClass);
         List<SqlNode> ifNodes = new ArrayList<SqlNode>();
+        Boolean hasIdentityKey = false;
         for (EntityHelper.EntityColumn column : columnList) {
-            StaticTextSqlNode columnNode = new StaticTextSqlNode(column.getColumn() + ",");
-            IfSqlNode ifSqlNode = new IfSqlNode(columnNode, column.getProperty() + " != null ");
-            ifNodes.add(ifSqlNode);
+            if (column.getSequenceName() != null && column.getSequenceName().length() > 0) {
+                //直接序列加进去
+                StaticTextSqlNode columnNode = new StaticTextSqlNode(column.getColumn() + ",");
+                ifNodes.add(columnNode);
+            } else if (column.getIDENTITY()) {
+                //列必有
+                if (hasIdentityKey) {
+                    throw new RuntimeException(ms.getId() + "对应的实体类" + entityClass.getCanonicalName() + "中包含多个MySql的自动增长列,最多只能有一个!");
+                }
+                newSelectKeyMappedStatement(ms, column);
+                hasIdentityKey = true;
+            } else if (column.getUUID()) {
+                VarDeclSqlNode bind = new VarDeclSqlNode(column.getProperty() + "_bind", "@java.util.UUID@randomUUID()@toString()");
+                sqlNodes.add(bind);
+            } else {
+                StaticTextSqlNode columnNode = new StaticTextSqlNode(column.getColumn() + ",");
+                IfSqlNode ifSqlNode = new IfSqlNode(columnNode, column.getProperty() + " != null ");
+                ifNodes.add(ifSqlNode);
+            }
         }
         TrimSqlNode trimSqlNode = new TrimSqlNode(ms.getConfiguration(), new MixedSqlNode(ifNodes), "(", null, ")", ",");
         sqlNodes.add(trimSqlNode);
 
         ifNodes = new ArrayList<SqlNode>();
         for (EntityHelper.EntityColumn column : columnList) {
-            StaticTextSqlNode columnNode = new StaticTextSqlNode("#{" + column.getProperty() + "},");
-            IfSqlNode ifSqlNode = new IfSqlNode(columnNode, column.getProperty() + " != null ");
-            ifNodes.add(ifSqlNode);
+            if (column.getSequenceName() != null && column.getSequenceName().length() > 0) {
+                StaticTextSqlNode columnNode = new StaticTextSqlNode(column.getProperty() + ".nextval ,");
+                ifNodes.add(columnNode);
+            } else if (column.getIDENTITY()) {
+                StaticTextSqlNode columnNode = new StaticTextSqlNode("#{" + column.getProperty() + "_identity },");
+                ifNodes.add(columnNode);
+            } else if (column.getUUID()) {
+                StaticTextSqlNode columnNode = new StaticTextSqlNode("#{" + column.getProperty() + "_bind },");
+                ifNodes.add(columnNode);
+            } else {
+                StaticTextSqlNode columnNode = new StaticTextSqlNode("#{" + column.getProperty() + "},");
+                IfSqlNode ifSqlNode = new IfSqlNode(columnNode, column.getProperty() + " != null ");
+                ifNodes.add(ifSqlNode);
+            }
         }
         trimSqlNode = new TrimSqlNode(ms.getConfiguration(), new MixedSqlNode(ifNodes), "VALUES (", null, ")", ",");
         sqlNodes.add(trimSqlNode);
+        return new MixedSqlNode(sqlNodes);
+    }
+
+    /**
+     * 生成动态insert语句
+     *
+     * @param ms
+     * @return
+     */
+    private static MixedSqlNode getInsertAllSqlNode(MappedStatement ms) {
+        Class<?> entityClass = getSelectReturnType(ms);
+        List<SqlNode> sqlNodes = new ArrayList<SqlNode>();
+        StaticTextSqlNode insertNode = new StaticTextSqlNode("INSERT INTO " + EntityHelper.getTableName(entityClass));
+        sqlNodes.add(insertNode);
+
+        List<EntityHelper.EntityColumn> columnList = EntityHelper.getColumns(entityClass);
+        Boolean hasIdentityKey = false;
+        //处理Key
+        for (EntityHelper.EntityColumn column : columnList) {
+            if (column.getSequenceName() != null && column.getSequenceName().length() > 0) {
+            } else if (column.getIDENTITY()) {
+                //列必有
+                if (hasIdentityKey) {
+                    throw new RuntimeException(ms.getId() + "对应的实体类" + entityClass.getCanonicalName() + "中包含多个MySql的自动增长列,最多只能有一个!");
+                }
+                newSelectKeyMappedStatement(ms, column);
+                hasIdentityKey = true;
+            } else if (column.getUUID()) {
+                //TODO 测试这里的UUID
+                VarDeclSqlNode bind = new VarDeclSqlNode(column.getProperty() + "_bind", "@java.util.UUID@randomUUID()@toString()");
+                sqlNodes.add(bind);
+            }
+        }
+        sqlNodes.add(new StaticTextSqlNode("(" + EntityHelper.getAllColumns(entityClass) + ")"));
+        StringBuilder valuesBuilder = new StringBuilder("VALUES (");
+        for (EntityHelper.EntityColumn column : columnList) {
+            if (column.getSequenceName() != null && column.getSequenceName().length() > 0) {
+                valuesBuilder.append(column.getProperty() + ".nextval ,");
+            } else if (column.getIDENTITY()) {
+                valuesBuilder.append("#{" + column.getProperty() + "_identity },");
+            } else if (column.getUUID()) {
+                valuesBuilder.append("#{" + column.getProperty() + "_bind },");
+            } else {
+                valuesBuilder.append("#{" + column.getProperty() + "},");
+            }
+        }
+        valuesBuilder.replace(valuesBuilder.length()-1,valuesBuilder.length(),")");
+        sqlNodes.add(new StaticTextSqlNode(valuesBuilder.toString()));
         return new MixedSqlNode(sqlNodes);
     }
 
@@ -427,6 +534,66 @@ public class MapperHelper {
                     + entityClass.getCanonicalName()
                     + ",实际入参类型为:"
                     + parameterObject.getClass().getCanonicalName());
+        }
+    }
+
+    /**
+     * 新建SelectKey节点 - 只对mysql的自动增长有效，Oracle序列直接写到列中
+     *
+     * @param ms
+     * @param column
+     */
+    private static void newSelectKeyMappedStatement(MappedStatement ms, EntityHelper.EntityColumn column) {
+        String keyId = ms.getId() + SelectKeyGenerator.SELECT_KEY_SUFFIX;
+        if (ms.getConfiguration().hasKeyGenerator(keyId)) {
+            return;
+        }
+        Class<?> entityClass = getSelectReturnType(ms);
+        //defaults
+        Configuration configuration = ms.getConfiguration();
+        KeyGenerator keyGenerator = new NoKeyGenerator();
+        Boolean executeBefore = true;
+        SqlSource sqlSource = new RawSqlSource(configuration, "CALL IDENTITY()", entityClass);
+
+        MappedStatement.Builder statementBuilder = new MappedStatement.Builder(configuration, keyId, sqlSource, SqlCommandType.SELECT);
+        statementBuilder.resource(ms.getResource());
+        statementBuilder.fetchSize(null);
+        statementBuilder.statementType(StatementType.STATEMENT);
+        statementBuilder.keyGenerator(keyGenerator);
+        statementBuilder.keyProperty(column.getProperty() + "_identity");
+        statementBuilder.keyColumn(null);
+        statementBuilder.databaseId(null);
+        statementBuilder.lang(configuration.getDefaultScriptingLanuageInstance());
+        statementBuilder.resultOrdered(false);
+        statementBuilder.resulSets(null);
+        statementBuilder.timeout(configuration.getDefaultStatementTimeout());
+
+        List<ParameterMapping> parameterMappings = new ArrayList<ParameterMapping>();
+        ParameterMap.Builder inlineParameterMapBuilder = new ParameterMap.Builder(
+                configuration,
+                statementBuilder.id() + "-Inline",
+                entityClass,
+                parameterMappings);
+        statementBuilder.parameterMap(inlineParameterMapBuilder.build());
+
+        statementBuilder.resultMaps(new ArrayList<ResultMap>());
+        statementBuilder.resultSetType(null);
+
+        statementBuilder.flushCacheRequired(false);
+        statementBuilder.useCache(false);
+        statementBuilder.cache(null);
+
+        MappedStatement statement = statementBuilder.build();
+        configuration.addMappedStatement(statement);
+
+        MappedStatement keyStatement = configuration.getMappedStatement(keyId, false);
+        configuration.addKeyGenerator(keyId, new SelectKeyGenerator(keyStatement, executeBefore));
+        //keyGenerator
+        try {
+            MetaObject msObject = forObject(ms);
+            msObject.setValue("keyGenerator", configuration.getKeyGenerator(keyId));
+        } catch (Exception e) {
+            //ignore
         }
     }
 }

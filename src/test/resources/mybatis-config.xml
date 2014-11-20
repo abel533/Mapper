@@ -33,7 +33,6 @@
 	</environments>
 
 	<mappers>
-		<!--<mapper resource="mapper/CountryMapper.xml" />-->
     <mapper class="com.github.abel533.mapper.Mapper" />
     <mapper class="com.github.abel533.mapper.CountryMapper" />
 	</mappers>
