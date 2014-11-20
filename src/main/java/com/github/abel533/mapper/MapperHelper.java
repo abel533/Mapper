@@ -374,6 +374,7 @@ public class MapperHelper {
         List<SqlNode> ifNodes = new ArrayList<SqlNode>();
         Boolean hasIdentityKey = false;
         for (EntityHelper.EntityColumn column : columnList) {
+            //TODO 当有值的时候,使用传入的值
             if (column.getSequenceName() != null && column.getSequenceName().length() > 0) {
                 //直接序列加进去
                 StaticTextSqlNode columnNode = new StaticTextSqlNode(column.getColumn() + ",");
@@ -386,7 +387,7 @@ public class MapperHelper {
                 newSelectKeyMappedStatement(ms, column);
                 hasIdentityKey = true;
             } else if (column.getUUID()) {
-                VarDeclSqlNode bind = new VarDeclSqlNode(column.getProperty() + "_bind", "@java.util.UUID@randomUUID()@toString()");
+                VarDeclSqlNode bind = new VarDeclSqlNode(column.getProperty() + "_bind", "@java.util.UUID@randomUUID().toString()");
                 sqlNodes.add(bind);
             } else {
                 StaticTextSqlNode columnNode = new StaticTextSqlNode(column.getColumn() + ",");
@@ -435,6 +436,7 @@ public class MapperHelper {
         Boolean hasIdentityKey = false;
         //处理Key
         for (EntityHelper.EntityColumn column : columnList) {
+            //TODO 当有值的时候,使用传入的值
             if (column.getSequenceName() != null && column.getSequenceName().length() > 0) {
             } else if (column.getIDENTITY()) {
                 //列必有
@@ -445,7 +447,7 @@ public class MapperHelper {
                 hasIdentityKey = true;
             } else if (column.getUUID()) {
                 //TODO 测试这里的UUID
-                VarDeclSqlNode bind = new VarDeclSqlNode(column.getProperty() + "_bind", "@java.util.UUID@randomUUID()@toString()");
+                VarDeclSqlNode bind = new VarDeclSqlNode(column.getProperty() + "_bind", "@java.util.UUID@randomUUID().toString()");
                 sqlNodes.add(bind);
             }
         }
