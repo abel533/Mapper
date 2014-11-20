@@ -240,6 +240,7 @@ public class EntityHelper {
                         throw new RuntimeException(field.getName() + " - 该字段@GeneratedValue配置为UUID，但该字段类型不是String");
                     }
                 } else {
+                    //TODO 允许通过generator来设置获取id的sql,例如mysql=CALL IDENTITY(),hsqldb=SELECT SCOPE_IDENTITY()
                     if (generatedValue.strategy() == GenerationType.IDENTITY) {
                         //mysql的自动增长
                         entityColumn.setIDENTITY(Boolean.TRUE);
