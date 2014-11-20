@@ -23,6 +23,8 @@ import static org.apache.ibatis.jdbc.SqlBuilder.*;
  * Created by liuzh on 2014/11/19.
  */
 public class MapperHelper {
+
+    public static final String DYNAMIC_SQL = "dynamicSQL";
     /**
      * 缓存skip结果
      */
@@ -42,7 +44,7 @@ public class MapperHelper {
             "updateByPrimaryKeySelective"};
 
     public String dynamicSQL(Object record) {
-        return "dynamicSQL";
+        return DYNAMIC_SQL;
     }
 
     private static final ObjectFactory DEFAULT_OBJECT_FACTORY = new DefaultObjectFactory();

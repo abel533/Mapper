@@ -12,28 +12,28 @@ import java.util.List;
  */
 public interface Mapper<T> {
 
-    @SelectProvider(type = MapperHelper.class, method = "dynamicSQL")
+    @SelectProvider(type = MapperHelper.class, method = MapperHelper.DYNAMIC_SQL)
     List<T> select(T record);
 
-    @SelectProvider(type = MapperHelper.class, method = "dynamicSQL")
+    @SelectProvider(type = MapperHelper.class, method = MapperHelper.DYNAMIC_SQL)
     int selectCount(T record);
 
-    @SelectProvider(type = MapperHelper.class, method = "dynamicSQL")
+    @SelectProvider(type = MapperHelper.class, method = MapperHelper.DYNAMIC_SQL)
     T selectByPrimaryKey(Object key);
 
-    @InsertProvider(type = MapperHelper.class, method = "dynamicSQL")
+    @InsertProvider(type = MapperHelper.class, method = MapperHelper.DYNAMIC_SQL)
     int insert(T record);
 
-    @InsertProvider(type = MapperHelper.class, method = "dynamicSQL")
+    @InsertProvider(type = MapperHelper.class, method = MapperHelper.DYNAMIC_SQL)
     int insertSelective(T record);
 
-    @DeleteProvider(type = MapperHelper.class, method = "dynamicSQL")
+    @DeleteProvider(type = MapperHelper.class, method = MapperHelper.DYNAMIC_SQL)
     int deleteByPrimaryKey(Object key);
 
-    @UpdateProvider(type = MapperHelper.class, method = "dynamicSQL")
+    @UpdateProvider(type = MapperHelper.class, method = MapperHelper.DYNAMIC_SQL)
     int updateByPrimaryKey(T record);
 
-    @UpdateProvider(type = MapperHelper.class, method = "dynamicSQL")
+    @UpdateProvider(type = MapperHelper.class, method = MapperHelper.DYNAMIC_SQL)
     int updateByPrimaryKeySelective(T record);
 
 }
