@@ -18,13 +18,22 @@ public class MapperTest {
     @Test
     public void test(){
         SqlSession sqlSession = MybatisHelper.getSqlSession();
-//        Mapper<Country> mapper = sqlSession.getMapper(Mapper.class);
         CountryMapper mapper = sqlSession.getMapper(CountryMapper.class);
+        //查询
         Country country = mapper.selectByPrimaryKey(1);
         System.out.println(country);
-        country = mapper.selectByPrimaryKey(2);
+        //删除
+        System.out.println(mapper.deleteByPrimaryKey(100));
+        //新增
+        country.setId(1000);
+        country.setCountryname("中国");
+        System.out.println(mapper.insert(country));
+        //更新
+        country.setCountrycode("C");
+        System.out.println(mapper.updateByPrimaryKey(country));
+        //查询
+        country = mapper.selectByPrimaryKey(1000);
         System.out.println(country);
-
     }
 
     @Test

@@ -71,39 +71,36 @@ public class ReflectionUtils {
         return map;
     }
 
-    public static String findTable(Object obj) {
-        if (null == obj) {
-            throw new RuntimeException("mybatis参数为空");
-        }
-        Table table = obj.getClass().getAnnotation(Table.class);
+    public static String findTable(Class entityClass) {
+        Table table = (Table) entityClass.getAnnotation(Table.class);
         if (table != null)
             return table.name();
         else
-            throw new RuntimeException(obj.getClass().getName() + " undefine @Table, need Tablename(@Table)");
+            throw new RuntimeException(entityClass.getName() + " undefine @Table, need Tablename(@Table)");
     }
 
-    public static String findPrimary(Object obj) {
-        for (Field field : obj.getClass().getDeclaredFields()) {
+    public static String findPrimary(Class entityClass) {
+        for (Field field : entityClass.getDeclaredFields()) {
             if (field.isAnnotationPresent(Id.class))
                 return field.getAnnotation(Column.class).name();
         }
-        throw new RuntimeException(obj.getClass().getName() + "undefine @Id");
+        throw new RuntimeException(entityClass.getName() + "undefine @Id");
     }
 
-    public static String findPrimaryProperty(Object obj) {
-        for (Field field : obj.getClass().getDeclaredFields()) {
+    public static String findPrimaryProperty(Class entityClass) {
+        for (Field field : entityClass.getDeclaredFields()) {
             if (field.isAnnotationPresent(Id.class))
                 return field.getName();
         }
-        throw new RuntimeException(obj.getClass().getName() + "undefine @Id");
+        throw new RuntimeException(entityClass.getName() + "undefine @Id");
     }
 
-    public static String findSequenceName(Object obj) {
-        for (Field field : obj.getClass().getDeclaredFields()) {
+    public static String findSequenceName(Class entityClass) {
+        for (Field field : entityClass.getDeclaredFields()) {
             if (field.isAnnotationPresent(SequenceGenerator.class))
                 return field.getAnnotation(SequenceGenerator.class).sequenceName();
         }
-        throw new RuntimeException(obj.getClass().getName() + "undefine @SequenceGenerator");
+        throw new RuntimeException(entityClass.getName() + "undefine @SequenceGenerator");
     }
 
     /**
@@ -280,17 +277,16 @@ public class ReflectionUtils {
     /**
      * obtainMethod:不能确定方法是否包含参数时，通过方法名匹配获得方法
      *
-     * @param obj
+     * @param entityClass
      * @param methodName
      * @return
      * @since JDK 1.6
      */
-    public static Method obtainMethod(final Object obj, final String methodName) {
-        Class<?> clazz = obj.getClass();
-        Method[] methods = METHODS_CACHEMAP.get(clazz);
+    public static Method obtainMethod(final Class entityClass, final String methodName) {
+        Method[] methods = METHODS_CACHEMAP.get(entityClass);
         if (methods == null) { // 尚未缓存
-            methods = clazz.getDeclaredMethods();
-            METHODS_CACHEMAP.put(clazz, methods);
+            methods = entityClass.getDeclaredMethods();
+            METHODS_CACHEMAP.put(entityClass, methods);
         }
         for (Method method : methods) {
             if (method.getName().equals(methodName))
@@ -308,7 +304,7 @@ public class ReflectionUtils {
      * @since JDK 1.6
      */
     public static Object obtainFieldValue(final Object obj, final String fieldName) {
-        Field field = obtainAccessibleField(obj, fieldName);
+        Field field = obtainAccessibleField(obj.getClass(), fieldName);
         if (field == null) {
             throw new IllegalArgumentException("Devkit: could not find field [" + fieldName + "] on target [" + obj
                     + "]");
@@ -334,7 +330,7 @@ public class ReflectionUtils {
      * @since JDK 1.6
      */
     public static void setFieldValue(final Object obj, final String fieldName, final Object value) {
-        Field field = obtainAccessibleField(obj, fieldName);
+        Field field = obtainAccessibleField(obj.getClass(), fieldName);
         if (field == null) {
             throw new IllegalArgumentException("Devkit: could not find field [" + fieldName + "] on target [" + obj
                     + "]");
@@ -352,13 +348,13 @@ public class ReflectionUtils {
     /**
      * obtainAccessibleField:循环向上转型，获取对象的DeclaredField,并强制设为可访问 如向上转型Object仍无法找到，返回null
      *
-     * @param obj
+     * @param entityClass
      * @param fieldName
      * @return
      * @since JDK 1.6
      */
-    public static Field obtainAccessibleField(final Object obj, final String fieldName) {
-        Class<?> superClass = obj.getClass();
+    public static Field obtainAccessibleField(final Class entityClass, final String fieldName) {
+        Class<?> superClass = entityClass;
         Class<Object> objClass = Object.class;
         for (; superClass != objClass; superClass = superClass.getSuperclass()) {
             try {

@@ -1,11 +1,13 @@
 package com.github.abel533.mapper;
 
+import com.github.abel533.model.Country;
+
 import javax.persistence.Column;
+import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import java.lang.reflect.Field;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -17,17 +19,194 @@ import java.util.regex.Pattern;
  */
 public class EntityHelper {
 
+    public static class EntityColumn {
+        private String property;
+        private String column;
+        private Class<?> javaType;
+
+        public String getProperty() {
+            return property;
+        }
+
+        public void setProperty(String property) {
+            this.property = property;
+        }
+
+        public String getColumn() {
+            return column;
+        }
+
+        public void setColumn(String column) {
+            this.column = column;
+        }
+
+        public Class<?> getJavaType() {
+            return javaType;
+        }
+
+        public void setJavaType(Class<?> javaType) {
+            this.javaType = javaType;
+        }
+    }
+
     /**
      * 实体类 => 表名
      */
-    private static final Map<Class<?>, String> entityClassTableNameMap = new HashMap<Class<?>, String>();
+    private static final Map<Class<?>, String> entityClassTableName = new HashMap<Class<?>, String>();
 
     /**
-     * 实体类 => (字段名 => 列名)
+     * 实体类 => 全部列属性
      */
-    private static final Map<Class<?>, Map<String, String>> entityClassFieldMapMap = new HashMap<Class<?>, Map<String, String>>();
+    private static final Map<Class<?>, List<EntityColumn>> entityClassColumns = new HashMap<Class<?>, List<EntityColumn>>();
 
-    private static final Map<String, SimpleTableMap> tableMap = new HashMap<String, SimpleTableMap>();
+    /**
+     * 实体类 => 主键信息
+     */
+    private static final Map<Class<?>, List<EntityColumn>> entityClassPKColumns = new HashMap<Class<?>, List<EntityColumn>>();
+
+    /**
+     * 获取表名
+     *
+     * @param entityClass
+     * @return
+     */
+    public static String getTableName(Class<?> entityClass) {
+        String tableName = entityClassTableName.get(entityClass);
+        if (tableName == null) {
+            initEntityNameMap(entityClass);
+        }
+        tableName = entityClassTableName.get(entityClass);
+        if (tableName == null) {
+            throw new RuntimeException("");
+        }
+        return tableName;
+    }
+
+    /**
+     * 获取全部列
+     *
+     * @param entityClass
+     * @return
+     */
+    public static List<EntityColumn> getColumns(Class<?> entityClass) {
+        //可以起到初始化的作用
+        getTableName(entityClass);
+        return entityClassColumns.get(entityClass);
+    }
+
+    /**
+     * 获取主键信息
+     *
+     * @param entityClass
+     * @return
+     */
+    public static List<EntityColumn> getPKColumns(Class<?> entityClass) {
+        //可以起到初始化的作用
+        getTableName(entityClass);
+        return entityClassPKColumns.get(entityClass);
+    }
+
+    /**
+     * 获取查询的Select
+     *
+     * @param entityClass
+     * @return
+     */
+    public static String getSelectColumns(Class<?> entityClass) {
+        List<EntityColumn> columnList = getColumns(entityClass);
+        StringBuilder selectBuilder = new StringBuilder();
+        for (EntityColumn entityColumn : columnList) {
+            selectBuilder.append(entityColumn.getColumn()).append(" ").append(entityColumn.getProperty().toUpperCase()).append(",");
+        }
+        return selectBuilder.substring(0, selectBuilder.length() - 1);
+    }
+
+    /**
+     * 获取主键的Where语句
+     *
+     * @param entityClass
+     * @return
+     */
+    public static String getPrimaryKeyWhere(Class<?> entityClass){
+        List<EntityHelper.EntityColumn> entityColumns = EntityHelper.getPKColumns(entityClass);
+        StringBuilder whereBuilder = new StringBuilder();
+        for (EntityHelper.EntityColumn column : entityColumns) {
+            whereBuilder.append(column.getColumn()).append(" = ?").append(" and ");
+        }
+        return whereBuilder.substring(0,whereBuilder.length() - 4);
+    }
+
+    /**
+     * 初始化实体属性
+     *
+     * @param entityClass
+     */
+    public static synchronized void initEntityNameMap(Class<?> entityClass) {
+        //表名
+        if (entityClass.isAnnotationPresent(Table.class)) {
+            Table table = entityClass.getAnnotation(Table.class);
+            entityClassTableName.put(entityClass, table.name());
+        } else {
+            entityClassTableName.put(entityClass, camelhumpToUnderline(entityClass.getSimpleName()).toUpperCase());
+        }
+        //TODO 为了准确，应该通过表名获取表对应的所有列
+        /*MetaObject metaObject = SystemMetaObject.forObject(invocation.getTarget());
+        while (metaObject.hasGetter("h")) {
+            metaObject = SystemMetaObject.forObject(metaObject.getValue("h"));
+        }
+        if (metaObject.getValue("target") instanceof CachingExecutor) {
+            CachingExecutor executor = (CachingExecutor)(metaObject.getValue("target"));
+            Connection connection = executor.getTransaction().getConnection();
+            System.out.println(connection!=null?connection.isClosed():"null");
+            DatabaseMetaData data = connection.getMetaData();
+
+            ResultSet colRet = data.getColumns(connection.getCatalog(),connection.getSchema(),"COUNTRY",null);
+            String columnName;
+            String columnType;
+            while(colRet.next()) {
+                columnName = colRet.getString("COLUMN_NAME");
+                columnType = colRet.getString("TYPE_NAME");
+                int datasize = colRet.getInt("COLUMN_SIZE");
+                int digits = colRet.getInt("DECIMAL_DIGITS");
+                int nullable = colRet.getInt("NULLABLE");
+                System.out.println(columnName+" "+columnType+" "+datasize+" "+digits+" "+ nullable);
+            }
+        }*/
+        //列
+        List<Field> fieldList = getAllField(entityClass, null);
+        List<EntityColumn> columnList = new ArrayList<EntityColumn>();
+        List<EntityColumn> pkColumnList = new ArrayList<EntityColumn>();
+        for (Field field : fieldList) {
+            //排除字段
+            if (field.isAnnotationPresent(Transient.class)) {
+                continue;
+            }
+            EntityColumn entityColumn = new EntityColumn();
+            boolean isId = false;
+            if (field.isAnnotationPresent(Id.class)) {
+                isId = true;
+            }
+            String columnName = null;
+            if (field.isAnnotationPresent(Column.class)) {
+                Column column = field.getAnnotation(Column.class);
+                columnName = column.name();
+            } else {
+                columnName = camelhumpToUnderline(field.getName());
+            }
+            entityColumn.setProperty(field.getName());
+            entityColumn.setColumn(columnName.toUpperCase());
+            entityColumn.setJavaType(field.getType());
+            columnList.add(entityColumn);
+            if (isId) {
+                pkColumnList.add(entityColumn);
+            }
+        }
+        if (pkColumnList.size() == 0) {
+            pkColumnList = columnList;
+        }
+        entityClassColumns.put(entityClass, columnList);
+        entityClassPKColumns.put(entityClass, pkColumnList);
+    }
 
     /**
      * 将驼峰风格替换为下划线风格
@@ -60,75 +239,32 @@ public class EntityHelper {
     }
 
     /**
-     * 转置 Map
-     */
-    public static <K, V> Map<V, K> invert(Map<K, V> source) {
-        Map<V, K> target = null;
-        if (source != null && source.size() > 0) {
-            target = new LinkedHashMap<V, K>(source.size());
-            for (Map.Entry<K, V> entry : source.entrySet()) {
-                target.put(entry.getValue(), entry.getKey());
-            }
-        }
-        return target;
-    }
-
-    /**
-     * 初始化实体属性
+     * 获取全部的Field
      *
      * @param entityClass
+     * @param fieldList
+     * @return
      */
-    public static synchronized void initEntityNameMap(Class<?> entityClass) {
-        // 判断该实体类上是否存在 Table 注解
-        String tableName;
-        if (entityClass.isAnnotationPresent(Table.class)) {
-            // 若已存在，则使用该注解中定义的表名
-            tableName = entityClass.getAnnotation(Table.class).name();
-        } else {
-            // 若不存在，则将实体类名转换为下划线风格的表名
-            tableName = camelhumpToUnderline(entityClass.getSimpleName());
+    private static List<Field> getAllField(Class<?> entityClass, List<Field> fieldList) {
+        if (fieldList == null) {
+            fieldList = new ArrayList<Field>();
         }
-        entityClassTableNameMap.put(entityClass, tableName);
-        initEntityFieldMapMap(entityClass);
-    }
-
-    private static void initEntityFieldMapMap(Class<?> entityClass) {
-        // 获取并遍历该实体类中所有的字段（不包括父类中的方法）
+        if (entityClass.equals(Object.class)) {
+            return fieldList;
+        }
         Field[] fields = entityClass.getDeclaredFields();
-        if (fields != null && fields.length > 0) {
-            // 创建一个 fieldMap（用于存放列名与字段名的映射关系）
-            Map<String, String> fieldMap = new HashMap<String, String>();
-            for (Field field : fields) {
-                String fieldName = field.getName();
-                String columnName;
-                // 判断该字段上是否存在 Column 注解
-                if (field.isAnnotationPresent(Column.class)) {
-                    // 若已存在，则使用该注解中定义的列名
-                    columnName = field.getAnnotation(Column.class).name();
-                } else {
-                    // 若不存在，则将字段名转换为下划线风格的列名
-                    columnName = camelhumpToUnderline(fieldName);
-                }
-                fieldMap.put(fieldName, columnName);
-            }
-            entityClassFieldMapMap.put(entityClass, fieldMap);
+        fieldList.addAll(Arrays.asList(fields));
+        if (entityClass.getSuperclass() != null && !entityClass.getSuperclass().equals(Object.class)) {
+            return getAllField(entityClass.getSuperclass(), fieldList);
+        }
+        return fieldList;
+    }
+
+    public static void main(String[] args) {
+        List<Field> fieldList = getAllField(Country.class, null);
+        for (Field field : fieldList) {
+            System.out.println(field.getName());
         }
     }
 
-    public static String getTableName(Class<?> entityClass) {
-        return entityClassTableNameMap.get(entityClass);
-    }
-
-    public static Map<String, String> getFieldMap(Class<?> entityClass) {
-        return entityClassFieldMapMap.get(entityClass);
-    }
-
-    public static Map<String, String> getColumnMap(Class<?> entityClass) {
-        return invert(getFieldMap(entityClass));
-    }
-
-    public static String getColumnName(Class<?> entityClass, String fieldName) {
-        String columnName = getFieldMap(entityClass).get(fieldName);
-        return (columnName != null && columnName.length() > 0) ? columnName : fieldName;
-    }
 }
