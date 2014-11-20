@@ -2,10 +2,7 @@ package com.github.abel533.mapper;
 
 import com.github.abel533.model.Country;
 
-import javax.persistence.Column;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.Transient;
+import javax.persistence.*;
 import java.lang.reflect.Field;
 import java.util.*;
 import java.util.regex.Matcher;
@@ -23,6 +20,10 @@ public class EntityHelper {
         private String property;
         private String column;
         private Class<?> javaType;
+        private String sequenceName;
+        private Boolean ID = Boolean.FALSE;
+        private Boolean UUID = Boolean.FALSE;
+        private Boolean IDENTITY = Boolean.FALSE;
 
         public String getProperty() {
             return property;
@@ -46,6 +47,38 @@ public class EntityHelper {
 
         public void setJavaType(Class<?> javaType) {
             this.javaType = javaType;
+        }
+
+        public String getSequenceName() {
+            return sequenceName;
+        }
+
+        public void setSequenceName(String sequenceName) {
+            this.sequenceName = sequenceName;
+        }
+
+        public Boolean getID() {
+            return ID;
+        }
+
+        public void setID(Boolean ID) {
+            this.ID = ID;
+        }
+
+        public Boolean getUUID() {
+            return UUID;
+        }
+
+        public void setUUID(Boolean UUID) {
+            this.UUID = UUID;
+        }
+
+        public Boolean getIDENTITY() {
+            return IDENTITY;
+        }
+
+        public void setIDENTITY(Boolean IDENTITY) {
+            this.IDENTITY = IDENTITY;
         }
     }
 
@@ -127,13 +160,13 @@ public class EntityHelper {
      * @param entityClass
      * @return
      */
-    public static String getPrimaryKeyWhere(Class<?> entityClass){
+    public static String getPrimaryKeyWhere(Class<?> entityClass) {
         List<EntityHelper.EntityColumn> entityColumns = EntityHelper.getPKColumns(entityClass);
         StringBuilder whereBuilder = new StringBuilder();
         for (EntityHelper.EntityColumn column : entityColumns) {
             whereBuilder.append(column.getColumn()).append(" = ?").append(" and ");
         }
-        return whereBuilder.substring(0,whereBuilder.length() - 4);
+        return whereBuilder.substring(0, whereBuilder.length() - 4);
     }
 
     /**
@@ -142,6 +175,9 @@ public class EntityHelper {
      * @param entityClass
      */
     public static synchronized void initEntityNameMap(Class<?> entityClass) {
+        if (entityClassTableName.get(entityClass) != null) {
+            return;
+        }
         //表名
         if (entityClass.isAnnotationPresent(Table.class)) {
             Table table = entityClass.getAnnotation(Table.class);
@@ -159,9 +195,8 @@ public class EntityHelper {
                 continue;
             }
             EntityColumn entityColumn = new EntityColumn();
-            boolean isId = false;
             if (field.isAnnotationPresent(Id.class)) {
-                isId = true;
+                entityColumn.setID(Boolean.TRUE);
             }
             String columnName = null;
             if (field.isAnnotationPresent(Column.class)) {
@@ -173,8 +208,32 @@ public class EntityHelper {
             entityColumn.setProperty(field.getName());
             entityColumn.setColumn(columnName.toUpperCase());
             entityColumn.setJavaType(field.getType());
+            //TODO 主键策略 - Oracle序列，MySql自动增长，UUID
+            if (field.isAnnotationPresent(SequenceGenerator.class)) {
+                SequenceGenerator sequenceGenerator = field.getAnnotation(SequenceGenerator.class);
+                entityColumn.setSequenceName(sequenceGenerator.sequenceName());
+            }
+            if (field.isAnnotationPresent(GeneratedValue.class)) {
+                GeneratedValue generatedValue = field.getAnnotation(GeneratedValue.class);
+                if (generatedValue.generator().equals("UUID")) {
+                    if (field.getType().equals(String.class)) {
+                        entityColumn.setUUID(Boolean.TRUE);
+                    } else {
+                        throw new RuntimeException(field.getName() + " - 该字段@GeneratedValue配置为UUID，但该字段类型不是String");
+                    }
+                } else {
+                    if (generatedValue.strategy() == GenerationType.IDENTITY) {
+                        //mysql的自动增长
+                        entityColumn.setIDENTITY(Boolean.TRUE);
+                    } else {
+                        throw new RuntimeException(field.getName()
+                                + " - 该字段@GeneratedValue配置只允许两种形式，全部数据库通用的@GeneratedValue(generator=\"UUID\") 或者 " +
+                                "mysql数据库的@GeneratedValue(strategy=GenerationType.IDENTITY)");
+                    }
+                }
+            }
             columnList.add(entityColumn);
-            if (isId) {
+            if (entityColumn.getID()) {
                 pkColumnList.add(entityColumn);
             }
         }
