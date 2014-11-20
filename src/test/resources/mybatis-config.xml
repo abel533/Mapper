@@ -35,6 +35,7 @@
 	<mappers>
     <mapper class="com.github.abel533.mapper.Mapper" />
     <mapper class="com.github.abel533.mapper.CountryMapper" />
+    <mapper class="com.github.abel533.mapper.Country2Mapper" />
 	</mappers>
 
 </configuration>
