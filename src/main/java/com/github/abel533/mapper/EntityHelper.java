@@ -241,6 +241,7 @@ public class EntityHelper {
                     }
                 } else {
                     //TODO 允许通过generator来设置获取id的sql,例如mysql=CALL IDENTITY(),hsqldb=SELECT SCOPE_IDENTITY()
+                    //TODO 允许通过拦截器参数设置公共的generator
                     if (generatedValue.strategy() == GenerationType.IDENTITY) {
                         //mysql的自动增长
                         entityColumn.setIDENTITY(Boolean.TRUE);
