@@ -17,7 +17,10 @@ import org.apache.ibatis.type.TypeHandlerRegistry;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static org.apache.ibatis.jdbc.SqlBuilder.*;
 
@@ -459,7 +462,7 @@ public class MapperHelper {
                 valuesBuilder.append("#{" + column.getProperty() + "},");
             }
         }
-        valuesBuilder.replace(valuesBuilder.length()-1,valuesBuilder.length(),")");
+        valuesBuilder.replace(valuesBuilder.length() - 1, valuesBuilder.length(), ")");
         sqlNodes.add(new StaticTextSqlNode(valuesBuilder.toString()));
         return new MixedSqlNode(sqlNodes);
     }
@@ -510,6 +513,7 @@ public class MapperHelper {
         String methodName = getMethodName(ms);
         Object parameterObject = args[1];
         Map<String, Object> parameterMap = new HashMap<String, Object>();
+        //两个通过PK查询的方法用下面的方法处理参数
         if (methodName.equals(METHODS[1]) || methodName.equals(METHODS[5])) {
             TypeHandlerRegistry typeHandlerRegistry = ms.getConfiguration().getTypeHandlerRegistry();
             List<ParameterMapping> parameterMappings = getPrimaryKeyParameterMappings(ms);
@@ -529,6 +533,8 @@ public class MapperHelper {
                 }
             }
             args[1] = parameterMap;
+        } else if (parameterObject == null) {
+            throw new RuntimeException("入参不能为空!");
         } else if (!entityClass.isAssignableFrom(parameterObject.getClass())) {
             throw new RuntimeException("入参类型错误，需要的类型为:"
                     + entityClass.getCanonicalName()
