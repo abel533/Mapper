@@ -20,7 +20,9 @@ import java.util.Map;
 import static org.apache.ibatis.jdbc.SqlBuilder.*;
 
 /**
- * Created by liuzh on 2014/11/19.
+ * 处理主要逻辑
+ *
+ * @author liuzh
  */
 public class MapperHelper {
 
@@ -67,7 +69,7 @@ public class MapperHelper {
      * @return
      * @throws ClassNotFoundException
      */
-    public static Class getMapperClass(String msId) throws ClassNotFoundException {
+    public static Class<?> getMapperClass(String msId) throws ClassNotFoundException {
         String mapperClassStr = msId.substring(0, msId.lastIndexOf("."));
         return Class.forName(mapperClassStr);
     }
@@ -118,9 +120,9 @@ public class MapperHelper {
      * @param ms
      * @return
      */
-    public static Class getSelectReturnType(MappedStatement ms) {
+    public static Class<?> getSelectReturnType(MappedStatement ms) {
         String msId = ms.getId();
-        Class mapperClass = null;
+        Class<?> mapperClass = null;
         try {
             mapperClass = getMapperClass(msId);
         } catch (ClassNotFoundException e) {
@@ -151,7 +153,7 @@ public class MapperHelper {
 
     public static void selectSqlSource(MappedStatement ms) {
         String methodName = getMethodName(ms);
-        Class entityClass = getSelectReturnType(ms);
+        Class<?> entityClass = getSelectReturnType(ms);
         //动态sql
         if (methodName.equals(METHODS[0])) {
             DynamicSqlSource dynamicSqlSource = new DynamicSqlSource(ms.getConfiguration(), getSelectSqlNode(ms));
@@ -177,7 +179,7 @@ public class MapperHelper {
 
     public static void insertSqlSource(MappedStatement ms) {
         String methodName = getMethodName(ms);
-        Class entityClass = getSelectReturnType(ms);
+        Class<?> entityClass = getSelectReturnType(ms);
         //动态sql
         if (methodName.equals(METHODS[4])) {
             DynamicSqlSource dynamicSqlSource = new DynamicSqlSource(ms.getConfiguration(), getInsertSqlNode(ms));
@@ -197,7 +199,7 @@ public class MapperHelper {
 
     public static void updateSqlSource(MappedStatement ms) {
         String methodName = getMethodName(ms);
-        Class entityClass = getSelectReturnType(ms);
+        Class<?> entityClass = getSelectReturnType(ms);
         //动态sql
         if (methodName.equals(METHODS[7])) {
             DynamicSqlSource dynamicSqlSource = new DynamicSqlSource(ms.getConfiguration(), getUpdateSqlNode(ms));
@@ -219,7 +221,7 @@ public class MapperHelper {
     }
 
     public static void deleteSqlSource(MappedStatement ms) {
-        Class entityClass = getSelectReturnType(ms);
+        Class<?> entityClass = getSelectReturnType(ms);
         List<ParameterMapping> parameterMappings = getPrimaryKeyParameterMappings(ms);
         BEGIN();
         DELETE_FROM(EntityHelper.getTableName(entityClass));
@@ -235,7 +237,7 @@ public class MapperHelper {
      * @return
      */
     private static List<ParameterMapping> getPrimaryKeyParameterMappings(MappedStatement ms) {
-        Class entityClass = getSelectReturnType(ms);
+        Class<?> entityClass = getSelectReturnType(ms);
         List<EntityHelper.EntityColumn> entityColumns = EntityHelper.getPKColumns(entityClass);
         List<ParameterMapping> parameterMappings = new ArrayList<ParameterMapping>();
         for (EntityHelper.EntityColumn column : entityColumns) {
@@ -253,7 +255,7 @@ public class MapperHelper {
      * @return
      */
     private static List<ParameterMapping> getColumnParameterMappings(MappedStatement ms) {
-        Class entityClass = getSelectReturnType(ms);
+        Class<?> entityClass = getSelectReturnType(ms);
         List<EntityHelper.EntityColumn> entityColumns = EntityHelper.getColumns(entityClass);
         List<ParameterMapping> parameterMappings = new ArrayList<ParameterMapping>();
         for (EntityHelper.EntityColumn column : entityColumns) {
@@ -271,7 +273,7 @@ public class MapperHelper {
      * @return
      */
     private static MixedSqlNode getSelectSqlNode(MappedStatement ms) {
-        Class entityClass = getSelectReturnType(ms);
+        Class<?> entityClass = getSelectReturnType(ms);
         List<SqlNode> sqlNodes = new ArrayList<SqlNode>();
         //select column ... from table
         StaticTextSqlNode selectItems = new StaticTextSqlNode("SELECT "
@@ -301,7 +303,7 @@ public class MapperHelper {
      * @return
      */
     private static MixedSqlNode getSelectCountSqlNode(MappedStatement ms) {
-        Class entityClass = getSelectReturnType(ms);
+        Class<?> entityClass = getSelectReturnType(ms);
         List<SqlNode> sqlNodes = new ArrayList<SqlNode>();
         //select column ... from table
         StaticTextSqlNode selectItems = new StaticTextSqlNode("SELECT COUNT(*) FROM "
@@ -329,7 +331,7 @@ public class MapperHelper {
      * @return
      */
     private static MixedSqlNode getInsertSqlNode(MappedStatement ms) {
-        Class entityClass = getSelectReturnType(ms);
+        Class<?> entityClass = getSelectReturnType(ms);
         List<SqlNode> sqlNodes = new ArrayList<SqlNode>();
         StaticTextSqlNode insertNode = new StaticTextSqlNode("INSERT INTO " + EntityHelper.getTableName(entityClass));
         sqlNodes.add(insertNode);
@@ -359,10 +361,10 @@ public class MapperHelper {
      * 生成动态select语句
      *
      * @param ms
-     * @return
+     * @return MixedSqlNode
      */
     private static MixedSqlNode getUpdateSqlNode(MappedStatement ms) {
-        Class entityClass = getSelectReturnType(ms);
+        Class<?> entityClass = getSelectReturnType(ms);
         List<SqlNode> sqlNodes = new ArrayList<SqlNode>();
         //select column ... from table
         StaticTextSqlNode selectItems = new StaticTextSqlNode("UPDATE " + EntityHelper.getTableName(entityClass));
@@ -383,6 +385,7 @@ public class MapperHelper {
         for (EntityHelper.EntityColumn column : columnList) {
             StaticTextSqlNode columnNode = new StaticTextSqlNode((first ? "" : " AND ") + column.getColumn() + " = #{" + column.getProperty() + "} ");
             whereNodes.add(columnNode);
+            first = false;
         }
         WhereSqlNode whereSqlNode = new WhereSqlNode(ms.getConfiguration(), new MixedSqlNode(whereNodes));
         sqlNodes.add(whereSqlNode);
@@ -396,15 +399,14 @@ public class MapperHelper {
      * @param args
      */
     public static void processParameterObject(MappedStatement ms, Object[] args) {
-        Class entityClass = getSelectReturnType(ms);
+        Class<?> entityClass = getSelectReturnType(ms);
         String methodName = getMethodName(ms);
         Object parameterObject = args[1];
         Map<String, Object> parameterMap = new HashMap<String, Object>();
         if (methodName.equals(METHODS[1]) || methodName.equals(METHODS[5])) {
             TypeHandlerRegistry typeHandlerRegistry = ms.getConfiguration().getTypeHandlerRegistry();
             List<ParameterMapping> parameterMappings = getPrimaryKeyParameterMappings(ms);
-            for (int i = 0; i < parameterMappings.size(); i++) {
-                ParameterMapping parameterMapping = parameterMappings.get(i);
+            for (ParameterMapping parameterMapping : parameterMappings) {
                 if (parameterMapping.getMode() != ParameterMode.OUT) {
                     Object value;
                     String propertyName = parameterMapping.getProperty();
