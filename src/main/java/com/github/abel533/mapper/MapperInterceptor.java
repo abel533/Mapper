@@ -3,9 +3,7 @@ package com.github.abel533.mapper;
 import org.apache.ibatis.builder.annotation.ProviderSqlSource;
 import org.apache.ibatis.executor.Executor;
 import org.apache.ibatis.mapping.MappedStatement;
-import org.apache.ibatis.mapping.ResultMap;
 import org.apache.ibatis.plugin.*;
-import org.apache.ibatis.reflection.MetaObject;
 import org.apache.ibatis.session.ResultHandler;
 import org.apache.ibatis.session.RowBounds;
 
@@ -29,14 +27,10 @@ public class MapperInterceptor implements Interceptor {
         if (!MapperHelper.isMapperMethod(msId)) {
             return invocation.proceed();
         }
-        String methodName = msId.substring(msId.lastIndexOf(".") + 1);
-        ResultMap resultMap = ms.getResultMaps().get(0);
+        //第一次经过处理后，就不会是ProviderSqlSource了，一开始高并发时可能会执行多次，但不影响。以后就不会在执行了
         if (ms.getSqlSource() instanceof ProviderSqlSource) {
             switch (ms.getSqlCommandType()) {
                 case SELECT:
-                    Class T = MapperHelper.getSelectReturnType(ms);
-                    MetaObject metaObject = MapperHelper.forObject(resultMap);
-                    metaObject.setValue("type", T);
                     MapperHelper.selectSqlSource(ms);
                     break;
                 case INSERT:

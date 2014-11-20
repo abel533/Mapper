@@ -9,6 +9,7 @@ import org.junit.Test;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.List;
 
 /**
  * Created by liuzh on 2014/11/19.
@@ -32,6 +33,61 @@ public class MapperTest {
         country.setCountrycode("C");
         System.out.println(mapper.updateByPrimaryKey(country));
         //查询
+        country = mapper.selectByPrimaryKey(1000);
+        System.out.println(country);
+    }
+
+    @Test
+    public void testDynamicSelect(){
+        SqlSession sqlSession = MybatisHelper.getSqlSession();
+        CountryMapper mapper = sqlSession.getMapper(CountryMapper.class);
+        Country country = new Country();
+        country.setId(100);
+        //查询
+        List<Country> list = mapper.select(country);
+        System.out.println(list.get(0));
+
+        country = new Country();
+        country.setCountrycode("MY");
+        list = mapper.select(country);
+        System.out.println(list.get(0));
+    }
+
+    @Test
+    public void testDynamicSelectCount(){
+        SqlSession sqlSession = MybatisHelper.getSqlSession();
+        CountryMapper mapper = sqlSession.getMapper(CountryMapper.class);
+        Country country = new Country();
+        country.setId(100);
+        //查询
+        System.out.println(mapper.selectCount(country));
+        System.out.println(mapper.selectCount(new Country()));
+    }
+
+    @Test
+    public void testDynamicUpdate(){
+        SqlSession sqlSession = MybatisHelper.getSqlSession();
+        CountryMapper mapper = sqlSession.getMapper(CountryMapper.class);
+        Country country = new Country();
+        country.setId(100);
+        country.setCountryname("中国");
+        //选择性更新
+        System.out.println(mapper.updateByPrimaryKeySelective(country));
+        //查询更新结果
+        country = mapper.selectByPrimaryKey(100);
+        System.out.println(country);
+    }
+
+    @Test
+    public void testDynamicInsert(){
+        SqlSession sqlSession = MybatisHelper.getSqlSession();
+        CountryMapper mapper = sqlSession.getMapper(CountryMapper.class);
+        Country country = new Country();
+        country.setId(1000);
+        country.setCountryname("lzh");
+        //选择性插入
+        System.out.println(mapper.insertSelective(country));
+        //查询插入结果
         country = mapper.selectByPrimaryKey(1000);
         System.out.println(country);
     }

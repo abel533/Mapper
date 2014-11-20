@@ -16,6 +16,9 @@ public interface Mapper<T> {
     List<T> select(T record);
 
     @SelectProvider(type = MapperHelper.class, method = "dynamicSQL")
+    int selectCount(T record);
+
+    @SelectProvider(type = MapperHelper.class, method = "dynamicSQL")
     T selectByPrimaryKey(Object key);
 
     @InsertProvider(type = MapperHelper.class, method = "dynamicSQL")

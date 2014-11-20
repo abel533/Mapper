@@ -149,29 +149,6 @@ public class EntityHelper {
         } else {
             entityClassTableName.put(entityClass, camelhumpToUnderline(entityClass.getSimpleName()).toUpperCase());
         }
-        //TODO 为了准确，应该通过表名获取表对应的所有列
-        /*MetaObject metaObject = SystemMetaObject.forObject(invocation.getTarget());
-        while (metaObject.hasGetter("h")) {
-            metaObject = SystemMetaObject.forObject(metaObject.getValue("h"));
-        }
-        if (metaObject.getValue("target") instanceof CachingExecutor) {
-            CachingExecutor executor = (CachingExecutor)(metaObject.getValue("target"));
-            Connection connection = executor.getTransaction().getConnection();
-            System.out.println(connection!=null?connection.isClosed():"null");
-            DatabaseMetaData data = connection.getMetaData();
-
-            ResultSet colRet = data.getColumns(connection.getCatalog(),connection.getSchema(),"COUNTRY",null);
-            String columnName;
-            String columnType;
-            while(colRet.next()) {
-                columnName = colRet.getString("COLUMN_NAME");
-                columnType = colRet.getString("TYPE_NAME");
-                int datasize = colRet.getInt("COLUMN_SIZE");
-                int digits = colRet.getInt("DECIMAL_DIGITS");
-                int nullable = colRet.getInt("NULLABLE");
-                System.out.println(columnName+" "+columnType+" "+datasize+" "+digits+" "+ nullable);
-            }
-        }*/
         //列
         List<Field> fieldList = getAllField(entityClass, null);
         List<EntityColumn> columnList = new ArrayList<EntityColumn>();

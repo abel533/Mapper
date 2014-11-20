@@ -1,10 +1,7 @@
 package com.github.abel533.mapper;
 
 import org.apache.ibatis.builder.StaticSqlSource;
-import org.apache.ibatis.mapping.MappedStatement;
-import org.apache.ibatis.mapping.ParameterMapping;
-import org.apache.ibatis.mapping.ParameterMode;
-import org.apache.ibatis.mapping.SqlSource;
+import org.apache.ibatis.mapping.*;
 import org.apache.ibatis.reflection.MetaObject;
 import org.apache.ibatis.reflection.factory.DefaultObjectFactory;
 import org.apache.ibatis.reflection.factory.ObjectFactory;
@@ -27,11 +24,17 @@ import static org.apache.ibatis.jdbc.SqlBuilder.*;
  */
 public class MapperHelper {
     /**
+     * 缓存skip结果
+     */
+    private static final Map<String, Boolean> msIdSkip = new HashMap<String, Boolean>();
+
+    /**
      * 定义要拦截的方法名
      */
     public static final String[] METHODS = {
             "select",
             "selectByPrimaryKey",
+            "selectCount",
             "insert",
             "insertSelective",
             "deleteByPrimaryKey",
@@ -39,7 +42,7 @@ public class MapperHelper {
             "updateByPrimaryKeySelective"};
 
     public String dynamicSQL(Object record) {
-        return "select * from country where id = " + record;
+        return "dynamicSQL";
     }
 
     private static final ObjectFactory DEFAULT_OBJECT_FACTORY = new DefaultObjectFactory();
@@ -84,6 +87,9 @@ public class MapperHelper {
      * @return
      */
     public static boolean isMapperMethod(String msId) {
+        if (msIdSkip.get(msId) != null) {
+            return msIdSkip.get(msId);
+        }
         try {
             String methodName = msId.substring(msId.lastIndexOf(".") + 1);
             boolean rightMethod = false;
@@ -96,7 +102,9 @@ public class MapperHelper {
             if (!rightMethod) {
                 return false;
             }
-            return extendsMapper(getMapperClass(msId));
+            Boolean skip = extendsMapper(getMapperClass(msId));
+            msIdSkip.put(msId, skip);
+            return skip;
         } catch (ClassNotFoundException e) {
             return false;
         }
@@ -144,13 +152,9 @@ public class MapperHelper {
         Class entityClass = getSelectReturnType(ms);
         //动态sql
         if (methodName.equals(METHODS[0])) {
-            //TODO 根据属性生成if节点
-            List<SqlNode> sqlNodes = new ArrayList<SqlNode>();
-            SqlNode sqlNode = new MixedSqlNode(sqlNodes);
-            DynamicSqlSource dynamicSqlSource = new DynamicSqlSource(ms.getConfiguration(), sqlNode);
+            DynamicSqlSource dynamicSqlSource = new DynamicSqlSource(ms.getConfiguration(), getSelectSqlNode(ms));
             setSqlSource(ms, dynamicSqlSource);
-
-        } else {//静态sql - selectByPrimaryKey
+        } else if (methodName.equals(METHODS[1])) {//静态sql - selectByPrimaryKey
             List<ParameterMapping> parameterMappings = getPrimaryKeyParameterMappings(ms);
             BEGIN();
             SELECT(EntityHelper.getSelectColumns(entityClass));
@@ -158,6 +162,14 @@ public class MapperHelper {
             WHERE(EntityHelper.getPrimaryKeyWhere(entityClass));
             StaticSqlSource sqlSource = new StaticSqlSource(ms.getConfiguration(), SQL(), parameterMappings);
             setSqlSource(ms, sqlSource);
+        } else {
+            DynamicSqlSource dynamicSqlSource = new DynamicSqlSource(ms.getConfiguration(), getSelectCountSqlNode(ms));
+            setSqlSource(ms, dynamicSqlSource);
+        }
+        if (methodName.equals(METHODS[0]) || methodName.equals(METHODS[1])) {
+            ResultMap resultMap = ms.getResultMaps().get(0);
+            MetaObject metaObject = MapperHelper.forObject(resultMap);
+            metaObject.setValue("type", entityClass);
         }
     }
 
@@ -165,11 +177,8 @@ public class MapperHelper {
         String methodName = getMethodName(ms);
         Class entityClass = getSelectReturnType(ms);
         //动态sql
-        if (methodName.equals(METHODS[3])) {
-            //TODO 根据属性生成if节点
-            List<SqlNode> sqlNodes = new ArrayList<SqlNode>();
-            SqlNode sqlNode = new MixedSqlNode(sqlNodes);
-            DynamicSqlSource dynamicSqlSource = new DynamicSqlSource(ms.getConfiguration(), sqlNode);
+        if (methodName.equals(METHODS[4])) {
+            DynamicSqlSource dynamicSqlSource = new DynamicSqlSource(ms.getConfiguration(), getInsertSqlNode(ms));
             setSqlSource(ms, dynamicSqlSource);
         } else {//静态sql - selectByPrimaryKey
             List<ParameterMapping> parameterMappings = getColumnParameterMappings(ms);
@@ -188,13 +197,9 @@ public class MapperHelper {
         String methodName = getMethodName(ms);
         Class entityClass = getSelectReturnType(ms);
         //动态sql
-        if (methodName.equals(METHODS[6])) {
-            //TODO 根据属性生成if节点
-            List<SqlNode> sqlNodes = new ArrayList<SqlNode>();
-            SqlNode sqlNode = new MixedSqlNode(sqlNodes);
-            DynamicSqlSource dynamicSqlSource = new DynamicSqlSource(ms.getConfiguration(), sqlNode);
+        if (methodName.equals(METHODS[7])) {
+            DynamicSqlSource dynamicSqlSource = new DynamicSqlSource(ms.getConfiguration(), getUpdateSqlNode(ms));
             setSqlSource(ms, dynamicSqlSource);
-
         } else {//静态sql - updateByPrimaryKey
             //映射要包含set=?和where=?
             List<ParameterMapping> parameterMappings = getColumnParameterMappings(ms);
@@ -258,21 +263,128 @@ public class MapperHelper {
     }
 
     /**
-     * 根据对象所有列生成if的动态sqlNode
+     * 生成动态select语句
      *
      * @param ms
      * @return
      */
-    private static MixedSqlNode getSqlNode(MappedStatement ms) {
+    private static MixedSqlNode getSelectSqlNode(MappedStatement ms) {
         Class entityClass = getSelectReturnType(ms);
-        //
-//        IfSqlNode ifSqlNode = new IfSqlNode()
-        StaticTextSqlNode textSqlNode = new StaticTextSqlNode("");
-        List<SqlNode> sqlNodes = new ArrayList<SqlNode>(1);
-        sqlNodes.add(textSqlNode);
-        MixedSqlNode mixedSqlNode = new MixedSqlNode(sqlNodes);
-        IfSqlNode ifSqlNode = new IfSqlNode(mixedSqlNode, "property!=null and propertye!=''");
-        return null;
+        List<SqlNode> sqlNodes = new ArrayList<SqlNode>();
+        //select column ... from table
+        StaticTextSqlNode selectItems = new StaticTextSqlNode("SELECT "
+                + EntityHelper.getSelectColumns(entityClass)
+                + " FROM "
+                + EntityHelper.getTableName(entityClass));
+        sqlNodes.add(selectItems);
+        List<EntityHelper.EntityColumn> columnList = EntityHelper.getColumns(entityClass);
+        List<SqlNode> ifNodes = new ArrayList<SqlNode>();
+        boolean first = true;
+        for (EntityHelper.EntityColumn column : columnList) {
+            StaticTextSqlNode columnNode = new StaticTextSqlNode((first ? "" : " AND ") + column.getColumn() + " = #{" + column.getProperty() + "} ");
+            IfSqlNode ifSqlNode = new IfSqlNode(columnNode, column.getProperty() + " != null ");
+            ifNodes.add(ifSqlNode);
+            first = false;
+        }
+        WhereSqlNode whereSqlNode = new WhereSqlNode(ms.getConfiguration(), new MixedSqlNode(ifNodes));
+
+        sqlNodes.add(whereSqlNode);
+        return new MixedSqlNode(sqlNodes);
+    }
+
+    /**
+     * 生成动态select语句
+     *
+     * @param ms
+     * @return
+     */
+    private static MixedSqlNode getSelectCountSqlNode(MappedStatement ms) {
+        Class entityClass = getSelectReturnType(ms);
+        List<SqlNode> sqlNodes = new ArrayList<SqlNode>();
+        //select column ... from table
+        StaticTextSqlNode selectItems = new StaticTextSqlNode("SELECT COUNT(*) FROM "
+                + EntityHelper.getTableName(entityClass));
+        sqlNodes.add(selectItems);
+        List<EntityHelper.EntityColumn> columnList = EntityHelper.getColumns(entityClass);
+        List<SqlNode> ifNodes = new ArrayList<SqlNode>();
+        boolean first = true;
+        for (EntityHelper.EntityColumn column : columnList) {
+            StaticTextSqlNode columnNode = new StaticTextSqlNode((first ? "" : " AND ") + column.getColumn() + " = #{" + column.getProperty() + "} ");
+            IfSqlNode ifSqlNode = new IfSqlNode(columnNode, column.getProperty() + " != null ");
+            ifNodes.add(ifSqlNode);
+            first = false;
+        }
+        WhereSqlNode whereSqlNode = new WhereSqlNode(ms.getConfiguration(), new MixedSqlNode(ifNodes));
+
+        sqlNodes.add(whereSqlNode);
+        return new MixedSqlNode(sqlNodes);
+    }
+
+    /**
+     * 生成动态insert语句
+     *
+     * @param ms
+     * @return
+     */
+    private static MixedSqlNode getInsertSqlNode(MappedStatement ms) {
+        Class entityClass = getSelectReturnType(ms);
+        List<SqlNode> sqlNodes = new ArrayList<SqlNode>();
+        StaticTextSqlNode insertNode = new StaticTextSqlNode("INSERT INTO " + EntityHelper.getTableName(entityClass));
+        sqlNodes.add(insertNode);
+
+        List<EntityHelper.EntityColumn> columnList = EntityHelper.getColumns(entityClass);
+        List<SqlNode> ifNodes = new ArrayList<SqlNode>();
+        for (EntityHelper.EntityColumn column : columnList) {
+            StaticTextSqlNode columnNode = new StaticTextSqlNode(column.getColumn() + ",");
+            IfSqlNode ifSqlNode = new IfSqlNode(columnNode, column.getProperty() + " != null ");
+            ifNodes.add(ifSqlNode);
+        }
+        TrimSqlNode trimSqlNode = new TrimSqlNode(ms.getConfiguration(), new MixedSqlNode(ifNodes), "(", null, ")", ",");
+        sqlNodes.add(trimSqlNode);
+
+        ifNodes = new ArrayList<SqlNode>();
+        for (EntityHelper.EntityColumn column : columnList) {
+            StaticTextSqlNode columnNode = new StaticTextSqlNode("#{" + column.getProperty() + "},");
+            IfSqlNode ifSqlNode = new IfSqlNode(columnNode, column.getProperty() + " != null ");
+            ifNodes.add(ifSqlNode);
+        }
+        trimSqlNode = new TrimSqlNode(ms.getConfiguration(), new MixedSqlNode(ifNodes), "VALUES (", null, ")", ",");
+        sqlNodes.add(trimSqlNode);
+        return new MixedSqlNode(sqlNodes);
+    }
+
+    /**
+     * 生成动态select语句
+     *
+     * @param ms
+     * @return
+     */
+    private static MixedSqlNode getUpdateSqlNode(MappedStatement ms) {
+        Class entityClass = getSelectReturnType(ms);
+        List<SqlNode> sqlNodes = new ArrayList<SqlNode>();
+        //select column ... from table
+        StaticTextSqlNode selectItems = new StaticTextSqlNode("UPDATE " + EntityHelper.getTableName(entityClass));
+        sqlNodes.add(selectItems);
+        List<EntityHelper.EntityColumn> columnList = EntityHelper.getColumns(entityClass);
+        List<SqlNode> ifNodes = new ArrayList<SqlNode>();
+        for (EntityHelper.EntityColumn column : columnList) {
+            StaticTextSqlNode columnNode = new StaticTextSqlNode(column.getColumn() + " = #{" + column.getProperty() + "}, ");
+            IfSqlNode ifSqlNode = new IfSqlNode(columnNode, column.getProperty() + " != null ");
+            ifNodes.add(ifSqlNode);
+        }
+        SetSqlNode setSqlNode = new SetSqlNode(ms.getConfiguration(), new MixedSqlNode(ifNodes));
+        sqlNodes.add(setSqlNode);
+
+        columnList = EntityHelper.getPKColumns(entityClass);
+        List<SqlNode> whereNodes = new ArrayList<SqlNode>();
+        boolean first = true;
+        for (EntityHelper.EntityColumn column : columnList) {
+            StaticTextSqlNode columnNode = new StaticTextSqlNode((first ? "" : " AND ") + column.getColumn() + " = #{" + column.getProperty() + "} ");
+            whereNodes.add(columnNode);
+        }
+        WhereSqlNode whereSqlNode = new WhereSqlNode(ms.getConfiguration(), new MixedSqlNode(whereNodes));
+        sqlNodes.add(whereSqlNode);
+        return new MixedSqlNode(sqlNodes);
     }
 
     /**
@@ -286,7 +398,7 @@ public class MapperHelper {
         String methodName = getMethodName(ms);
         Object parameterObject = args[1];
         Map<String, Object> parameterMap = new HashMap<String, Object>();
-        if (methodName.equals(METHODS[1]) || methodName.equals(METHODS[4])) {
+        if (methodName.equals(METHODS[1]) || methodName.equals(METHODS[5])) {
             TypeHandlerRegistry typeHandlerRegistry = ms.getConfiguration().getTypeHandlerRegistry();
             List<ParameterMapping> parameterMappings = getPrimaryKeyParameterMappings(ms);
             for (int i = 0; i < parameterMappings.size(); i++) {
