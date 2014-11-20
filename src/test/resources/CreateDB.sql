@@ -1,9 +1,9 @@
 drop table country if exists;
 
 create table country (
-  id integer,
+  id integer not null,
   countryname varchar(32),
-  countrycode varchar(2)
+  countrycode varchar(2) DEFAULT 'HH'
 );
 
 insert into country (id, countryname, countrycode) values(1,'Angola','AO');
