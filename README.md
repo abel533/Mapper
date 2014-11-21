@@ -8,11 +8,11 @@
 
 程序使用拦截器实现具体的执行Sql,完全使用原生的Mybatis进行操作.
 
-继续往下看如何使用吧,相信这个通用的Mapper会让你更方便的使用Mybatis,这是一个强大的Mapper!
+你还在因为数据库表变动重新生成xml吗?还是要手动修改自动生成的insert|update|delete的xml呢?赶紧使用通用Mapper,表的变动只需要实体类保持一致,不用管基础的xml,你不止会拥有更多的时间陪老婆|孩子|女朋友|打DOTA,你也不用做哪些繁琐无聊的事情,感兴趣了吗?继续看如何使用吧!!相信这个通用的Mapper会让你更方便的使用Mybatis,这是一个强大的Mapper!!!
 
-不管你信不信,这个项目的测试代码中没有一个Mapper的xml配置文件,但是却可以做到
+不管你信不信,这个项目的测试代码中没有一个Mapper的xml配置文件,但是却可以做到每个Mapper对应上百行xml才能完成的许多功能.没有了这些基础xml信息的干扰,你将会拥有清晰干净的Mapper.xml.
 
-发现BUG可以提Issue,可以给我发邮件,可以加我QQ,可以进Mybatis群讨论(群和我无关,我有时会帮忙解答一些问题).
+发现BUG可以提Issue,可以给我发邮件,可以加我QQ,可以进Mybatis群讨论.
 
 作者博客：http://blog.csdn.net/isea533
 
@@ -20,7 +20,7 @@
 
 作者邮箱： abel533@gmail.com
 
-推荐一个Mybatis的QQ群： 146127540
+推荐一个Mybatis的QQ群： 146127540 (群不是我创建的,但是大家可以在群里讨论问题,相互学习)
 
 推荐使用Mybatis分页插件:[PageHelper分页插件](https://github.com/pagehelper/Mybatis-PageHelper)
 
@@ -77,11 +77,11 @@
       <value>classpath:mapper/*.xml</value>
     </array>
   </property>
-  <property name="typeAliasesPackage" value="com.isea533.ssm.model"/>
+  <property name="typeAliasesPackage" value="com.isea533.mybatis.model"/>
   <property name="plugins">
     <array>
       <-- 主要看这里 -->
-      <bean class="com.isea533.ssm.mapper.utils.MapperInterceptor"/>
+      <bean class="com.isea533.mybatis.mapperhelper.MapperInterceptor"/>
     </array>
   </property>
 </bean>
@@ -97,10 +97,10 @@
       <value>classpath:mapper/*.xml</value>
     </array>
   </property>
-  <property name="typeAliasesPackage" value="com.isea533.ssm.model"/>
+  <property name="typeAliasesPackage" value="com.isea533.mybatis.model"/>
   <property name="plugins">
     <array>
-      <bean class="com.isea533.ssm.pagehelper.PageHelper">
+      <bean class="com.isea533.mybatis.pagehelper.PageHelper">
         <property name="properties">
           <value>
             dialect=hsqldb
@@ -108,7 +108,7 @@
           </value>
         </property>
       </bean>
-      <bean class="com.isea533.ssm.mapper.utils.MapperInterceptor"/>
+      <bean class="com.isea533.mybatis.mapperhelper.MapperInterceptor"/>
     </array>
   </property>
 </bean>
@@ -238,7 +238,7 @@ private Integer id;
 如果你在Spring中配置Mapper接口,不需要像上面这样一个个配置,只需要有下面的这个扫描Mapper接口的这个配置即可:
 ```xml
 <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-  <property name="basePackage" value="com.isea533.ssm.mapper"/>
+  <property name="basePackage" value="com.isea533.mybatis.mapper"/>
 </bean>
 ```
 
