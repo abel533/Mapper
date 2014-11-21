@@ -235,7 +235,7 @@ public class EntityHelper {
             entityColumn.setProperty(field.getName());
             entityColumn.setColumn(columnName.toUpperCase());
             entityColumn.setJavaType(field.getType());
-            //TODO 主键策略 - Oracle序列，MySql自动增长，UUID
+            //主键策略 - Oracle序列，MySql自动增长，UUID
             if (field.isAnnotationPresent(SequenceGenerator.class)) {
                 SequenceGenerator sequenceGenerator = field.getAnnotation(SequenceGenerator.class);
                 entityColumn.setSequenceName(sequenceGenerator.sequenceName());
@@ -249,8 +249,8 @@ public class EntityHelper {
                         throw new RuntimeException(field.getName() + " - 该字段@GeneratedValue配置为UUID，但该字段类型不是String");
                     }
                 } else {
-                    //TODO 允许通过generator来设置获取id的sql,例如mysql=CALL IDENTITY(),hsqldb=SELECT SCOPE_IDENTITY()
-                    //TODO 允许通过拦截器参数设置公共的generator
+                    //允许通过generator来设置获取id的sql,例如mysql=CALL IDENTITY(),hsqldb=SELECT SCOPE_IDENTITY()
+                    //允许通过拦截器参数设置公共的generator
                     if (generatedValue.strategy() == GenerationType.IDENTITY) {
                         //mysql的自动增长
                         entityColumn.setIdentity(true);

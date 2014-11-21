@@ -74,5 +74,9 @@ public class MapperInterceptor implements Interceptor {
         if (IDENTITY != null && IDENTITY.length() > 0) {
             mapperHelper.setIDENTITY(IDENTITY);
         }
+        String ORDER = properties.getProperty("ORDER");
+        if (ORDER != null && ORDER.length() > 0) {
+            mapperHelper.setBEFORE(ORDER);
+        }
     }
 }

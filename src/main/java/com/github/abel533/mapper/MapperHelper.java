@@ -35,6 +35,7 @@ public class MapperHelper {
     private class Config {
         private String UUID = "";
         private String IDENTITY = "";
+        private boolean BEFORE = false;
     }
 
     private Config config = new Config();
@@ -45,6 +46,10 @@ public class MapperHelper {
 
     public void setIDENTITY(String IDENTITY) {
         config.IDENTITY = IDENTITY;
+    }
+
+    public void setBEFORE(String BEFORE) {
+        config.BEFORE = "BEFORE".equalsIgnoreCase(BEFORE);
     }
 
     private String getUUID() {
@@ -59,6 +64,10 @@ public class MapperHelper {
             return config.IDENTITY;
         }
         return "CALL IDENTITY()";
+    }
+
+    private boolean getBEFORE() {
+        return config.BEFORE;
     }
 
     public static final String DYNAMIC_SQL = "dynamicSQL";
@@ -415,6 +424,9 @@ public class MapperHelper {
                 newSelectKeyMappedStatement(ms, column);
                 hasIdentityKey = true;
                 ifNodes.add(new StaticTextSqlNode(column.getColumn() + ","));
+                //这种情况下,如果原先的字段有值,需要先缓存起来,否则就一定会使用自动增长
+                VarDeclSqlNode bind = new VarDeclSqlNode(column.getProperty() + "_cache", column.getProperty());
+                sqlNodes.add(bind);
             } else if (column.isUuid()) {
                 sqlNodes.add(new VarDeclSqlNode(column.getProperty() + "_bind", getUUID()));
                 ifNodes.add(new StaticTextSqlNode(column.getColumn() + ","));
@@ -429,18 +441,19 @@ public class MapperHelper {
         ifNodes = new ArrayList<SqlNode>();
         for (EntityHelper.EntityColumn column : columnList) {
             //当参数中的属性值不为空的时候,使用传入的值
-            StaticTextSqlNode columnNode = new StaticTextSqlNode("#{" + column.getProperty() + "},");
-            ifNodes.add(new IfSqlNode(columnNode, column.getProperty() + " != null "));
+            //自增的情况下,如果默认有值,就会备份到property_cache中
+            if (column.isIdentity()) {
+                ifNodes.add(new IfSqlNode(new StaticTextSqlNode("#{" + column.getProperty() + "_cache },"), column.getProperty() + "_cache != null "));
+            } else {
+                ifNodes.add(new IfSqlNode(new StaticTextSqlNode("#{" + column.getProperty() + "},"), column.getProperty() + " != null "));
+            }
 
             if (column.getSequenceName() != null && column.getSequenceName().length() > 0) {
-                columnNode = new StaticTextSqlNode(column.getProperty() + ".nextval ,");
-                ifNodes.add(new IfSqlNode(columnNode, column.getProperty() + " == null "));
+                ifNodes.add(new IfSqlNode(new StaticTextSqlNode(column.getProperty() + ".nextval ,"), column.getProperty() + " == null "));
             } else if (column.isIdentity()) {
-                columnNode = new StaticTextSqlNode("#{" + column.getProperty() + "_identity },");
-                ifNodes.add(new IfSqlNode(columnNode, column.getProperty() + " == null "));
+                ifNodes.add(new IfSqlNode(new StaticTextSqlNode("#{" + column.getProperty() + " },"), column.getProperty() + " == null "));
             } else if (column.isUuid()) {
-                columnNode = new StaticTextSqlNode("#{" + column.getProperty() + "_bind },");
-                ifNodes.add(new IfSqlNode(columnNode, column.getProperty() + " == null "));
+                ifNodes.add(new IfSqlNode(new StaticTextSqlNode("#{" + column.getProperty() + "_bind },"), column.getProperty() + " == null "));
             }
         }
         sqlNodes.add(new TrimSqlNode(ms.getConfiguration(), new MixedSqlNode(ifNodes), "VALUES (", null, ")", ","));
@@ -471,6 +484,9 @@ public class MapperHelper {
                 }
                 newSelectKeyMappedStatement(ms, column);
                 hasIdentityKey = true;
+                //这种情况下,如果原先的字段有值,需要先缓存起来,否则就一定会使用自动增长
+                VarDeclSqlNode bind = new VarDeclSqlNode(column.getProperty() + "_cache", column.getProperty());
+                sqlNodes.add(bind);
             } else if (column.isUuid()) {
                 VarDeclSqlNode bind = new VarDeclSqlNode(column.getProperty() + "_bind", getUUID());
                 sqlNodes.add(bind);
@@ -480,21 +496,21 @@ public class MapperHelper {
         List<SqlNode> ifNodes = new ArrayList<SqlNode>();
         for (EntityHelper.EntityColumn column : columnList) {
             //优先使用传入的属性值
-            StaticTextSqlNode columnNode = new StaticTextSqlNode("#{" + column.getProperty() + "},");
-            ifNodes.add(new IfSqlNode(columnNode, column.getProperty() + " != null "));
+            //自增的情况下,如果默认有值,就会备份到property_cache中
+            if (column.isIdentity()) {
+                ifNodes.add(new IfSqlNode(new StaticTextSqlNode("#{" + column.getProperty() + "_cache },"), column.getProperty() + "_cache != null "));
+            } else {
+                ifNodes.add(new IfSqlNode(new StaticTextSqlNode("#{" + column.getProperty() + "},"), column.getProperty() + " != null "));
+            }
 
             if (column.getSequenceName() != null && column.getSequenceName().length() > 0) {
-                columnNode = new StaticTextSqlNode(column.getProperty() + ".nextval ,");
-                ifNodes.add(new IfSqlNode(columnNode, column.getProperty() + " == null "));
+                ifNodes.add(new IfSqlNode(new StaticTextSqlNode(column.getProperty() + ".nextval ,"), column.getProperty() + " == null "));
             } else if (column.isIdentity()) {
-                columnNode = new StaticTextSqlNode("#{" + column.getProperty() + "_identity },");
-                ifNodes.add(new IfSqlNode(columnNode, column.getProperty() + " == null "));
+                ifNodes.add(new IfSqlNode(new StaticTextSqlNode("#{" + column.getProperty() + " },"), column.getProperty() + "_cache == null "));
             } else if (column.isUuid()) {
-                columnNode = new StaticTextSqlNode("#{" + column.getProperty() + "_bind },");
-                ifNodes.add(new IfSqlNode(columnNode, column.getProperty() + " == null "));
+                ifNodes.add(new IfSqlNode(new StaticTextSqlNode("#{" + column.getProperty() + "_bind },"), column.getProperty() + " == null "));
             } else {
-                columnNode = new StaticTextSqlNode("#{" + column.getProperty() + "},");
-                ifNodes.add(new IfSqlNode(columnNode, column.getProperty() + " == null "));
+                ifNodes.add(new IfSqlNode(new StaticTextSqlNode("#{" + column.getProperty() + "},"), column.getProperty() + " == null "));
             }
         }
         sqlNodes.add(new TrimSqlNode(ms.getConfiguration(), new MixedSqlNode(ifNodes), "VALUES (", null, ")", ","));
@@ -592,7 +608,7 @@ public class MapperHelper {
         //defaults
         Configuration configuration = ms.getConfiguration();
         KeyGenerator keyGenerator = new NoKeyGenerator();
-        Boolean executeBefore = true;
+        Boolean executeBefore = getBEFORE();
         String IDENTITY = (column.getGenerator() == null || column.getGenerator().equals("")) ? getIDENTITY() : column.getGenerator();
         SqlSource sqlSource = new RawSqlSource(configuration, IDENTITY, entityClass);
 
@@ -601,7 +617,7 @@ public class MapperHelper {
         statementBuilder.fetchSize(null);
         statementBuilder.statementType(StatementType.STATEMENT);
         statementBuilder.keyGenerator(keyGenerator);
-        statementBuilder.keyProperty(column.getProperty() + "_identity");
+        statementBuilder.keyProperty(column.getProperty());
         statementBuilder.keyColumn(null);
         statementBuilder.databaseId(null);
         statementBuilder.lang(configuration.getDefaultScriptingLanuageInstance());
@@ -617,7 +633,15 @@ public class MapperHelper {
                 parameterMappings);
         statementBuilder.parameterMap(inlineParameterMapBuilder.build());
 
-        statementBuilder.resultMaps(new ArrayList<ResultMap>());
+        List<ResultMap> resultMaps = new ArrayList<ResultMap>();
+        ResultMap.Builder inlineResultMapBuilder = new ResultMap.Builder(
+                configuration,
+                statementBuilder.id() + "-Inline",
+                int.class,
+                new ArrayList<ResultMapping>(),
+                null);
+        resultMaps.add(inlineResultMapBuilder.build());
+        statementBuilder.resultMaps(resultMaps);
         statementBuilder.resultSetType(null);
 
         statementBuilder.flushCacheRequired(false);
