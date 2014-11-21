@@ -8,7 +8,10 @@ import org.apache.ibatis.annotations.UpdateProvider;
 import java.util.List;
 
 /**
- * Created by liuzh on 2014/11/19.
+ * 通用Mapper接口,其他接口继承该接口即可
+ *
+ * @param <T> 不能为空
+ * @author liuzh
  */
 public interface Mapper<T> {
 

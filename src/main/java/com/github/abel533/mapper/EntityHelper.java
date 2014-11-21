@@ -7,10 +7,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * 初始化 Entity 结构
+ * 实体类工具类
  *
- * @author huangyong
- * @since 1.0
+ * @author liuzh
  */
 public class EntityHelper {
 

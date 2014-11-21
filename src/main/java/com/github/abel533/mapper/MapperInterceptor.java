@@ -10,7 +10,9 @@ import org.apache.ibatis.session.RowBounds;
 import java.util.Properties;
 
 /**
- * Created by liuzh on 2014/11/19.
+ * 通用Mapper拦截器
+ *
+ * @author liuzh
  */
 @Intercepts({
         @Signature(type = Executor.class, method = "query", args = {MappedStatement.class, Object.class, RowBounds.class, ResultHandler.class}),
@@ -18,7 +20,7 @@ import java.util.Properties;
 })
 public class MapperInterceptor implements Interceptor {
 
-    private MapperHelper mapperHelper;
+    private final MapperHelper mapperHelper = new MapperHelper();;
 
     @Override
     public Object intercept(Invocation invocation) throws Throwable {
@@ -50,8 +52,7 @@ public class MapperInterceptor implements Interceptor {
         }
         //只有select和delete通过PK操作时需要处理入参
         mapperHelper.processParameterObject(ms,objects);
-        Object result = invocation.proceed();
-        return result;
+        return invocation.proceed();
     }
 
     @Override
@@ -65,7 +66,6 @@ public class MapperInterceptor implements Interceptor {
 
     @Override
     public void setProperties(Properties properties) {
-        mapperHelper = new MapperHelper();
         String UUID = properties.getProperty("UUID");
         if (UUID != null && UUID.length() > 0) {
             mapperHelper.setUUID(UUID);

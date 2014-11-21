@@ -26,7 +26,7 @@
 
 ##如何使用?
 
-下面是基于Mybatis配置的配置方法,稍后会增加Spring集成的配置方法.还会讲和[PageHelper分页插件](https://github.com/pagehelper/Mybatis-PageHelper)集成的配置方式.
+下面是通用Mapper的配置方法,还会提到Spring中的配置方法.还有和[PageHelper分页插件](https://github.com/pagehelper/Mybatis-PageHelper)集成的配置方式.
 
 ###1. 引入通用Mapper的代码
 
@@ -41,7 +41,7 @@
 </dependency>
 ```
 
-###2. 配置Mapper拦截器(后续会提供Spring集成的配置)
+###2. 配置Mapper拦截器
 
 在`mybatis-config.xml`中添加如下配置:
 ```xml
@@ -65,6 +65,58 @@
 ```xml
 <plugin interceptor="com.github.abel533.mapper.MapperInterceptor"></plugin>
 ```
+
+<b>附:Spring配置相关</b>
+
+如果你使用Spring的方式来配置该拦截器,你可以像下面这样:
+```xml
+<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+  <property name="dataSource" ref="dataSource"/>
+  <property name="mapperLocations">
+    <array>
+      <value>classpath:mapper/*.xml</value>
+    </array>
+  </property>
+  <property name="typeAliasesPackage" value="com.isea533.ssm.model"/>
+  <property name="plugins">
+    <array>
+      <-- 主要看这里 -->
+      <bean class="com.isea533.ssm.mapper.utils.MapperInterceptor"/>
+    </array>
+  </property>
+</bean>
+```
+只需要像上面这样配置一个bean即可.
+
+如果你同时使用了[PageHelper分页插件](https://github.com/pagehelper/Mybatis-PageHelper),可以像下面这样配置:
+```xml
+<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+  <property name="dataSource" ref="dataSource"/>
+  <property name="mapperLocations">
+    <array>
+      <value>classpath:mapper/*.xml</value>
+    </array>
+  </property>
+  <property name="typeAliasesPackage" value="com.isea533.ssm.model"/>
+  <property name="plugins">
+    <array>
+      <bean class="com.isea533.ssm.pagehelper.PageHelper">
+        <property name="properties">
+          <value>
+            dialect=hsqldb
+            reasonable=true
+          </value>
+        </property>
+      </bean>
+      <bean class="com.isea533.ssm.mapper.utils.MapperInterceptor"/>
+    </array>
+  </property>
+</bean>
+```
+一定要注意`PageHelper`和`MapperInterceptor`这两者的顺序不能颠倒.
+
+如果你想配置`MapperInterceptor`的参数,可以像`PageHelper`中的`properties`参数这样配置
+
 
 ###3. 继承通用的`Mapper<T>`,必须指定泛型`<T>`
 
@@ -181,6 +233,15 @@ private Integer id;
 </mappers>
 ```
 
+<b>附:Spring配置相关</b>
+
+如果你在Spring中配置Mapper接口,不需要像上面这样一个个配置,只需要有下面的这个扫描Mapper接口的这个配置即可:
+```xml
+<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+  <property name="basePackage" value="com.isea533.ssm.mapper"/>
+</bean>
+```
+
 ###6. 代码中使用
 
 例如下面这个简单的例子:
@@ -227,6 +288,10 @@ try {
     sqlSession.close();
 }
 ```
+
+<b>附:Spring使用相关</b>
+
+直接在需要的地方注入Mapper继承的接口即可,和一般情况下的使用没有区别.
 
 ##当前版本v0.1.0
 
