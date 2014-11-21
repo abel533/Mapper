@@ -26,8 +26,11 @@
 
 下面是基于Mybatis配置的配置方法,稍后会增加Spring集成的配置方法.还会讲和[PageHelper分页插件](https://github.com/pagehelper/Mybatis-PageHelper)集成的配置方式.
 
-###1. 引入通用Mapper的代码,项目依赖于JPA的注解,需要引入persistence-api-1.0.jar或者添加Maven依赖:
+###1. 引入通用Mapper的代码
 
+将本项目中的4个代码文件(`EntityHelper`,`Mapper`,`MapperHelper`,`MapperInterceptor`)复制到你自己的项目中.
+
+项目依赖于JPA的注解,需要引入`persistence-api-1.0.jar`或者添加Maven依赖:
 ```xml
 <dependency>
   <groupId>javax.persistence</groupId>
@@ -39,7 +42,6 @@
 ###2. 配置Mapper拦截器(后续会提供Spring集成的配置)
 
 在`mybatis-config.xml`中添加如下配置:
-
 ```xml
 <plugins>
   <plugin interceptor="com.github.abel533.mapper.MapperInterceptor">
@@ -57,24 +59,21 @@
   </plugin>
 </plugins>
 ```
-
 可配置参数一般情况下不需要修改,直接像下面这样一行即可:
-
 ```xml
 <plugin interceptor="com.github.abel533.mapper.MapperInterceptor"></plugin>
 ```
 
-###3. 继承通用的`Mapper<T>`,必须指定泛型`<T>`,例如下面的例子:
+###3. 继承通用的`Mapper<T>`,必须指定泛型`<T>`
 
+例如下面的例子:
 ```java
 public interface UserInfoMapper extends Mapper<UserInfo> {
   //其他必须手写的接口...
 
 }
 ```
-
 一旦继承了`Mapper<T>`,继承的`Mapper`就拥有了以下通用的方法:
-
 ```java
 //根据实体类不为null的字段进行查询,条件全部使用=号and条件
 List<T> select(T record);
@@ -141,7 +140,6 @@ int updateByPrimaryKeySelective(T record);
 这三种方式不能同时使用,同时存在时按照 `序列>UUID>主键自增`的优先级进行选择.下面是具体配置方法:
 
 1. 使用序列可以添加如下的注解:
-
 ```java
 //可以用于数字类型,字符串类型(需数据库支持自动转型)的字段
 @SequenceGenerator(name="Any",sequenceName="seq_userid")
@@ -150,7 +148,6 @@ private Integer id;
 ```
 
 2. 使用UUID时:
-
 ```java
 //可以用于任意字符串类型长度超过32位的字段
 @GeneratedValue(generator = "UUID")
@@ -158,7 +155,6 @@ private String countryname;
 ```
 
 3. 使用主键自增:
-
 ```java
 //不限于@Id注解的字段,但是一个实体类中只能存在一个(继承关系中也只能存在一个)
 @Id
@@ -170,7 +166,6 @@ private Integer id;
 ###5. 将继承的Mapper接口添加到Mybatis配置中
 
 例如本项目测试中的配置:
-
 ```xml
 <mappers>
   <mapper class="com.github.abel533.mapper.CountryMapper" />
@@ -187,7 +182,6 @@ private Integer id;
 ###6. 代码中使用
 
 例如下面这个简单的例子:
-
 ```java
 SqlSession sqlSession = MybatisHelper.getSqlSession();
 try {
@@ -212,7 +206,6 @@ try {
 ```
 
 另一个例子:
-
 ```java
 SqlSession sqlSession = MybatisHelper.getSqlSession();
 try {
