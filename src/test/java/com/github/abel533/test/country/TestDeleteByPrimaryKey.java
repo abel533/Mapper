@@ -15,7 +15,7 @@ import java.util.Map;
  *
  * @author liuzh
  */
-public class TestDelete {
+public class TestDeleteByPrimaryKey {
 
     /**
      * 主要测试删除
@@ -29,12 +29,8 @@ public class TestDelete {
             Assert.assertEquals(183, mapper.selectCount(new Country()));
             //查询100
             Country country = mapper.selectByPrimaryKey(100);
-
-
             //根据主键删除
             Assert.assertEquals(1, mapper.deleteByPrimaryKey(100));
-
-
             //查询总数
             Assert.assertEquals(182, mapper.selectCount(new Country()));
             //插入

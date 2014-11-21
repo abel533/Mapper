@@ -238,9 +238,12 @@ public class EntityHelper {
             //主键策略 - Oracle序列，MySql自动增长，UUID
             if (field.isAnnotationPresent(SequenceGenerator.class)) {
                 SequenceGenerator sequenceGenerator = field.getAnnotation(SequenceGenerator.class);
+                if (sequenceGenerator.sequenceName().equals("")) {
+                    throw new RuntimeException(entityClass+"字段"+field.getName()+"的注解@SequenceGenerator未指定sequenceName!");
+                }
                 entityColumn.setSequenceName(sequenceGenerator.sequenceName());
             }
-            if (field.isAnnotationPresent(GeneratedValue.class)) {
+            else if (field.isAnnotationPresent(GeneratedValue.class)) {
                 GeneratedValue generatedValue = field.getAnnotation(GeneratedValue.class);
                 if (generatedValue.generator().equals("UUID")) {
                     if (field.getType().equals(String.class)) {
@@ -260,7 +263,7 @@ public class EntityHelper {
                     } else {
                         throw new RuntimeException(field.getName()
                                 + " - 该字段@GeneratedValue配置只允许两种形式，全部数据库通用的@GeneratedValue(generator=\"UUID\") 或者 " +
-                                "mysql数据库的@GeneratedValue(strategy=GenerationType.IDENTITY[,generator=\"CALL IDENTITY()\"])");
+                                "类似mysql数据库的@GeneratedValue(strategy=GenerationType.IDENTITY[,generator=\"CALL IDENTITY()\"])");
                     }
                 }
             }

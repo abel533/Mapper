@@ -28,6 +28,9 @@ public interface Mapper<T> {
     int insertSelective(T record);
 
     @DeleteProvider(type = MapperHelper.class, method = MapperHelper.DYNAMIC_SQL)
+    int delete(T key);
+
+    @DeleteProvider(type = MapperHelper.class, method = MapperHelper.DYNAMIC_SQL)
     int deleteByPrimaryKey(Object key);
 
     @UpdateProvider(type = MapperHelper.class, method = MapperHelper.DYNAMIC_SQL)
