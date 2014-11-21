@@ -574,6 +574,13 @@ public class MapperHelper {
                     if (parameterObject == null) {
                         value = null;
                     } else if (typeHandlerRegistry.hasTypeHandler(parameterObject.getClass())) {
+                        if (parameterMappings.size() > 1) {
+                            StringBuilder propertyBuilder = new StringBuilder("入参缺少必要的属性错误!参数中必须提供属性:");
+                            for (ParameterMapping mapping : parameterMappings) {
+                                propertyBuilder.append(mapping.getProperty()).append(",");
+                            }
+                            throw new RuntimeException(propertyBuilder.substring(0, propertyBuilder.length() - 1));
+                        }
                         value = parameterObject;
                     } else {
                         MetaObject metaObject = forObject(parameterObject);
