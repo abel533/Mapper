@@ -61,7 +61,7 @@ public class TestUUID {
 
             Assert.assertEquals(1, list.size());
             Assert.assertNotNull(list.get(0).getCountryname());
-            Assert.assertEquals("天朝",list.get(0).getCountrycode());
+            Assert.assertEquals("天朝",list.get(0).getCountryname());
             //删除插入的数据,以免对其他测试产生影响
             Assert.assertEquals(1, mapper.deleteByPrimaryKey(10086));
         } finally {

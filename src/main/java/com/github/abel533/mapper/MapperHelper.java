@@ -31,20 +31,50 @@ import static org.apache.ibatis.jdbc.SqlBuilder.*;
  */
 public class MapperHelper {
 
+    //基础可配置项
+    private class Config {
+        private String UUID = "";
+        private String IDENTITY = "";
+    }
+
+    private Config config = new Config();
+
+    public void setUUID(String UUID) {
+        config.UUID = UUID;
+    }
+
+    public void setIDENTITY(String IDENTITY) {
+        config.IDENTITY = IDENTITY;
+    }
+
+    private String getUUID() {
+        if (config.UUID != null && config.UUID.length() > 0) {
+            return config.UUID;
+        }
+        return "@java.util.UUID@randomUUID().toString().replace(\"-\", \"\")";
+    }
+
+    private String getIDENTITY() {
+        if (config.IDENTITY != null && config.IDENTITY.length() > 0) {
+            return config.IDENTITY;
+        }
+        return "CALL IDENTITY()";
+    }
+
     public static final String DYNAMIC_SQL = "dynamicSQL";
     /**
      * 缓存skip结果
      */
-    private static final Map<String, Boolean> msIdSkip = new HashMap<String, Boolean>();
+    private final Map<String, Boolean> msIdSkip = new HashMap<String, Boolean>();
     /**
      * 缓存实体类类型
      */
-    private static final Map<String, Class<?>> entityType = new HashMap<String, Class<?>>();
+    private final Map<String, Class<?>> entityType = new HashMap<String, Class<?>>();
 
     /**
      * 定义要拦截的方法名
      */
-    public static final String[] METHODS = {
+    public final String[] METHODS = {
             "select",
             "selectByPrimaryKey",
             "selectCount",
@@ -78,7 +108,7 @@ public class MapperHelper {
      * @return
      * @throws ClassNotFoundException
      */
-    public static Class<?> getMapperClass(String msId) throws ClassNotFoundException {
+    public Class<?> getMapperClass(String msId) throws ClassNotFoundException {
         String mapperClassStr = msId.substring(0, msId.lastIndexOf("."));
         return Class.forName(mapperClassStr);
     }
@@ -89,7 +119,7 @@ public class MapperHelper {
      * @param mapperClass
      * @return
      */
-    public static boolean extendsMapper(Class mapperClass) {
+    public boolean extendsMapper(Class mapperClass) {
         return Mapper.class.isAssignableFrom(mapperClass);
     }
 
@@ -99,7 +129,7 @@ public class MapperHelper {
      * @param msId
      * @return
      */
-    public static boolean isMapperMethod(String msId) {
+    public boolean isMapperMethod(String msId) {
         if (msIdSkip.get(msId) != null) {
             return msIdSkip.get(msId);
         }
@@ -129,7 +159,7 @@ public class MapperHelper {
      * @param ms
      * @return
      */
-    public static Class<?> getSelectReturnType(MappedStatement ms) {
+    public Class<?> getSelectReturnType(MappedStatement ms) {
         String msId = ms.getId();
         if (entityType.get(msId) != null) {
             return entityType.get(msId);
@@ -155,7 +185,7 @@ public class MapperHelper {
         throw new RuntimeException("无法获取Mapper<T>泛型类型:" + msId);
     }
 
-    public static String getMethodName(MappedStatement ms) {
+    public String getMethodName(MappedStatement ms) {
         String msId = ms.getId();
         return msId.substring(msId.lastIndexOf(".") + 1);
     }
@@ -166,7 +196,7 @@ public class MapperHelper {
      * @param ms
      * @param sqlSource
      */
-    private static void setSqlSource(MappedStatement ms, SqlSource sqlSource) {
+    private void setSqlSource(MappedStatement ms, SqlSource sqlSource) {
         MetaObject msObject = forObject(ms);
         msObject.setValue("sqlSource", sqlSource);
     }
@@ -176,7 +206,7 @@ public class MapperHelper {
      *
      * @param ms
      */
-    public static void selectSqlSource(MappedStatement ms) {
+    public void selectSqlSource(MappedStatement ms) {
         String methodName = getMethodName(ms);
         Class<?> entityClass = getSelectReturnType(ms);
         //动态sql
@@ -207,7 +237,7 @@ public class MapperHelper {
      *
      * @param ms
      */
-    public static void insertSqlSource(MappedStatement ms) {
+    public void insertSqlSource(MappedStatement ms) {
         String methodName = getMethodName(ms);
         Class<?> entityClass = getSelectReturnType(ms);
         //动态sql
@@ -226,7 +256,7 @@ public class MapperHelper {
      *
      * @param ms
      */
-    public static void updateSqlSource(MappedStatement ms) {
+    public void updateSqlSource(MappedStatement ms) {
         String methodName = getMethodName(ms);
         Class<?> entityClass = getSelectReturnType(ms);
         //动态sql
@@ -254,7 +284,7 @@ public class MapperHelper {
      *
      * @param ms
      */
-    public static void deleteSqlSource(MappedStatement ms) {
+    public void deleteSqlSource(MappedStatement ms) {
         Class<?> entityClass = getSelectReturnType(ms);
         List<ParameterMapping> parameterMappings = getPrimaryKeyParameterMappings(ms);
         BEGIN();
@@ -270,7 +300,7 @@ public class MapperHelper {
      * @param ms
      * @return
      */
-    private static List<ParameterMapping> getPrimaryKeyParameterMappings(MappedStatement ms) {
+    private List<ParameterMapping> getPrimaryKeyParameterMappings(MappedStatement ms) {
         Class<?> entityClass = getSelectReturnType(ms);
         List<EntityHelper.EntityColumn> entityColumns = EntityHelper.getPKColumns(entityClass);
         List<ParameterMapping> parameterMappings = new ArrayList<ParameterMapping>();
@@ -288,7 +318,7 @@ public class MapperHelper {
      * @param ms
      * @return
      */
-    private static List<ParameterMapping> getColumnParameterMappings(MappedStatement ms) {
+    private List<ParameterMapping> getColumnParameterMappings(MappedStatement ms) {
         Class<?> entityClass = getSelectReturnType(ms);
         List<EntityHelper.EntityColumn> entityColumns = EntityHelper.getColumns(entityClass);
         List<ParameterMapping> parameterMappings = new ArrayList<ParameterMapping>();
@@ -306,7 +336,7 @@ public class MapperHelper {
      * @param ms
      * @return
      */
-    private static MixedSqlNode getSelectSqlNode(MappedStatement ms) {
+    private MixedSqlNode getSelectSqlNode(MappedStatement ms) {
         Class<?> entityClass = getSelectReturnType(ms);
         List<SqlNode> sqlNodes = new ArrayList<SqlNode>();
         //select column ... from table
@@ -336,7 +366,7 @@ public class MapperHelper {
      * @param ms
      * @return
      */
-    private static MixedSqlNode getSelectCountSqlNode(MappedStatement ms) {
+    private MixedSqlNode getSelectCountSqlNode(MappedStatement ms) {
         Class<?> entityClass = getSelectReturnType(ms);
         List<SqlNode> sqlNodes = new ArrayList<SqlNode>();
         //select column ... from table
@@ -364,7 +394,7 @@ public class MapperHelper {
      * @param ms
      * @return
      */
-    private static MixedSqlNode getInsertSqlNode(MappedStatement ms) {
+    private MixedSqlNode getInsertSqlNode(MappedStatement ms) {
         Class<?> entityClass = getSelectReturnType(ms);
         List<SqlNode> sqlNodes = new ArrayList<SqlNode>();
         StaticTextSqlNode insertNode = new StaticTextSqlNode("INSERT INTO " + EntityHelper.getTableName(entityClass));
@@ -374,49 +404,46 @@ public class MapperHelper {
         List<SqlNode> ifNodes = new ArrayList<SqlNode>();
         Boolean hasIdentityKey = false;
         for (EntityHelper.EntityColumn column : columnList) {
-            //TODO 当有值的时候,使用传入的值
             if (column.getSequenceName() != null && column.getSequenceName().length() > 0) {
                 //直接序列加进去
-                StaticTextSqlNode columnNode = new StaticTextSqlNode(column.getColumn() + ",");
-                ifNodes.add(columnNode);
-            } else if (column.getIDENTITY()) {
-                //列必有
+                ifNodes.add(new StaticTextSqlNode(column.getColumn() + ","));
+            } else if (column.isIdentity()) {
                 if (hasIdentityKey) {
                     throw new RuntimeException(ms.getId() + "对应的实体类" + entityClass.getCanonicalName() + "中包含多个MySql的自动增长列,最多只能有一个!");
                 }
+                //新增一个selectKey-MS
                 newSelectKeyMappedStatement(ms, column);
                 hasIdentityKey = true;
-            } else if (column.getUUID()) {
-                VarDeclSqlNode bind = new VarDeclSqlNode(column.getProperty() + "_bind", "@java.util.UUID@randomUUID().toString()");
-                sqlNodes.add(bind);
+                ifNodes.add(new StaticTextSqlNode(column.getColumn() + ","));
+            } else if (column.isUuid()) {
+                sqlNodes.add(new VarDeclSqlNode(column.getProperty() + "_bind", getUUID()));
+                ifNodes.add(new StaticTextSqlNode(column.getColumn() + ","));
             } else {
                 StaticTextSqlNode columnNode = new StaticTextSqlNode(column.getColumn() + ",");
                 IfSqlNode ifSqlNode = new IfSqlNode(columnNode, column.getProperty() + " != null ");
                 ifNodes.add(ifSqlNode);
             }
         }
-        TrimSqlNode trimSqlNode = new TrimSqlNode(ms.getConfiguration(), new MixedSqlNode(ifNodes), "(", null, ")", ",");
-        sqlNodes.add(trimSqlNode);
+        sqlNodes.add(new TrimSqlNode(ms.getConfiguration(), new MixedSqlNode(ifNodes), "(", null, ")", ","));
 
         ifNodes = new ArrayList<SqlNode>();
         for (EntityHelper.EntityColumn column : columnList) {
+            //当参数中的属性值不为空的时候,使用传入的值
+            StaticTextSqlNode columnNode = new StaticTextSqlNode("#{" + column.getProperty() + "},");
+            ifNodes.add(new IfSqlNode(columnNode, column.getProperty() + " != null "));
+
             if (column.getSequenceName() != null && column.getSequenceName().length() > 0) {
-                StaticTextSqlNode columnNode = new StaticTextSqlNode(column.getProperty() + ".nextval ,");
-                ifNodes.add(columnNode);
-            } else if (column.getIDENTITY()) {
-                StaticTextSqlNode columnNode = new StaticTextSqlNode("#{" + column.getProperty() + "_identity },");
-                ifNodes.add(columnNode);
-            } else if (column.getUUID()) {
-                StaticTextSqlNode columnNode = new StaticTextSqlNode("#{" + column.getProperty() + "_bind },");
-                ifNodes.add(columnNode);
-            } else {
-                StaticTextSqlNode columnNode = new StaticTextSqlNode("#{" + column.getProperty() + "},");
-                IfSqlNode ifSqlNode = new IfSqlNode(columnNode, column.getProperty() + " != null ");
-                ifNodes.add(ifSqlNode);
+                columnNode = new StaticTextSqlNode(column.getProperty() + ".nextval ,");
+                ifNodes.add(new IfSqlNode(columnNode, column.getProperty() + " == null "));
+            } else if (column.isIdentity()) {
+                columnNode = new StaticTextSqlNode("#{" + column.getProperty() + "_identity },");
+                ifNodes.add(new IfSqlNode(columnNode, column.getProperty() + " == null "));
+            } else if (column.isUuid()) {
+                columnNode = new StaticTextSqlNode("#{" + column.getProperty() + "_bind },");
+                ifNodes.add(new IfSqlNode(columnNode, column.getProperty() + " == null "));
             }
         }
-        trimSqlNode = new TrimSqlNode(ms.getConfiguration(), new MixedSqlNode(ifNodes), "VALUES (", null, ")", ",");
-        sqlNodes.add(trimSqlNode);
+        sqlNodes.add(new TrimSqlNode(ms.getConfiguration(), new MixedSqlNode(ifNodes), "VALUES (", null, ")", ","));
         return new MixedSqlNode(sqlNodes);
     }
 
@@ -426,7 +453,7 @@ public class MapperHelper {
      * @param ms
      * @return
      */
-    private static MixedSqlNode getInsertAllSqlNode(MappedStatement ms) {
+    private MixedSqlNode getInsertAllSqlNode(MappedStatement ms) {
         Class<?> entityClass = getSelectReturnType(ms);
         List<SqlNode> sqlNodes = new ArrayList<SqlNode>();
         StaticTextSqlNode insertNode = new StaticTextSqlNode("INSERT INTO " + EntityHelper.getTableName(entityClass));
@@ -436,36 +463,41 @@ public class MapperHelper {
         Boolean hasIdentityKey = false;
         //处理Key
         for (EntityHelper.EntityColumn column : columnList) {
-            //TODO 当有值的时候,使用传入的值
             if (column.getSequenceName() != null && column.getSequenceName().length() > 0) {
-            } else if (column.getIDENTITY()) {
+            } else if (column.isIdentity()) {
                 //列必有
                 if (hasIdentityKey) {
                     throw new RuntimeException(ms.getId() + "对应的实体类" + entityClass.getCanonicalName() + "中包含多个MySql的自动增长列,最多只能有一个!");
                 }
                 newSelectKeyMappedStatement(ms, column);
                 hasIdentityKey = true;
-            } else if (column.getUUID()) {
-                //TODO 测试这里的UUID
-                VarDeclSqlNode bind = new VarDeclSqlNode(column.getProperty() + "_bind", "@java.util.UUID@randomUUID().toString()");
+            } else if (column.isUuid()) {
+                VarDeclSqlNode bind = new VarDeclSqlNode(column.getProperty() + "_bind", getUUID());
                 sqlNodes.add(bind);
             }
         }
         sqlNodes.add(new StaticTextSqlNode("(" + EntityHelper.getAllColumns(entityClass) + ")"));
-        StringBuilder valuesBuilder = new StringBuilder("VALUES (");
+        List<SqlNode> ifNodes = new ArrayList<SqlNode>();
         for (EntityHelper.EntityColumn column : columnList) {
+            //优先使用传入的属性值
+            StaticTextSqlNode columnNode = new StaticTextSqlNode("#{" + column.getProperty() + "},");
+            ifNodes.add(new IfSqlNode(columnNode, column.getProperty() + " != null "));
+
             if (column.getSequenceName() != null && column.getSequenceName().length() > 0) {
-                valuesBuilder.append(column.getProperty() + ".nextval ,");
-            } else if (column.getIDENTITY()) {
-                valuesBuilder.append("#{" + column.getProperty() + "_identity },");
-            } else if (column.getUUID()) {
-                valuesBuilder.append("#{" + column.getProperty() + "_bind },");
+                columnNode = new StaticTextSqlNode(column.getProperty() + ".nextval ,");
+                ifNodes.add(new IfSqlNode(columnNode, column.getProperty() + " == null "));
+            } else if (column.isIdentity()) {
+                columnNode = new StaticTextSqlNode("#{" + column.getProperty() + "_identity },");
+                ifNodes.add(new IfSqlNode(columnNode, column.getProperty() + " == null "));
+            } else if (column.isUuid()) {
+                columnNode = new StaticTextSqlNode("#{" + column.getProperty() + "_bind },");
+                ifNodes.add(new IfSqlNode(columnNode, column.getProperty() + " == null "));
             } else {
-                valuesBuilder.append("#{" + column.getProperty() + "},");
+                columnNode = new StaticTextSqlNode("#{" + column.getProperty() + "},");
+                ifNodes.add(new IfSqlNode(columnNode, column.getProperty() + " == null "));
             }
         }
-        valuesBuilder.replace(valuesBuilder.length() - 1, valuesBuilder.length(), ")");
-        sqlNodes.add(new StaticTextSqlNode(valuesBuilder.toString()));
+        sqlNodes.add(new TrimSqlNode(ms.getConfiguration(), new MixedSqlNode(ifNodes), "VALUES (", null, ")", ","));
         return new MixedSqlNode(sqlNodes);
     }
 
@@ -475,7 +507,7 @@ public class MapperHelper {
      * @param ms
      * @return MixedSqlNode
      */
-    private static MixedSqlNode getUpdateSqlNode(MappedStatement ms) {
+    private MixedSqlNode getUpdateSqlNode(MappedStatement ms) {
         Class<?> entityClass = getSelectReturnType(ms);
         List<SqlNode> sqlNodes = new ArrayList<SqlNode>();
         //select column ... from table
@@ -510,7 +542,7 @@ public class MapperHelper {
      * @param ms
      * @param args
      */
-    public static void processParameterObject(MappedStatement ms, Object[] args) {
+    public void processParameterObject(MappedStatement ms, Object[] args) {
         Class<?> entityClass = getSelectReturnType(ms);
         String methodName = getMethodName(ms);
         Object parameterObject = args[1];
@@ -551,7 +583,7 @@ public class MapperHelper {
      * @param ms
      * @param column
      */
-    private static void newSelectKeyMappedStatement(MappedStatement ms, EntityHelper.EntityColumn column) {
+    private void newSelectKeyMappedStatement(MappedStatement ms, EntityHelper.EntityColumn column) {
         String keyId = ms.getId() + SelectKeyGenerator.SELECT_KEY_SUFFIX;
         if (ms.getConfiguration().hasKeyGenerator(keyId)) {
             return;
@@ -561,7 +593,8 @@ public class MapperHelper {
         Configuration configuration = ms.getConfiguration();
         KeyGenerator keyGenerator = new NoKeyGenerator();
         Boolean executeBefore = true;
-        SqlSource sqlSource = new RawSqlSource(configuration, "CALL IDENTITY()", entityClass);
+        String IDENTITY = (column.getGenerator() == null || column.getGenerator().equals("")) ? getIDENTITY() : column.getGenerator();
+        SqlSource sqlSource = new RawSqlSource(configuration, IDENTITY, entityClass);
 
         MappedStatement.Builder statementBuilder = new MappedStatement.Builder(configuration, keyId, sqlSource, SqlCommandType.SELECT);
         statementBuilder.resource(ms.getResource());

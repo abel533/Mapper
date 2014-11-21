@@ -19,9 +19,10 @@ public class EntityHelper {
         private String column;
         private Class<?> javaType;
         private String sequenceName;
-        private Boolean ID = Boolean.FALSE;
-        private Boolean UUID = Boolean.FALSE;
-        private Boolean IDENTITY = Boolean.FALSE;
+        private boolean id = false;
+        private boolean uuid = false;
+        private boolean identity = false;
+        private String generator;
 
         public String getProperty() {
             return property;
@@ -55,28 +56,36 @@ public class EntityHelper {
             this.sequenceName = sequenceName;
         }
 
-        public Boolean getID() {
-            return ID;
+        public boolean isId() {
+            return id;
         }
 
-        public void setID(Boolean ID) {
-            this.ID = ID;
+        public void setId(boolean id) {
+            this.id = id;
         }
 
-        public Boolean getUUID() {
-            return UUID;
+        public boolean isUuid() {
+            return uuid;
         }
 
-        public void setUUID(Boolean UUID) {
-            this.UUID = UUID;
+        public void setUuid(boolean uuid) {
+            this.uuid = uuid;
         }
 
-        public Boolean getIDENTITY() {
-            return IDENTITY;
+        public boolean isIdentity() {
+            return identity;
         }
 
-        public void setIDENTITY(Boolean IDENTITY) {
-            this.IDENTITY = IDENTITY;
+        public void setIdentity(boolean identity) {
+            this.identity = identity;
+        }
+
+        public String getGenerator() {
+            return generator;
+        }
+
+        public void setGenerator(String generator) {
+            this.generator = generator;
         }
     }
 
@@ -214,7 +223,7 @@ public class EntityHelper {
             }
             EntityColumn entityColumn = new EntityColumn();
             if (field.isAnnotationPresent(Id.class)) {
-                entityColumn.setID(Boolean.TRUE);
+                entityColumn.setId(true);
             }
             String columnName = null;
             if (field.isAnnotationPresent(Column.class)) {
@@ -235,7 +244,7 @@ public class EntityHelper {
                 GeneratedValue generatedValue = field.getAnnotation(GeneratedValue.class);
                 if (generatedValue.generator().equals("UUID")) {
                     if (field.getType().equals(String.class)) {
-                        entityColumn.setUUID(Boolean.TRUE);
+                        entityColumn.setUuid(true);
                     } else {
                         throw new RuntimeException(field.getName() + " - 该字段@GeneratedValue配置为UUID，但该字段类型不是String");
                     }
@@ -244,16 +253,19 @@ public class EntityHelper {
                     //TODO 允许通过拦截器参数设置公共的generator
                     if (generatedValue.strategy() == GenerationType.IDENTITY) {
                         //mysql的自动增长
-                        entityColumn.setIDENTITY(Boolean.TRUE);
+                        entityColumn.setIdentity(true);
+                        if (!generatedValue.generator().equals("")) {
+                            entityColumn.setGenerator(generatedValue.generator());
+                        }
                     } else {
                         throw new RuntimeException(field.getName()
                                 + " - 该字段@GeneratedValue配置只允许两种形式，全部数据库通用的@GeneratedValue(generator=\"UUID\") 或者 " +
-                                "mysql数据库的@GeneratedValue(strategy=GenerationType.IDENTITY)");
+                                "mysql数据库的@GeneratedValue(strategy=GenerationType.IDENTITY[,generator=\"CALL IDENTITY()\"])");
                     }
                 }
             }
             columnList.add(entityColumn);
-            if (entityColumn.getID()) {
+            if (entityColumn.isId()) {
                 pkColumnList.add(entityColumn);
             }
         }
