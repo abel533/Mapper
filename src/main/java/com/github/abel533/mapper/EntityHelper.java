@@ -113,10 +113,10 @@ public class EntityHelper {
         String tableName = entityClassTableName.get(entityClass);
         if (tableName == null) {
             initEntityNameMap(entityClass);
+            tableName = entityClassTableName.get(entityClass);
         }
-        tableName = entityClassTableName.get(entityClass);
         if (tableName == null) {
-            throw new RuntimeException("");
+            throw new RuntimeException("无法获取实体类" + entityClass.getCanonicalName() + "对应的表名!");
         }
         return tableName;
     }
@@ -238,11 +238,10 @@ public class EntityHelper {
             if (field.isAnnotationPresent(SequenceGenerator.class)) {
                 SequenceGenerator sequenceGenerator = field.getAnnotation(SequenceGenerator.class);
                 if (sequenceGenerator.sequenceName().equals("")) {
-                    throw new RuntimeException(entityClass+"字段"+field.getName()+"的注解@SequenceGenerator未指定sequenceName!");
+                    throw new RuntimeException(entityClass + "字段" + field.getName() + "的注解@SequenceGenerator未指定sequenceName!");
                 }
                 entityColumn.setSequenceName(sequenceGenerator.sequenceName());
-            }
-            else if (field.isAnnotationPresent(GeneratedValue.class)) {
+            } else if (field.isAnnotationPresent(GeneratedValue.class)) {
                 GeneratedValue generatedValue = field.getAnnotation(GeneratedValue.class);
                 if (generatedValue.generator().equals("UUID")) {
                     if (field.getType().equals(String.class)) {
@@ -289,21 +288,6 @@ public class EntityHelper {
         }
         if (builder.charAt(0) == '_') {
             builder.deleteCharAt(0);
-        }
-        return builder.toString();
-    }
-
-    /**
-     * 将下划线风格替换为驼峰风格
-     */
-    public static String underlineToCamelhump(String str) {
-        Matcher matcher = Pattern.compile("_[a-z]").matcher(str);
-        StringBuilder builder = new StringBuilder(str);
-        for (int i = 0; matcher.find(); i++) {
-            builder.replace(matcher.start() - i, matcher.end() - i, matcher.group().substring(1).toUpperCase());
-        }
-        if (Character.isUpperCase(builder.charAt(0))) {
-            builder.replace(0, 1, String.valueOf(Character.toLowerCase(builder.charAt(0))));
         }
         return builder.toString();
     }
