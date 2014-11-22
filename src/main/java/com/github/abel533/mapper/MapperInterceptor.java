@@ -46,7 +46,6 @@ import java.util.Properties;
 public class MapperInterceptor implements Interceptor {
 
     private final MapperHelper mapperHelper = new MapperHelper();
-    ;
 
     @Override
     public Object intercept(Invocation invocation) throws Throwable {
