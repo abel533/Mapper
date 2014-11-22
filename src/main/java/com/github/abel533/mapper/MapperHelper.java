@@ -597,11 +597,11 @@ public class MapperHelper {
         Class<?> entityClass = getSelectReturnType(ms);
         String methodName = getMethodName(ms);
         Object parameterObject = args[1];
-        Map<String, Object> parameterMap = new HashMap<String, Object>();
         //两个通过PK查询的方法用下面的方法处理参数
         if (methodName.equals(METHODS[1]) || methodName.equals(METHODS[6])) {
             TypeHandlerRegistry typeHandlerRegistry = ms.getConfiguration().getTypeHandlerRegistry();
             List<ParameterMapping> parameterMappings = getPrimaryKeyParameterMappings(ms);
+            Map<String, Object> parameterMap = new HashMap<String, Object>();
             for (ParameterMapping parameterMapping : parameterMappings) {
                 if (parameterMapping.getMode() != ParameterMode.OUT) {
                     Object value;
