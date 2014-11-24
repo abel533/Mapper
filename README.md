@@ -20,7 +20,7 @@
 
 作者邮箱： abel533@gmail.com
 
-推荐一个Mybatis的QQ群： 146127540 (群不是我创建的,但是大家可以在群里讨论问题,相互学习)
+Mybatis工具群： 211286137 (Mybatis相关工具插件等等)
 
 推荐使用Mybatis分页插件:[PageHelper分页插件](https://github.com/pagehelper/Mybatis-PageHelper)
 
