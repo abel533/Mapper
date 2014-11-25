@@ -3,11 +3,14 @@ package com.github.abel533.model;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import java.io.Serializable;
 
 /**
  * Created by liuzh on 2014/11/21.
  */
-public class UserInfo {
+public class UserInfo implements Serializable {
+
+    private static final long serialVersionUID = -7703830119762722918L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;

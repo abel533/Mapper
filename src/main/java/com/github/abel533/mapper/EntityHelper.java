@@ -26,6 +26,7 @@ package com.github.abel533.mapper;
 
 import javax.persistence.*;
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -332,7 +333,12 @@ public class EntityHelper {
             return fieldList;
         }
         Field[] fields = entityClass.getDeclaredFields();
-        fieldList.addAll(Arrays.asList(fields));
+        for (Field field : fields) {
+            //排除静态字段，解决bug#2
+            if (!Modifier.isStatic(field.getModifiers())) {
+                fieldList.add(field);
+            }
+        }
         if (entityClass.getSuperclass() != null && !entityClass.getSuperclass().equals(Object.class)) {
             return getAllField(entityClass.getSuperclass(), fieldList);
         }
