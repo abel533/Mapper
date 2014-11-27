@@ -66,7 +66,7 @@ Mybatis工具群： 211286137 (Mybatis相关工具插件等等)
 <plugin interceptor="com.github.abel533.mapper.MapperInterceptor"></plugin>
 ```
 
-<b>重要:关于`IDENTITY`，对于不同的数据库，需要配置的参数不一样，具体参数请看[这里](#INENTITY参数配置)</b>
+<b>重要:关于`IDENTITY`，对于不同的数据库，需要配置的参数不一样，具体参数请看[这里](#inentity参数配置)</b>
 
 <b>附:Spring配置相关</b>
 
