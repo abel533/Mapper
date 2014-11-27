@@ -24,8 +24,8 @@
 			<!--配置UUID生成策略需要使用OGNL表达式-->
 			<!--默认值32位长度:@java.util.UUID@randomUUID().toString().replace("-", "")-->
 			<!--<property name="UUID" value="@java.util.UUID@randomUUID().toString()"/>-->
-			<!--主键自增回写方法,默认值CALL IDENTITY(),适应于大多数数据库-->
-			<!--<property name="IDENTITY" value="CALL IDENTITY()"/>-->
+			<!--主键自增回写方法,默认值MYSQL,详细说明请看文档-->
+			<property name="IDENTITY" value="HSQLDB"/>
 			<!--主键自增回写方法执行顺序,默认AFTER,可选值为(BEFORE|AFTER)-->
 			<!--<property name="ORDER" value="AFTER"/>-->
 		</plugin>

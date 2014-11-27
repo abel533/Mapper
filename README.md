@@ -54,7 +54,7 @@ Mybatis工具群： 211286137 (Mybatis相关工具插件等等)
     <!--配置UUID生成策略需要使用OGNL表达式-->
     <!--默认值32位长度:@java.util.UUID@randomUUID().toString().replace("-", "")-->
     <!--<property name="UUID" value="@java.util.UUID@randomUUID().toString()"/>-->
-    <!--主键自增回写方法,默认值CALL IDENTITY(),适应于大多数数据库-->
+    <!--主键自增回写方法,默认值SELECT LAST_INSERT_ID()，适用于Mysql-->
     <!--<property name="IDENTITY" value="CALL IDENTITY()"/>-->
     <!--主键自增回写方法执行顺序,默认AFTER,可选值为(BEFORE|AFTER)-->
     <!--<property name="ORDER" value="AFTER"/>-->
@@ -65,6 +65,8 @@ Mybatis工具群： 211286137 (Mybatis相关工具插件等等)
 ```xml
 <plugin interceptor="com.github.abel533.mapper.MapperInterceptor"></plugin>
 ```
+
+<b>重要:关于`IDENTITY`，对于不同的数据库，需要配置的参数不一样，具体参数请看[这里](#INENTITY参数配置)</b>
 
 <b>附:Spring配置相关</b>
 
@@ -292,6 +294,38 @@ try {
 <b>附:Spring使用相关</b>
 
 直接在需要的地方注入Mapper继承的接口即可,和一般情况下的使用没有区别.
+
+##INENTITY参数配置
+
+对于不同的数据库，需要配置不同的参数，这些参数如下：
+  
+- <b>DB2</b>: `VALUES IDENTITY_VAL_LOCAL()`  
+- <b>MYSQL</b>: `SELECT LAST_INSERT_ID()`  
+- <b>SQLSERVER</b>: `SELECT SCOPE_IDENTITY()`  
+- <b>CLOUDSCAPE</b>: `VALUES IDENTITY_VAL_LOCAL()`  
+- <b>DERBY</b>: `VALUES IDENTITY_VAL_LOCAL()`  
+- <b>HSQLDB</b>: `CALL IDENTITY()`  
+- <b>SYBASE</b>: `SELECT @@IDENTITY`  
+- <b>DB2_MF</b>: `SELECT IDENTITY_VAL_LOCAL() FROM SYSIBM.SYSDUMMY1`  
+- <b>INFORMIX</b>: `select dbinfo('sqlca.sqlerrd1') from systables where tabid=1`
+
+为了配置的时候方便，可以直接使用这里的数据库名字进行配置，例如:
+```xml
+<plugins>
+  <plugin interceptor="com.github.abel533.mapper.MapperInterceptor">
+    <property name="IDENTITY" value="DB2"/>
+  </plugin>
+</plugins>
+```
+如果这里的值不是上面所提到的数据库，就会使用直接提供的语句。例如下面的这个配置和上面的效果一样：
+```xml
+<plugins>
+  <plugin interceptor="com.github.abel533.mapper.MapperInterceptor">
+    <property name="IDENTITY" value="VALUES IDENTITY_VAL_LOCAL()"/>
+  </plugin>
+</plugins>
+```  
+
 
 ##当前版本v0.1.0
 

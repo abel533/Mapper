@@ -56,6 +56,55 @@ import static org.apache.ibatis.jdbc.SqlBuilder.*;
  */
 public class MapperHelper {
 
+    /**
+     * IDENTITY的可选值
+     */
+    public enum IdentityDialect {
+        DB2("VALUES IDENTITY_VAL_LOCAL()"),
+        MYSQL("SELECT LAST_INSERT_ID()"),
+        SQLSERVER("SELECT SCOPE_IDENTITY()"),
+        CLOUDSCAPE("VALUES IDENTITY_VAL_LOCAL()"),
+        DERBY("VALUES IDENTITY_VAL_LOCAL()"),
+        HSQLDB("CALL IDENTITY()"),
+        SYBASE("SELECT @@IDENTITY"),
+        DB2_MF("SELECT IDENTITY_VAL_LOCAL() FROM SYSIBM.SYSDUMMY1"),
+        INFORMIX("select dbinfo('sqlca.sqlerrd1') from systables where tabid=1");
+
+        private String identityRetrievalStatement;
+
+        private IdentityDialect(String identityRetrievalStatement) {
+            this.identityRetrievalStatement = identityRetrievalStatement;
+        }
+
+        public String getIdentityRetrievalStatement() {
+            return identityRetrievalStatement;
+        }
+
+        public static IdentityDialect getDatabaseDialect(String database) {
+            IdentityDialect returnValue = null;
+            if ("DB2".equalsIgnoreCase(database)) {
+                returnValue = DB2;
+            } else if ("MySQL".equalsIgnoreCase(database)) {
+                returnValue = MYSQL;
+            } else if ("SqlServer".equalsIgnoreCase(database)) {
+                returnValue = SQLSERVER;
+            } else if ("Cloudscape".equalsIgnoreCase(database)) {
+                returnValue = CLOUDSCAPE;
+            } else if ("Derby".equalsIgnoreCase(database)) {
+                returnValue = DERBY;
+            } else if ("HSQLDB".equalsIgnoreCase(database)) {
+                returnValue = HSQLDB;
+            } else if ("SYBASE".equalsIgnoreCase(database)) {
+                returnValue = SYBASE;
+            } else if ("DB2_MF".equalsIgnoreCase(database)) {
+                returnValue = DB2_MF;
+            } else if ("Informix".equalsIgnoreCase(database)) {
+                returnValue = INFORMIX;
+            }
+            return returnValue;
+        }
+    }
+
     //基础可配置项
     private class Config {
         private String UUID = "";
@@ -70,7 +119,12 @@ public class MapperHelper {
     }
 
     public void setIDENTITY(String IDENTITY) {
-        config.IDENTITY = IDENTITY;
+        IdentityDialect identityDialect = IdentityDialect.getDatabaseDialect(IDENTITY);
+        if (identityDialect != null) {
+            config.IDENTITY = identityDialect.getIdentityRetrievalStatement();
+        } else {
+            config.IDENTITY = IDENTITY;
+        }
     }
 
     public void setBEFORE(String BEFORE) {
@@ -88,7 +142,8 @@ public class MapperHelper {
         if (config.IDENTITY != null && config.IDENTITY.length() > 0) {
             return config.IDENTITY;
         }
-        return "CALL IDENTITY()";
+        //针对mysql的默认值
+        return IdentityDialect.MYSQL.getIdentityRetrievalStatement();
     }
 
     private boolean getBEFORE() {
