@@ -77,7 +77,12 @@ public class MapperInterceptor implements Interceptor {
         }
         //只有select和delete通过PK操作时需要处理入参
         mapperHelper.processParameterObject(ms, objects);
-        return invocation.proceed();
+        Object result = invocation.proceed();
+        //是否对Map类型的实体处理返回结果，例如USER_NAME=>userName
+        if (mapperHelper.isCameHumpMap()) {
+            mapperHelper.cameHumpMap(result, ms);
+        }
+        return result;
     }
 
     @Override
@@ -102,6 +107,10 @@ public class MapperInterceptor implements Interceptor {
         String ORDER = properties.getProperty("ORDER");
         if (ORDER != null && ORDER.length() > 0) {
             mapperHelper.setBEFORE(ORDER);
+        }
+        String cameHumpMap = properties.getProperty("cameHumpMap");
+        if (cameHumpMap != null && cameHumpMap.length() > 0) {
+            mapperHelper.setCameHumpMap(cameHumpMap);
         }
     }
 }

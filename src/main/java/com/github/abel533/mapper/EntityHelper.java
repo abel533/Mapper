@@ -180,9 +180,10 @@ public class EntityHelper {
     public static String getSelectColumns(Class<?> entityClass) {
         List<EntityColumn> columnList = getColumns(entityClass);
         StringBuilder selectBuilder = new StringBuilder();
+        boolean skipAlias = Map.class.isAssignableFrom(entityClass);
         for (EntityColumn entityColumn : columnList) {
             selectBuilder.append(entityColumn.getColumn());
-            if (!entityColumn.getColumn().equalsIgnoreCase(entityColumn.getProperty())) {
+            if (!skipAlias && !entityColumn.getColumn().equalsIgnoreCase(entityColumn.getProperty())) {
                 selectBuilder.append(" ").append(entityColumn.getProperty().toUpperCase()).append(",");
             } else {
                 selectBuilder.append(",");
@@ -319,6 +320,24 @@ public class EntityHelper {
     }
 
     /**
+     * 将下划线风格替换为驼峰风格
+     *
+     * @param str
+     * @return
+     */
+    public static String underlineToCamelhump(String str) {
+        Matcher matcher = Pattern.compile("_[a-z]").matcher(str);
+        StringBuilder builder = new StringBuilder(str);
+        for (int i = 0; matcher.find(); i++) {
+            builder.replace(matcher.start() - i, matcher.end() - i, matcher.group().substring(1).toUpperCase());
+        }
+        if (Character.isUpperCase(builder.charAt(0))) {
+            builder.replace(0, 1, String.valueOf(Character.toLowerCase(builder.charAt(0))));
+        }
+        return builder.toString();
+    }
+
+    /**
      * 获取全部的Field
      *
      * @param entityClass
@@ -339,7 +358,10 @@ public class EntityHelper {
                 fieldList.add(field);
             }
         }
-        if (entityClass.getSuperclass() != null && !entityClass.getSuperclass().equals(Object.class)) {
+        if (entityClass.getSuperclass() != null
+                && !entityClass.getSuperclass().equals(Object.class)
+                && !Map.class.isAssignableFrom(entityClass.getSuperclass())
+                && !Collection.class.isAssignableFrom(entityClass.getSuperclass())) {
             return getAllField(entityClass.getSuperclass(), fieldList);
         }
         return fieldList;

@@ -41,10 +41,7 @@ import org.apache.ibatis.type.TypeHandlerRegistry;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static org.apache.ibatis.jdbc.SqlBuilder.*;
 
@@ -110,6 +107,7 @@ public class MapperHelper {
         private String UUID = "";
         private String IDENTITY = "";
         private boolean BEFORE = false;
+        private boolean cameHumpMap = false;
     }
 
     private Config config = new Config();
@@ -131,6 +129,10 @@ public class MapperHelper {
         config.BEFORE = "BEFORE".equalsIgnoreCase(BEFORE);
     }
 
+    public void setCameHumpMap(String cameHumpMap) {
+        config.cameHumpMap = "TRUE".equalsIgnoreCase(cameHumpMap);
+    }
+
     private String getUUID() {
         if (config.UUID != null && config.UUID.length() > 0) {
             return config.UUID;
@@ -148,6 +150,10 @@ public class MapperHelper {
 
     private boolean getBEFORE() {
         return config.BEFORE;
+    }
+
+    public boolean isCameHumpMap() {
+        return config.cameHumpMap;
     }
 
     public static final String DYNAMIC_SQL = "dynamicSQL";
@@ -757,5 +763,93 @@ public class MapperHelper {
         } catch (Exception e) {
             //ignore
         }
+    }
+
+    /**
+     * 处理Key为驼峰式
+     *
+     * @param result
+     * @param ms
+     */
+    public void cameHumpMap(Object result, MappedStatement ms) {
+        ResultMap resultMap = ms.getResultMaps().get(0);
+        Class<?> type = resultMap.getType();
+        //只有有返回值并且type是Map的时候,还不能是嵌套复杂的resultMap,才需要特殊处理
+        if (result instanceof List
+                && ((List) result).size() > 0
+                && Map.class.isAssignableFrom(type)
+                && !resultMap.hasNestedQueries()
+                && !resultMap.hasNestedResultMaps()) {
+            List resultList = (List) result;
+            //1.resultType时
+            if (resultMap.getId().endsWith("-Inline")) {
+                for (Object re : resultList) {
+                    processMap((Map) re);
+                }
+            } else {//2.resultMap时
+                for (Object re : resultList) {
+                    processMap((Map) re, resultMap.getResultMappings());
+                }
+            }
+        }
+    }
+
+    /**
+     * 处理简单对象
+     *
+     * @param map
+     */
+    private void processMap(Map map) {
+        Map cameHumpMap = new HashMap();
+        Iterator<Map.Entry> iterator = map.entrySet().iterator();
+        while (iterator.hasNext()) {
+            Map.Entry entry = iterator.next();
+            String key = (String) entry.getKey();
+            String cameHumpKey = EntityHelper.underlineToCamelhump(key.toLowerCase());
+            if (!key.equals(cameHumpKey)) {
+                cameHumpMap.put(cameHumpKey, entry.getValue());
+                iterator.remove();
+            }
+        }
+        map.putAll(cameHumpMap);
+    }
+
+    /**
+     * 配置过的属性不做修改
+     *
+     * @param map
+     * @param resultMappings
+     */
+    private void processMap(Map map, List<ResultMapping> resultMappings) {
+        Set<String> propertySet = toPropertySet(resultMappings);
+        Map cameHumpMap = new HashMap();
+        Iterator<Map.Entry> iterator = map.entrySet().iterator();
+        while (iterator.hasNext()) {
+            Map.Entry entry = iterator.next();
+            String key = (String) entry.getKey();
+            if (propertySet.contains(key)) {
+                continue;
+            }
+            String cameHumpKey = EntityHelper.underlineToCamelhump(key.toLowerCase());
+            if (!key.equals(cameHumpKey)) {
+                cameHumpMap.put(cameHumpKey, entry.getValue());
+                iterator.remove();
+            }
+        }
+        map.putAll(cameHumpMap);
+    }
+
+    /**
+     * 列属性转Set
+     *
+     * @param resultMappings
+     * @return
+     */
+    private Set<String> toPropertySet(List<ResultMapping> resultMappings) {
+        Set<String> propertySet = new HashSet<String>();
+        for (ResultMapping resultMapping : resultMappings) {
+            propertySet.add(resultMapping.getProperty());
+        }
+        return propertySet;
     }
 }

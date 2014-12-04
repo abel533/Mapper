@@ -28,6 +28,8 @@
 			<property name="IDENTITY" value="HSQLDB"/>
 			<!--主键自增回写方法执行顺序,默认AFTER,可选值为(BEFORE|AFTER)-->
 			<!--<property name="ORDER" value="AFTER"/>-->
+      <!--支持Map类型的实体类，自动将大写下划线的Key转换为驼峰式-->
+      <property name="cameHumpMap" value="true"/>
 		</plugin>
 	</plugins>
 
@@ -51,6 +53,7 @@
     <mapper class="com.github.abel533.mapper.CountryUMapper" />
     <mapper class="com.github.abel533.mapper.CountryIMapper" />
     <mapper class="com.github.abel533.mapper.UserInfoMapper" />
+    <mapper class="com.github.abel533.mapper.UserInfoMapMapper" />
     <mapper class="com.github.abel533.mapper.UserLoginMapper" />
     <mapper class="com.github.abel533.mapper.UserLogin2Mapper" />
 	</mappers>
