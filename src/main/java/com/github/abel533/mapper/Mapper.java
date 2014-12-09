@@ -40,31 +40,31 @@ import java.util.List;
  */
 public interface Mapper<T> {
 
-    @SelectProvider(type = MapperHelper.class, method = MapperHelper.DYNAMIC_SQL)
+    @SelectProvider(type = MapperProvider.class, method = "dynamicSQL")
     List<T> select(T record);
 
-    @SelectProvider(type = MapperHelper.class, method = MapperHelper.DYNAMIC_SQL)
+    @SelectProvider(type = MapperProvider.class, method = "dynamicSQL")
     int selectCount(T record);
 
-    @SelectProvider(type = MapperHelper.class, method = MapperHelper.DYNAMIC_SQL)
+    @SelectProvider(type = MapperProvider.class, method = "dynamicSQL")
     T selectByPrimaryKey(Object key);
 
-    @InsertProvider(type = MapperHelper.class, method = MapperHelper.DYNAMIC_SQL)
+    @InsertProvider(type = MapperProvider.class, method = "dynamicSQL")
     int insert(T record);
 
-    @InsertProvider(type = MapperHelper.class, method = MapperHelper.DYNAMIC_SQL)
+    @InsertProvider(type = MapperProvider.class, method = "dynamicSQL")
     int insertSelective(T record);
 
-    @DeleteProvider(type = MapperHelper.class, method = MapperHelper.DYNAMIC_SQL)
+    @DeleteProvider(type = MapperProvider.class, method = "dynamicSQL")
     int delete(T key);
 
-    @DeleteProvider(type = MapperHelper.class, method = MapperHelper.DYNAMIC_SQL)
+    @DeleteProvider(type = MapperProvider.class, method = "dynamicSQL")
     int deleteByPrimaryKey(Object key);
 
-    @UpdateProvider(type = MapperHelper.class, method = MapperHelper.DYNAMIC_SQL)
+    @UpdateProvider(type = MapperProvider.class, method = "dynamicSQL")
     int updateByPrimaryKey(T record);
 
-    @UpdateProvider(type = MapperHelper.class, method = MapperHelper.DYNAMIC_SQL)
+    @UpdateProvider(type = MapperProvider.class, method = "dynamicSQL")
     int updateByPrimaryKeySelective(T record);
 
 }
