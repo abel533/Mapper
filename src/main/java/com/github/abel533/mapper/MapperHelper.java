@@ -532,7 +532,7 @@ public class MapperHelper {
                 ifNodes.add(new IfSqlNode(new StaticTextSqlNode("#{" + column.getProperty() + "},"), column.getProperty() + " != null "));
             }
             if (column.getSequenceName() != null && column.getSequenceName().length() > 0) {
-                ifNodes.add(new IfSqlNode(new StaticTextSqlNode(column.getProperty() + ".nextval ,"), column.getProperty() + " == null "));
+                ifNodes.add(new IfSqlNode(new StaticTextSqlNode(column.getSequenceName() + ".nextval ,"), column.getProperty() + " == null "));
             } else if (column.isIdentity()) {
                 ifNodes.add(new IfSqlNode(new StaticTextSqlNode("#{" + column.getProperty() + " },"), column.getProperty() + " == null "));
             } else if (column.isUuid()) {
@@ -584,7 +584,7 @@ public class MapperHelper {
             }
 
             if (column.getSequenceName() != null && column.getSequenceName().length() > 0) {
-                ifNodes.add(new IfSqlNode(new StaticTextSqlNode(column.getProperty() + ".nextval ,"), column.getProperty() + " == null "));
+                ifNodes.add(new IfSqlNode(new StaticTextSqlNode(column.getSequenceName() + ".nextval ,"), column.getProperty() + " == null "));
             } else if (column.isIdentity()) {
                 ifNodes.add(new IfSqlNode(new StaticTextSqlNode("#{" + column.getProperty() + " },"), column.getProperty() + "_cache == null "));
             } else if (column.isUuid()) {
