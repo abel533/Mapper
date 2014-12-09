@@ -30,6 +30,7 @@
 			<!--<property name="ORDER" value="AFTER"/>-->
       <!--支持Map类型的实体类，自动将大写下划线的Key转换为驼峰式-->
       <property name="cameHumpMap" value="true"/>
+			<!--通用Mapper接口，多个用逗号隔开-->
 			<property name="mappers" value="com.github.abel533.mapper.Mapper"/>
 		</plugin>
 	</plugins>

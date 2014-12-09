@@ -58,9 +58,13 @@ Mybatis工具群： 211286137 (Mybatis相关工具插件等等)
     <!--<property name="IDENTITY" value="MYSQL"/>-->
     <!--主键自增回写方法执行顺序,默认AFTER,可选值为(BEFORE|AFTER)-->
     <!--<property name="ORDER" value="AFTER"/>-->
+    <!--通用Mapper接口，多个用逗号隔开-->
+    <property name="mappers" value="com.github.abel533.mapper.Mapper"/>
   </plugin>
 </plugins>
 ```
+
+**mappers**参数，这里先记住是通用Mapper的权限定路径即可。后面将自己扩展时，会详细介绍。  
 
 ####INENTITY参数配置
 
@@ -199,7 +203,7 @@ int updateByPrimaryKeySelective(T record);
 
 实体类按照如下规则和数据库表进行转换,注解全部是JPA中的注解:
 
-1. 表名默认使用类名,驼峰转下划线,如`UserInfo`默认对应的表名为`user_info`.
+1. 表名默认使用类名,驼峰转下划线,如`UserInfo`默认对应的表名为`user_info`，数字也会转下划线，例如`Country2`对于的表名为`country_2`.
 
 2. 表名可以使用`@Table(name = "tableName")`进行指定,对不符合第一条默认规则的可以通过这种方式指定表名.
 
