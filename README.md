@@ -268,17 +268,17 @@ private Integer id;
 ```  
 首先该字段必须是一个自增的字段，增加这个注解后，**会回写ID**。
 
-通过设置`generator`参数可以支持更多的获取主键的方法，例如在Oracle中使用序列：
-```java
-@Id
-@GeneratedValue(strategy = GenerationType.IDENTITY,generator = "select SEQ_ID.nextval from dual")
-private Integer id;
-```  
-使用Oracle序列的时候，还需要配置:
-```xml
-<property name="ORDER" value="BEFORE"/>
-```
-因为在插入数据库前，需要先获取到序列值，否则会报错。  
+  通过设置`generator`参数可以支持更多的获取主键的方法，例如在Oracle中使用序列：
+  ```java
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY,generator = "select SEQ_ID.nextval from dual")
+  private Integer id;
+  ```  
+  使用Oracle序列的时候，还需要配置:
+  ```xml
+  <property name="ORDER" value="BEFORE"/>
+  ```
+  因为在插入数据库前，需要先获取到序列值，否则会报错。  
 
 ###5. 将继承的Mapper接口添加到Mybatis配置中
 
