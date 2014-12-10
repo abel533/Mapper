@@ -34,8 +34,7 @@ import org.apache.ibatis.reflection.factory.ObjectFactory;
 import org.apache.ibatis.reflection.wrapper.DefaultObjectWrapperFactory;
 import org.apache.ibatis.reflection.wrapper.ObjectWrapperFactory;
 import org.apache.ibatis.scripting.defaults.RawSqlSource;
-import org.apache.ibatis.scripting.xmltags.DynamicSqlSource;
-import org.apache.ibatis.scripting.xmltags.SqlNode;
+import org.apache.ibatis.scripting.xmltags.*;
 import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.type.TypeHandlerRegistry;
 
@@ -49,6 +48,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * Mapper方法
+ *
  * @author liuzh
  */
 public abstract class MapperTemplate {
@@ -227,7 +228,7 @@ public abstract class MapperTemplate {
     }
 
     /**
-     * 获取返回值类型
+     * 获取返回值类型 - 实体类型
      *
      * @param ms
      * @return
@@ -299,6 +300,116 @@ public abstract class MapperTemplate {
             parameterMappings.add(builder.build());
         }
         return parameterMappings;
+    }
+
+    /**
+     * 获取序列下个值的表达式
+     *
+     * @param column
+     * @return
+     */
+    protected String getSeqNextVal(EntityHelper.EntityColumn column){
+        return column.getSequenceName() + ".nextval";
+    }
+
+    /**
+     * 获取实体类的表名
+     *
+     * @param entityClass
+     * @return
+     */
+    protected String tableName(Class<?> entityClass){
+        return EntityHelper.getTableName(entityClass);
+    }
+
+    /**
+     * 返回if条件的sqlNode
+     * <p>一般类型：<code>&lt;if test="property!=null"&gt;columnNode&lt;/if&gt;</code></p>
+     * <p>String类型：<code>&lt;if test="property!=null and property!=''"&gt;columnNode&lt;/if&gt;</code></p>
+     *
+     * @param column
+     * @return
+     */
+    protected SqlNode getIfNotNull(EntityHelper.EntityColumn column, SqlNode columnNode) {
+        if (column.getJavaType().equals(String.class)) {
+            return new IfSqlNode(columnNode, column.getProperty() + " != null and " + column.getProperty() + " != '' ");
+        }
+        return new IfSqlNode(columnNode, column.getProperty() + " != null ");
+    }
+
+    /**
+     * 返回if条件的sqlNode
+     * <p>一般类型：<code>&lt;if test="property==null"&gt;columnNode&lt;/if&gt;</code></p>
+     * <p>String类型：<code>&lt;if test="property==null or property==''"&gt;columnNode&lt;/if&gt;</code></p>
+     *
+     * @param column
+     * @return
+     */
+    protected SqlNode getIfIsNull(EntityHelper.EntityColumn column, SqlNode columnNode) {
+        if (column.getJavaType().equals(String.class)) {
+            return new IfSqlNode(columnNode, column.getProperty() + " == null or " + column.getProperty() + " == '' ");
+        }
+        return new IfSqlNode(columnNode, column.getProperty() + " == null ");
+    }
+
+    /**
+     * 返回if条件的sqlNode
+     * <p>一般类型：<code>&lt;if test="property!=null"&gt;columnNode&lt;/if&gt;</code></p>
+     * <p>String类型：<code>&lt;if test="property!=null and property!=''"&gt;columnNode&lt;/if&gt;</code></p>
+     *
+     * @param column
+     * @return
+     */
+    protected SqlNode getIfCacheNotNull(EntityHelper.EntityColumn column, SqlNode columnNode) {
+        if (column.getJavaType().equals(String.class)) {
+            return new IfSqlNode(columnNode, column.getProperty() + "_cache != null and " + column.getProperty() + "_cache != '' ");
+        }
+        return new IfSqlNode(columnNode, column.getProperty() + "_cache != null ");
+    }
+
+    /**
+     * 返回if条件的sqlNode
+     * <p>一般类型：<code>&lt;if test="property_cache!=null"&gt;columnNode&lt;/if&gt;</code></p>
+     * <p>String类型：<code>&lt;if test="property_cache!=null and property_cache!=''"&gt;columnNode&lt;/if&gt;</code></p>
+     *
+     * @param column
+     * @return
+     */
+    protected SqlNode getIfCacheIsNull(EntityHelper.EntityColumn column, SqlNode columnNode) {
+        if (column.getJavaType().equals(String.class)) {
+            return new IfSqlNode(columnNode, column.getProperty() + "_cache == null or " + column.getProperty() + "_cache == '' ");
+        }
+        return new IfSqlNode(columnNode, column.getProperty() + "_cache == null ");
+    }
+
+    /**
+     * 获取 <code>[AND] column = #{property}</code>
+     *
+     * @param column
+     * @param first
+     * @return
+     */
+    protected SqlNode getColumnEqualsProperty(EntityHelper.EntityColumn column,boolean first){
+        return new StaticTextSqlNode((first ? "" : " AND ") + column.getColumn() + " = #{" + column.getProperty() + "} ");
+    }
+
+    /**
+     * 获取所有列的where节点中的if判断列
+     *
+     * @param entityClass
+     * @return
+     */
+    protected SqlNode getAllIfColumnNode(Class<?> entityClass){
+        //获取全部列
+        List<EntityHelper.EntityColumn> columnList = EntityHelper.getColumns(entityClass);
+        List<SqlNode> ifNodes = new ArrayList<SqlNode>();
+        boolean first = true;
+        //对所有列循环，生成<if test="property!=null">column = #{property}</if>
+        for (EntityHelper.EntityColumn column : columnList) {
+            ifNodes.add(getIfNotNull(column,getColumnEqualsProperty(column,first)));
+            first = false;
+        }
+        return new MixedSqlNode(ifNodes);
     }
 
     /**

@@ -215,7 +215,7 @@ public class EntityHelper {
         List<EntityHelper.EntityColumn> entityColumns = EntityHelper.getPKColumns(entityClass);
         StringBuilder whereBuilder = new StringBuilder();
         for (EntityHelper.EntityColumn column : entityColumns) {
-            whereBuilder.append(column.getColumn()).append(" = ?").append(" and ");
+            whereBuilder.append(column.getColumn()).append(" = ?").append(" AND ");
         }
         return whereBuilder.substring(0, whereBuilder.length() - 4);
     }
