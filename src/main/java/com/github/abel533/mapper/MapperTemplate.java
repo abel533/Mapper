@@ -146,16 +146,22 @@ public abstract class MapperTemplate {
      * @throws InvocationTargetException
      * @throws IllegalAccessException
      */
-    public void setSqlSource(MappedStatement ms) throws InvocationTargetException, IllegalAccessException {
+    public void setSqlSource(MappedStatement ms) throws Exception {
         Method method = methodMap.get(getMethodName(ms));
-        if (method.getReturnType() == Void.TYPE) {
-            method.invoke(this, ms);
-        } else if (SqlNode.class.isAssignableFrom(method.getReturnType())) {
-            SqlNode sqlNode = (SqlNode) method.invoke(this, ms);
-            DynamicSqlSource dynamicSqlSource = new DynamicSqlSource(ms.getConfiguration(), sqlNode);
-            setSqlSource(ms, dynamicSqlSource);
-        } else {
-            throw new RuntimeException("自定义Mapper方法返回类型错误,可选的返回类型为void和SqlNode!");
+        try {
+            if (method.getReturnType() == Void.TYPE) {
+                method.invoke(this, ms);
+            } else if (SqlNode.class.isAssignableFrom(method.getReturnType())) {
+                SqlNode sqlNode = (SqlNode) method.invoke(this, ms);
+                DynamicSqlSource dynamicSqlSource = new DynamicSqlSource(ms.getConfiguration(), sqlNode);
+                setSqlSource(ms, dynamicSqlSource);
+            } else {
+                throw new RuntimeException("自定义Mapper方法返回类型错误,可选的返回类型为void和SqlNode!");
+            }
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        } catch (InvocationTargetException e) {
+            throw new RuntimeException(e.getTargetException() != null ? e.getTargetException() : e);
         }
     }
 
