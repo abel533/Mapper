@@ -35,7 +35,7 @@
       <!--这个处理使得通用Mapper可以支持Map类型的实体（实体中的字段必须按常规方式定义，否则无法反射获得列）-->
       <property name="cameHumpMap" value="true"/>
 			<!--通用Mapper接口，多个用逗号隔开-->
-			<property name="mappers" value="com.github.abel533.mapper.Mapper"/>
+			<property name="mappers" value="com.github.abel533.mapper.Mapper,com.github.abel533.hsqldb.HsqldbMapper"/>
 		</plugin>
 	</plugins>
 

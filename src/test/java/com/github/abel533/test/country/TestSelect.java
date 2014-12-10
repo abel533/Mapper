@@ -7,7 +7,6 @@ import org.apache.ibatis.session.SqlSession;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.text.MessageFormat;
 import java.util.List;
 
 /**
@@ -34,18 +33,39 @@ public class TestSelect {
     }
 
     /**
+     * 查询全部
+     */
+    @Test
+    public void testDynamicSelectPage() {
+        SqlSession sqlSession = MybatisHelper.getSqlSession();
+        try {
+            CountryMapper mapper = sqlSession.getMapper(CountryMapper.class);
+            Country country = new Country();
+            country.setCountrycode("US");
+            List<Country> countryList = mapper.selectPage(country, 0, 10);
+            //查询总数
+            Assert.assertEquals(1, countryList.size());
+
+            countryList = mapper.selectPage(null, 100, 10);
+            //查询总数
+            Assert.assertEquals(10, countryList.size());
+        } finally {
+            sqlSession.close();
+        }
+    }
+
+    /**
      * 入参为null时查询全部
      */
     @Test
     public void testDynamicSelectAllByNull() {
-//        SqlSession sqlSession = MybatisHelper.getSqlSession();
-//        try {
-//            CountryMapper mapper = sqlSession.getMapper(CountryMapper.class);
-//            mapper.select(null);
-//        } finally {
-//            sqlSession.close();
-//        }
-        System.out.println(MessageFormat.format("{2}-{0}.nextval ","SEQ_ID","HEHE","XIXI"));
+        SqlSession sqlSession = MybatisHelper.getSqlSession();
+        try {
+            CountryMapper mapper = sqlSession.getMapper(CountryMapper.class);
+            mapper.select(null);
+        } finally {
+            sqlSession.close();
+        }
     }
 
     /**
