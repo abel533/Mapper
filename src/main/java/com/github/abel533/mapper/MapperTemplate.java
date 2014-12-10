@@ -263,60 +263,44 @@ public abstract class MapperTemplate {
     /**
      * 返回if条件的sqlNode
      * <p>一般类型：<code>&lt;if test="property!=null"&gt;columnNode&lt;/if&gt;</code></p>
-     * <p>String类型：<code>&lt;if test="property!=null and property!=''"&gt;columnNode&lt;/if&gt;</code></p>
      *
      * @param column
      * @return
      */
     protected SqlNode getIfNotNull(EntityHelper.EntityColumn column, SqlNode columnNode) {
-        if (column.getJavaType().equals(String.class)) {
-            return new IfSqlNode(columnNode, column.getProperty() + " != null and " + column.getProperty() + " != '' ");
-        }
         return new IfSqlNode(columnNode, column.getProperty() + " != null ");
     }
 
     /**
      * 返回if条件的sqlNode
      * <p>一般类型：<code>&lt;if test="property==null"&gt;columnNode&lt;/if&gt;</code></p>
-     * <p>String类型：<code>&lt;if test="property==null or property==''"&gt;columnNode&lt;/if&gt;</code></p>
      *
      * @param column
      * @return
      */
     protected SqlNode getIfIsNull(EntityHelper.EntityColumn column, SqlNode columnNode) {
-        if (column.getJavaType().equals(String.class)) {
-            return new IfSqlNode(columnNode, column.getProperty() + " == null or " + column.getProperty() + " == '' ");
-        }
         return new IfSqlNode(columnNode, column.getProperty() + " == null ");
     }
 
     /**
      * 返回if条件的sqlNode
      * <p>一般类型：<code>&lt;if test="property!=null"&gt;columnNode&lt;/if&gt;</code></p>
-     * <p>String类型：<code>&lt;if test="property!=null and property!=''"&gt;columnNode&lt;/if&gt;</code></p>
      *
      * @param column
      * @return
      */
     protected SqlNode getIfCacheNotNull(EntityHelper.EntityColumn column, SqlNode columnNode) {
-        if (column.getJavaType().equals(String.class)) {
-            return new IfSqlNode(columnNode, column.getProperty() + "_cache != null and " + column.getProperty() + "_cache != '' ");
-        }
         return new IfSqlNode(columnNode, column.getProperty() + "_cache != null ");
     }
 
     /**
      * 返回if条件的sqlNode
      * <p>一般类型：<code>&lt;if test="property_cache!=null"&gt;columnNode&lt;/if&gt;</code></p>
-     * <p>String类型：<code>&lt;if test="property_cache!=null and property_cache!=''"&gt;columnNode&lt;/if&gt;</code></p>
      *
      * @param column
      * @return
      */
     protected SqlNode getIfCacheIsNull(EntityHelper.EntityColumn column, SqlNode columnNode) {
-        if (column.getJavaType().equals(String.class)) {
-            return new IfSqlNode(columnNode, column.getProperty() + "_cache == null or " + column.getProperty() + "_cache == '' ");
-        }
         return new IfSqlNode(columnNode, column.getProperty() + "_cache == null ");
     }
 

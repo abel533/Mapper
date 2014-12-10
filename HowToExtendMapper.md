@@ -299,10 +299,10 @@
 				<if test="entity.id!=null">
 					id = #{entity.id}
 				</if>
-				<if test="entity.countryname!=null and entity.countryname!=''">
+				<if test="entity.countryname!=null">
 					countryname = #{entity.countryname}
 				</if>
-				<if test="entity.countrycode!=null and entity.countrycode!=''">
+				<if test="entity.countrycode!=null">
 					countrycode = #{entity.countrycode}
 				</if>
 			</if>
