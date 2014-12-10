@@ -7,6 +7,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.text.MessageFormat;
 import java.util.List;
 
 /**
@@ -33,17 +34,18 @@ public class TestSelect {
     }
 
     /**
-     * 除了通过主键的方法，其他的方法入参不能为null
+     * 入参为null时查询全部
      */
-    @Test(expected = RuntimeException.class)
+    @Test
     public void testDynamicSelectAllByNull() {
-        SqlSession sqlSession = MybatisHelper.getSqlSession();
-        try {
-            CountryMapper mapper = sqlSession.getMapper(CountryMapper.class);
-            mapper.select(null);
-        } finally {
-            sqlSession.close();
-        }
+//        SqlSession sqlSession = MybatisHelper.getSqlSession();
+//        try {
+//            CountryMapper mapper = sqlSession.getMapper(CountryMapper.class);
+//            mapper.select(null);
+//        } finally {
+//            sqlSession.close();
+//        }
+        System.out.println(MessageFormat.format("{2}-{0}.nextval ","SEQ_ID","HEHE","XIXI"));
     }
 
     /**

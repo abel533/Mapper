@@ -29,9 +29,9 @@ public class TestUpdateByPrimaryKey {
     }
 
     /**
-     * 除了通过主键的方法，其他的方法入参不能为null
+     * 入参为null时更新全部
      */
-    @Test(expected = RuntimeException.class)
+    @Test
     public void testDynamicUpdateByPrimaryKeyAllByNull() {
         SqlSession sqlSession = MybatisHelper.getSqlSession();
         try {

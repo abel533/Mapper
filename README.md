@@ -24,6 +24,16 @@ Mybatis工具群： 211286137 (Mybatis相关工具插件等等)
 
 推荐使用Mybatis分页插件:[PageHelper分页插件](https://github.com/pagehelper/Mybatis-PageHelper)
 
+##v0.2.0版本说明
+
+该版本做了大量的重构，在原有基础上增加了两个类，分别为`MapperTemplate`和`MapperProvider`，其他几个类都有相当大的改动。  
+
+**但是**，这次重构并不影响原有的业务代码。  
+
+这次重构的目的是为了方便开发者自行扩展，增加自己需要的通用Mapper。这次重构后，扩展变的更容易。稍后会写一篇**如何进行扩展**的文档。  
+
+这次更新还修复Oracle序列的BUG。
+
 ##如何使用?
 
 下面是通用Mapper的配置方法,还会提到Spring中的配置方法.还有和[PageHelper分页插件](https://github.com/pagehelper/Mybatis-PageHelper)集成的配置方式.
@@ -54,11 +64,17 @@ Mybatis工具群： 211286137 (Mybatis相关工具插件等等)
     <!--配置UUID生成策略需要使用OGNL表达式-->
     <!--默认值32位长度:@java.util.UUID@randomUUID().toString().replace("-", "")-->
     <!--<property name="UUID" value="@java.util.UUID@randomUUID().toString()"/>-->
-    <!--主键自增回写方法,默认值MYSQL,详细说明看下面的INENTITY参数配置-->
-    <!--<property name="IDENTITY" value="MYSQL"/>-->
+    <!--主键自增回写方法,默认值MYSQL,详细说明请看文档-->
+    <property name="IDENTITY" value="HSQLDB"/>
+    <!--序列的获取规则,使用{num}格式化参数，默认值为{0}.nextval，针对Oracle-->
+    <!--可选参数一共3个，对应0,1,2,分别为SequenceName，ColumnName,PropertyName-->
+    <property name="seqFormat" value="{0}.nextval"/>
     <!--主键自增回写方法执行顺序,默认AFTER,可选值为(BEFORE|AFTER)-->
     <!--<property name="ORDER" value="AFTER"/>-->
-    <!--通用Mapper接口，多个用逗号隔开-->
+    <!--支持Map类型的实体类，自动将大写下划线的Key转换为驼峰式-->
+    <!--这个处理使得通用Mapper可以支持Map类型的实体（实体中的字段必须按常规方式定义，否则无法反射获得列）-->
+    <property name="cameHumpMap" value="true"/>
+    <!--通用Mapper接口，多个通用接口用逗号隔开-->
     <property name="mappers" value="com.github.abel533.mapper.Mapper"/>
   </plugin>
 </plugins>
@@ -232,6 +248,7 @@ int updateByPrimaryKeySelective(T record);
 @Id
 private Integer id;
 ```
+该字段不会回写。   
 
 2. 使用UUID时:
 ```java
@@ -239,6 +256,7 @@ private Integer id;
 @GeneratedValue(generator = "UUID")
 private String countryname;
 ```
+该字段不会回写。 
 
 3. 使用主键自增:
 ```java
@@ -246,7 +264,8 @@ private String countryname;
 @Id
 @GeneratedValue(strategy = GenerationType.IDENTITY)
 private Integer id;
-```
+```  
+首先该字段必须是一个自增的字段，增加这个注解后，**会回写ID**。
 
 
 ###5. 将继承的Mapper接口添加到Mybatis配置中
@@ -325,7 +344,7 @@ try {
 
 直接在需要的地方注入Mapper继承的接口即可,和一般情况下的使用没有区别.
 
-##当前版本v0.1.0
+##当前版本v0.2.0
 
 ##这是一个新生的开源项目
 

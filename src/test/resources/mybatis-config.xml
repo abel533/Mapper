@@ -26,9 +26,13 @@
 			<!--<property name="UUID" value="@java.util.UUID@randomUUID().toString()"/>-->
 			<!--主键自增回写方法,默认值MYSQL,详细说明请看文档-->
 			<property name="IDENTITY" value="HSQLDB"/>
+      <!--序列的获取规则,使用{num}格式化参数，默认值为{0}.nextval，针对Oracle-->
+      <!--可选参数一共3个，对应0,1,2,分别为SequenceName，ColumnName,PropertyName-->
+			<property name="seqFormat" value="{0}.nextval"/>
 			<!--主键自增回写方法执行顺序,默认AFTER,可选值为(BEFORE|AFTER)-->
 			<!--<property name="ORDER" value="AFTER"/>-->
       <!--支持Map类型的实体类，自动将大写下划线的Key转换为驼峰式-->
+      <!--这个处理使得通用Mapper可以支持Map类型的实体（实体中的字段必须按常规方式定义，否则无法反射获得列）-->
       <property name="cameHumpMap" value="true"/>
 			<!--通用Mapper接口，多个用逗号隔开-->
 			<property name="mappers" value="com.github.abel533.mapper.Mapper"/>

@@ -3,7 +3,6 @@ package com.github.abel533.test.country2;
 import com.github.abel533.mapper.Country2Mapper;
 import com.github.abel533.mapper.MybatisHelper;
 import com.github.abel533.model.Country2;
-import org.apache.ibatis.exceptions.PersistenceException;
 import org.apache.ibatis.session.SqlSession;
 import org.junit.Assert;
 import org.junit.Test;
@@ -42,7 +41,7 @@ public class TestInsert {
     /**
      * 不能插入null
      */
-    @Test(expected = PersistenceException.class)
+    @Test
     public void testDynamicInsertAllByNull() {
         SqlSession sqlSession = MybatisHelper.getSqlSession();
         try {

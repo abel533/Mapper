@@ -30,9 +30,9 @@ public class TestSelectCount {
     }
 
     /**
-     * 除了通过主键的方法，其他的方法入参不能为null
+     * 入参为null时查询全部
      */
-    @Test(expected = RuntimeException.class)
+    @Test
     public void testDynamicSelectAllByNull() {
         SqlSession sqlSession = MybatisHelper.getSqlSession();
         try {
