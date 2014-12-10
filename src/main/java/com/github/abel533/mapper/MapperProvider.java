@@ -176,7 +176,8 @@ public class MapperProvider extends MapperTemplate {
             } else if (column.isUuid()) {
                 ifNodes.add(getIfIsNull(column, new StaticTextSqlNode("#{" + column.getProperty() + "_bind },")));
             } else {
-                ifNodes.add(getIfIsNull(column, new StaticTextSqlNode("#{" + column.getProperty() + "},")));
+                //当null的时候，如果不指定jdbcType，oracle可能会报异常，指定VARCHAR不影响其他
+                ifNodes.add(getIfIsNull(column, new StaticTextSqlNode("#{" + column.getProperty() + ",jdbcType=VARCHAR},")));
             }
         }
         //values(#{property},#{property}...)
