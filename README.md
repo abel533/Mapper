@@ -34,6 +34,10 @@ Mybatis工具群： 211286137 (Mybatis相关工具插件等等)
 
 这次更新还修复Oracle序列的BUG。
 
+##如何开发自己的通用Mapper
+
+[打开文档](Mapper/blob/master/HowToExtendMapper.md)  
+
 ##如何使用?
 
 下面是通用Mapper的配置方法,还会提到Spring中的配置方法.还有和[PageHelper分页插件](https://github.com/pagehelper/Mybatis-PageHelper)集成的配置方式.
