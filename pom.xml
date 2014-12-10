@@ -26,6 +26,19 @@
       <version>3.2.6</version>
       <optional>true</optional>
     </dependency>
+    <!--与Spring集成-->
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-beans</artifactId>
+      <version>3.2.12.RELEASE</version>
+      <optional>true</optional>
+    </dependency>
+    <dependency>
+      <groupId>org.mybatis</groupId>
+      <artifactId>mybatis-spring</artifactId>
+      <version>1.2.2</version>
+      <optional>true</optional>
+    </dependency>
 
     <!--测试-->
     <dependency>
