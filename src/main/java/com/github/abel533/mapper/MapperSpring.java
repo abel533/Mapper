@@ -10,15 +10,13 @@ import java.util.Collection;
 import java.util.Properties;
 
 /**
- * 和Spring集成
+ * 通用Mapper和Spring集成
  *
  * @author liuzh
  */
 public class MapperSpring implements BeanPostProcessor {
 
     private final MapperHelper mapperHelper = new MapperHelper();
-
-    private boolean runed = false;
 
     public void setProperties(Properties properties) {
         String UUID = properties.getProperty("UUID");
@@ -65,7 +63,8 @@ public class MapperSpring implements BeanPostProcessor {
 
     @Override
     public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
-        if (!runed && bean instanceof SqlSessionTemplate) {
+        //对所有的SqlSessionTemplate进行处理，多数据源情况下仍然有效
+        if (bean instanceof SqlSessionTemplate) {
             SqlSessionTemplate sqlSessionTemplate = (SqlSessionTemplate)bean;
             Collection<MappedStatement> collection = sqlSessionTemplate.getConfiguration().getMappedStatements();
             for (Object object : collection) {
@@ -78,7 +77,6 @@ public class MapperSpring implements BeanPostProcessor {
                     }
                 }
             }
-            runed = true;
         }
         return bean;
     }
