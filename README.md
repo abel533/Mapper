@@ -34,9 +34,7 @@ Mybatis工具群： 211286137 (Mybatis相关工具插件等等)
 
 这次更新还修复Oracle序列的BUG。
 
-##如何开发自己的通用Mapper
-
-[打开文档](Mapper/blob/master/HowToExtendMapper.md)  
+##[如何开发自己的通用Mapper](http://git.oschina.net/free/Mapper/blob/master/HowToExtendMapper.md)  
 
 ##如何使用?
 
