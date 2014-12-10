@@ -46,17 +46,6 @@ public class MapperProvider extends MapperTemplate {
     }
 
     /**
-     * 需要处理主键的情况
-     *
-     * @param methodName
-     * @return
-     */
-    @Override
-    public boolean processPKParameter(String methodName) {
-        return methodName.equals("selectByPrimaryKey") || methodName.equals("deleteByPrimaryKey");
-    }
-
-    /**
      * 查询
      *
      * @param ms

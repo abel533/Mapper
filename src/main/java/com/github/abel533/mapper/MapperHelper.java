@@ -195,10 +195,11 @@ public class MapperHelper {
 
     //基础可配置项
     private class Config {
-        private String UUID = "";
-        private String IDENTITY = "";
+        private String UUID;
+        private String IDENTITY;
         private boolean BEFORE = false;
         private boolean cameHumpMap = false;
+        private String seqFormat;
     }
 
     private Config config = new Config();
@@ -214,6 +215,10 @@ public class MapperHelper {
         } else {
             config.IDENTITY = IDENTITY;
         }
+    }
+
+    public void setSeqFormat(String seqFormat){
+        config.seqFormat = seqFormat;
     }
 
     public void setBEFORE(String BEFORE) {
@@ -245,6 +250,13 @@ public class MapperHelper {
 
     public boolean isCameHumpMap() {
         return config.cameHumpMap;
+    }
+
+    public String getSeqFormat(){
+        if (config.seqFormat != null && config.seqFormat.length() > 0) {
+            return config.seqFormat;
+        }
+        return "{0}.nextval";
     }
 
     /**
@@ -301,17 +313,6 @@ public class MapperHelper {
         } catch (Exception e) {
             throw new RuntimeException("调用方法异常:" + e.getMessage());
         }
-    }
-
-    /**
-     * 处理入参
-     *
-     * @param ms
-     * @param args
-     */
-    public void processParameterObject(MappedStatement ms, Object[] args) {
-        MapperTemplate mapperTemplate = getMapperTemplate(ms.getId());
-        mapperTemplate.processParameterObject(ms, args);
     }
 
     /**

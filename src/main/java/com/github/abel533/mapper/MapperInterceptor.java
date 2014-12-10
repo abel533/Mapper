@@ -58,11 +58,10 @@ public class MapperInterceptor implements Interceptor {
             if (ms.getSqlSource() instanceof ProviderSqlSource) {
                 mapperHelper.setSqlSource(ms);
             }
-            //只有select和delete通过PK操作时需要处理入参
-            mapperHelper.processParameterObject(ms, objects);
         }
         Object result = invocation.proceed();
         //是否对Map类型的实体处理返回结果，例如USER_NAME=>userName
+        //这个处理使得通用Mapper可以支持Map类型的实体（实体中的字段必须按常规方式定义，否则无法反射获得列）
         if (mapperHelper.isCameHumpMap()) {
             mapperHelper.cameHumpMap(result, ms);
         }
@@ -87,6 +86,10 @@ public class MapperInterceptor implements Interceptor {
         String IDENTITY = properties.getProperty("IDENTITY");
         if (IDENTITY != null && IDENTITY.length() > 0) {
             mapperHelper.setIDENTITY(IDENTITY);
+        }
+        String seqFormat = properties.getProperty("seqFormat");
+        if (seqFormat != null && seqFormat.length() > 0) {
+            mapperHelper.setSeqFormat(seqFormat);
         }
         String ORDER = properties.getProperty("ORDER");
         if (ORDER != null && ORDER.length() > 0) {

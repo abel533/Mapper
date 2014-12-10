@@ -36,12 +36,12 @@ import org.apache.ibatis.reflection.wrapper.ObjectWrapperFactory;
 import org.apache.ibatis.scripting.defaults.RawSqlSource;
 import org.apache.ibatis.scripting.xmltags.*;
 import org.apache.ibatis.session.Configuration;
-import org.apache.ibatis.type.TypeHandlerRegistry;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -166,74 +166,6 @@ public abstract class MapperTemplate {
     }
 
     /**
-     * 处理主键参数
-     *
-     * @param ms
-     * @param args
-     * @return
-     */
-    public Map<String, Object> processPKParameter(MappedStatement ms, Object[] args) {
-        Object parameterObject = args[1];
-        TypeHandlerRegistry typeHandlerRegistry = ms.getConfiguration().getTypeHandlerRegistry();
-        List<ParameterMapping> parameterMappings = getPrimaryKeyParameterMappings(ms);
-        Map<String, Object> parameterMap = new HashMap<String, Object>();
-        for (ParameterMapping parameterMapping : parameterMappings) {
-            if (parameterMapping.getMode() != ParameterMode.OUT) {
-                Object value;
-                String propertyName = parameterMapping.getProperty();
-                if (parameterObject == null) {
-                    value = null;
-                } else if (typeHandlerRegistry.hasTypeHandler(parameterObject.getClass())) {
-                    if (parameterMappings.size() > 1) {
-                        StringBuilder propertyBuilder = new StringBuilder("入参缺少必要的属性错误!参数中必须提供属性:");
-                        for (ParameterMapping mapping : parameterMappings) {
-                            propertyBuilder.append(mapping.getProperty()).append(",");
-                        }
-                        throw new RuntimeException(propertyBuilder.substring(0, propertyBuilder.length() - 1));
-                    }
-                    value = parameterObject;
-                } else {
-                    MetaObject metaObject = forObject(parameterObject);
-                    value = metaObject.getValue(propertyName);
-                }
-                parameterMap.put(propertyName, value);
-            }
-        }
-        return parameterMap;
-    }
-
-    /**
-     * 需要处理PK主键参数的情况
-     *
-     * @param methodName
-     * @return
-     */
-    public abstract boolean processPKParameter(String methodName);
-
-    /**
-     * 处理入参
-     *
-     * @param ms
-     * @param args
-     */
-    public void processParameterObject(MappedStatement ms, Object[] args) {
-        Class<?> entityClass = getSelectReturnType(ms);
-        String methodName = getMethodName(ms);
-        Object parameterObject = args[1];
-        //两个通过PK查询的方法用下面的方法处理参数
-        if (processPKParameter(methodName)) {
-            args[1] = processPKParameter(ms,args);
-        } else if (parameterObject == null) {
-            throw new RuntimeException("入参不能为空!");
-        } else if (!entityClass.isAssignableFrom(parameterObject.getClass())) {
-            throw new RuntimeException("入参类型错误，需要的类型为:"
-                    + entityClass.getCanonicalName()
-                    + ",实际入参类型为:"
-                    + parameterObject.getClass().getCanonicalName());
-        }
-    }
-
-    /**
      * 获取返回值类型 - 实体类型
      *
      * @param ms
@@ -315,7 +247,7 @@ public abstract class MapperTemplate {
      * @return
      */
     protected String getSeqNextVal(EntityHelper.EntityColumn column){
-        return column.getSequenceName() + ".nextval";
+        return MessageFormat.format(mapperHelper.getSeqFormat(),column.getSequenceName(),column.getColumn(),column.getProperty());
     }
 
     /**
