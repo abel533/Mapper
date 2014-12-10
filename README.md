@@ -266,9 +266,9 @@ private String countryname;
 @GeneratedValue(strategy = GenerationType.IDENTITY)
 private Integer id;
 ```  
-首先该字段必须是一个自增的字段，增加这个注解后，**会回写ID**。
+增加这个注解后，**会回写ID**。
 
-  通过设置`generator`参数可以支持更多的获取主键的方法，例如在Oracle中使用序列：
+  通过设置`@GeneratedValue`的`generator`参数可以支持更多的获取主键的方法，例如在Oracle中使用序列：
   ```java
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY,generator = "select SEQ_ID.nextval from dual")
