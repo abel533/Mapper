@@ -31,6 +31,7 @@ import org.apache.ibatis.annotations.UpdateProvider;
 import org.apache.ibatis.builder.annotation.ProviderSqlSource;
 import org.apache.ibatis.mapping.MappedStatement;
 import org.apache.ibatis.session.Configuration;
+import org.apache.ibatis.session.SqlSession;
 
 import java.lang.reflect.Method;
 import java.util.*;
@@ -75,6 +76,31 @@ public class MapperHelper {
      */
     public MapperHelper(Properties properties) {
         setProperties(properties);
+    }
+
+    /**
+     * 缓存初始化时的SqlSession
+     */
+    private List<SqlSession> sqlSessions = new ArrayList<SqlSession>();
+
+    /**
+     * 针对Spring注入需要处理的SqlSession
+     *
+     * @param sqlSessions
+     */
+    public void setSqlSessions(SqlSession[] sqlSessions){
+        if (sqlSessions != null && sqlSessions.length>0) {
+            this.sqlSessions.addAll(Arrays.asList(sqlSessions));
+        }
+    }
+
+    /**
+     * Spring初始化方法，使用Spring时需要配置init-method="initMapper"
+     */
+    public void initMapper(){
+        for (SqlSession sqlSession : sqlSessions) {
+            processConfiguration(sqlSession.getConfiguration());
+        }
     }
 
     /**
@@ -158,6 +184,19 @@ public class MapperHelper {
             registerMapper(Class.forName(mapperClass));
         } catch (ClassNotFoundException e) {
             throw new RuntimeException("注册通用Mapper[" + mapperClass + "]失败，找不到该通用Mapper!");
+        }
+    }
+
+    /**
+     * 方便Spring注入
+     *
+     * @param mappers
+     */
+    public void setMappers(String[] mappers) {
+        if (mappers != null && mappers.length > 0) {
+            for (String mapper : mappers) {
+                registerMapper(mapper);
+            }
         }
     }
 

@@ -3,10 +3,12 @@ package com.github.abel533.test.user;
 import com.github.abel533.mapper.MybatisHelper;
 import com.github.abel533.mapper.UserInfoMapper;
 import com.github.abel533.model.UserInfo;
+import org.apache.ibatis.mapping.MappedStatement;
 import org.apache.ibatis.session.SqlSession;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -30,6 +32,15 @@ public class TestBasic {
             userInfo.setPassword("123456");
             userInfo.setUsertype("2");
             userInfo.setEmail("abel533@gmail.com");
+            Collection collection = sqlSession.getConfiguration().getMappedStatements();
+            for (Object o : collection) {
+                if(o instanceof MappedStatement){
+                    MappedStatement ms = (MappedStatement) o;
+                    if (ms.getId().contains("UserInfoMapper.insert")) {
+                        System.out.println(ms.getId());
+                    }
+                }
+            }
 
             Assert.assertEquals(1, mapper.insert(userInfo));
 

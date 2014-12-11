@@ -24,6 +24,74 @@ Mybatis工具群： 211286137 (Mybatis相关工具插件等等)
 
 推荐使用Mybatis分页插件:[PageHelper分页插件](https://github.com/pagehelper/Mybatis-PageHelper)
 
+##v0.3.0版本说明
+
+这个版本的主要目的是消除拦截器，因此针对常用的情况增加了两种更方便的使用方式。
+
+对于单独使用Mybatis，通过如下方式创建`sqlSessionFactory`:
+```java
+Reader reader = Resources.getResourceAsReader("mybatis-config.xml");
+sqlSessionFactory = new SqlSessionFactoryBuilder().build(reader);
+reader.close();
+```  
+如果你喜欢拦截器方式，那么你仍然可以在mybatis的配置文件中配置拦截器。
+
+如果你想要更直接的JAVA编码方式，可以在初始化`sqlSessionFactory`的地方按照下面的方式操作：  
+```java
+//从上面的sqlSessionFactory取出一个session
+session = sqlSessionFactory.openSession();
+//创建一个MapperHelper
+MapperHelper mapperHelper = new MapperHelper();
+// 设置UUID生成策略
+// 配置UUID生成策略需要使用OGNL表达式
+// 默认值32位长度:@java.util.UUID@randomUUID().toString().replace("-", "")
+mapperHelper.setUUID("");
+// 主键自增回写方法,默认值MYSQL,详细说明请看文档
+mapperHelper.setIDENTITY("HSQLDB");
+// 序列的获取规则,使用{num}格式化参数，默认值为{0}.nextval，针对Oracle
+// 可选参数一共3个，对应0,1,2,分别为SequenceName，ColumnName, PropertyName
+mapperHelper.setSeqFormat("NEXT VALUE FOR {0}");
+// 设置全局的catalog,默认为空，如果设置了值，操作表时的sql会是catalog.tablename
+mapperHelper.setCatalog("");
+// 设置全局的schema,默认为空，如果设置了值，操作表时的sql会是schema.tablename
+// 如果同时设置了catalog,优先使用catalog.tablename
+mapperHelper.setSchema("");
+// 主键自增回写方法执行顺序,默认AFTER,可选值为(BEFORE|AFTER)
+mapperHelper.setOrder("AFTER");
+// 注册通用Mapper接口
+mapperHelper.registerMapper(Mapper.class);
+mapperHelper.registerMapper(HsqldbMapper.class);
+//配置完成后，执行下面的操作
+mapperHelper.processConfiguration(session.getConfiguration());
+//OK - mapperHelper的任务已经完成，可以不管了
+```
+上面配置参数的时候，是一个个调用set方法进行的，你还可以使用`MapperHelper`的`MapperHelper(Properties properties)`构造方法，或者调用`setProperties(properties)`方法，通过`.properties`配置文件来配置。
+
+使用JAVA编码方式不需要拦截器。如果你的情况适用于这种方式，推荐你用JAVA编码的方式处理。  
+
+**还有一种最常见的情况，那就是和Spring集成的情况。**
+在Spring中使用的时候，可以通过xml达到上面Java编码方式的效果。如下配置：  
+```xml
+<bean class="com.github.abel533.mapper.MapperHelper" depends-on="sqlSession" init-method="initMapper">
+    <property name="mappers">
+        <array>
+            <!-- 可以配置多个 -->
+            <value>com.isea533.mybatis.mapperhelper.Mapper</value>
+        </array>
+    </property>
+    <!-- 对于多数据源，这里也可以像上面这样配置多个 -->
+    <property name="sqlSessions" ref="sqlSession"/>
+</bean>
+```  
+可以看到配置中依赖了`sqlSession`，所以使用这种方式，你还要在Spring的配置中保证`sqlSession`存在。一般情况下都会在Spring定义`sqlSession`。一般的定义方法如下：  
+```xml
+<bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate" scope="prototype">
+    <constructor-arg index="0" ref="sqlSessionFactory"/>
+</bean>
+```  
+在Spring中使用这种方式的时候，Spring启动完成的时候，所有的通用Mapper都已经处理完成了。后面就可以直接使用通用方法，不需要拦截器来执行了。
+
+
 ##v0.2.0版本说明
 
 该版本做了大量的重构，在原有基础上增加了两个类，分别为`MapperTemplate`和`MapperProvider`，其他几个类都有相当大的改动。  
