@@ -57,7 +57,7 @@ public abstract class MapperTemplate {
     private Class<?> mapperClass;
     private MapperHelper mapperHelper;
 
-    public MapperTemplate(Class<?> mapperClass,MapperHelper mapperHelper) {
+    public MapperTemplate(Class<?> mapperClass, MapperHelper mapperHelper) {
         this.mapperClass = mapperClass;
         this.mapperHelper = mapperHelper;
     }
@@ -122,7 +122,7 @@ public abstract class MapperTemplate {
      * @param ms
      * @param entityClass
      */
-    protected void setResultType(MappedStatement ms,Class<?> entityClass){
+    protected void setResultType(MappedStatement ms, Class<?> entityClass) {
         ResultMap resultMap = ms.getResultMaps().get(0);
         MetaObject metaObject = forObject(resultMap);
         metaObject.setValue("type", entityClass);
@@ -143,10 +143,22 @@ public abstract class MapperTemplate {
      * 重新设置SqlSource
      *
      * @param ms
-     * @throws InvocationTargetException
+     * @throws java.lang.reflect.InvocationTargetException
      * @throws IllegalAccessException
      */
     public void setSqlSource(MappedStatement ms) throws Exception {
+        if (this.mapperClass == getMapperClass(ms.getId())) {
+            if (mapperHelper.isSpring4()) {
+                return;
+            } else if (mapperHelper.isSpring()) {
+                throw new RuntimeException("Spring4.x.x 及以上版本支持泛型注入," +
+                        "您当前的Spring版本为" + mapperHelper.getSpringVersion() + ",不能使用泛型注入," +
+                        "因此在配置MapperScannerConfigurer时,不要扫描通用Mapper接口类," +
+                        "也不要在您Mybatis的xml配置文件中的<mappers>中指定通用Mapper接口类.");
+            } else {
+                throw new RuntimeException("请不要在您Mybatis的xml配置文件中的<mappers>中指定通用Mapper接口类.");
+            }
+        }
         Method method = methodMap.get(getMethodName(ms));
         try {
             if (method.getReturnType() == Void.TYPE) {
@@ -215,10 +227,11 @@ public abstract class MapperTemplate {
 
     /**
      * 获取执行的方法名
+     *
      * @param msId
      * @return
      */
-    public static String getMethodName(String msId){
+    public static String getMethodName(String msId) {
         return msId.substring(msId.lastIndexOf(".") + 1);
     }
 
@@ -246,8 +259,8 @@ public abstract class MapperTemplate {
      * @param column
      * @return
      */
-    protected String getSeqNextVal(EntityHelper.EntityColumn column){
-        return MessageFormat.format(mapperHelper.getSeqFormat(),column.getSequenceName(),column.getColumn(),column.getProperty());
+    protected String getSeqNextVal(EntityHelper.EntityColumn column) {
+        return MessageFormat.format(mapperHelper.getSeqFormat(), column.getSequenceName(), column.getColumn(), column.getProperty());
     }
 
     /**
@@ -256,7 +269,7 @@ public abstract class MapperTemplate {
      * @param entityClass
      * @return
      */
-    protected String tableName(Class<?> entityClass){
+    protected String tableName(Class<?> entityClass) {
         return mapperHelper.getTableName(entityClass);
     }
 
@@ -311,7 +324,7 @@ public abstract class MapperTemplate {
      * @param first
      * @return
      */
-    protected SqlNode getColumnEqualsProperty(EntityHelper.EntityColumn column,boolean first){
+    protected SqlNode getColumnEqualsProperty(EntityHelper.EntityColumn column, boolean first) {
         return new StaticTextSqlNode((first ? "" : " AND ") + column.getColumn() + " = #{" + column.getProperty() + "} ");
     }
 
@@ -321,14 +334,14 @@ public abstract class MapperTemplate {
      * @param entityClass
      * @return
      */
-    protected SqlNode getAllIfColumnNode(Class<?> entityClass){
+    protected SqlNode getAllIfColumnNode(Class<?> entityClass) {
         //获取全部列
         List<EntityHelper.EntityColumn> columnList = EntityHelper.getColumns(entityClass);
         List<SqlNode> ifNodes = new ArrayList<SqlNode>();
         boolean first = true;
         //对所有列循环，生成<if test="property!=null">column = #{property}</if>
         for (EntityHelper.EntityColumn column : columnList) {
-            ifNodes.add(getIfNotNull(column,getColumnEqualsProperty(column,first)));
+            ifNodes.add(getIfNotNull(column, getColumnEqualsProperty(column, first)));
             first = false;
         }
         return new MixedSqlNode(ifNodes);

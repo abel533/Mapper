@@ -64,6 +64,21 @@ public class MapperHelper {
     private Set<Collection<MappedStatement>> collectionSet = new HashSet<Collection<MappedStatement>>();
 
     /**
+     * 是否使用的Spring
+     */
+    private boolean spring = false;
+
+    /**
+     * 是否为Spring4.x以上版本
+     */
+    private boolean spring4 = false;
+
+    /**
+     * Spring版本号
+     */
+    private String springVersion;
+
+    /**
      * 默认构造方法
      */
     public MapperHelper() {
@@ -88,8 +103,8 @@ public class MapperHelper {
      *
      * @param sqlSessions
      */
-    public void setSqlSessions(SqlSession[] sqlSessions){
-        if (sqlSessions != null && sqlSessions.length>0) {
+    public void setSqlSessions(SqlSession[] sqlSessions) {
+        if (sqlSessions != null && sqlSessions.length > 0) {
             this.sqlSessions.addAll(Arrays.asList(sqlSessions));
         }
     }
@@ -97,10 +112,62 @@ public class MapperHelper {
     /**
      * Spring初始化方法，使用Spring时需要配置init-method="initMapper"
      */
-    public void initMapper(){
+    public void initMapper() {
+        //只有Spring会执行这个方法,所以Spring配置的时候,从这儿可以尝试获取Spring的版本
+        //先判断Spring版本,对下面的操作有影响
+        //Spring4以上支持泛型注入,因此可以扫描通用Mapper
+        initSpringVersion();
         for (SqlSession sqlSession : sqlSessions) {
             processConfiguration(sqlSession.getConfiguration());
         }
+    }
+
+    /**
+     * 检测Spring版本号,Spring4.x以上支持泛型注入
+     */
+    private void initSpringVersion() {
+        try {
+            //反射获取SpringVersion
+            Class<?> springVersionClass = Class.forName("org.springframework.core.SpringVersion");
+            springVersion = (String) springVersionClass.getDeclaredMethod("getVersion", null).invoke(null, null);
+            spring = true;
+            if (springVersion.indexOf(".") > 0) {
+                int MajorVersion = Integer.parseInt(springVersion.substring(0, springVersion.indexOf(".")));
+                if (MajorVersion > 3) {
+                    spring4 = true;
+                }
+            }
+        } catch (Exception e) {
+            spring = false;
+            spring4 = false;
+        }
+    }
+
+    /**
+     * 是否为Spring4.x以上版本
+     *
+     * @return
+     */
+    public boolean isSpring4() {
+        return spring4;
+    }
+
+    /**
+     * 是否为Spring4.x以上版本
+     *
+     * @return
+     */
+    public boolean isSpring() {
+        return spring;
+    }
+
+    /**
+     * 获取Spring版本号
+     *
+     * @return
+     */
+    public String getSpringVersion(){
+        return springVersion;
     }
 
     /**
@@ -263,6 +330,7 @@ public class MapperHelper {
 
     /**
      * 设置UUID
+     *
      * @param UUID
      */
     public void setUUID(String UUID) {
@@ -285,6 +353,7 @@ public class MapperHelper {
 
     /**
      * 设置selectKey方法的ORDER，默认AFTER
+     *
      * @param order
      */
     public void setOrder(String order) {
@@ -296,7 +365,7 @@ public class MapperHelper {
      *
      * @param seqFormat
      */
-    public void setSeqFormat(String seqFormat){
+    public void setSeqFormat(String seqFormat) {
         config.seqFormat = seqFormat;
     }
 
@@ -305,7 +374,7 @@ public class MapperHelper {
      *
      * @param catalog
      */
-    public void setCatalog(String catalog){
+    public void setCatalog(String catalog) {
         config.catalog = catalog;
     }
 
@@ -314,7 +383,7 @@ public class MapperHelper {
      *
      * @param schema
      */
-    public void setSchema(String schema){
+    public void setSchema(String schema) {
         config.schema = schema;
     }
 
