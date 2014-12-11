@@ -72,7 +72,8 @@ mapperHelper.processConfiguration(session.getConfiguration());
 **还有一种最常见的情况，那就是和Spring集成的情况。**
 在Spring中使用的时候，可以通过xml达到上面Java编码方式的效果。如下配置：  
 ```xml
-<bean class="com.github.abel533.mapper.MapperHelper" depends-on="sqlSession" init-method="initMapper">
+<bean class="com.github.abel533.mapper.MapperHelper"
+        depends-on="sqlSession" init-method="initMapper" scope="singleton" lazy-init="false">
     <property name="mappers">
         <array>
             <!-- 可以配置多个 -->
