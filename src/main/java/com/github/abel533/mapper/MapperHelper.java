@@ -135,6 +135,8 @@ public class MapperHelper {
                 int MajorVersion = Integer.parseInt(springVersion.substring(0, springVersion.indexOf(".")));
                 if (MajorVersion > 3) {
                     spring4 = true;
+                } else {
+                    spring4 = false;
                 }
             }
         } catch (Exception e) {
