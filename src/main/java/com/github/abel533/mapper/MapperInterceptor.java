@@ -27,7 +27,6 @@ package com.github.abel533.mapper;
 import org.apache.ibatis.builder.annotation.ProviderSqlSource;
 import org.apache.ibatis.executor.Executor;
 import org.apache.ibatis.mapping.MappedStatement;
-import org.apache.ibatis.mapping.SqlCommandType;
 import org.apache.ibatis.plugin.*;
 import org.apache.ibatis.session.ResultHandler;
 import org.apache.ibatis.session.RowBounds;
@@ -60,13 +59,7 @@ public class MapperInterceptor implements Interceptor {
                 mapperHelper.setSqlSource(ms);
             }
         }
-        Object result = invocation.proceed();
-        //是否对Map类型的实体处理返回结果，例如USER_NAME=>userName
-        //这个处理使得通用Mapper可以支持Map类型的实体（实体中的字段必须按常规方式定义，否则无法反射获得列）
-        if (ms.getSqlCommandType() == SqlCommandType.SELECT && mapperHelper.isCameHumpMap()) {
-            mapperHelper.cameHumpMap(result, ms);
-        }
-        return result;
+        return invocation.proceed();
     }
 
     @Override
@@ -95,10 +88,6 @@ public class MapperInterceptor implements Interceptor {
         String ORDER = properties.getProperty("ORDER");
         if (ORDER != null && ORDER.length() > 0) {
             mapperHelper.setBEFORE(ORDER);
-        }
-        String cameHumpMap = properties.getProperty("cameHumpMap");
-        if (cameHumpMap != null && cameHumpMap.length() > 0) {
-            mapperHelper.setCameHumpMap(cameHumpMap);
         }
         int mapperCount = 0;
         String mapper = properties.getProperty("mappers");

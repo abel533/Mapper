@@ -35,10 +35,6 @@ public class MapperSpring implements BeanPostProcessor {
         if (ORDER != null && ORDER.length() > 0) {
             mapperHelper.setBEFORE(ORDER);
         }
-        String cameHumpMap = properties.getProperty("cameHumpMap");
-        if (cameHumpMap != null && cameHumpMap.length() > 0) {
-            mapperHelper.setCameHumpMap(cameHumpMap);
-        }
         int mapperCount = 0;
         String mapper = properties.getProperty("mappers");
         if (mapper != null && mapper.length() > 0) {

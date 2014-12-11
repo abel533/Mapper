@@ -5,12 +5,11 @@ import com.github.abel533.mapper.UserInfoMapMapper;
 import com.github.abel533.model.UserInfoMap;
 import org.apache.ibatis.session.SqlSession;
 import org.junit.Assert;
-import org.junit.Test;
 
 import java.util.List;
 
 /**
- * 测试增删改查
+ * 测试增删改查 - 不在直接支持Map
  *
  * @author liuzh
  */
@@ -20,7 +19,7 @@ public class TestMap {
     /**
      * 新增
      */
-    @Test
+//    @Test
     public void testInsert() {
         SqlSession sqlSession = MybatisHelper.getSqlSession();
         try {
@@ -44,7 +43,7 @@ public class TestMap {
     /**
      * 主要测试删除
      */
-    @Test
+//    @Test
     public void testDelete() {
         SqlSession sqlSession = MybatisHelper.getSqlSession();
         try {
@@ -70,7 +69,7 @@ public class TestMap {
     /**
      * 查询
      */
-    @Test
+//    @Test
     public void testSelect() {
         SqlSession sqlSession = MybatisHelper.getSqlSession();
         try {
@@ -87,7 +86,7 @@ public class TestMap {
     /**
      * 根据主键全更新
      */
-    @Test
+//    @Test
     public void testUpdateByPrimaryKey() {
         SqlSession sqlSession = MybatisHelper.getSqlSession();
         try {
@@ -110,7 +109,7 @@ public class TestMap {
     /**
      * 根据主键更新非null
      */
-    @Test
+//    @Test
     public void testUpdateByPrimaryKeySelective() {
         SqlSession sqlSession = MybatisHelper.getSqlSession();
         try {

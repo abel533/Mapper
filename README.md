@@ -73,9 +73,6 @@ Mybatis工具群： 211286137 (Mybatis相关工具插件等等)
     <property name="seqFormat" value="{0}.nextval"/>
     <!--主键自增回写方法执行顺序,默认AFTER,可选值为(BEFORE|AFTER)-->
     <!--<property name="ORDER" value="AFTER"/>-->
-    <!--支持Map类型的实体类，自动将大写下划线的Key转换为驼峰式-->
-    <!--这个处理使得通用Mapper可以支持Map类型的实体（实体中的字段必须按常规方式定义，否则无法反射获得列）-->
-    <property name="cameHumpMap" value="true"/>
     <!--通用Mapper接口，多个通用接口用逗号隔开-->
     <property name="mappers" value="com.github.abel533.mapper.Mapper"/>
   </plugin>
@@ -220,7 +217,7 @@ int updateByPrimaryKeySelective(T record);
 
 实体类按照如下规则和数据库表进行转换,注解全部是JPA中的注解:
 
-1. 表名默认使用类名,驼峰转下划线,如`UserInfo`默认对应的表名为`user_info`，数字也会转下划线，例如`Country2`对于的表名为`country_2`.
+1. 表名默认使用类名,驼峰转下划线(只对大写字母进行处理),如`UserInfo`默认对应的表名为`user_info`。
 
 2. 表名可以使用`@Table(name = "tableName")`进行指定,对不符合第一条默认规则的可以通过这种方式指定表名.
 
@@ -355,6 +352,14 @@ try {
 <b>附:Spring使用相关</b>
 
 直接在需要的地方注入Mapper继承的接口即可,和一般情况下的使用没有区别.
+
+###7.其他  
+
+如果你的实体是继承Map的，你可能需要将数据库查询的结果从大写下划线形式转换为驼峰形式，你可以搭配下面的拦截器使用：  
+
+**CameHumpInterceptor - Map结果的Key转为驼峰式**  
+
+http://git.oschina.net/free/Mybatis_Utils/tree/master/CameHumpMap  
 
 ##当前版本v0.2.0
 
