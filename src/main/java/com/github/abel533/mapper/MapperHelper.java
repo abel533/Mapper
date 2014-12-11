@@ -28,13 +28,12 @@ import org.apache.ibatis.annotations.DeleteProvider;
 import org.apache.ibatis.annotations.InsertProvider;
 import org.apache.ibatis.annotations.SelectProvider;
 import org.apache.ibatis.annotations.UpdateProvider;
+import org.apache.ibatis.builder.annotation.ProviderSqlSource;
 import org.apache.ibatis.mapping.MappedStatement;
+import org.apache.ibatis.session.Configuration;
 
 import java.lang.reflect.Method;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * 处理主要逻辑
@@ -59,6 +58,26 @@ public class MapperHelper {
     private final Map<String, Boolean> msIdSkip = new HashMap<String, Boolean>();
 
     /**
+     * 缓存已经处理过的Collection<MappedStatement>
+     */
+    private Set<Collection<MappedStatement>> collectionSet = new HashSet<Collection<MappedStatement>>();
+
+    /**
+     * 默认构造方法
+     */
+    public MapperHelper() {
+    }
+
+    /**
+     * 带配置的构造方法
+     *
+     * @param properties
+     */
+    public MapperHelper(Properties properties) {
+        setProperties(properties);
+    }
+
+    /**
      * 通过通用Mapper接口获取对应的MapperTemplate
      *
      * @param mapperClass
@@ -75,18 +94,15 @@ public class MapperHelper {
                 SelectProvider provider = method.getAnnotation(SelectProvider.class);
                 tempClass = provider.type();
                 methodSet.add(method.getName());
-            }
-            else if (method.isAnnotationPresent(InsertProvider.class)) {
+            } else if (method.isAnnotationPresent(InsertProvider.class)) {
                 InsertProvider provider = method.getAnnotation(InsertProvider.class);
                 tempClass = provider.type();
                 methodSet.add(method.getName());
-            }
-            else if (method.isAnnotationPresent(DeleteProvider.class)) {
+            } else if (method.isAnnotationPresent(DeleteProvider.class)) {
                 DeleteProvider provider = method.getAnnotation(DeleteProvider.class);
                 tempClass = provider.type();
                 methodSet.add(method.getName());
-            }
-            else if (method.isAnnotationPresent(UpdateProvider.class)) {
+            } else if (method.isAnnotationPresent(UpdateProvider.class)) {
                 UpdateProvider provider = method.getAnnotation(UpdateProvider.class);
                 tempClass = provider.type();
                 methodSet.add(method.getName());
@@ -123,9 +139,9 @@ public class MapperHelper {
      * @param mapperClass
      * @throws Exception
      */
-    public void registerMapper(Class<?> mapperClass)  {
+    public void registerMapper(Class<?> mapperClass) {
         if (registerMapper.get(mapperClass) == null) {
-            registerMapper.put(mapperClass,fromMapperClass(mapperClass));
+            registerMapper.put(mapperClass, fromMapperClass(mapperClass));
         } else {
             throw new RuntimeException("已经注册过的通用Mapper[" + mapperClass.getCanonicalName() + "]不能多次注册!");
         }
@@ -141,7 +157,7 @@ public class MapperHelper {
         try {
             registerMapper(Class.forName(mapperClass));
         } catch (ClassNotFoundException e) {
-            throw new RuntimeException("注册通用Mapper["+mapperClass+"]失败，找不到该通用Mapper!");
+            throw new RuntimeException("注册通用Mapper[" + mapperClass + "]失败，找不到该通用Mapper!");
         }
     }
 
@@ -200,14 +216,25 @@ public class MapperHelper {
         private String IDENTITY;
         private boolean BEFORE = false;
         private String seqFormat;
+        private String catalog;
+        private String schema;
     }
 
     private Config config = new Config();
 
+    /**
+     * 设置UUID
+     * @param UUID
+     */
     public void setUUID(String UUID) {
         config.UUID = UUID;
     }
 
+    /**
+     * 设置主键自增回写方法，默认MYSQL
+     *
+     * @param IDENTITY
+     */
     public void setIDENTITY(String IDENTITY) {
         IdentityDialect identityDialect = IdentityDialect.getDatabaseDialect(IDENTITY);
         if (identityDialect != null) {
@@ -217,14 +244,61 @@ public class MapperHelper {
         }
     }
 
+    /**
+     * 设置selectKey方法的ORDER，默认AFTER
+     * @param order
+     */
+    public void setOrder(String order) {
+        config.BEFORE = "BEFORE".equalsIgnoreCase(order);
+    }
+
+    /**
+     * 设置序列格式化，默认值"{0}.nextval"
+     *
+     * @param seqFormat
+     */
     public void setSeqFormat(String seqFormat){
         config.seqFormat = seqFormat;
     }
 
-    public void setBEFORE(String BEFORE) {
-        config.BEFORE = "BEFORE".equalsIgnoreCase(BEFORE);
+    /**
+     * 设置catalog，默认""
+     *
+     * @param catalog
+     */
+    public void setCatalog(String catalog){
+        config.catalog = catalog;
     }
 
+    /**
+     * 设置schema，默认""
+     *
+     * @param schema
+     */
+    public void setSchema(String schema){
+        config.schema = schema;
+    }
+
+    /**
+     * 获取表前缀，带catalog或schema
+     *
+     * @return
+     */
+    public String getPrefix() {
+        if (config.catalog != null && config.catalog.length() > 0) {
+            return config.catalog;
+        }
+        if (config.schema != null && config.schema.length() > 0) {
+            return config.catalog;
+        }
+        return "";
+    }
+
+    /**
+     * 获取UUID生成规则
+     *
+     * @return
+     */
     public String getUUID() {
         if (config.UUID != null && config.UUID.length() > 0) {
             return config.UUID;
@@ -232,6 +306,11 @@ public class MapperHelper {
         return "@java.util.UUID@randomUUID().toString().replace(\"-\", \"\")";
     }
 
+    /**
+     * 获取主键自增回写SQL
+     *
+     * @return
+     */
     public String getIDENTITY() {
         if (config.IDENTITY != null && config.IDENTITY.length() > 0) {
             return config.IDENTITY;
@@ -240,15 +319,44 @@ public class MapperHelper {
         return IdentityDialect.MYSQL.getIdentityRetrievalStatement();
     }
 
+    /**
+     * 获取SelectKey的Order
+     *
+     * @return
+     */
     public boolean getBEFORE() {
         return config.BEFORE;
     }
 
-    public String getSeqFormat(){
+    /**
+     * 获取序列格式化模板
+     *
+     * @return
+     */
+    public String getSeqFormat() {
         if (config.seqFormat != null && config.seqFormat.length() > 0) {
             return config.seqFormat;
         }
         return "{0}.nextval";
+    }
+
+    /**
+     * 获取表名
+     *
+     * @param entityClass
+     * @return
+     */
+    public String getTableName(Class<?> entityClass) {
+        EntityHelper.EntityTable entityTable = EntityHelper.getEntityTable(entityClass);
+        String prefix = entityTable.getPrefix();
+        if (prefix.equals("")) {
+            //使用全局配置
+            prefix = getPrefix();
+        }
+        if (!prefix.equals("")) {
+            return prefix + "." + entityTable.getName();
+        }
+        return entityTable.getName();
     }
 
     /**
@@ -301,9 +409,89 @@ public class MapperHelper {
     public void setSqlSource(MappedStatement ms) {
         MapperTemplate mapperTemplate = getMapperTemplate(ms.getId());
         try {
-            mapperTemplate.setSqlSource(ms);
+            if (mapperTemplate != null) {
+                mapperTemplate.setSqlSource(ms);
+            }
         } catch (Exception e) {
             throw new RuntimeException("调用方法异常:" + e.getMessage());
+        }
+    }
+
+    /**
+     * 配置属性
+     *
+     * @param properties
+     */
+    public void setProperties(Properties properties) {
+        if (properties == null) {
+            return;
+        }
+        String UUID = properties.getProperty("UUID");
+        if (UUID != null && UUID.length() > 0) {
+            setUUID(UUID);
+        }
+        String IDENTITY = properties.getProperty("IDENTITY");
+        if (IDENTITY != null && IDENTITY.length() > 0) {
+            setIDENTITY(IDENTITY);
+        }
+        String seqFormat = properties.getProperty("seqFormat");
+        if (seqFormat != null && seqFormat.length() > 0) {
+            setSeqFormat(seqFormat);
+        }
+        String catalog = properties.getProperty("catalog");
+        if (catalog != null && catalog.length() > 0) {
+            setCatalog(catalog);
+        }
+        String schema = properties.getProperty("schema");
+        if (schema != null && schema.length() > 0) {
+            setSchema(schema);
+        }
+        String ORDER = properties.getProperty("ORDER");
+        if (ORDER != null && ORDER.length() > 0) {
+            setOrder(ORDER);
+        }
+        //注册通用接口
+        String mapper = properties.getProperty("mappers");
+        if (mapper != null && mapper.length() > 0) {
+            String[] mappers = mapper.split(",");
+            for (String mapperClass : mappers) {
+                if (mapperClass.length() > 0) {
+                    registerMapper(mapperClass);
+                }
+            }
+        }
+    }
+
+    /**
+     * 处理configuration中全部的MappedStatement
+     *
+     * @param configuration
+     */
+    public void processConfiguration(Configuration configuration) {
+        Collection<MappedStatement> collection = configuration.getMappedStatements();
+        //防止反复处理一个
+        if (collectionSet.contains(collection)) {
+            return;
+        } else {
+            collectionSet.add(collection);
+        }
+        int size = collection.size();
+        Iterator iterator = collection.iterator();
+        while (iterator.hasNext()) {
+            Object object = iterator.next();
+            if (object instanceof MappedStatement) {
+                MappedStatement ms = (MappedStatement) object;
+                if (isMapperMethod(ms.getId())) {
+                    if (ms.getSqlSource() instanceof ProviderSqlSource) {
+                        setSqlSource(ms);
+                    }
+                }
+            }
+            //处理过程中可能会新增selectKey，导致ms增多，所以这里判断大小，重新循环
+            if (collection.size() != size) {
+                size = collection.size();
+                iterator = collection.iterator();
+            }
         }
     }
 }

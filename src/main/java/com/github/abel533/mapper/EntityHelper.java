@@ -37,6 +37,46 @@ import java.util.*;
  */
 public class EntityHelper {
 
+    /**
+     * 实体对应表的配置信息
+     */
+    public static class EntityTable {
+        private String name;
+        private String catalog;
+        private String schema;
+
+        public void setTable(Table table){
+            this.name = table.name();
+            this.catalog = table.catalog();
+            this.schema = table.schema();
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public String getCatalog() {
+            return catalog;
+        }
+
+        public String getSchema() {
+            return schema;
+        }
+
+        public String getPrefix() {
+            if (catalog != null && catalog.length() > 0) {
+                return catalog;
+            }
+            if (schema != null && schema.length() > 0) {
+                return catalog;
+            }
+            return "";
+        }
+    }
+
+    /**
+     * 实体字段对应数据库列的信息
+     */
     public static class EntityColumn {
         private String property;
         private String column;
@@ -113,9 +153,9 @@ public class EntityHelper {
     }
 
     /**
-     * 实体类 => 表名
+     * 实体类 => 表对象
      */
-    private static final Map<Class<?>, String> entityClassTableName = new HashMap<Class<?>, String>();
+    private static final Map<Class<?>, EntityTable> entityTableMap = new HashMap<Class<?>, EntityTable>();
 
     /**
      * 实体类 => 全部列属性
@@ -128,21 +168,21 @@ public class EntityHelper {
     private static final Map<Class<?>, List<EntityColumn>> entityClassPKColumns = new HashMap<Class<?>, List<EntityColumn>>();
 
     /**
-     * 获取表名
+     * 获取表对象
      *
      * @param entityClass
      * @return
      */
-    public static String getTableName(Class<?> entityClass) {
-        String tableName = entityClassTableName.get(entityClass);
-        if (tableName == null) {
+    public static EntityTable getEntityTable(Class<?> entityClass) {
+        EntityTable entityTable = entityTableMap.get(entityClass);
+        if (entityTable == null) {
             initEntityNameMap(entityClass);
-            tableName = entityClassTableName.get(entityClass);
+            entityTable = entityTableMap.get(entityClass);
         }
-        if (tableName == null) {
+        if (entityTable == null) {
             throw new RuntimeException("无法获取实体类" + entityClass.getCanonicalName() + "对应的表名!");
         }
-        return tableName;
+        return entityTable;
     }
 
     /**
@@ -153,7 +193,7 @@ public class EntityHelper {
      */
     public static List<EntityColumn> getColumns(Class<?> entityClass) {
         //可以起到初始化的作用
-        getTableName(entityClass);
+        getEntityTable(entityClass);
         return entityClassColumns.get(entityClass);
     }
 
@@ -165,7 +205,7 @@ public class EntityHelper {
      */
     public static List<EntityColumn> getPKColumns(Class<?> entityClass) {
         //可以起到初始化的作用
-        getTableName(entityClass);
+        getEntityTable(entityClass);
         return entityClassPKColumns.get(entityClass);
     }
 
@@ -226,16 +266,23 @@ public class EntityHelper {
      * @param entityClass
      */
     public static synchronized void initEntityNameMap(Class<?> entityClass) {
-        if (entityClassTableName.get(entityClass) != null) {
+        if (entityTableMap.get(entityClass) != null) {
             return;
         }
         //表名
+        EntityTable entityTable = null;
         if (entityClass.isAnnotationPresent(Table.class)) {
             Table table = entityClass.getAnnotation(Table.class);
-            entityClassTableName.put(entityClass, table.name());
-        } else {
-            entityClassTableName.put(entityClass, camelhumpToUnderline(entityClass.getSimpleName()).toUpperCase());
+            if (!table.name().equals("")) {
+                entityTable = new EntityTable();
+                entityTable.setTable(table);
+            }
         }
+        if (entityTable == null) {
+            entityTable = new EntityTable();
+            entityTable.name = camelhumpToUnderline(entityClass.getSimpleName()).toUpperCase();
+        }
+        entityTableMap.put(entityClass, entityTable);
         //列
         List<Field> fieldList = getAllField(entityClass, null);
         List<EntityColumn> columnList = new ArrayList<EntityColumn>();
