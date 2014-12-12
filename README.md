@@ -30,6 +30,28 @@ Mybatis工具群： 211286137 (Mybatis相关工具插件等等)
 
 ###2. [在Spring4中使用通用Mapper](http://git.oschina.net/free/Mapper/blob/master/UseMapperInSpring4.md)  
 
+##v0.3.2版本说明
+
+移除了`MapperInterceptor`类，不在提供拦截器方式的使用。如果有需要可以自己从0.3.1版本获取。
+ 
+另外调整的类的包结构，目的更明确，下面分别介绍这几个类的作用。  
+
+* `com.github.abel533.mapperhelper`包下面的是通用Mapper的关键类
+
+   * `EntityHelper`:实体类工具类 - 处理实体和数据库表以及字段关键的一个类  
+
+   * `MapperHelper`:处理主要逻辑，最关键的一个类  
+
+   * `MapperTemplate`:通用Mapper模板类，扩展通用Mapper时需要继承该类  
+
+* `com.github.abel533.mapper`包下面是通用Mapper自带的一个默认实现
+
+   * `Mapper`:通用Mapper接口类   
+
+   * `MapperProvider`:通用Mapper接口类对应的实现类 
+
+如果你不需要通用Mapper自带的默认实现类`Mapper`，你就不需要`com.github.abel533.mapper`包下面的两个类，你可以根据文档和自己的需求自行扩展。  
+
 ##v0.3.1版本说明
 
 支持Spring4泛型注入，详细请看文档[在Spring4中使用通用Mapper](http://git.oschina.net/free/Mapper/blob/master/UseMapperInSpring4.md) 
@@ -82,7 +104,7 @@ mapperHelper.processConfiguration(session.getConfiguration());
 **还有一种最常见的情况，那就是和Spring集成的情况。**
 在Spring中使用的时候，可以通过xml达到上面Java编码方式的效果。如下配置：  
 ```xml
-<bean class="com.github.abel533.mapper.MapperHelper"
+<bean class="com.github.abel533.mapperhelper.MapperHelper"
         depends-on="sqlSession" init-method="initMapper" scope="singleton" lazy-init="false">
     <property name="mappers">
         <array>

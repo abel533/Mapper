@@ -1,8 +1,8 @@
 package com.github.abel533.hsqldb;
 
-import com.github.abel533.mapper.EntityHelper;
-import com.github.abel533.mapper.MapperHelper;
-import com.github.abel533.mapper.MapperTemplate;
+import com.github.abel533.mapperhelper.EntityHelper;
+import com.github.abel533.mapperhelper.MapperHelper;
+import com.github.abel533.mapperhelper.MapperTemplate;
 import org.apache.ibatis.mapping.MappedStatement;
 import org.apache.ibatis.scripting.xmltags.*;
 

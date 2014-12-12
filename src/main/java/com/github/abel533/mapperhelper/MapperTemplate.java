@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package com.github.abel533.mapper;
+package com.github.abel533.mapperhelper;
 
 import org.apache.ibatis.executor.keygen.KeyGenerator;
 import org.apache.ibatis.executor.keygen.NoKeyGenerator;
@@ -48,7 +48,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Mapper方法
+ * 通用Mapper模板类，扩展通用Mapper时需要继承该类
  *
  * @author liuzh
  */

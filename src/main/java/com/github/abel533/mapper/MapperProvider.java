@@ -24,6 +24,9 @@
 
 package com.github.abel533.mapper;
 
+import com.github.abel533.mapperhelper.EntityHelper;
+import com.github.abel533.mapperhelper.MapperHelper;
+import com.github.abel533.mapperhelper.MapperTemplate;
 import org.apache.ibatis.builder.StaticSqlSource;
 import org.apache.ibatis.mapping.MappedStatement;
 import org.apache.ibatis.mapping.ParameterMapping;
@@ -35,7 +38,7 @@ import java.util.List;
 import static org.apache.ibatis.jdbc.SqlBuilder.*;
 
 /**
- * Mappper实现类
+ * Mappper实现类，可以当场一个用来参考的例子
  *
  * @author liuzh
  */

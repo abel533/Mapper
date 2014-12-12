@@ -1,6 +1,7 @@
 package com.github.abel533.mapper;
 
 import com.github.abel533.hsqldb.HsqldbMapper;
+import com.github.abel533.mapperhelper.MapperHelper;
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.jdbc.ScriptRunner;
 import org.apache.ibatis.session.SqlSession;

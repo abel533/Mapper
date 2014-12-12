@@ -22,7 +22,7 @@
 	THE SOFTWARE.
 */
 
-package com.github.abel533.mapper;
+package com.github.abel533.mapperhelper;
 
 import org.apache.ibatis.annotations.DeleteProvider;
 import org.apache.ibatis.annotations.InsertProvider;
@@ -37,7 +37,8 @@ import java.lang.reflect.Method;
 import java.util.*;
 
 /**
- * 处理主要逻辑
+ * 处理主要逻辑，最关键的一个类
+ *
  * <p>项目地址 : <a href="https://github.com/abel533/Mapper" target="_blank">https://github.com/abel533/Mapper</a></p>
  *
  * @author liuzh
