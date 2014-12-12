@@ -24,6 +24,12 @@ Mybatis工具群： 211286137 (Mybatis相关工具插件等等)
 
 推荐使用Mybatis分页插件:[PageHelper分页插件](https://github.com/pagehelper/Mybatis-PageHelper)
 
+##两篇独立的文档
+
+###[如何开发自己的通用Mapper](http://git.oschina.net/free/Mapper/blob/master/HowToExtendMapper.md)  
+
+###[在Spring4中使用通用Mapper](http://git.oschina.net/free/Mapper/blob/master/UseMapperInSpring4.md)  
+
 ##v0.3.0版本说明
 
 这个版本的主要目的是消除拦截器，因此针对常用的情况增加了两种更方便的使用方式。
@@ -102,8 +108,6 @@ mapperHelper.processConfiguration(session.getConfiguration());
 这次重构的目的是为了方便开发者自行扩展，增加自己需要的通用Mapper。这次重构后，扩展变的更容易。稍后会写一篇**如何进行扩展**的文档。  
 
 这次更新还修复Oracle序列的BUG。
-
-##[如何开发自己的通用Mapper](http://git.oschina.net/free/Mapper/blob/master/HowToExtendMapper.md)  
 
 ##如何使用?
 
