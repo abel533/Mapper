@@ -35,6 +35,9 @@ import java.util.Properties;
 
 /**
  * 通用Mapper拦截器
+ *
+ * <p>不建议使用拦截器方式</p>
+ *
  * <p>项目地址 : <a href="https://github.com/abel533/Mapper" target="_blank">https://github.com/abel533/Mapper</a></p>
  *
  * @author liuzh
@@ -43,6 +46,7 @@ import java.util.Properties;
         @Signature(type = Executor.class, method = "query", args = {MappedStatement.class, Object.class, RowBounds.class, ResultHandler.class}),
         @Signature(type = Executor.class, method = "update", args = {MappedStatement.class, Object.class})
 })
+@Deprecated
 public class MapperInterceptor implements Interceptor {
 
     private final MapperHelper mapperHelper = new MapperHelper();
