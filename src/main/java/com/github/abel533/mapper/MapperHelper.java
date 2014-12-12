@@ -129,7 +129,7 @@ public class MapperHelper {
         try {
             //反射获取SpringVersion
             Class<?> springVersionClass = Class.forName("org.springframework.core.SpringVersion");
-            springVersion = (String) springVersionClass.getDeclaredMethod("getVersion", null).invoke(null, null);
+            springVersion = (String) springVersionClass.getDeclaredMethod("getVersion", new Class<?>[0]).invoke(null, new Object[0]);
             spring = true;
             if (springVersion.indexOf(".") > 0) {
                 int MajorVersion = Integer.parseInt(springVersion.substring(0, springVersion.indexOf(".")));
@@ -586,7 +586,7 @@ public class MapperHelper {
             collectionSet.add(collection);
         }
         int size = collection.size();
-        Iterator iterator = collection.iterator();
+        Iterator<?> iterator = collection.iterator();
         while (iterator.hasNext()) {
             Object object = iterator.next();
             if (object instanceof MappedStatement) {

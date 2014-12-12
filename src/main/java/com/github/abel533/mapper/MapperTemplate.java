@@ -191,7 +191,7 @@ public abstract class MapperTemplate {
             if (type instanceof ParameterizedType) {
                 ParameterizedType t = (ParameterizedType) type;
                 if (t.getRawType() == this.mapperClass) {
-                    Class<?> returnType = (Class) t.getActualTypeArguments()[0];
+                    Class<?> returnType = (Class<?>) t.getActualTypeArguments()[0];
                     return returnType;
                 }
             }
