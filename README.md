@@ -30,6 +30,10 @@ Mybatis工具群： 211286137 (Mybatis相关工具插件等等)
 
 ###2. [在Spring4中使用通用Mapper](http://git.oschina.net/free/Mapper/blob/master/UseMapperInSpring4.md)  
 
+##v0.3.1版本说明
+
+支持Spring4泛型注入，详细请看文档[在Spring4中使用通用Mapper](http://git.oschina.net/free/Mapper/blob/master/UseMapperInSpring4.md) 
+
 ##v0.3.0版本说明
 
 这个版本的主要目的是消除拦截器，因此针对常用的情况增加了两种更方便的使用方式。
