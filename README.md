@@ -109,7 +109,7 @@ mapperHelper.processConfiguration(session.getConfiguration());
     <property name="mappers">
         <array>
             <!-- 可以配置多个 -->
-            <value>com.isea533.mybatis.mapperhelper.Mapper</value>
+            <value>com.isea533.mybatis.mapper.Mapper</value>
         </array>
     </property>
     <!-- 对于多数据源，这里也可以像上面这样配置多个 -->

@@ -9,10 +9,10 @@ Spring4增加了对泛型注入的支持，这个特性对通用Mapper来说，�
 和其他里面配置的区别就是在Spring4中可以配置通用Mapper这个类，我们可以把通用Mapper中提供的`Mapper<T>`配置到Spring中，如果你有自己实现的通用Mapper，也可以这么配置：  
 
 	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-		<property name="basePackage" value="com.isea533.mybatis.mapper,com.isea533.mybatis.mapperhelper"/>
+		<property name="basePackage" value="com.isea533.mybatis.mapper"/>
 	</bean>
 
-这里在配置`basePackage`的时候，将通用`Mapper<T>`所在的包`com.isea533.mybatis.mapperhelper`也配置上了。这样就能在Spring4中直接注入`Mapper<T>`。
+这里在配置`basePackage`的时候，将通用`Mapper<T>`接口也放在了`com.isea533.mybatis.mapper`这个包中，会被扫描到。这样就能在Spring4中直接注入`Mapper<T>`。
 
 另外就是通用Mapper自身的配置： 
  
@@ -20,7 +20,7 @@ Spring4增加了对泛型注入的支持，这个特性对通用Mapper来说，�
 			depends-on="sqlSession" init-method="initMapper" scope="singleton" lazy-init="false">
 		<property name="mappers">
 			<array>
-				<value>com.isea533.mybatis.mapperhelper.Mapper</value>
+				<value>com.isea533.mybatis.mapper.Mapper</value>
 			</array>
 		</property>
 		<property name="sqlSessions" ref="sqlSession"/>
