@@ -38,7 +38,15 @@ Mybatis工具群： 211286137 (Mybatis相关工具插件等等)
 
 * 有关插件的使用，后续完善文档
 
-* 目前更新主要是为了推送到Maven中央仓库
+Maven坐标:
+
+```xml
+<dependency>
+    <groupId>com.github.abel533</groupId>
+    <artifactId>mapper</artifactId>
+    <version>1.0.0</version>
+</dependency>
+```
 
 ##v0.3.2版本说明
 
