@@ -30,6 +30,14 @@ Mybatis工具群： 211286137 (Mybatis相关工具插件等等)
 
 ###2. [在Spring4中使用通用Mapper](http://git.oschina.net/free/Mapper/blob/master/UseMapperInSpring4.md)  
 
+##v1.0.0正式发布版
+
+* 增加通用Mapper专用的MyBatis Generator插件，可以自动生成实体类注解以及Mapper接口和一个空的xml文件
+
+* 有关插件的时候，后续完善文档
+
+* 目前更新主要是为了推送到Maven中央仓库
+
 ##v0.3.2版本说明
 
 移除了`MapperInterceptor`类，不在提供拦截器方式的使用。如果有需要可以自己从0.3.1版本获取。
