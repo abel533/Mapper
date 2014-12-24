@@ -24,11 +24,13 @@ Mybatis工具群： 211286137 (Mybatis相关工具插件等等)
 
 推荐使用Mybatis分页插件:[PageHelper分页插件](https://github.com/pagehelper/Mybatis-PageHelper)
 
-##两篇独立的文档
+##独立文档
 
 ###1. [如何开发自己的通用Mapper](http://git.oschina.net/free/Mapper/blob/master/HowToExtendMapper.md)  
 
 ###2. [在Spring4中使用通用Mapper](http://git.oschina.net/free/Mapper/blob/master/UseMapperInSpring4.md)  
+
+###3. 如何使用Mapper专用的MyBatis Generator插件(未完成)
 
 ##v1.0.0正式发布版
 
