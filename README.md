@@ -32,6 +32,12 @@ Mybatis工具群： 211286137 (Mybatis相关工具插件等等)
 
 ###3. 如何使用Mapper专用的MyBatis Generator插件(未完成)
 
+##V1.1.0-SNAPSHOT计划
+
+* 完善文档
+* 解决主键selectKey的一个bug(已解决，1.1.0版本会发布)
+* 完善自动增长的配置，增加对JDBC的支持
+
 ##v1.0.0正式发布版
 
 * 增加通用Mapper专用的MyBatis Generator插件，可以自动生成实体类注解以及Mapper接口和一个空的xml文件

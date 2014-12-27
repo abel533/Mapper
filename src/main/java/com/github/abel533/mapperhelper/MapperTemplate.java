@@ -409,7 +409,7 @@ public abstract class MapperTemplate {
         ResultMap.Builder inlineResultMapBuilder = new ResultMap.Builder(
                 configuration,
                 statementBuilder.id() + "-Inline",
-                int.class,
+                column.getJavaType(),
                 new ArrayList<ResultMapping>(),
                 null);
         resultMaps.add(inlineResultMapBuilder.build());
