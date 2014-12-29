@@ -30,7 +30,7 @@ Mybatis工具群： 211286137 (Mybatis相关工具插件等等)
 
 ###2. [在Spring4中使用通用Mapper](http://git.oschina.net/free/Mapper/blob/master/UseMapperInSpring4.md)  
 
-###3. 如何使用Mapper专用的MyBatis Generator插件(未完成)
+###3. [如何使用Mapper专用的MyBatis Generator插件](http://git.oschina.net/free/Mapper/blob/master/UseMBGInMapper.md)
 
 ##V1.1.0-SNAPSHOT计划
 
