@@ -80,6 +80,11 @@ public class MapperHelper {
     private String springVersion;
 
     /**
+     * 对于一般的getAllIfColumnNode，是否判断!=''，默认不判断
+     */
+    private boolean notEmpty = false;
+
+    /**
      * 默认构造方法
      */
     public MapperHelper() {
@@ -108,6 +113,14 @@ public class MapperHelper {
         if (sqlSessions != null && sqlSessions.length > 0) {
             this.sqlSessions.addAll(Arrays.asList(sqlSessions));
         }
+    }
+
+    public boolean isNotEmpty() {
+        return notEmpty;
+    }
+
+    public void setNotEmpty(boolean notEmpty) {
+        this.notEmpty = notEmpty;
     }
 
     /**
@@ -560,6 +573,10 @@ public class MapperHelper {
         String ORDER = properties.getProperty("ORDER");
         if (ORDER != null && ORDER.length() > 0) {
             setOrder(ORDER);
+        }
+        String notEmpty = properties.getProperty("notEmpty");
+        if (notEmpty != null && notEmpty.length() > 0) {
+            this.notEmpty = notEmpty.equalsIgnoreCase("TRUE");
         }
         //注册通用接口
         String mapper = properties.getProperty("mappers");

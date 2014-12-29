@@ -278,10 +278,24 @@ public abstract class MapperTemplate {
      * <p>一般类型：<code>&lt;if test="property!=null"&gt;columnNode&lt;/if&gt;</code></p>
      *
      * @param column
+     * @param columnNode
      * @return
      */
     protected SqlNode getIfNotNull(EntityHelper.EntityColumn column, SqlNode columnNode) {
-        return new IfSqlNode(columnNode, column.getProperty() + " != null ");
+        return getIfNotNull(column, columnNode, false);
+    }
+
+    /**
+     * 返回if条件的sqlNode
+     * <p>一般类型：<code>&lt;if test="property!=null"&gt;columnNode&lt;/if&gt;</code></p>
+     *
+     * @param column
+     * @param columnNode
+     * @param empty      是否包含!=''条件
+     * @return
+     */
+    protected SqlNode getIfNotNull(EntityHelper.EntityColumn column, SqlNode columnNode, boolean empty) {
+        return new IfSqlNode(columnNode, column.getProperty() + " != null " + (empty ? " and " + column.getProperty() + " != ''" : ""));
     }
 
     /**
@@ -341,7 +355,7 @@ public abstract class MapperTemplate {
         boolean first = true;
         //对所有列循环，生成<if test="property!=null">column = #{property}</if>
         for (EntityHelper.EntityColumn column : columnList) {
-            ifNodes.add(getIfNotNull(column, getColumnEqualsProperty(column, first)));
+            ifNodes.add(getIfNotNull(column, getColumnEqualsProperty(column, first), mapperHelper.isNotEmpty()));
             first = false;
         }
         return new MixedSqlNode(ifNodes);
