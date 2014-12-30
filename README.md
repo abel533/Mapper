@@ -293,15 +293,32 @@ int updateByPrimaryKeySelective(T record);
 @Id
 private Integer id;
 ```
-该字段不会回写。   
+该字段不会回写。这种情况对应类似如下的XML：
+  ```xml
+  <insert id="insertAuthor">
+      insert into Author
+        (id, username, password, email,bio, favourite_section)
+      values
+        (seq_userid.nextval, #{username, #{password}, #{email}, #{bio}, #{favouriteSection,jdbcType=VARCHAR})
+  </insert>
+  ```   
 
 2. 使用UUID时:
 ```java
 //可以用于任意字符串类型长度超过32位的字段
 @GeneratedValue(generator = "UUID")
-private String countryname;
+private String username;
 ```
-该字段不会回写。 
+该字段不会回写。这种情况对应类似如下的XML：
+  ```xml
+  <insert id="insertAuthor">
+      <bind name="username_bind" value='@java.util.UUID@randomUUID().toString().replace("-", "")' />
+      insert into Author
+        (id, username, password, email,bio, favourite_section)
+      values
+        (#{id}, #{username_bind}, #{password}, #{email}, #{bio}, #{favouriteSection,jdbcType=VARCHAR})
+  </insert>
+  ```
 
 3. 使用主键自增:
 ```java
@@ -310,7 +327,7 @@ private String countryname;
 @GeneratedValue(strategy = GenerationType.IDENTITY)
 private Integer id;
 ```  
-增加这个注解后，**会回写ID**。
+增加这个注解后，__会回写ID__。
 
   通过设置`@GeneratedValue`的`generator`参数可以支持更多的获取主键的方法，例如在Oracle中使用序列：
   ```java
@@ -323,14 +340,34 @@ private Integer id;
   <property name="ORDER" value="BEFORE"/>
   ```
   因为在插入数据库前，需要先获取到序列值，否则会报错。  
+  这种情况对于的xml类似下面这样：  
+  ```xml
+  <insert id="insertAuthor">
+    <selectKey keyProperty="id" resultType="int" order="BEFORE">
+      select SEQ_ID.nextval from dual
+    </selectKey>
+    insert into Author
+      (id, username, password, email,bio, favourite_section)
+    values
+      (#{id}, #{username}, #{password}, #{email}, #{bio}, #{favouriteSection,jdbcType=VARCHAR})
+  </insert>
+  ```
 
-主键自增还有一种简单的写法：  
+4. 主键自增还有一种简单的写法：  
 ```java
 //可以用于任意字符串类型长度超过32位的字段
 @GeneratedValue(generator = "JDBC")
 private String countryname;
 ```
-这会令 MyBatis 使用 JDBC 的 getGeneratedKeys 方法来取出由数据库内部生成的主键（比如：像 MySQL 和 SQL Server 这样的关系数据库管理系统的自动递增字段）。
+  这会令 MyBatis 使用 JDBC 的 getGeneratedKeys 方法来取出由数据库内部生成的主键（比如：像 MySQL 和 SQL Server 这样的关系数据库管理系统的自动递增字段）。
+  这种情况对应的xml类似下面这样:
+  ```xml
+  <insert id="insertAuthor" useGeneratedKeys="true" keyProperty="id">
+    insert into Author (username,password,email,bio)
+    values (#{username},#{password},#{email},#{bio})
+  </insert>
+  ```
+
 
 
 ###5. 将继承的Mapper接口添加到Mybatis配置中
