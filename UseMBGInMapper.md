@@ -32,20 +32,22 @@ http://git.oschina.net/free/Mybatis_Utils/tree/master/MybatisGeneator/MybatisGen
 
 ###一、使用Java编码方式运行MBG
 
-使用这种方式，首先下载MBG的Jar包。  
+本项目测试代码中包含这个例子。  
+
+使用这种方式，首先下载MBG的Jar包（本项目测试代码中使用maven引入jar包，使用Java代码运行）。  
 
 MBG下载地址:http://repo1.maven.org/maven2/org/mybatis/generator/mybatis-generator-core/
 
 Java代码很容易，和文档中的一样：  
 
 	List<String> warnings = new ArrayList<String>();
-	boolean overwrite = true;
-	File configFile = new File("generatorConfig.xml");
-	ConfigurationParser cp = new ConfigurationParser(warnings);
-	Configuration config = cp.parseConfiguration(configFile);
-	DefaultShellCallback callback = new DefaultShellCallback(overwrite);
-	MyBatisGenerator myBatisGenerator = new MyBatisGenerator(config, callback, warnings);
-	myBatisGenerator.generate(null);
+    boolean overwrite = true;
+    ConfigurationParser cp = new ConfigurationParser(warnings);
+    Configuration config = cp.parseConfiguration(
+            Generator.class.getResourceAsStream("/generator/generatorConfig.xml"));
+    DefaultShellCallback callback = new DefaultShellCallback(overwrite);
+    MyBatisGenerator myBatisGenerator = new MyBatisGenerator(config, callback, warnings);
+    myBatisGenerator.generate(null);
 
 你只需要在你当前的项目中创建一个类，添加一个`main`方法，在`main`中写上上面的代码即可。  
 

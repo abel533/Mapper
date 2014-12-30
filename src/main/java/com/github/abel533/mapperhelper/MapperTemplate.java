@@ -24,6 +24,7 @@
 
 package com.github.abel533.mapperhelper;
 
+import org.apache.ibatis.executor.keygen.Jdbc3KeyGenerator;
 import org.apache.ibatis.executor.keygen.KeyGenerator;
 import org.apache.ibatis.executor.keygen.NoKeyGenerator;
 import org.apache.ibatis.executor.keygen.SelectKeyGenerator;
@@ -393,56 +394,62 @@ public abstract class MapperTemplate {
         Class<?> entityClass = getSelectReturnType(ms);
         //defaults
         Configuration configuration = ms.getConfiguration();
-        KeyGenerator keyGenerator = new NoKeyGenerator();
+        KeyGenerator keyGenerator = null;
         Boolean executeBefore = getBEFORE();
         String IDENTITY = (column.getGenerator() == null || column.getGenerator().equals("")) ? getIDENTITY() : column.getGenerator();
-        SqlSource sqlSource = new RawSqlSource(configuration, IDENTITY, entityClass);
+        if (IDENTITY.equalsIgnoreCase("JDBC")) {
+            keyGenerator = new Jdbc3KeyGenerator();
+        } else {
+            SqlSource sqlSource = new RawSqlSource(configuration, IDENTITY, entityClass);
 
-        MappedStatement.Builder statementBuilder = new MappedStatement.Builder(configuration, keyId, sqlSource, SqlCommandType.SELECT);
-        statementBuilder.resource(ms.getResource());
-        statementBuilder.fetchSize(null);
-        statementBuilder.statementType(StatementType.STATEMENT);
-        statementBuilder.keyGenerator(keyGenerator);
-        statementBuilder.keyProperty(column.getProperty());
-        statementBuilder.keyColumn(null);
-        statementBuilder.databaseId(null);
-        statementBuilder.lang(configuration.getDefaultScriptingLanuageInstance());
-        statementBuilder.resultOrdered(false);
-        statementBuilder.resulSets(null);
-        statementBuilder.timeout(configuration.getDefaultStatementTimeout());
+            MappedStatement.Builder statementBuilder = new MappedStatement.Builder(configuration, keyId, sqlSource, SqlCommandType.SELECT);
+            statementBuilder.resource(ms.getResource());
+            statementBuilder.fetchSize(null);
+            statementBuilder.statementType(StatementType.STATEMENT);
+            statementBuilder.keyGenerator(new NoKeyGenerator());
+            statementBuilder.keyProperty(column.getProperty());
+            statementBuilder.keyColumn(null);
+            statementBuilder.databaseId(null);
+            statementBuilder.lang(configuration.getDefaultScriptingLanuageInstance());
+            statementBuilder.resultOrdered(false);
+            statementBuilder.resulSets(null);
+            statementBuilder.timeout(configuration.getDefaultStatementTimeout());
 
-        List<ParameterMapping> parameterMappings = new ArrayList<ParameterMapping>();
-        ParameterMap.Builder inlineParameterMapBuilder = new ParameterMap.Builder(
-                configuration,
-                statementBuilder.id() + "-Inline",
-                entityClass,
-                parameterMappings);
-        statementBuilder.parameterMap(inlineParameterMapBuilder.build());
+            List<ParameterMapping> parameterMappings = new ArrayList<ParameterMapping>();
+            ParameterMap.Builder inlineParameterMapBuilder = new ParameterMap.Builder(
+                    configuration,
+                    statementBuilder.id() + "-Inline",
+                    entityClass,
+                    parameterMappings);
+            statementBuilder.parameterMap(inlineParameterMapBuilder.build());
 
-        List<ResultMap> resultMaps = new ArrayList<ResultMap>();
-        ResultMap.Builder inlineResultMapBuilder = new ResultMap.Builder(
-                configuration,
-                statementBuilder.id() + "-Inline",
-                column.getJavaType(),
-                new ArrayList<ResultMapping>(),
-                null);
-        resultMaps.add(inlineResultMapBuilder.build());
-        statementBuilder.resultMaps(resultMaps);
-        statementBuilder.resultSetType(null);
+            List<ResultMap> resultMaps = new ArrayList<ResultMap>();
+            ResultMap.Builder inlineResultMapBuilder = new ResultMap.Builder(
+                    configuration,
+                    statementBuilder.id() + "-Inline",
+                    column.getJavaType(),
+                    new ArrayList<ResultMapping>(),
+                    null);
+            resultMaps.add(inlineResultMapBuilder.build());
+            statementBuilder.resultMaps(resultMaps);
+            statementBuilder.resultSetType(null);
 
-        statementBuilder.flushCacheRequired(false);
-        statementBuilder.useCache(false);
-        statementBuilder.cache(null);
+            statementBuilder.flushCacheRequired(false);
+            statementBuilder.useCache(false);
+            statementBuilder.cache(null);
 
-        MappedStatement statement = statementBuilder.build();
-        configuration.addMappedStatement(statement);
+            MappedStatement statement = statementBuilder.build();
+            configuration.addMappedStatement(statement);
 
-        MappedStatement keyStatement = configuration.getMappedStatement(keyId, false);
-        configuration.addKeyGenerator(keyId, new SelectKeyGenerator(keyStatement, executeBefore));
+            MappedStatement keyStatement = configuration.getMappedStatement(keyId, false);
+            keyGenerator = new SelectKeyGenerator(keyStatement, executeBefore);
+            configuration.addKeyGenerator(keyId, keyGenerator);
+        }
         //keyGenerator
         try {
             MetaObject msObject = forObject(ms);
-            msObject.setValue("keyGenerator", configuration.getKeyGenerator(keyId));
+            msObject.setValue("keyGenerator", keyGenerator);
+            msObject.setValue("keyProperties", new String[]{column.getProperty()});
         } catch (Exception e) {
             //ignore
         }

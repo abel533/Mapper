@@ -33,6 +33,7 @@
     <mapper class="com.github.abel533.mapper.Country2Mapper" />
     <mapper class="com.github.abel533.mapper.CountryTMapper" />
     <mapper class="com.github.abel533.mapper.CountryUMapper" />
+    <mapper class="com.github.abel533.mapper.CountryJDBCMapper" />
     <mapper class="com.github.abel533.mapper.CountryIMapper" />
     <mapper class="com.github.abel533.mapper.UserInfoMapper" />
     <mapper class="com.github.abel533.mapper.UserInfoMapMapper" />

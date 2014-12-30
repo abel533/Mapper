@@ -39,18 +39,17 @@
     <jdbcConnection driverClass="com.mysql.jdbc.Driver"
                     connectionURL="jdbc:mysql://localhost:3306/test"
                     userId="root"
-                    password="">
+                    password="jj">
     </jdbcConnection>
 
-    <javaModelGenerator targetPackage="test.model" targetProject="G:\MyProject\src\main\java"/>
+    <javaModelGenerator targetPackage="test.model" targetProject="E:\Git\Mybatis\Mapper\src\test\java"/>
 
-    <sqlMapGenerator targetPackage="mapper"  targetProject="G:\MyProject\src\main\resources"/>
+    <sqlMapGenerator targetPackage="mappers"  targetProject="E:\Git\Mybatis\Mapper\src\test\resources"/>
 
-    <javaClientGenerator targetPackage="test.mapper" targetProject="G:\MyProject\src\main\java" type="XMLMAPPER" />
+    <javaClientGenerator targetPackage="test.mapper" targetProject="E:\Git\Mybatis\Mapper\src\test\java" type="XMLMAPPER" />
 
     <table tableName="%" >
-      <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
-      <columnOverride column="id" property="sysId"/>
+      <generatedKey column="id" sqlStatement="JDBC"/>
     </table>
   </context>
 </generatorConfiguration>

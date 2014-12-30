@@ -322,6 +322,13 @@ public class EntityHelper {
                     } else {
                         throw new RuntimeException(field.getName() + " - 该字段@GeneratedValue配置为UUID，但该字段类型不是String");
                     }
+                } else if (generatedValue.generator().equals("JDBC")) {
+                    if (Number.class.isAssignableFrom(field.getType())) {
+                        entityColumn.setIdentity(true);
+                        entityColumn.setGenerator("JDBC");
+                    } else {
+                        throw new RuntimeException(field.getName() + " - 该字段@GeneratedValue配置为UUID，但该字段类型不是String");
+                    }
                 } else {
                     //允许通过generator来设置获取id的sql,例如mysql=CALL IDENTITY(),hsqldb=SELECT SCOPE_IDENTITY()
                     //允许通过拦截器参数设置公共的generator
@@ -329,12 +336,21 @@ public class EntityHelper {
                         //mysql的自动增长
                         entityColumn.setIdentity(true);
                         if (!generatedValue.generator().equals("")) {
-                            entityColumn.setGenerator(generatedValue.generator());
+                            String generator = null;
+                            MapperHelper.IdentityDialect identityDialect = MapperHelper.IdentityDialect.getDatabaseDialect(generatedValue.generator());
+                            if (identityDialect != null) {
+                                generator = identityDialect.getIdentityRetrievalStatement();
+                            } else {
+                                generator = generatedValue.generator();
+                            }
+                            entityColumn.setGenerator(generator);
                         }
                     } else {
                         throw new RuntimeException(field.getName()
-                                + " - 该字段@GeneratedValue配置只允许两种形式，全部数据库通用的@GeneratedValue(generator=\"UUID\") 或者 " +
-                                "类似mysql数据库的@GeneratedValue(strategy=GenerationType.IDENTITY[,generator=\"CALL IDENTITY()\"])");
+                                + " - 该字段@GeneratedValue配置只允许以下几种形式:" +
+                                "\n1.全部数据库通用的@GeneratedValue(generator=\"UUID\")" +
+                                "\n2.useGeneratedKeys的@GeneratedValue(generator=\\\"JDBC\\\")  " +
+                                "\n3.类似mysql数据库的@GeneratedValue(strategy=GenerationType.IDENTITY[,generator=\"Mysql\"])");
                     }
                 }
             }

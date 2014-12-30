@@ -31,22 +31,14 @@ import org.mybatis.generator.api.dom.java.*;
 import org.mybatis.generator.api.dom.xml.TextElement;
 import org.mybatis.generator.api.dom.xml.XmlElement;
 import org.mybatis.generator.config.MergeConstants;
-import org.mybatis.generator.config.PropertyRegistry;
 import org.mybatis.generator.internal.util.StringUtility;
 
 import java.util.Properties;
 
-import static org.mybatis.generator.internal.util.StringUtility.isTrue;
-
 public class MapperCommentGenerator implements CommentGenerator {
-
-    private Properties properties;
-    private boolean suppressAllComments;
 
     public MapperCommentGenerator() {
         super();
-        properties = new Properties();
-        suppressAllComments = false;
     }
 
     public void addJavaFileComment(CompilationUnit compilationUnit) {
@@ -59,9 +51,6 @@ public class MapperCommentGenerator implements CommentGenerator {
      * @param xmlElement
      */
     public void addComment(XmlElement xmlElement) {
-        if (suppressAllComments) {
-            return;
-        }
         xmlElement.addElement(new TextElement("<!--"));
         StringBuilder sb = new StringBuilder();
         sb.append("  WARNING - ");
@@ -74,10 +63,7 @@ public class MapperCommentGenerator implements CommentGenerator {
         return;
     }
 
-    public void addConfigurationProperties(Properties properties) {
-        this.properties.putAll(properties);
-        suppressAllComments = isTrue(properties.getProperty(PropertyRegistry.COMMENT_GENERATOR_SUPPRESS_ALL_COMMENTS));
-    }
+    public void addConfigurationProperties(Properties properties) {}
 
     /**
      * 删除标记
@@ -101,17 +87,9 @@ public class MapperCommentGenerator implements CommentGenerator {
      * @param innerClass
      * @param introspectedTable
      */
-    public void addClassComment(InnerClass innerClass, IntrospectedTable introspectedTable) {
-        if (suppressAllComments) {
-            return;
-        }
-    }
+    public void addClassComment(InnerClass innerClass, IntrospectedTable introspectedTable) {}
 
-    public void addEnumComment(InnerEnum innerEnum, IntrospectedTable introspectedTable) {
-        if (suppressAllComments) {
-            return;
-        }
-    }
+    public void addEnumComment(InnerEnum innerEnum, IntrospectedTable introspectedTable) {}
 
     /**
      * 给字段添加数据库备注
@@ -121,9 +99,6 @@ public class MapperCommentGenerator implements CommentGenerator {
      * @param introspectedColumn
      */
     public void addFieldComment(Field field, IntrospectedTable introspectedTable, IntrospectedColumn introspectedColumn) {
-        if (suppressAllComments) {
-            return;
-        }
         if (StringUtility.stringHasValue(introspectedColumn.getRemarks())) {
             field.addJavaDocLine("/**");
             StringBuilder sb = new StringBuilder();
@@ -154,7 +129,11 @@ public class MapperCommentGenerator implements CommentGenerator {
             field.addAnnotation("@Column(name = \"" + column + "\")");
         }
         if (introspectedColumn.isIdentity()) {
-            field.addAnnotation("@GeneratedValue(strategy = GenerationType.IDENTITY)");
+            if (introspectedTable.getTableConfiguration().getGeneratedKey().getRuntimeSqlStatement().equals("JDBC")) {
+                field.addAnnotation("@GeneratedValue(generator = \"JDBC\")");
+            } else {
+                field.addAnnotation("@GeneratedValue(strategy = GenerationType.IDENTITY)");
+            }
         } else if (introspectedColumn.isSequenceColumn()) {
             field.addAnnotation("@SequenceGenerator(name=\"\",sequenceName=\"" + introspectedTable.getTableConfiguration().getGeneratedKey().getRuntimeSqlStatement() + "\")");
         }
@@ -166,21 +145,13 @@ public class MapperCommentGenerator implements CommentGenerator {
      * @param field
      * @param introspectedTable
      */
-    public void addFieldComment(Field field, IntrospectedTable introspectedTable) {
-        if (suppressAllComments) {
-            return;
-        }
-    }
+    public void addFieldComment(Field field, IntrospectedTable introspectedTable) {}
 
     /**
      * @param method
      * @param introspectedTable
      */
-    public void addGeneralMethodComment(Method method, IntrospectedTable introspectedTable) {
-        if (suppressAllComments) {
-            return;
-        }
-    }
+    public void addGeneralMethodComment(Method method, IntrospectedTable introspectedTable) {}
 
     /**
      * getter方法注释
@@ -190,9 +161,6 @@ public class MapperCommentGenerator implements CommentGenerator {
      * @param introspectedColumn
      */
     public void addGetterComment(Method method, IntrospectedTable introspectedTable, IntrospectedColumn introspectedColumn) {
-        if (suppressAllComments) {
-            return;
-        }
         StringBuilder sb = new StringBuilder();
         method.addJavaDocLine("/**");
         if (StringUtility.stringHasValue(introspectedColumn.getRemarks())) {
@@ -220,9 +188,6 @@ public class MapperCommentGenerator implements CommentGenerator {
      * @param introspectedColumn
      */
     public void addSetterComment(Method method, IntrospectedTable introspectedTable, IntrospectedColumn introspectedColumn) {
-        if (suppressAllComments) {
-            return;
-        }
         StringBuilder sb = new StringBuilder();
         method.addJavaDocLine("/**");
         if (StringUtility.stringHasValue(introspectedColumn.getRemarks())) {
@@ -250,9 +215,5 @@ public class MapperCommentGenerator implements CommentGenerator {
      * @param introspectedTable
      * @param markAsDoNotDelete
      */
-    public void addClassComment(InnerClass innerClass, IntrospectedTable introspectedTable, boolean markAsDoNotDelete) {
-        if (suppressAllComments) {
-            return;
-        }
-    }
+    public void addClassComment(InnerClass innerClass, IntrospectedTable introspectedTable, boolean markAsDoNotDelete) {}
 }
