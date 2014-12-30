@@ -32,38 +32,27 @@ Mybatis工具群： 211286137 (Mybatis相关工具插件等等)
 
 ###3. [如何使用Mapper专用的MyBatis Generator插件](http://git.oschina.net/free/Mapper/blob/master/UseMBGInMapper.md)
 
-##V1.1.0-SNAPSHOT计划
+##最新版V1.1.0-SNAPSHOT
 
 * 完善文档
 * 解决主键selectKey的一个bug(已解决，1.1.0版本会发布)
 * 完善自动增长的配置，增加对JDBC的支持
 * 增加了一个`notEmpty`参数，该参数会影响所有使用`getAllIfColumnNode`方法的地方,具体到`Mapper<T>`,影响3个方法：select,selectCount,delete。如果设置为`true`，那么`<if ...`的条件中会包含`String`类型`property!=''`的条件。
 
+##如何使用?
 
-##v1.0.0正式发布版
+下面是通用Mapper的配置方法。
 
-* 增加通用Mapper专用的MyBatis Generator插件，可以自动生成实体类注解以及Mapper接口和一个空的xml文件
+###1. 引入通用Mapper的代码
 
-* 插件后续可能会增加更多的自动生成代码。
+将本项目中的代码文件复制到你自己的项目中，代码文件如下：
 
-* 有关插件的使用，后续完善文档
+* `com.github.abel533.generator`包下面的是通用Mapper的MyBatis Generator插件
 
-Maven坐标:
+   * `MapperCommentGenerator`:注释以及字段注解处理类。 
 
-```xml
-<dependency>
-    <groupId>com.github.abel533</groupId>
-    <artifactId>mapper</artifactId>
-    <version>1.0.0</version>
-</dependency>
-```
-
-##v0.3.2版本说明
-
-移除了`MapperInterceptor`类，不在提供拦截器方式的使用。如果有需要可以自己从0.3.1版本获取。
- 
-另外调整的类的包结构，目的更明确，下面分别介绍这几个类的作用。  
-
+   * `MapperPlugin`:处理主要逻辑，详细信息请看 [如何使用Mapper专用的MyBatis Generator插件](http://git.oschina.net/free/Mapper/blob/master/UseMBGInMapper.md)  
+   
 * `com.github.abel533.mapperhelper`包下面的是通用Mapper的关键类
 
    * `EntityHelper`:实体类工具类 - 处理实体和数据库表以及字段关键的一个类  
@@ -78,15 +67,31 @@ Maven坐标:
 
    * `MapperProvider`:通用Mapper接口类对应的实现类 
 
-如果你不需要通用Mapper自带的默认实现类`Mapper`，你就不需要`com.github.abel533.mapper`包下面的两个类，你可以根据文档和自己的需求自行扩展。  
+或者使用Maven引入依赖：  
 
-##v0.3.1版本说明
+```xml
+<dependency>
+    <groupId>com.github.abel533</groupId>
+    <artifactId>mapper</artifactId>
+    <!-- x.x.x是版本号，推荐使用最新版 -->
+    <version>x.x.x</version>
+</dependency>
+```
 
-支持Spring4泛型注入，详细请看文档[在Spring4中使用通用Mapper](http://git.oschina.net/free/Mapper/blob/master/UseMapperInSpring4.md) 
+项目依赖于JPA的注解,需要引入`persistence-api-1.0.jar`或者添加Maven依赖:
+```xml
+<dependency>
+  <groupId>javax.persistence</groupId>
+  <artifactId>persistence-api</artifactId>
+  <version>1.0</version>
+</dependency>
+```
 
-##v0.3.0版本说明
+###2. 配置MapperHelper
 
-这个版本的主要目的是消除拦截器，因此针对常用的情况增加了两种更方便的使用方式。
+首先本项目中已经移除了拦截器，不在使用拦截器的配置方式。增加了两种更方便的使用方式。
+
+**第一种、Java编码**
 
 对于单独使用Mybatis，通过如下方式创建`sqlSessionFactory`:
 ```java
@@ -94,9 +99,8 @@ Reader reader = Resources.getResourceAsReader("mybatis-config.xml");
 sqlSessionFactory = new SqlSessionFactoryBuilder().build(reader);
 reader.close();
 ```  
-如果你喜欢拦截器方式，那么你仍然可以在mybatis的配置文件中配置拦截器。
 
-如果你想要更直接的JAVA编码方式，可以在初始化`sqlSessionFactory`的地方按照下面的方式操作：  
+使用直接的JAVA编码方式，可以在初始化`sqlSessionFactory`的地方按照下面的方式操作：  
 ```java
 //从上面的sqlSessionFactory取出一个session
 session = sqlSessionFactory.openSession();
@@ -127,9 +131,10 @@ mapperHelper.processConfiguration(session.getConfiguration());
 ```
 上面配置参数的时候，是一个个调用set方法进行的，你还可以使用`MapperHelper`的`MapperHelper(Properties properties)`构造方法，或者调用`setProperties(properties)`方法，通过`.properties`配置文件来配置。
 
-使用JAVA编码方式不需要拦截器。如果你的情况适用于这种方式，推荐你用JAVA编码的方式处理。  
+如果你的情况适用于这种方式，推荐你用JAVA编码的方式处理。  
 
-**还有一种最常见的情况，那就是和Spring集成的情况。**
+**第二种、还有一种最常见的情况，那就是和Spring集成的情况**
+
 在Spring中使用的时候，可以通过xml达到上面Java编码方式的效果。如下配置：  
 ```xml
 <bean class="com.github.abel533.mapperhelper.MapperHelper"
@@ -152,63 +157,7 @@ mapperHelper.processConfiguration(session.getConfiguration());
 ```  
 在Spring中使用这种方式的时候，Spring启动完成的时候，所有的通用Mapper都已经处理完成了。后面就可以直接使用通用方法，不需要拦截器来执行了。
 
-
-##v0.2.0版本说明
-
-该版本做了大量的重构，在原有基础上增加了两个类，分别为`MapperTemplate`和`MapperProvider`，其他几个类都有相当大的改动。  
-
-**但是**，这次重构并不影响原有的业务代码。  
-
-这次重构的目的是为了方便开发者自行扩展，增加自己需要的通用Mapper。这次重构后，扩展变的更容易。稍后会写一篇**如何进行扩展**的文档。  
-
-这次更新还修复Oracle序列的BUG。
-
-##如何使用?
-
-下面是通用Mapper的配置方法,还会提到Spring中的配置方法.还有和[PageHelper分页插件](https://github.com/pagehelper/Mybatis-PageHelper)集成的配置方式.
-
-###1. 引入通用Mapper的代码
-
-将本项目中的4个代码文件(`EntityHelper`,`Mapper`,`MapperHelper`,`MapperInterceptor`)复制到你自己的项目中.
-
-项目依赖于JPA的注解,需要引入`persistence-api-1.0.jar`或者添加Maven依赖:
-```xml
-<dependency>
-  <groupId>javax.persistence</groupId>
-  <artifactId>persistence-api</artifactId>
-  <version>1.0</version>
-</dependency>
-```
-
-###2. 配置Mapper拦截器
-
-在`mybatis-config.xml`中添加如下配置:
-```xml
-<plugins>
-  <plugin interceptor="com.github.abel533.mapper.MapperInterceptor">
-    <!--================================================-->
-    <!--可配置参数说明(一般无需修改)-->
-    <!--================================================-->
-    <!--UUID生成策略-->
-    <!--配置UUID生成策略需要使用OGNL表达式-->
-    <!--默认值32位长度:@java.util.UUID@randomUUID().toString().replace("-", "")-->
-    <!--<property name="UUID" value="@java.util.UUID@randomUUID().toString()"/>-->
-    <!--主键自增回写方法,默认值MYSQL,详细说明请看文档-->
-    <property name="IDENTITY" value="HSQLDB"/>
-    <!--序列的获取规则,使用{num}格式化参数，默认值为{0}.nextval，针对Oracle-->
-    <!--可选参数一共3个，对应0,1,2,分别为SequenceName，ColumnName,PropertyName-->
-    <property name="seqFormat" value="{0}.nextval"/>
-    <!--主键自增回写方法执行顺序,默认AFTER,可选值为(BEFORE|AFTER)-->
-    <!--<property name="ORDER" value="AFTER"/>-->
-    <!--通用Mapper接口，多个通用接口用逗号隔开-->
-    <property name="mappers" value="com.github.abel533.mapper.Mapper"/>
-  </plugin>
-</plugins>
-```
-
-**mappers**参数：这里先记住是通用Mapper的全限定路径即可。后面讲如何扩展时，会详细介绍。
-
-####INENTITY参数配置
+####INENTITY参数配置（仅对 insert 有用）
 
 对于不同的数据库，需要配置不同的参数，这些参数如下：
   
@@ -221,6 +170,7 @@ mapperHelper.processConfiguration(session.getConfiguration());
 - <b>SYBASE</b>: `SELECT @@IDENTITY`  
 - <b>DB2_MF</b>: `SELECT IDENTITY_VAL_LOCAL() FROM SYSIBM.SYSDUMMY1`  
 - <b>INFORMIX</b>: `select dbinfo('sqlca.sqlerrd1') from systables where tabid=1`
+- <b>JDBC</b>:这会令 MyBatis 使用 JDBC 的 getGeneratedKeys 方法来取出由数据库内部生成的主键（比如：像 MySQL 和 SQL Server 这样的关系数据库管理系统的自动递增字段）。
 
 为了配置的时候方便，可以直接使用这里的数据库名字进行配置，例如:
 ```xml
@@ -260,36 +210,6 @@ mapperHelper.processConfiguration(session.getConfiguration());
 </bean>
 ```
 只需要像上面这样配置一个bean即可.
-
-如果你同时使用了[PageHelper分页插件](https://github.com/pagehelper/Mybatis-PageHelper),可以像下面这样配置:
-```xml
-<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
-  <property name="dataSource" ref="dataSource"/>
-  <property name="mapperLocations">
-    <array>
-      <value>classpath:mapper/*.xml</value>
-    </array>
-  </property>
-  <property name="typeAliasesPackage" value="com.isea533.mybatis.model"/>
-  <property name="plugins">
-    <array>
-      <bean class="com.isea533.mybatis.pagehelper.PageHelper">
-        <property name="properties">
-          <value>
-            dialect=hsqldb
-            reasonable=true
-          </value>
-        </property>
-      </bean>
-      <bean class="com.isea533.mybatis.mapperhelper.MapperInterceptor"/>
-    </array>
-  </property>
-</bean>
-```
-一定要注意`PageHelper`和`MapperInterceptor`这两者的顺序不能颠倒.
-
-如果你想配置`MapperInterceptor`的参数,可以像`PageHelper`中的`properties`参数这样配置
-
 
 ###3. 继承通用的`Mapper<T>`,必须指定泛型`<T>`
 
@@ -404,6 +324,15 @@ private Integer id;
   ```
   因为在插入数据库前，需要先获取到序列值，否则会报错。  
 
+主键自增还有一种简单的写法：  
+```java
+//可以用于任意字符串类型长度超过32位的字段
+@GeneratedValue(generator = "JDBC")
+private String countryname;
+```
+这会令 MyBatis 使用 JDBC 的 getGeneratedKeys 方法来取出由数据库内部生成的主键（比如：像 MySQL 和 SQL Server 这样的关系数据库管理系统的自动递增字段）。
+
+
 ###5. 将继承的Mapper接口添加到Mybatis配置中
 
 例如本项目测试中的配置:
@@ -427,7 +356,9 @@ private Integer id;
 <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
   <property name="basePackage" value="com.isea533.mybatis.mapper"/>
 </bean>
-```
+```  
+
+如果想在Spring4中使用泛型注入，还需要包含`Mapper<T>`所在的包，具体请看 [在Spring4中使用通用Mapper](http://git.oschina.net/free/Mapper/blob/master/UseMapperInSpring4.md)。  
 
 ###6. 代码中使用
 
@@ -488,10 +419,63 @@ try {
 
 http://git.oschina.net/free/Mybatis_Utils/tree/master/CameHumpMap  
 
-##当前版本v0.2.0
+##更新日志
 
-##这是一个新生的开源项目
+###v1.0.0正式发布版
 
-首先感谢您能看到这里!
+* 增加通用Mapper专用的MyBatis Generator插件，可以自动生成实体类注解以及Mapper接口和一个空的xml文件
 
-这是一个新生的项目,一切都刚刚开始,虽然项目中包含大量的测试,但是仍然会有很多未知的bug存在,希望各位能够在使用过程中发现问题时及时反馈,欢迎各位fork本项目进行参与!
+* 插件后续可能会增加更多的自动生成代码。
+
+* 有关插件的使用，后续完善文档
+
+Maven坐标:
+
+```xml
+<dependency>
+    <groupId>com.github.abel533</groupId>
+    <artifactId>mapper</artifactId>
+    <version>1.0.0</version>
+</dependency>
+```
+
+###v0.3.2版本说明
+
+移除了`MapperInterceptor`类，不在提供拦截器方式的使用。如果有需要可以自己从0.3.1版本获取。
+ 
+另外调整的类的包结构，目的更明确，下面分别介绍这几个类的作用。  
+
+* `com.github.abel533.mapperhelper`包下面的是通用Mapper的关键类
+
+   * `EntityHelper`:实体类工具类 - 处理实体和数据库表以及字段关键的一个类  
+
+   * `MapperHelper`:处理主要逻辑，最关键的一个类  
+
+   * `MapperTemplate`:通用Mapper模板类，扩展通用Mapper时需要继承该类  
+
+* `com.github.abel533.mapper`包下面是通用Mapper自带的一个默认实现
+
+   * `Mapper`:通用Mapper接口类   
+
+   * `MapperProvider`:通用Mapper接口类对应的实现类 
+
+如果你不需要通用Mapper自带的默认实现类`Mapper`，你就不需要`com.github.abel533.mapper`包下面的两个类，你可以根据文档和自己的需求自行扩展。  
+
+###v0.3.1版本说明
+
+支持Spring4泛型注入，详细请看文档[在Spring4中使用通用Mapper](http://git.oschina.net/free/Mapper/blob/master/UseMapperInSpring4.md) 
+
+###v0.3.0版本说明
+
+这个版本的主要目的是消除拦截器，因此针对常用的情况增加了两种更方便的使用方式。
+
+
+###v0.2.0版本说明
+
+该版本做了大量的重构，在原有基础上增加了两个类，分别为`MapperTemplate`和`MapperProvider`，其他几个类都有相当大的改动。  
+
+**但是**，这次重构并不影响原有的业务代码。  
+
+这次重构的目的是为了方便开发者自行扩展，增加自己需要的通用Mapper。这次重构后，扩展变的更容易。稍后会写一篇**如何进行扩展**的文档。  
+
+这次更新还修复Oracle序列的BUG。
