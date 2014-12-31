@@ -33,7 +33,7 @@
     <property name="endingDelimiter" value="`"/>
     
     <plugin type="com.github.abel533.generator.MapperPlugin">
-      <property name="mappers" value="com.github.abel533.mapper.Mapper"/>
+      <property name="mappers" value="com.github.abel533.mapper.Mapper,com.github.abel533.hsqldb.HsqldbMapper"/>
     </plugin>
 
     <jdbcConnection driverClass="com.mysql.jdbc.Driver"

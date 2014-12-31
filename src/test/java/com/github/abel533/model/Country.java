@@ -1,5 +1,6 @@
 package com.github.abel533.model;
 
+import javax.persistence.Column;
 import javax.persistence.Id;
 
 /**
@@ -10,6 +11,7 @@ import javax.persistence.Id;
 public class Country {
     @Id
     private Integer id;
+    @Column
     private String countryname;
     private String countrycode;
 

@@ -31,7 +31,7 @@ import java.util.*;
 
 /**
  * 实体类工具类 - 处理实体和数据库表以及字段关键的一个类
- *
+ * <p/>
  * <p>项目地址 : <a href="https://github.com/abel533/Mapper" target="_blank">https://github.com/abel533/Mapper</a></p>
  *
  * @author liuzh
@@ -46,7 +46,7 @@ public class EntityHelper {
         private String catalog;
         private String schema;
 
-        public void setTable(Table table){
+        public void setTable(Table table) {
             this.name = table.name();
             this.catalog = table.catalog();
             this.schema = table.schema();
@@ -301,7 +301,8 @@ public class EntityHelper {
             if (field.isAnnotationPresent(Column.class)) {
                 Column column = field.getAnnotation(Column.class);
                 columnName = column.name();
-            } else {
+            }
+            if (columnName == null || columnName.equals("")) {
                 columnName = camelhumpToUnderline(field.getName());
             }
             entityColumn.setProperty(field.getName());
@@ -390,7 +391,7 @@ public class EntityHelper {
                 sb.append(toUpperAscii(c));
             }
         }
-        return sb.charAt(0) == '_'? sb.substring(1): sb.toString();
+        return sb.charAt(0) == '_' ? sb.substring(1) : sb.toString();
     }
 
     public static boolean isUppercaseAlpha(char c) {

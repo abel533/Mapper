@@ -345,7 +345,9 @@ public class MapperHelper {
     private Config config = new Config();
 
     /**
-     * 设置UUID
+     * 设置UUID生成策略
+     * <br>配置UUID生成策略需要使用OGNL表达式
+     * <br>默认值32位长度:@java.util.UUID@randomUUID().toString().replace("-", "")
      *
      * @param UUID
      */
@@ -354,7 +356,7 @@ public class MapperHelper {
     }
 
     /**
-     * 设置主键自增回写方法，默认MYSQL
+     * 主键自增回写方法,默认值MYSQL,详细说明请看文档
      *
      * @param IDENTITY
      */
@@ -368,7 +370,7 @@ public class MapperHelper {
     }
 
     /**
-     * 设置selectKey方法的ORDER，默认AFTER
+     * 主键自增回写方法执行顺序,默认AFTER,可选值为(BEFORE|AFTER)
      *
      * @param order
      */
@@ -377,7 +379,8 @@ public class MapperHelper {
     }
 
     /**
-     * 设置序列格式化，默认值"{0}.nextval"
+     * 序列的获取规则,使用{num}格式化参数，默认值为{0}.nextval，针对Oracle
+     * <br>可选参数一共3个，对应0,1,2,分别为SequenceName，ColumnName, PropertyName
      *
      * @param seqFormat
      */
@@ -386,7 +389,7 @@ public class MapperHelper {
     }
 
     /**
-     * 设置catalog，默认""
+     * 设置全局的catalog,默认为空，如果设置了值，操作表时的sql会是catalog.tablename
      *
      * @param catalog
      */
@@ -395,7 +398,8 @@ public class MapperHelper {
     }
 
     /**
-     * 设置schema，默认""
+     * 设置全局的schema,默认为空，如果设置了值，操作表时的sql会是schema.tablename
+     * <br>如果同时设置了catalog,优先使用catalog.tablename
      *
      * @param schema
      */
@@ -591,7 +595,8 @@ public class MapperHelper {
     }
 
     /**
-     * 处理configuration中全部的MappedStatement
+     * 配置完成后，执行下面的操作
+     * <br>处理configuration中全部的MappedStatement
      *
      * @param configuration
      */

@@ -1,18 +1,18 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="test.mapper.UserInfoMapper" >
-  <resultMap id="BaseResultMap" type="test.model.UserInfo" >
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="test.mapper.UserInfoMapper">
+  <resultMap id="BaseResultMap" type="test.model.UserInfo">
     <!--
       WARNING - @mbggenerated
     -->
-    <id column="Id" property="id" jdbcType="INTEGER" />
-    <result column="username" property="username" jdbcType="VARCHAR" />
-    <result column="password" property="password" jdbcType="VARCHAR" />
-    <result column="usertype" property="usertype" jdbcType="VARCHAR" />
-    <result column="enabled" property="enabled" jdbcType="INTEGER" />
-    <result column="realname" property="realname" jdbcType="VARCHAR" />
-    <result column="qq" property="qq" jdbcType="VARCHAR" />
-    <result column="email" property="email" jdbcType="VARCHAR" />
-    <result column="tel" property="tel" jdbcType="VARCHAR" />
+    <id column="Id" jdbcType="INTEGER" property="id" />
+    <result column="username" jdbcType="VARCHAR" property="username" />
+    <result column="password" jdbcType="VARCHAR" property="password" />
+    <result column="usertype" jdbcType="VARCHAR" property="usertype" />
+    <result column="enabled" jdbcType="INTEGER" property="enabled" />
+    <result column="realname" jdbcType="VARCHAR" property="realname" />
+    <result column="qq" jdbcType="VARCHAR" property="qq" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
+    <result column="tel" jdbcType="VARCHAR" property="tel" />
   </resultMap>
 </mapper>

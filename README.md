@@ -32,10 +32,11 @@ Mybatis工具群： 211286137 (Mybatis相关工具插件等等)
 
 ###3. [如何使用Mapper专用的MyBatis Generator插件](http://git.oschina.net/free/Mapper/blob/master/UseMBGInMapper.md)
 
-##最新版V1.1.0-SNAPSHOT
+##最新版V1.1.0
 
 * 完善文档
 * 解决主键selectKey的一个bug(已解决，1.1.0版本会发布)
+* 解决@Column注解为空时的bug
 * 完善自动增长的配置，增加对JDBC的支持
 * 增加了一个`notEmpty`参数，该参数会影响所有使用`getAllIfColumnNode`方法的地方,具体到`Mapper<T>`,影响3个方法：select,selectCount,delete。如果设置为`true`，那么`<if ...`的条件中会包含`String`类型`property!=''`的条件。
 
@@ -73,8 +74,8 @@ Mybatis工具群： 211286137 (Mybatis相关工具插件等等)
 <dependency>
     <groupId>com.github.abel533</groupId>
     <artifactId>mapper</artifactId>
-    <!-- x.x.x是版本号，推荐使用最新版 -->
-    <version>x.x.x</version>
+    <!-- 1.1.0是版本号，推荐使用最新版 -->
+    <version>1.1.0</version>
 </dependency>
 ```
 
