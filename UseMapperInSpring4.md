@@ -6,33 +6,9 @@ Spring4增加了对泛型注入的支持，这个特性对通用Mapper来说，�
 
 ##一、在Spring4中配置通用Mapper  
 
-和其他里面配置的区别就是在Spring4中可以配置通用Mapper这个类，我们可以把通用Mapper中提供的`Mapper<T>`配置到Spring中，如果你有自己实现的通用Mapper，也可以这么配置：  
+和Spring3中的配置一样，配置方法请看[这里](http://git.oschina.net/free/Mapper)有关Spring配置的信息。
 
-	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-		<property name="basePackage" value="com.isea533.mybatis.mapper"/>
-	</bean>
-
-这里在配置`basePackage`的时候，将通用`Mapper<T>`接口也放在了`com.isea533.mybatis.mapper`这个包中，会被扫描到。这样就能在Spring4中直接注入`Mapper<T>`。
-
-另外就是通用Mapper自身的配置： 
- 
-	<bean class="com.isea533.mybatis.mapperhelper.MapperHelper"
-			depends-on="sqlSession" init-method="initMapper" scope="singleton" lazy-init="false">
-		<property name="mappers">
-			<array>
-				<value>com.isea533.mybatis.mapper.Mapper</value>
-			</array>
-		</property>
-		<property name="sqlSessions" ref="sqlSession"/>
-	</bean>
-
-这里的配置和Spring3没什么区别，另外需要保证有`sqlSession`，可以按如下配置：  
-
-	<bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate" scope="prototype">
-		<constructor-arg index="0" ref="sqlSessionFactory"/>
-	</bean>
-
-其他的配置按照通常的方法进行配置即可，没有特殊的地方，如果有人不明白完整的配置什么样，可以看下面的例子：  
+如果有人不明白完整的配置什么样，可以看下面的例子：  
 
 * [Mybatis-Spring4项目](https://github.com/abel533/Mybatis-Spring/tree/spring4)  
 
