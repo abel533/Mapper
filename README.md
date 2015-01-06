@@ -173,44 +173,14 @@ mapperHelper.processConfiguration(session.getConfiguration());
 - <b>INFORMIX</b>: `select dbinfo('sqlca.sqlerrd1') from systables where tabid=1`
 - <b>JDBC</b>:这会令 MyBatis 使用 JDBC 的 getGeneratedKeys 方法来取出由数据库内部生成的主键（比如：像 MySQL 和 SQL Server 这样的关系数据库管理系统的自动递增字段）。
 
-为了配置的时候方便，可以直接使用这里的数据库名字进行配置，例如:
-```xml
-<plugins>
-  <plugin interceptor="com.github.abel533.mapper.MapperInterceptor">
-    <property name="IDENTITY" value="DB2"/>
-  </plugin>
-</plugins>
-```
-如果这里的值不是上面所提到的数据库，就会使用直接提供的语句。例如下面的这个配置和上面的效果一样：
-```xml
-<plugins>
-  <plugin interceptor="com.github.abel533.mapper.MapperInterceptor">
-    <property name="IDENTITY" value="VALUES IDENTITY_VAL_LOCAL()"/>
-  </plugin>
-</plugins>
-```  
+JAVA编码方式使用：
 
-<b>附:Spring配置相关</b>
+	// 主键自增回写方法,默认值MYSQL,详细说明请看文档
+	mapperHelper.setIDENTITY("HSQLDB");
 
-如果你使用Spring的方式来配置该拦截器,你可以像下面这样:
-```xml
-<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
-  <property name="dataSource" ref="dataSource"/>
-  <property name="mapperLocations">
-    <array>
-      <value>classpath:mapper/*.xml</value>
-    </array>
-  </property>
-  <property name="typeAliasesPackage" value="com.isea533.mybatis.model"/>
-  <property name="plugins">
-    <array>
-      <-- 主要看这里 -->
-      <bean class="com.isea533.mybatis.mapperhelper.MapperInterceptor"/>
-    </array>
-  </property>
-</bean>
-```
-只需要像上面这样配置一个bean即可.
+Spring中可以属性注入：
+
+	<property name="IDENTITY" value="MYSQL"/>
 
 ###3. 继承通用的`Mapper<T>`,必须指定泛型`<T>`
 
