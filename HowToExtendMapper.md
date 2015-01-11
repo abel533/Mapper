@@ -42,6 +42,7 @@
 
 ###第三步，在`HsqldbMapper<T>`中添加通用方法
 这里以一个分页查询作为例子。
+
     public interface HsqldbMapper<T> {
         /**
          * 单表分页查询
