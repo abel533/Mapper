@@ -4,13 +4,15 @@
 
 ##优点?
 
-不客气的说,使用这个通用Mapper甚至能改变你对Mybatis单表基础操作不方便的想法,使用它你能简单的使用单表的增删改查,包含动态的增删改查.
+使用它你能简单的使用单表的增删改查,包含动态的增删改查,你还可以参考文档[开发自己的通用Mapper](http://git.oschina.net/free/Mapper/blob/master/HowToExtendMapper.md)。  
+
+如果你使用Spring4集成，可以使用泛型注入，具体方法请看[在Spring4中使用通用Mapper](http://git.oschina.net/free/Mapper/blob/master/UseMapperInSpring4.md)。  
 
 本插件在项目启动时根据实体动态生成实际执行的Sql,完全使用原生的Mybatis进行操作，不存在效率问题，和自己写的xml一样的效果。  
 
-你还在因为数据库表变动重新生成xml吗?还是要手动修改自动生成的insert|update|delete的xml呢?赶紧使用通用Mapper,表的变动只需要实体类保持一致,不用管基础的xml,你不止会拥有更多的时间陪老婆|孩子|女朋友|打DOTA,你也不用做哪些繁琐无聊的事情,感兴趣了吗?继续看如何使用吧!!相信这个通用的Mapper会让你更方便的使用Mybatis,这是一个强大的Mapper!!!
+本插件还提供了通用Mapper专用的MyBatis Generator插件，使用方法可以看[如何使用Mapper专用的MyBatis Generator插件](http://git.oschina.net/free/Mapper/blob/master/UseMBGInMapper.md)
 
-不管你信不信,这个项目的测试代码中没有一个Mapper的xml配置文件,但是却可以做到每个Mapper对应上百行xml才能完成的许多功能.没有了这些基础xml信息的干扰,你将会拥有清晰干净的Mapper.xml.
+**通用Mapper支持Mybatis-3.2.4及以上版本**  
 
 发现BUG可以提Issue,可以给我发邮件,可以加我QQ,可以进Mybatis群讨论.
 
