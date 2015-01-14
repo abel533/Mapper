@@ -151,6 +151,39 @@ public class EntityHelper {
         public void setGenerator(String generator) {
             this.generator = generator;
         }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+
+            EntityColumn that = (EntityColumn) o;
+
+            if (id != that.id) return false;
+            if (identity != that.identity) return false;
+            if (uuid != that.uuid) return false;
+            if (column != null ? !column.equals(that.column) : that.column != null) return false;
+            if (generator != null ? !generator.equals(that.generator) : that.generator != null) return false;
+            if (javaType != null ? !javaType.equals(that.javaType) : that.javaType != null) return false;
+            if (property != null ? !property.equals(that.property) : that.property != null) return false;
+            if (sequenceName != null ? !sequenceName.equals(that.sequenceName) : that.sequenceName != null)
+                return false;
+
+            return true;
+        }
+
+        @Override
+        public int hashCode() {
+            int result = property != null ? property.hashCode() : 0;
+            result = 31 * result + (column != null ? column.hashCode() : 0);
+            result = 31 * result + (javaType != null ? javaType.hashCode() : 0);
+            result = 31 * result + (sequenceName != null ? sequenceName.hashCode() : 0);
+            result = 31 * result + (id ? 1 : 0);
+            result = 31 * result + (uuid ? 1 : 0);
+            result = 31 * result + (identity ? 1 : 0);
+            result = 31 * result + (generator != null ? generator.hashCode() : 0);
+            return result;
+        }
     }
 
     /**
@@ -286,8 +319,8 @@ public class EntityHelper {
         entityTableMap.put(entityClass, entityTable);
         //列
         List<Field> fieldList = getAllField(entityClass, null);
-        List<EntityColumn> columnList = new ArrayList<EntityColumn>();
-        List<EntityColumn> pkColumnList = new ArrayList<EntityColumn>();
+        Set<EntityColumn> columnSet = new HashSet<EntityColumn>();
+        Set<EntityColumn> pkColumnSet = new HashSet<EntityColumn>();
         for (Field field : fieldList) {
             //排除字段
             if (field.isAnnotationPresent(Transient.class)) {
@@ -355,16 +388,16 @@ public class EntityHelper {
                     }
                 }
             }
-            columnList.add(entityColumn);
+            columnSet.add(entityColumn);
             if (entityColumn.isId()) {
-                pkColumnList.add(entityColumn);
+                pkColumnSet.add(entityColumn);
             }
         }
-        if (pkColumnList.size() == 0) {
-            pkColumnList = columnList;
+        if (pkColumnSet.size() == 0) {
+            pkColumnSet = columnSet;
         }
-        entityClassColumns.put(entityClass, columnList);
-        entityClassPKColumns.put(entityClass, pkColumnList);
+        entityClassColumns.put(entityClass, new ArrayList<EntityColumn>(columnSet));
+        entityClassPKColumns.put(entityClass, new ArrayList<EntityColumn>(pkColumnSet));
     }
 
     public static void main(String[] args) {
@@ -426,10 +459,12 @@ public class EntityHelper {
                 fieldList.add(field);
             }
         }
-        if (entityClass.getSuperclass() != null
-                && !entityClass.getSuperclass().equals(Object.class)
-                && !Map.class.isAssignableFrom(entityClass.getSuperclass())
-                && !Collection.class.isAssignableFrom(entityClass.getSuperclass())) {
+        Class superClass = entityClass.getSuperclass();
+        if (superClass != null
+                && !superClass.equals(Object.class)
+                && (superClass.isAnnotationPresent(Entity.class)
+                    ||(!Map.class.isAssignableFrom(superClass)
+                        && !Collection.class.isAssignableFrom(superClass)))) {
             return getAllField(entityClass.getSuperclass(), fieldList);
         }
         return fieldList;
