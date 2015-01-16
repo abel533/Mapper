@@ -28,14 +28,13 @@ import com.github.abel533.mapperhelper.EntityHelper;
 import com.github.abel533.mapperhelper.MapperHelper;
 import com.github.abel533.mapperhelper.MapperTemplate;
 import org.apache.ibatis.builder.StaticSqlSource;
+import org.apache.ibatis.jdbc.SQL;
 import org.apache.ibatis.mapping.MappedStatement;
 import org.apache.ibatis.mapping.ParameterMapping;
 import org.apache.ibatis.scripting.xmltags.*;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static org.apache.ibatis.jdbc.SqlBuilder.*;
 
 /**
  * Mappper实现类，可以当场一个用来参考的例子
@@ -75,19 +74,20 @@ public class MapperProvider extends MapperTemplate {
      * @param ms
      */
     public void selectByPrimaryKey(MappedStatement ms) {
-        Class<?> entityClass = getSelectReturnType(ms);
+        final Class<?> entityClass = getSelectReturnType(ms);
         //获取主键字段映射
         List<ParameterMapping> parameterMappings = getPrimaryKeyParameterMappings(ms);
         //开始拼sql
-        BEGIN();
-        //select全部列
-        SELECT(EntityHelper.getSelectColumns(entityClass));
-        //from表
-        FROM(tableName(entityClass));
-        //where条件，主键字段=#{property}
-        WHERE(EntityHelper.getPrimaryKeyWhere(entityClass));
-        //SQL()方法获取最终SQL，使用静态SqlSource
-        StaticSqlSource sqlSource = new StaticSqlSource(ms.getConfiguration(), SQL(), parameterMappings);
+        String sql = new SQL() {{
+            //select全部列
+            SELECT(EntityHelper.getSelectColumns(entityClass));
+            //from表
+            FROM(tableName(entityClass));
+            //where条件，主键字段=#{property}
+            WHERE(EntityHelper.getPrimaryKeyWhere(entityClass));
+        }}.toString();
+        //使用静态SqlSource
+        StaticSqlSource sqlSource = new StaticSqlSource(ms.getConfiguration(), sql, parameterMappings);
         //替换原有的SqlSource
         setSqlSource(ms, sqlSource);
         //将返回值修改为实体类型
@@ -154,10 +154,10 @@ public class MapperProvider extends MapperTemplate {
             //优先使用传入的属性值,当原属性property!=null时，用原属性
             //自增的情况下,如果默认有值,就会备份到property_cache中,所以这里需要先判断备份的值是否存在
             if (column.isIdentity()) {
-                ifNodes.add(getIfCacheNotNull(column,new StaticTextSqlNode("#{" + column.getProperty() + "_cache },")));
+                ifNodes.add(getIfCacheNotNull(column, new StaticTextSqlNode("#{" + column.getProperty() + "_cache },")));
             } else {
                 //其他情况值仍然存在原property中
-                ifNodes.add(getIfNotNull(column,new StaticTextSqlNode("#{" + column.getProperty() + "},")));
+                ifNodes.add(getIfNotNull(column, new StaticTextSqlNode("#{" + column.getProperty() + "},")));
             }
             //当属性为null时，如果存在主键策略，会自动获取值，如果不存在，则使用null
             //序列的情况
@@ -215,7 +215,7 @@ public class MapperProvider extends MapperTemplate {
                 sqlNodes.add(new VarDeclSqlNode(column.getProperty() + "_bind", getUUID()));
                 ifNodes.add(new StaticTextSqlNode(column.getColumn() + ","));
             } else {
-                ifNodes.add(getIfNotNull(column,new StaticTextSqlNode(column.getColumn() + ",")));
+                ifNodes.add(getIfNotNull(column, new StaticTextSqlNode(column.getColumn() + ",")));
             }
         }
         //将动态的列加入sqlNodes
@@ -266,16 +266,17 @@ public class MapperProvider extends MapperTemplate {
      * @param ms
      */
     public void deleteByPrimaryKey(MappedStatement ms) {
-        Class<?> entityClass = getSelectReturnType(ms);
+        final Class<?> entityClass = getSelectReturnType(ms);
         List<ParameterMapping> parameterMappings = getPrimaryKeyParameterMappings(ms);
         //开始拼sql
-        BEGIN();
-        //delete from table
-        DELETE_FROM(tableName(entityClass));
-        //where 主键=#{property} 条件
-        WHERE(EntityHelper.getPrimaryKeyWhere(entityClass));
+        String sql = new SQL() {{
+            //delete from table
+            DELETE_FROM(tableName(entityClass));
+            //where 主键=#{property} 条件
+            WHERE(EntityHelper.getPrimaryKeyWhere(entityClass));
+        }}.toString();
         //静态SqlSource
-        StaticSqlSource sqlSource = new StaticSqlSource(ms.getConfiguration(), SQL(), parameterMappings);
+        StaticSqlSource sqlSource = new StaticSqlSource(ms.getConfiguration(), sql, parameterMappings);
         //替换原有的SqlSource
         setSqlSource(ms, sqlSource);
     }
@@ -286,26 +287,27 @@ public class MapperProvider extends MapperTemplate {
      * @param ms
      */
     public void updateByPrimaryKey(MappedStatement ms) {
-        Class<?> entityClass = getSelectReturnType(ms);
+        final Class<?> entityClass = getSelectReturnType(ms);
         //映射要包含set=?和where=?
         //获取set映射
         List<ParameterMapping> parameterMappings = getColumnParameterMappings(ms);
         //获取where主键映射
         parameterMappings.addAll(getPrimaryKeyParameterMappings(ms));
-        //开始拼Sql
-        BEGIN();
-        //update table
-        UPDATE(tableName(entityClass));
-        //获取全部列
-        List<EntityHelper.EntityColumn> columnList = EntityHelper.getColumns(entityClass);
-        //拼所有的set column = ?
-        for (EntityHelper.EntityColumn column : columnList) {
-            SET(column.getColumn() + " = ?");
-        }
-        //where 主键=#{property} 条件
-        WHERE(EntityHelper.getPrimaryKeyWhere(entityClass));
+        //开始拼sql
+        String sql = new SQL() {{
+            //update table
+            UPDATE(tableName(entityClass));
+            //获取全部列
+            List<EntityHelper.EntityColumn> columnList = EntityHelper.getColumns(entityClass);
+            //拼所有的set column = ?
+            for (EntityHelper.EntityColumn column : columnList) {
+                SET(column.getColumn() + " = ?");
+            }
+            //where 主键=#{property} 条件
+            WHERE(EntityHelper.getPrimaryKeyWhere(entityClass));
+        }}.toString();
         //静态SqlSource
-        StaticSqlSource sqlSource = new StaticSqlSource(ms.getConfiguration(), SQL(), parameterMappings);
+        StaticSqlSource sqlSource = new StaticSqlSource(ms.getConfiguration(), sql, parameterMappings);
         //替换原有的SqlSource
         setSqlSource(ms, sqlSource);
     }
@@ -327,7 +329,7 @@ public class MapperProvider extends MapperTemplate {
         //全部的if property!=null and property!=''
         for (EntityHelper.EntityColumn column : columnList) {
             StaticTextSqlNode columnNode = new StaticTextSqlNode(column.getColumn() + " = #{" + column.getProperty() + "}, ");
-            ifNodes.add(getIfNotNull(column,columnNode));
+            ifNodes.add(getIfNotNull(column, columnNode));
         }
         sqlNodes.add(new SetSqlNode(ms.getConfiguration(), new MixedSqlNode(ifNodes)));
         //获取全部的主键的列
@@ -336,7 +338,7 @@ public class MapperProvider extends MapperTemplate {
         boolean first = true;
         //where 主键=#{property} 条件
         for (EntityHelper.EntityColumn column : columnList) {
-            whereNodes.add(getColumnEqualsProperty(column,first));
+            whereNodes.add(getColumnEqualsProperty(column, first));
             first = false;
         }
         sqlNodes.add(new WhereSqlNode(ms.getConfiguration(), new MixedSqlNode(whereNodes)));
