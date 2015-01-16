@@ -59,7 +59,7 @@ public interface Mapper<T> {
     int insertSelective(T record);
 
     @DeleteProvider(type = MapperProvider.class, method = "dynamicSQL")
-    int delete(T key);
+    int delete(T record);
 
     @DeleteProvider(type = MapperProvider.class, method = "dynamicSQL")
     int deleteByPrimaryKey(Object key);

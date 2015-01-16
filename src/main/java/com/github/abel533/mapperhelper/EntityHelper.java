@@ -28,6 +28,8 @@ import javax.persistence.*;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * 实体类工具类 - 处理实体和数据库表以及字段关键的一个类
@@ -45,6 +47,10 @@ public class EntityHelper {
         private String name;
         private String catalog;
         private String schema;
+        //实体类 => 全部列属性
+        private List<EntityColumn> entityClassColumns;
+        //实体类 => 主键信息
+        private List<EntityColumn> entityClassPKColumns;
 
         public void setTable(Table table) {
             this.name = table.name();
@@ -72,6 +78,14 @@ public class EntityHelper {
                 return catalog;
             }
             return "";
+        }
+
+        public List<EntityColumn> getEntityClassColumns() {
+            return entityClassColumns;
+        }
+
+        public List<EntityColumn> getEntityClassPKColumns() {
+            return entityClassPKColumns;
         }
     }
 
@@ -192,16 +206,6 @@ public class EntityHelper {
     private static final Map<Class<?>, EntityTable> entityTableMap = new HashMap<Class<?>, EntityTable>();
 
     /**
-     * 实体类 => 全部列属性
-     */
-    private static final Map<Class<?>, List<EntityColumn>> entityClassColumns = new HashMap<Class<?>, List<EntityColumn>>();
-
-    /**
-     * 实体类 => 主键信息
-     */
-    private static final Map<Class<?>, List<EntityColumn>> entityClassPKColumns = new HashMap<Class<?>, List<EntityColumn>>();
-
-    /**
      * 获取表对象
      *
      * @param entityClass
@@ -226,9 +230,7 @@ public class EntityHelper {
      * @return
      */
     public static List<EntityColumn> getColumns(Class<?> entityClass) {
-        //可以起到初始化的作用
-        getEntityTable(entityClass);
-        return entityClassColumns.get(entityClass);
+        return getEntityTable(entityClass).getEntityClassColumns();
     }
 
     /**
@@ -238,9 +240,7 @@ public class EntityHelper {
      * @return
      */
     public static List<EntityColumn> getPKColumns(Class<?> entityClass) {
-        //可以起到初始化的作用
-        getEntityTable(entityClass);
-        return entityClassPKColumns.get(entityClass);
+        return getEntityTable(entityClass).getEntityClassPKColumns();
     }
 
     /**
@@ -316,7 +316,6 @@ public class EntityHelper {
             entityTable = new EntityTable();
             entityTable.name = camelhumpToUnderline(entityClass.getSimpleName()).toUpperCase();
         }
-        entityTableMap.put(entityClass, entityTable);
         //列
         List<Field> fieldList = getAllField(entityClass, null);
         Set<EntityColumn> columnSet = new HashSet<EntityColumn>();
@@ -393,11 +392,14 @@ public class EntityHelper {
                 pkColumnSet.add(entityColumn);
             }
         }
+        entityTable.entityClassColumns = new ArrayList<EntityColumn>(columnSet);
         if (pkColumnSet.size() == 0) {
-            pkColumnSet = columnSet;
+            entityTable.entityClassPKColumns = entityTable.entityClassColumns;
+        } else {
+            entityTable.entityClassPKColumns = new ArrayList<EntityColumn>(pkColumnSet);
         }
-        entityClassColumns.put(entityClass, new ArrayList<EntityColumn>(columnSet));
-        entityClassPKColumns.put(entityClass, new ArrayList<EntityColumn>(pkColumnSet));
+        //缓存
+        entityTableMap.put(entityClass, entityTable);
     }
 
     public static void main(String[] args) {
@@ -463,8 +465,8 @@ public class EntityHelper {
         if (superClass != null
                 && !superClass.equals(Object.class)
                 && (superClass.isAnnotationPresent(Entity.class)
-                    ||(!Map.class.isAssignableFrom(superClass)
-                        && !Collection.class.isAssignableFrom(superClass)))) {
+                || (!Map.class.isAssignableFrom(superClass)
+                && !Collection.class.isAssignableFrom(superClass)))) {
             return getAllField(entityClass.getSuperclass(), fieldList);
         }
         return fieldList;
