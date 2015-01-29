@@ -26,7 +26,9 @@ package com.github.abel533.entity.test;
 
 import com.github.abel533.entity.Entity;
 import com.github.abel533.entity.mapper.EntityMapper;
+import com.github.abel533.entity.mapper.ExampleMapper;
 import com.github.abel533.entity.model.Country;
+import com.github.abel533.entity.model.CountryExample;
 import com.github.abel533.entity.model.UserInfo;
 import com.github.abel533.mapper.MybatisHelper;
 import org.apache.ibatis.session.SqlSession;
@@ -34,6 +36,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 通过实体类属性进行查询 - 这是目前有的一个测试
@@ -64,7 +67,7 @@ public class TestSelect {
 
             Map userInfo = mapper.selectByPrimaryKey(UserInfo.class, 2);
             Assert.assertEquals(userInfo.get("USERNAME"), "test2");*/
-            
+
             //删除
             /*countrya.setId(1);
             //int count = mapper.delete(countrya);
@@ -77,13 +80,13 @@ public class TestSelect {
             int count = mapper.updateByPrimaryKeySelective(countrya);
             System.out.println("更新返回的影响行数:"+count);
             Assert.assertEquals(1, count);*/
-            
+
             countrya.setId(1);
             countrya.setCountryname(null);
             int count = mapper.count(countrya);
-            System.out.println("数量:"+count);
-            
-            
+            System.out.println("数量:" + count);
+
+
         } finally {
             sqlSession.close();
         }
@@ -108,6 +111,23 @@ public class TestSelect {
 
             UserInfo userInfo = beanMapper.selectByPrimaryKey(UserInfo.class, 2);
             Assert.assertEquals(userInfo.getUsername(), "test2");
+        } finally {
+            sqlSession.close();
+        }
+    }
+
+    /**
+     * 这个测试用BeanMapper包装的CommonMapper，select查询返回的bean
+     */
+    @Test
+    public void testExampleMapper() {
+        SqlSession sqlSession = MybatisHelper.getSqlSession();
+        try {
+            ExampleMapper mapper = sqlSession.getMapper(ExampleMapper.class);
+            CountryExample example = new CountryExample();
+            example.createCriteria().andIdGreaterThan(100);
+            List<Map<String, Object>> list = mapper.selectByExample(Country.class, example);
+            System.out.println(list.size());
         } finally {
             sqlSession.close();
         }

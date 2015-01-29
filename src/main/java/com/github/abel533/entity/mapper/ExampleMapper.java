@@ -31,6 +31,7 @@ import org.apache.ibatis.annotations.SelectProvider;
 import org.apache.ibatis.annotations.UpdateProvider;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Example查询，Example需要是Mybatis生成的Example类
@@ -70,7 +71,7 @@ public interface ExampleMapper {
      * @return
      */
     @SelectProvider(type = ExampleProvider.class, method = "selectByExample")
-    <T> List<T> selectByExample(@Param("entityClass") Class<T> entityClass, @Param("example") Object example);
+    <T> List<Map<String,Object>> selectByExample(@Param("entityClass") Class<T> entityClass, @Param("example") Object example);
 
     /**
      * 通过Example进行更新非空字段
