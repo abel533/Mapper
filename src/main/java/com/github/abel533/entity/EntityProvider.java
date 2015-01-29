@@ -92,7 +92,7 @@ public class EntityProvider extends BaseProvider {
                 entityClass = getEntityClass(params);
             }
             EntityHelper.EntityTable entityTable = EntityHelper.getEntityTable(entityClass);
-            SELECT("count(0)");
+            SELECT("count(*)");
             FROM(entityTable.getName());
             if (entity != null) {
                 MetaObject metaObject = MapperTemplate.forObject(entity);

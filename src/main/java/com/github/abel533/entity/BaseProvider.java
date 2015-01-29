@@ -25,11 +25,8 @@
 package com.github.abel533.entity;
 
 import com.github.abel533.mapperhelper.MapperTemplate;
+import org.apache.ibatis.jdbc.SQL;
 import org.apache.ibatis.reflection.MetaObject;
-import org.apache.ibatis.reflection.factory.DefaultObjectFactory;
-import org.apache.ibatis.reflection.factory.ObjectFactory;
-import org.apache.ibatis.reflection.wrapper.DefaultObjectWrapperFactory;
-import org.apache.ibatis.reflection.wrapper.ObjectWrapperFactory;
 
 import java.util.List;
 import java.util.Map;
@@ -98,37 +95,56 @@ public class BaseProvider {
     }
 
     /**
+     * 获取Example类 - 不在此校验是否为合法的Example类
+     *
+     * @param params
+     * @return
+     */
+    protected MetaObject getExample(Map<String, Object> params) {
+        Object result = null;
+        if (params.containsKey("example")) {
+            result = params.get("example");
+        }
+        if (result == null) {
+            throw new NullPointerException("Example参数不能为空!");
+        }
+        //根据Example的结构，通过判断是否包含某些属性来判断条件是否为合法的example类型
+        MetaObject example = MapperTemplate.forObject(result);
+        if(example.hasGetter("orderByClause")
+                &&example.hasGetter("oredCriteria")
+                &&example.hasGetter("distinct")){
+            return example;
+        }
+        throw new IllegalArgumentException("Example参数不是合法的Mybatis Example对象!");
+    }
+
+    /**
      * Example条件
      */
-    protected String applyWhere(Object example, boolean includeExamplePhrase) {
+    protected void applyOrderBy(SQL sql, MetaObject example) {
+        Object orderBy = example.getValue("orderByClause");
+        if (orderBy != null) {
+            sql.ORDER_BY((String) orderBy);
+        }
+    }
+
+    /**
+     * Example条件
+     */
+    protected void applyWhere(SQL sql, MetaObject example) {
         if (example == null) {
-            return "";
+            return;
         }
-        String parmPhrase1;
-        String parmPhrase1_th;
-        String parmPhrase2;
-        String parmPhrase2_th;
-        String parmPhrase3;
-        String parmPhrase3_th;
-        if (includeExamplePhrase) {
-            parmPhrase1 = "%s #{example.oredCriteria[%d].allCriteria[%d].value}";
-            parmPhrase1_th = "%s #{example.oredCriteria[%d].allCriteria[%d].value,typeHandler=%s}";
-            parmPhrase2 = "%s #{example.oredCriteria[%d].allCriteria[%d].value} and #{example.oredCriteria[%d].criteria[%d].secondValue}";
-            parmPhrase2_th = "%s #{example.oredCriteria[%d].allCriteria[%d].value,typeHandler=%s} and #{example.oredCriteria[%d].criteria[%d].secondValue,typeHandler=%s}";
-            parmPhrase3 = "#{example.oredCriteria[%d].allCriteria[%d].value[%d]}";
-            parmPhrase3_th = "#{example.oredCriteria[%d].allCriteria[%d].value[%d],typeHandler=%s}";
-        } else {
-            parmPhrase1 = "%s #{oredCriteria[%d].allCriteria[%d].value}";
-            parmPhrase1_th = "%s #{oredCriteria[%d].allCriteria[%d].value,typeHandler=%s}";
-            parmPhrase2 = "%s #{oredCriteria[%d].allCriteria[%d].value} and #{oredCriteria[%d].criteria[%d].secondValue}";
-            parmPhrase2_th = "%s #{oredCriteria[%d].allCriteria[%d].value,typeHandler=%s} and #{oredCriteria[%d].criteria[%d].secondValue,typeHandler=%s}";
-            parmPhrase3 = "#{oredCriteria[%d].allCriteria[%d].value[%d]}";
-            parmPhrase3_th = "#{oredCriteria[%d].allCriteria[%d].value[%d],typeHandler=%s}";
-        }
+        String parmPhrase1 = "%s #{example.oredCriteria[%d].allCriteria[%d].value}";
+        String parmPhrase1_th = "%s #{example.oredCriteria[%d].allCriteria[%d].value,typeHandler=%s}";
+        String parmPhrase2 = "%s #{example.oredCriteria[%d].allCriteria[%d].value} and #{example.oredCriteria[%d].criteria[%d].secondValue}";
+        String parmPhrase2_th = "%s #{example.oredCriteria[%d].allCriteria[%d].value,typeHandler=%s} and #{example.oredCriteria[%d].criteria[%d].secondValue,typeHandler=%s}";
+        String parmPhrase3 = "#{example.oredCriteria[%d].allCriteria[%d].value[%d]}";
+        String parmPhrase3_th = "#{example.oredCriteria[%d].allCriteria[%d].value[%d],typeHandler=%s}";
+
         StringBuilder sb = new StringBuilder();
-        MetaObject exampleObject = MapperTemplate.forObject(example);
-        //TODO 根据Example的结构，通过判断是否包含某些属性来判断条件是否为合法的example类型
-        List<?> oredCriteria = (List<?>) exampleObject.getValue("oredCriteria");
+
+        List<?> oredCriteria = (List<?>) example.getValue("oredCriteria");
         boolean firstCriteria = true;
         for (int i = 0; i < oredCriteria.size(); i++) {
             MetaObject criteria = MapperTemplate.forObject(oredCriteria.get(i));
@@ -187,11 +203,9 @@ public class BaseProvider {
                 sb.append(')');
             }
         }
-
         if (sb.length() > 0) {
-            return sb.toString();
+            sql.WHERE(sb.toString());
         }
-        return "";
     }
 
     protected boolean isEmpty(String value) {

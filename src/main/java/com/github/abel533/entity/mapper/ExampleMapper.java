@@ -24,14 +24,16 @@
 
 package com.github.abel533.entity.mapper;
 
-import com.github.abel533.entity.EntityProvider;
-import org.apache.ibatis.annotations.*;
+import com.github.abel533.entity.ExampleProvider;
+import org.apache.ibatis.annotations.DeleteProvider;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.SelectProvider;
+import org.apache.ibatis.annotations.UpdateProvider;
 
 import java.util.List;
-import java.util.Map;
 
 /**
- * 这个仍然是接口类，不需要被继承，可以直接用
+ * Example查询，Example需要是Mybatis生成的Example类
  *
  * @author liuzh
  */
@@ -39,13 +41,13 @@ public interface ExampleMapper {
 
     /**
      * 通过Example类来查询count
-     * 
+     *
      * @param entityClass
      * @param example
      * @param <T>
      * @return
      */
-    @SelectProvider(type = EntityProvider.class, method = "countByExample")
+    @SelectProvider(type = ExampleProvider.class, method = "countByExample")
     <T> int countByExample(@Param("entityClass") Class<T> entityClass, @Param("example") Object example);
 
     /**
@@ -56,7 +58,7 @@ public interface ExampleMapper {
      * @param <T>
      * @return
      */
-    @DeleteProvider(type=EntityProvider.class, method="deleteByExample")
+    @DeleteProvider(type = ExampleProvider.class, method = "deleteByExample")
     <T> int deleteByExample(@Param("entityClass") Class<T> entityClass, @Param("example") Object example);
 
     /**
@@ -67,7 +69,7 @@ public interface ExampleMapper {
      * @param <T>
      * @return
      */
-    @SelectProvider(type=EntityProvider.class, method="selectByExample")
+    @SelectProvider(type = ExampleProvider.class, method = "selectByExample")
     <T> List<T> selectByExample(@Param("entityClass") Class<T> entityClass, @Param("example") Object example);
 
     /**
@@ -78,7 +80,7 @@ public interface ExampleMapper {
      * @param <T>
      * @return
      */
-    @UpdateProvider(type=EntityProvider.class, method="updateByExampleSelective")
+    @UpdateProvider(type = ExampleProvider.class, method = "updateByExampleSelective")
     <T> int updateByExampleSelective(@Param("record") T record, @Param("example") Object example);
 
     /**
@@ -89,7 +91,7 @@ public interface ExampleMapper {
      * @param <T>
      * @return
      */
-    @UpdateProvider(type=EntityProvider.class, method="updateByExample")
+    @UpdateProvider(type = ExampleProvider.class, method = "updateByExample")
     <T> int updateByExample(@Param("record") T record, @Param("example") Object example);
 
 }

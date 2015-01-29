@@ -26,14 +26,9 @@ package com.github.abel533.entity;
 
 import com.github.abel533.mapperhelper.EntityHelper;
 import com.github.abel533.mapperhelper.MapperTemplate;
-import org.apache.ibatis.annotations.DeleteProvider;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.SelectProvider;
-import org.apache.ibatis.annotations.UpdateProvider;
 import org.apache.ibatis.jdbc.SQL;
 import org.apache.ibatis.reflection.MetaObject;
 
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -44,22 +39,72 @@ import java.util.Map;
 public class ExampleProvider extends BaseProvider {
 
     public String countByExample(final Map<String, Object> params) {
-        return null;
+        return new SQL() {{
+            MetaObject example = getExample(params);
+            Class<?> entityClass = getEntityClass(params);
+            EntityHelper.EntityTable entityTable = EntityHelper.getEntityTable(entityClass);
+            SELECT("count(*)");
+            FROM(entityTable.getName());
+            applyWhere(this, example);
+        }}.toString();
     }
 
     public String deleteByExample(final Map<String, Object> params) {
-        return null;
+        return new SQL() {{
+            MetaObject example = getExample(params);
+            Class<?> entityClass = getEntityClass(params);
+            EntityHelper.EntityTable entityTable = EntityHelper.getEntityTable(entityClass);
+            DELETE_FROM(entityTable.getName());
+            applyWhere(this, example);
+        }}.toString();
     }
 
     public String selectByExample(final Map<String, Object> params) {
-        return null;
+        return new SQL() {{
+            MetaObject example = getExample(params);
+            Class<?> entityClass = getEntityClass(params);
+            EntityHelper.EntityTable entityTable = EntityHelper.getEntityTable(entityClass);
+            SELECT(EntityHelper.getAllColumns(entityClass));
+            FROM(entityTable.getName());
+            applyWhere(this, example);
+            applyOrderBy(this,example);
+        }}.toString();
     }
 
     public String updateByExampleSelective(final Map<String, Object> params) {
-        return null;
+        return new SQL() {{
+            Object entity = getEntity(params);
+            MetaObject example = getExample(params);
+            Class<?> entityClass = getEntityClass(params);
+            EntityHelper.EntityTable entityTable = EntityHelper.getEntityTable(entityClass);
+            MetaObject metaObject = MapperTemplate.forObject(entity);
+            UPDATE(entityTable.getName());
+            for (EntityHelper.EntityColumn column : entityTable.getEntityClassColumns()) {
+                Object value = metaObject.getValue(column.getProperty());
+                //更新不是ID的字段，因为根据主键查询的...更新后还是一样。
+                if (value != null) {
+                    SET(column.getColumn() + "=#{record." + column.getProperty() + "}");
+                }
+            }
+            applyWhere(this, example);
+        }}.toString();
     }
 
     public String updateByExample(final Map<String, Object> params) {
-        return null;
+        return new SQL() {{
+            Object entity = getEntity(params);
+            MetaObject example = getExample(params);
+            Class<?> entityClass = getEntityClass(params);
+            EntityHelper.EntityTable entityTable = EntityHelper.getEntityTable(entityClass);
+            MetaObject metaObject = MapperTemplate.forObject(entity);
+            UPDATE(entityTable.getName());
+            for (EntityHelper.EntityColumn column : entityTable.getEntityClassColumns()) {
+                //更新不是ID的字段，因为根据主键查询的...更新后还是一样。
+                if (!column.isId()) {
+                    SET(column.getColumn() + "=#{record." + column.getProperty() + "}");
+                }
+            }
+            applyWhere(this, example);
+        }}.toString();
     }
 }
