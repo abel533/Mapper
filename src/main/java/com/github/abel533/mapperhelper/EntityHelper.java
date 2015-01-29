@@ -24,6 +24,8 @@
 
 package com.github.abel533.mapperhelper;
 
+import org.apache.ibatis.reflection.MetaObject;
+
 import javax.persistence.*;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -244,6 +246,21 @@ public class EntityHelper {
     }
 
     /**
+     * 获取字段映射关系
+     *
+     * @param entityClass
+     * @return
+     */
+    public static Map<String,String> getColumnAlias(Class<?> entityClass){
+        List<EntityColumn> columnList = getColumns(entityClass);
+        Map<String,String> alias = new HashMap<String, String>(columnList.size());
+        for (EntityColumn column : columnList) {
+            alias.put(column.getColumn(),column.getProperty());
+        }
+        return alias;
+    }
+
+    /**
      * 获取查询的Select
      *
      * @param entityClass
@@ -429,6 +446,21 @@ public class EntityHelper {
         return sb.charAt(0) == '_' ? sb.substring(1) : sb.toString();
     }
 
+    /**
+     * 将下划线风格替换为驼峰风格
+     */
+    public static String underlineToCamelhump(String str) {
+        Matcher matcher = Pattern.compile("_[a-z]").matcher(str);
+        StringBuilder builder = new StringBuilder(str);
+        for (int i = 0; matcher.find(); i++) {
+            builder.replace(matcher.start() - i, matcher.end() - i, matcher.group().substring(1).toUpperCase());
+        }
+        if (Character.isUpperCase(builder.charAt(0))) {
+            builder.replace(0, 1, String.valueOf(Character.toLowerCase(builder.charAt(0))));
+        }
+        return builder.toString();
+    }
+
     public static boolean isUppercaseAlpha(char c) {
         return (c >= 'A') && (c <= 'Z');
     }
@@ -461,7 +493,7 @@ public class EntityHelper {
                 fieldList.add(field);
             }
         }
-        Class superClass = entityClass.getSuperclass();
+        Class<?> superClass = entityClass.getSuperclass();
         if (superClass != null
                 && !superClass.equals(Object.class)
                 && (superClass.isAnnotationPresent(Entity.class)
@@ -470,5 +502,45 @@ public class EntityHelper {
             return getAllField(entityClass.getSuperclass(), fieldList);
         }
         return fieldList;
+    }
+
+    /**
+     * map转换为bean
+     *
+     * @param map
+     * @param beanClass
+     * @return
+     */
+    public static Object map2Bean(Map map, Class<?> beanClass) {
+        try {
+            Object bean = beanClass.newInstance();
+            Map<String, String> alias = EntityHelper.getColumnAlias(beanClass);
+            MetaObject metaBean = MapperTemplate.forObject(bean);
+            MetaObject metaMap = MapperTemplate.forObject(map);
+            for (String name : metaMap.getGetterNames()) {
+                String alia = alias.get(name);
+                if (metaBean.hasSetter(alia)) {
+                    metaBean.setValue(alia, metaMap.getValue(name));
+                }
+            }
+            return bean;
+        } catch (Exception e) {
+            throw new RuntimeException(beanClass.getCanonicalName() + "类没有默认空的构造方法!");
+        }
+    }
+
+    /**
+     * mapList转换为beanList
+     *
+     * @param mapList
+     * @param beanClass
+     * @return
+     */
+    public static List<?> maplist2BeanList(List<Map<String, Object>> mapList, Class<?> beanClass) {
+        List list = new ArrayList<Object>(mapList.size());
+        for (Map map : mapList) {
+            list.add(map2Bean(map, beanClass));
+        }
+        return list;
     }
 }
