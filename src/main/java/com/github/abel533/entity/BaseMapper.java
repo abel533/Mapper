@@ -30,17 +30,19 @@ import com.github.abel533.mapperhelper.EntityHelper;
 import java.util.List;
 
 /**
- * 封装的EntityMapper,实际上只对select方法做了处理
+ * 封装的EntityMapper,实际上只对select方法做了处理<br>
+ * <p/>
+ * 该类起名Mapper结尾只是为了表面上看着统一，实际上和普通的Mapper不是一类东西
  *
  * @author liuzh
  */
-public class Entity {
+public class BaseMapper {
 
     //需要注入该类，可以构造参数注入 -- 注意这里
     private EntityMapper entityMapper;
 
-    public Entity(EntityMapper commonMapper) {
-        this.entityMapper = commonMapper;
+    public BaseMapper(EntityMapper entityMapper) {
+        this.entityMapper = entityMapper;
     }
 
     /**
@@ -158,5 +160,98 @@ public class Entity {
      */
     public <T> int updateByPrimaryKeySelective(T record) {
         return entityMapper.updateByPrimaryKeySelective(record);
+    }
+
+    /**
+     * 通过Example类来查询count
+     *
+     * @param entityClass
+     * @param example 可以是Mybatis生成器生成的Example类或者通用的Example类
+     * @param <T>
+     * @return
+     */
+    public <T> int countByExample(Class<T> entityClass, Object example) {
+        return entityMapper.countByExample(entityClass, example);
+    }
+
+    /**
+     * 通过Example类来查询count
+     *
+     * @param example
+     * @param <T>
+     * @return
+     */
+    public <T> int countByExample(Example example) {
+        return entityMapper.countByExample(example.getEntityClass(), example);
+    }
+
+    /**
+     * 通过Example删除
+     *
+     * @param entityClass
+     * @param example 可以是Mybatis生成器生成的Example类或者通用的Example类
+     * @param <T>
+     * @return
+     */
+    public <T> int deleteByExample(Class<T> entityClass, Object example) {
+        return entityMapper.deleteByExample(entityClass, example);
+    }
+
+    /**
+     * 通过Example删除
+     *
+     * @param example
+     * @param <T>
+     * @return
+     */
+    public <T> int deleteByExample(Example example) {
+        return entityMapper.deleteByExample(example.getEntityClass(), example);
+    }
+
+    /**
+     * 通过Example来查询
+     *
+     * @param entityClass
+     * @param example 可以是Mybatis生成器生成的Example类或者通用的Example类
+     * @param <T>
+     * @return
+     */
+    public <T> List<T> selectByExample(Class<T> entityClass, Object example) {
+        return (List<T>) EntityHelper.maplist2BeanList(entityMapper.selectByExample(entityClass, example), entityClass);
+    }
+
+    /**
+     * 通过Example来查询
+     *
+     * @param example
+     * @param <T>
+     * @return
+     */
+    public <T> List<T> selectByExample(Example example) {
+        return (List<T>) EntityHelper.maplist2BeanList(entityMapper.selectByExample(example.getEntityClass(), example), example.getEntityClass());
+    }
+
+    /**
+     * 通过Example进行更新非空字段
+     *
+     * @param record
+     * @param example 可以是Mybatis生成器生成的Example类或者通用的Example类
+     * @param <T>
+     * @return
+     */
+    public <T> int updateByExampleSelective(T record, Object example) {
+        return entityMapper.updateByExampleSelective(record, example);
+    }
+
+    /**
+     * 通过Example进行更新全部字段
+     *
+     * @param record
+     * @param example 可以是Mybatis生成器生成的Example类或者通用的Example类
+     * @param <T>
+     * @return
+     */
+    public <T> int updateByExample(T record, Object example) {
+        return entityMapper.updateByExample(record, example);
     }
 }

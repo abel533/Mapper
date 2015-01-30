@@ -35,7 +35,7 @@ import java.util.Map;
  *
  * @author liuzh
  */
-public interface EntityMapper {
+public interface EntityMapper extends ExampleMapper {
     /**
      * 根据参数进行查询,record可以是Class<?>类型
      * <br>查询条件为属性String类型不为空，其他类型!=null时

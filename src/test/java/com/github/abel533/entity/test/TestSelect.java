@@ -24,7 +24,7 @@
 
 package com.github.abel533.entity.test;
 
-import com.github.abel533.entity.Entity;
+import com.github.abel533.entity.BaseMapper;
 import com.github.abel533.entity.mapper.EntityMapper;
 import com.github.abel533.entity.mapper.ExampleMapper;
 import com.github.abel533.entity.model.Country;
@@ -100,7 +100,7 @@ public class TestSelect {
         SqlSession sqlSession = MybatisHelper.getSqlSession();
         try {
             EntityMapper mapper = sqlSession.getMapper(EntityMapper.class);
-            Entity beanMapper = new Entity(mapper);
+            BaseMapper beanMapper = new BaseMapper(mapper);
             List<Country> countryList = beanMapper.select(new Country());
             //查询总数
             Assert.assertEquals(183, countryList.size());
