@@ -32,25 +32,23 @@ import org.apache.ibatis.session.SqlSession;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.util.List;
-
 /**
- * 测试查询
+ * 测试count
  *
  * @author liuzh
  */
-public class TestSelect {
+public class TestCount {
 
     @Test
-    public void testSelectAllByNew() {
+    public void testCountAllByNew() {
         SqlSession sqlSession = MybatisHelper.getSqlSession();
         try {
             CommonMapper commonMapper = sqlSession.getMapper(CommonMapper.class);
             EntityMapper entityMapper = new EntityMapper(commonMapper);
 
-            List<Country> countryList = entityMapper.select(new Country());
+            int count = entityMapper.count(new Country());
 
-            Assert.assertEquals(183, countryList.size());
+            Assert.assertEquals(183, count);
         } finally {
             sqlSession.close();
         }
@@ -65,9 +63,9 @@ public class TestSelect {
 
             Country country = new Country();
             country.setCountrycode("CN");
-            List<Country> countryList = entityMapper.select(country);
+            int count = entityMapper.count(country);
 
-            Assert.assertEquals(1, countryList.size());
+            Assert.assertEquals(1, count);
         } finally {
             sqlSession.close();
         }
@@ -80,7 +78,7 @@ public class TestSelect {
             CommonMapper commonMapper = sqlSession.getMapper(CommonMapper.class);
             EntityMapper entityMapper = new EntityMapper(commonMapper);
 
-            entityMapper.select(null);
+            entityMapper.count(null);
         } finally {
             sqlSession.close();
         }

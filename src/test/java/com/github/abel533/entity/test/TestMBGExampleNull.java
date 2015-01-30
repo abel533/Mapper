@@ -27,7 +27,6 @@ package com.github.abel533.entity.test;
 import com.github.abel533.entity.EntityMapper;
 import com.github.abel533.entity.mapper.CommonMapper;
 import com.github.abel533.entity.model.Country;
-import com.github.abel533.entity.model.CountryExample;
 import com.github.abel533.mapper.MybatisHelper;
 import org.apache.ibatis.session.SqlSession;
 import org.junit.Assert;
@@ -36,11 +35,11 @@ import org.junit.Test;
 import java.util.List;
 
 /**
- * 测试MBG生成的Example对象
+ * 测试MBG生成的Example对象=null的情况
  *
  * @author liuzh
  */
-public class TestMBGExample {
+public class TestMBGExampleNull {
     @Test
     public void testCountByExample() {
         SqlSession sqlSession = MybatisHelper.getSqlSession();
@@ -48,17 +47,8 @@ public class TestMBGExample {
             CommonMapper commonMapper = sqlSession.getMapper(CommonMapper.class);
             EntityMapper entityMapper = new EntityMapper(commonMapper);
 
-            CountryExample example = new CountryExample();
-            example.createCriteria().andIdGreaterThan(100).andIdLessThanOrEqualTo(150);
-
-            int count = entityMapper.countByExample(Country.class, example);
-            Assert.assertEquals(50, count);
-
-            example = new CountryExample();
-            example.createCriteria().andCountrynameLike("A%");
-
-            count = entityMapper.countByExample(Country.class, example);
-            Assert.assertEquals(12, count);
+            int count = entityMapper.countByExample(Country.class, null);
+            Assert.assertEquals(183, count);
         } finally {
             sqlSession.close();
         }
@@ -71,17 +61,8 @@ public class TestMBGExample {
             CommonMapper commonMapper = sqlSession.getMapper(CommonMapper.class);
             EntityMapper entityMapper = new EntityMapper(commonMapper);
 
-            CountryExample example = new CountryExample();
-            example.createCriteria().andIdGreaterThan(100).andIdLessThanOrEqualTo(150);
-
-            int count = entityMapper.deleteByExample(Country.class, example);
-            Assert.assertEquals(50, count);
-
-            example = new CountryExample();
-            example.createCriteria().andCountrynameLike("A%");
-
-            count = entityMapper.deleteByExample(Country.class, example);
-            Assert.assertEquals(12, count);
+            int count = entityMapper.deleteByExample(Country.class, null);
+            Assert.assertEquals(183, count);
         } finally {
             //回滚
             sqlSession.rollback();
@@ -96,19 +77,8 @@ public class TestMBGExample {
             CommonMapper commonMapper = sqlSession.getMapper(CommonMapper.class);
             EntityMapper entityMapper = new EntityMapper(commonMapper);
 
-            CountryExample example = new CountryExample();
-            example.createCriteria().andCountrynameEqualTo("China");
-
-            List<Country> countries = entityMapper.selectByExample(Country.class, example);
-            Assert.assertEquals(1, countries.size());
-            Assert.assertEquals("CN", countries.get(0).getCountrycode());
-
-            example = new CountryExample();
-            example.createCriteria().andIdEqualTo(100);
-
-            countries = entityMapper.selectByExample(Country.class, example);
-            Assert.assertEquals(1, countries.size());
-            Assert.assertEquals("MY", countries.get(0).getCountrycode());
+            List<Country> countries = entityMapper.selectByExample(Country.class, null);
+            Assert.assertEquals(183, countries.size());
         } finally {
             sqlSession.close();
         }
@@ -121,21 +91,11 @@ public class TestMBGExample {
             CommonMapper commonMapper = sqlSession.getMapper(CommonMapper.class);
             EntityMapper entityMapper = new EntityMapper(commonMapper);
 
-            CountryExample example = new CountryExample();
-            example.createCriteria().andCountrynameEqualTo("China");
-
             Country country = new Country();
             country.setCountryname("天朝");
-            int count = entityMapper.updateByExampleSelective(country, example);
+            int count = entityMapper.updateByExampleSelective(country, null);
 
-            Assert.assertEquals(1, count);
-
-            example = new CountryExample();
-            example.createCriteria().andCountrynameEqualTo("天朝");
-
-            List<Country> countries = entityMapper.selectByExample(Country.class, example);
-            Assert.assertEquals(1, countries.size());
-            Assert.assertEquals("天朝", countries.get(0).getCountryname());
+            Assert.assertEquals(183, count);
         } finally {
             //回滚
             sqlSession.rollback();
@@ -150,21 +110,11 @@ public class TestMBGExample {
             CommonMapper commonMapper = sqlSession.getMapper(CommonMapper.class);
             EntityMapper entityMapper = new EntityMapper(commonMapper);
 
-            CountryExample example = new CountryExample();
-            example.createCriteria().andCountrynameLike("A%");
-
             Country country = new Country();
             country.setCountryname("统一");
-            int count = entityMapper.updateByExample(country, example);
+            int count = entityMapper.updateByExample(country, null);
 
-            Assert.assertEquals(12, count);
-
-            example = new CountryExample();
-            example.createCriteria().andCountrynameEqualTo("统一");
-
-            List<Country> countries = entityMapper.selectByExample(Country.class, example);
-            Assert.assertEquals(12, countries.size());
-            Assert.assertEquals("统一", countries.get(0).getCountryname());
+            Assert.assertEquals(183, count);
         } finally {
             //回滚
             sqlSession.rollback();

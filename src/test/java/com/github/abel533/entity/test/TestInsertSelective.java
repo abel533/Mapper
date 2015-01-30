@@ -28,59 +28,68 @@ import com.github.abel533.entity.EntityMapper;
 import com.github.abel533.entity.mapper.CommonMapper;
 import com.github.abel533.entity.model.Country;
 import com.github.abel533.mapper.MybatisHelper;
+import com.github.abel533.model.Country2;
 import org.apache.ibatis.session.SqlSession;
 import org.junit.Assert;
 import org.junit.Test;
-
-import java.util.List;
 
 /**
  * 测试查询
  *
  * @author liuzh
  */
-public class TestSelect {
+public class TestInsertSelective {
 
     @Test
-    public void testSelectAllByNew() {
+    public void testInsertSelectiveByNew() {
         SqlSession sqlSession = MybatisHelper.getSqlSession();
         try {
             CommonMapper commonMapper = sqlSession.getMapper(CommonMapper.class);
             EntityMapper entityMapper = new EntityMapper(commonMapper);
 
-            List<Country> countryList = entityMapper.select(new Country());
+            Assert.assertEquals(0, entityMapper.count(new Country2()));
 
-            Assert.assertEquals(183, countryList.size());
+            int count = entityMapper.insertSelective(new Country2());
+
+            Assert.assertEquals(1, count);
+
+            Assert.assertEquals(1, entityMapper.count(new Country2()));
         } finally {
+            //回滚
+            sqlSession.rollback();
             sqlSession.close();
         }
     }
 
     @Test
-    public void testSelectOne() {
+    public void testInsertSelective() {
         SqlSession sqlSession = MybatisHelper.getSqlSession();
         try {
             CommonMapper commonMapper = sqlSession.getMapper(CommonMapper.class);
             EntityMapper entityMapper = new EntityMapper(commonMapper);
 
             Country country = new Country();
+            country.setId(999);
             country.setCountrycode("CN");
-            List<Country> countryList = entityMapper.select(country);
+            int count = entityMapper.insertSelective(country);
 
-            Assert.assertEquals(1, countryList.size());
+            Assert.assertEquals(1, count);
+            Assert.assertEquals(184, entityMapper.count(new Country()));
         } finally {
+            //回滚
+            sqlSession.rollback();
             sqlSession.close();
         }
     }
 
     @Test(expected = Exception.class)
-    public void testSelectAllByNull() {
+    public void testInsertSelectiveNull() {
         SqlSession sqlSession = MybatisHelper.getSqlSession();
         try {
             CommonMapper commonMapper = sqlSession.getMapper(CommonMapper.class);
             EntityMapper entityMapper = new EntityMapper(commonMapper);
 
-            entityMapper.select(null);
+            entityMapper.insertSelective(null);
         } finally {
             sqlSession.close();
         }

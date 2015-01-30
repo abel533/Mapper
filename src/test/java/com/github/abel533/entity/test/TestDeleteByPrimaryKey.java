@@ -32,55 +32,38 @@ import org.apache.ibatis.session.SqlSession;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.util.List;
-
 /**
- * 测试查询
+ * 测试删除
  *
  * @author liuzh
  */
-public class TestSelect {
+public class TestDeleteByPrimaryKey {
 
     @Test
-    public void testSelectAllByNew() {
+    public void testDeleteByPrimaryKey() {
         SqlSession sqlSession = MybatisHelper.getSqlSession();
         try {
             CommonMapper commonMapper = sqlSession.getMapper(CommonMapper.class);
             EntityMapper entityMapper = new EntityMapper(commonMapper);
-
-            List<Country> countryList = entityMapper.select(new Country());
-
-            Assert.assertEquals(183, countryList.size());
+            //不能删除全表
+            int count = entityMapper.deleteByPrimaryKey(Country.class, 1);
+            Assert.assertEquals(1, count);
+            Assert.assertEquals(182, entityMapper.count(new Country()));
         } finally {
-            sqlSession.close();
-        }
-    }
-
-    @Test
-    public void testSelectOne() {
-        SqlSession sqlSession = MybatisHelper.getSqlSession();
-        try {
-            CommonMapper commonMapper = sqlSession.getMapper(CommonMapper.class);
-            EntityMapper entityMapper = new EntityMapper(commonMapper);
-
-            Country country = new Country();
-            country.setCountrycode("CN");
-            List<Country> countryList = entityMapper.select(country);
-
-            Assert.assertEquals(1, countryList.size());
-        } finally {
+            //回滚
+            sqlSession.rollback();
             sqlSession.close();
         }
     }
 
     @Test(expected = Exception.class)
-    public void testSelectAllByNull() {
+    public void testDeleteNull() {
         SqlSession sqlSession = MybatisHelper.getSqlSession();
         try {
             CommonMapper commonMapper = sqlSession.getMapper(CommonMapper.class);
             EntityMapper entityMapper = new EntityMapper(commonMapper);
 
-            entityMapper.select(null);
+            entityMapper.deleteByPrimaryKey(Country.class, null);
         } finally {
             sqlSession.close();
         }

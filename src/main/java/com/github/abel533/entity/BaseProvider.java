@@ -106,7 +106,7 @@ public class BaseProvider {
             result = params.get("example");
         }
         if (result == null) {
-            throw new NullPointerException("Example参数不能为空!");
+            return null;
         }
         //根据Example的结构，通过判断是否包含某些属性来判断条件是否为合法的example类型
         MetaObject example = MapperTemplate.forObject(result);
@@ -122,6 +122,9 @@ public class BaseProvider {
      * Example条件
      */
     protected void applyOrderBy(SQL sql, MetaObject example) {
+        if (example == null) {
+            return;
+        }
         Object orderBy = example.getValue("orderByClause");
         if (orderBy != null) {
             sql.ORDER_BY((String) orderBy);

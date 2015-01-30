@@ -32,55 +32,43 @@ import org.apache.ibatis.session.SqlSession;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.util.List;
-
 /**
- * 测试查询
+ * 测试更新
  *
  * @author liuzh
  */
-public class TestSelect {
+public class TestUpdateByPrimaryKey {
 
     @Test
-    public void testSelectAllByNew() {
+    public void testUpdateByPrimaryKey() {
         SqlSession sqlSession = MybatisHelper.getSqlSession();
         try {
             CommonMapper commonMapper = sqlSession.getMapper(CommonMapper.class);
             EntityMapper entityMapper = new EntityMapper(commonMapper);
-
-            List<Country> countryList = entityMapper.select(new Country());
-
-            Assert.assertEquals(183, countryList.size());
-        } finally {
-            sqlSession.close();
-        }
-    }
-
-    @Test
-    public void testSelectOne() {
-        SqlSession sqlSession = MybatisHelper.getSqlSession();
-        try {
-            CommonMapper commonMapper = sqlSession.getMapper(CommonMapper.class);
-            EntityMapper entityMapper = new EntityMapper(commonMapper);
-
             Country country = new Country();
-            country.setCountrycode("CN");
-            List<Country> countryList = entityMapper.select(country);
+            country.setId(100);
+            country.setCountryname("测试");
+            int count = entityMapper.updateByPrimaryKey(country);
+            Assert.assertEquals(1, count);
 
-            Assert.assertEquals(1, countryList.size());
+            country = entityMapper.selectByPrimaryKey(Country.class, 100);
+            Assert.assertNull(country.getCountrycode());
+            Assert.assertEquals("测试", country.getCountryname());
         } finally {
+            //回滚
+            sqlSession.rollback();
             sqlSession.close();
         }
     }
 
     @Test(expected = Exception.class)
-    public void testSelectAllByNull() {
+    public void testUpdateNull() {
         SqlSession sqlSession = MybatisHelper.getSqlSession();
         try {
             CommonMapper commonMapper = sqlSession.getMapper(CommonMapper.class);
             EntityMapper entityMapper = new EntityMapper(commonMapper);
 
-            entityMapper.select(null);
+            entityMapper.updateByPrimaryKey(null);
         } finally {
             sqlSession.close();
         }

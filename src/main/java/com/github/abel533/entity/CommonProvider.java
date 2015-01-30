@@ -46,13 +46,7 @@ public class CommonProvider extends BaseProvider {
     public String select(final Map<String, Object> params) {
         return new SQL() {{
             Object entity = getEntity(params);
-            Class<?> entityClass;
-            if (entity instanceof Class<?>) {
-                entityClass = (Class<?>) entity;
-                entity = null;
-            } else {
-                entityClass = getEntityClass(params);
-            }
+            Class<?> entityClass = getEntityClass(params);
             EntityHelper.EntityTable entityTable = EntityHelper.getEntityTable(entityClass);
             SELECT(EntityHelper.getAllColumns(entityClass));
             FROM(entityTable.getName());
@@ -181,7 +175,7 @@ public class CommonProvider extends BaseProvider {
             INSERT_INTO(entityTable.getName());
             for (EntityHelper.EntityColumn column : entityTable.getEntityClassColumns()) {
                 Object value = metaObject.getValue(column.getProperty());
-                if (value != null) {
+                if (column.isId() || value != null) {
                     VALUES(column.getColumn(), "#{record." + column.getProperty() + "}");
                 }
             }

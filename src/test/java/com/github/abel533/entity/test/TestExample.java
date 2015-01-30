@@ -36,62 +36,139 @@ import org.junit.Test;
 import java.util.List;
 
 /**
- * 通过实体类属性进行查询 - 这是目前有的一个测试
+ * 测试通用的Example
  *
  * @author liuzh
  */
 public class TestExample {
 
-    /**
-     * 这个测试用BeanMapper包装的CommonMapper，select查询返回的bean
-     */
     @Test
     public void testCountByExample() {
         SqlSession sqlSession = MybatisHelper.getSqlSession();
         try {
-            CommonMapper entityMapper = sqlSession.getMapper(CommonMapper.class);
-            EntityMapper baseMapper = new EntityMapper(entityMapper);
+            CommonMapper commonMapper = sqlSession.getMapper(CommonMapper.class);
+            EntityMapper entityMapper = new EntityMapper(commonMapper);
 
             Example example = new Example(Country.class);
             example.createCriteria().andGreaterThan("id", 100).andLessThanOrEqualTo("id", 150);
 
-            int count = baseMapper.countByExample(example);
+            int count = entityMapper.countByExample(example);
             Assert.assertEquals(50, count);
 
             example = new Example(Country.class);
-            example.createCriteria().andLike("countryname","A%");
+            example.createCriteria().andLike("countryname", "A%");
 
-            count = baseMapper.countByExample(example);
+            count = entityMapper.countByExample(example);
             Assert.assertEquals(12, count);
         } finally {
             sqlSession.close();
         }
     }
 
-    /**
-     * 这个测试用BeanMapper包装的CommonMapper，select查询返回的bean
-     */
+    @Test
+    public void testDeleteByExample() {
+        SqlSession sqlSession = MybatisHelper.getSqlSession();
+        try {
+            CommonMapper commonMapper = sqlSession.getMapper(CommonMapper.class);
+            EntityMapper entityMapper = new EntityMapper(commonMapper);
+
+            Example example = new Example(Country.class);
+            example.createCriteria().andGreaterThan("id", 100).andLessThanOrEqualTo("id", 150);
+
+            int count = entityMapper.deleteByExample(example);
+            Assert.assertEquals(50, count);
+
+            example = new Example(Country.class);
+            example.createCriteria().andLike("countryname", "A%");
+
+            count = entityMapper.deleteByExample(example);
+            Assert.assertEquals(12, count);
+        } finally {
+            //回滚
+            sqlSession.rollback();
+            sqlSession.close();
+        }
+    }
+
     @Test
     public void testSelectByExample() {
         SqlSession sqlSession = MybatisHelper.getSqlSession();
         try {
-            CommonMapper entityMapper = sqlSession.getMapper(CommonMapper.class);
-            EntityMapper baseMapper = new EntityMapper(entityMapper);
+            CommonMapper commonMapper = sqlSession.getMapper(CommonMapper.class);
+            EntityMapper entityMapper = new EntityMapper(commonMapper);
 
             Example example = new Example(Country.class);
-            example.createCriteria().andEqualTo("countryname","China");
+            example.createCriteria().andEqualTo("countryname", "China");
 
-            List<Country> countries = baseMapper.selectByExample(example);
-            Assert.assertEquals(1,countries.size());
-            Assert.assertEquals("CN",countries.get(0).getCountrycode());
+            List<Country> countries = entityMapper.selectByExample(example);
+            Assert.assertEquals(1, countries.size());
+            Assert.assertEquals("CN", countries.get(0).getCountrycode());
 
             example = new Example(Country.class);
-            example.createCriteria().andEqualTo("id",100);
+            example.createCriteria().andEqualTo("id", 100);
 
-            countries = baseMapper.selectByExample(example);
-            Assert.assertEquals(1,countries.size());
-            Assert.assertEquals("MY",countries.get(0).getCountrycode());
+            countries = entityMapper.selectByExample(example);
+            Assert.assertEquals(1, countries.size());
+            Assert.assertEquals("MY", countries.get(0).getCountrycode());
         } finally {
+            sqlSession.close();
+        }
+    }
+
+    @Test
+    public void testUpdateByExampleSelective() {
+        SqlSession sqlSession = MybatisHelper.getSqlSession();
+        try {
+            CommonMapper commonMapper = sqlSession.getMapper(CommonMapper.class);
+            EntityMapper entityMapper = new EntityMapper(commonMapper);
+
+            Example example = new Example(Country.class);
+            example.createCriteria().andEqualTo("countryname", "China");
+
+            Country country = new Country();
+            country.setCountryname("天朝");
+            int count = entityMapper.updateByExampleSelective(country, example);
+
+            Assert.assertEquals(1, count);
+
+            example = new Example(Country.class);
+            example.createCriteria().andEqualTo("countryname", "天朝");
+
+            List<Country> countries = entityMapper.selectByExample(example);
+            Assert.assertEquals(1, countries.size());
+            Assert.assertEquals("天朝", countries.get(0).getCountryname());
+        } finally {
+            //回滚
+            sqlSession.rollback();
+            sqlSession.close();
+        }
+    }
+
+    @Test
+    public void testUpdateByExample() {
+        SqlSession sqlSession = MybatisHelper.getSqlSession();
+        try {
+            CommonMapper commonMapper = sqlSession.getMapper(CommonMapper.class);
+            EntityMapper entityMapper = new EntityMapper(commonMapper);
+
+            Example example = new Example(Country.class);
+            example.createCriteria().andLike("countryname", "A%");
+
+            Country country = new Country();
+            country.setCountryname("统一");
+            int count = entityMapper.updateByExample(country, example);
+
+            Assert.assertEquals(12, count);
+
+            example = new Example(Country.class);
+            example.createCriteria().andEqualTo("countryname", "统一");
+
+            List<Country> countries = entityMapper.selectByExample(example);
+            Assert.assertEquals(12, countries.size());
+            Assert.assertEquals("统一", countries.get(0).getCountryname());
+        } finally {
+            //回滚
+            sqlSession.rollback();
             sqlSession.close();
         }
     }

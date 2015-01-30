@@ -32,32 +32,30 @@ import org.apache.ibatis.session.SqlSession;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.util.List;
-
 /**
- * 测试查询
+ * 测试删除
  *
  * @author liuzh
  */
-public class TestSelect {
+public class TestDelete {
 
-    @Test
-    public void testSelectAllByNew() {
+    @Test(expected = Exception.class)
+    public void testDeleteByNew() {
         SqlSession sqlSession = MybatisHelper.getSqlSession();
         try {
             CommonMapper commonMapper = sqlSession.getMapper(CommonMapper.class);
             EntityMapper entityMapper = new EntityMapper(commonMapper);
-
-            List<Country> countryList = entityMapper.select(new Country());
-
-            Assert.assertEquals(183, countryList.size());
+            //不能删除全表
+            entityMapper.delete(new Country());
         } finally {
+            //回滚
+            sqlSession.rollback();
             sqlSession.close();
         }
     }
 
     @Test
-    public void testSelectOne() {
+    public void testDeleteOne() {
         SqlSession sqlSession = MybatisHelper.getSqlSession();
         try {
             CommonMapper commonMapper = sqlSession.getMapper(CommonMapper.class);
@@ -65,22 +63,25 @@ public class TestSelect {
 
             Country country = new Country();
             country.setCountrycode("CN");
-            List<Country> countryList = entityMapper.select(country);
+            int count = entityMapper.delete(country);
 
-            Assert.assertEquals(1, countryList.size());
+            Assert.assertEquals(1, count);
+            Assert.assertEquals(182,entityMapper.count(new Country()));
         } finally {
+            //回滚
+            sqlSession.rollback();
             sqlSession.close();
         }
     }
 
     @Test(expected = Exception.class)
-    public void testSelectAllByNull() {
+    public void testDeleteNull() {
         SqlSession sqlSession = MybatisHelper.getSqlSession();
         try {
             CommonMapper commonMapper = sqlSession.getMapper(CommonMapper.class);
             EntityMapper entityMapper = new EntityMapper(commonMapper);
 
-            entityMapper.select(null);
+            entityMapper.delete(null);
         } finally {
             sqlSession.close();
         }

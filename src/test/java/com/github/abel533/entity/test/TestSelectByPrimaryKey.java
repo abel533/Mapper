@@ -27,60 +27,46 @@ package com.github.abel533.entity.test;
 import com.github.abel533.entity.EntityMapper;
 import com.github.abel533.entity.mapper.CommonMapper;
 import com.github.abel533.entity.model.Country;
+import com.github.abel533.entity.model.UserInfo;
 import com.github.abel533.mapper.MybatisHelper;
 import org.apache.ibatis.session.SqlSession;
 import org.junit.Assert;
 import org.junit.Test;
-
-import java.util.List;
 
 /**
  * 测试查询
  *
  * @author liuzh
  */
-public class TestSelect {
+public class TestSelectByPrimaryKey {
 
     @Test
-    public void testSelectAllByNew() {
+    public void testSelectByPrimaryKey() {
         SqlSession sqlSession = MybatisHelper.getSqlSession();
         try {
             CommonMapper commonMapper = sqlSession.getMapper(CommonMapper.class);
             EntityMapper entityMapper = new EntityMapper(commonMapper);
 
-            List<Country> countryList = entityMapper.select(new Country());
+            Country country = entityMapper.selectByPrimaryKey(Country.class, 1);
 
-            Assert.assertEquals(183, countryList.size());
-        } finally {
-            sqlSession.close();
-        }
-    }
+            Assert.assertEquals(1, (int) country.getId());
+            Assert.assertEquals("Angola", country.getCountryname());
 
-    @Test
-    public void testSelectOne() {
-        SqlSession sqlSession = MybatisHelper.getSqlSession();
-        try {
-            CommonMapper commonMapper = sqlSession.getMapper(CommonMapper.class);
-            EntityMapper entityMapper = new EntityMapper(commonMapper);
-
-            Country country = new Country();
-            country.setCountrycode("CN");
-            List<Country> countryList = entityMapper.select(country);
-
-            Assert.assertEquals(1, countryList.size());
+            UserInfo userInfo = entityMapper.selectByPrimaryKey(UserInfo.class, 1);
+            Assert.assertEquals("test1", userInfo.getUsername());
         } finally {
             sqlSession.close();
         }
     }
 
     @Test(expected = Exception.class)
-    public void testSelectAllByNull() {
+    public void testByNull() {
         SqlSession sqlSession = MybatisHelper.getSqlSession();
         try {
             CommonMapper commonMapper = sqlSession.getMapper(CommonMapper.class);
             EntityMapper entityMapper = new EntityMapper(commonMapper);
 
-            entityMapper.select(null);
+            entityMapper.selectByPrimaryKey(Country.class, null);
         } finally {
             sqlSession.close();
         }

@@ -55,16 +55,10 @@ public class EntityMapper {
      * @return
      */
     public <T> List<T> select(T record) {
-        Class<?> entityClass;
         if (record == null) {
             throw new NullPointerException("实体或者主键参数不能为空!");
         }
-        if (record instanceof Class<?>) {
-            entityClass = (Class<?>) record;
-        } else {
-            entityClass = record.getClass();
-        }
-        return (List<T>) EntityHelper.maplist2BeanList(commonMapper.select(record), entityClass);
+        return (List<T>) EntityHelper.maplist2BeanList(commonMapper.select(record), record.getClass());
     }
 
     /**
@@ -166,7 +160,7 @@ public class EntityMapper {
      * 通过Example类来查询count
      *
      * @param entityClass
-     * @param example 可以是Mybatis生成器生成的Example类或者通用的Example类
+     * @param example     可以是Mybatis生成器生成的Example类或者通用的Example类
      * @param <T>
      * @return
      */
@@ -182,6 +176,9 @@ public class EntityMapper {
      * @return
      */
     public <T> int countByExample(Example example) {
+        if (example == null) {
+            throw new NullPointerException("example参数不能为空!");
+        }
         return commonMapper.countByExample(example.getEntityClass(), example);
     }
 
@@ -189,7 +186,7 @@ public class EntityMapper {
      * 通过Example删除
      *
      * @param entityClass
-     * @param example 可以是Mybatis生成器生成的Example类或者通用的Example类
+     * @param example     可以是Mybatis生成器生成的Example类或者通用的Example类
      * @param <T>
      * @return
      */
@@ -205,6 +202,9 @@ public class EntityMapper {
      * @return
      */
     public <T> int deleteByExample(Example example) {
+        if (example == null) {
+            throw new NullPointerException("example参数不能为空!");
+        }
         return commonMapper.deleteByExample(example.getEntityClass(), example);
     }
 
@@ -212,7 +212,7 @@ public class EntityMapper {
      * 通过Example来查询
      *
      * @param entityClass
-     * @param example 可以是Mybatis生成器生成的Example类或者通用的Example类
+     * @param example     可以是Mybatis生成器生成的Example类或者通用的Example类
      * @param <T>
      * @return
      */
@@ -228,6 +228,9 @@ public class EntityMapper {
      * @return
      */
     public <T> List<T> selectByExample(Example example) {
+        if (example == null) {
+            throw new NullPointerException("example参数不能为空!");
+        }
         return (List<T>) EntityHelper.maplist2BeanList(commonMapper.selectByExample(example.getEntityClass(), example), example.getEntityClass());
     }
 
