@@ -24,25 +24,25 @@
 
 package com.github.abel533.entity;
 
-import com.github.abel533.entity.mapper.EntityMapper;
+import com.github.abel533.entity.mapper.CommonMapper;
 import com.github.abel533.mapperhelper.EntityHelper;
 
 import java.util.List;
 
 /**
- * 封装的EntityMapper,实际上只对select方法做了处理<br>
+ * 封装的CommonMapper,实际上只对select方法做了处理<br>
  * <p/>
  * 该类起名Mapper结尾只是为了表面上看着统一，实际上和普通的Mapper不是一类东西
  *
  * @author liuzh
  */
-public class BaseMapper {
+public class EntityMapper {
 
     //需要注入该类，可以构造参数注入 -- 注意这里
-    private EntityMapper entityMapper;
+    private CommonMapper commonMapper;
 
-    public BaseMapper(EntityMapper entityMapper) {
-        this.entityMapper = entityMapper;
+    public EntityMapper(CommonMapper commonMapper) {
+        this.commonMapper = commonMapper;
     }
 
     /**
@@ -64,7 +64,7 @@ public class BaseMapper {
         } else {
             entityClass = record.getClass();
         }
-        return (List<T>) EntityHelper.maplist2BeanList(entityMapper.select(record), entityClass);
+        return (List<T>) EntityHelper.maplist2BeanList(commonMapper.select(record), entityClass);
     }
 
     /**
@@ -77,7 +77,7 @@ public class BaseMapper {
      * @return
      */
     public <T> int count(T record) {
-        return entityMapper.count(record);
+        return commonMapper.count(record);
     }
 
     /**
@@ -89,7 +89,7 @@ public class BaseMapper {
      * @return
      */
     public <T> T selectByPrimaryKey(Class<T> entityClass, Object key) {
-        return (T) EntityHelper.map2Bean(entityMapper.selectByPrimaryKey(entityClass, key), entityClass);
+        return (T) EntityHelper.map2Bean(commonMapper.selectByPrimaryKey(entityClass, key), entityClass);
     }
 
     /**
@@ -102,7 +102,7 @@ public class BaseMapper {
      * @return
      */
     public <T> int insert(T record) {
-        return entityMapper.insert(record);
+        return commonMapper.insert(record);
     }
 
     /**
@@ -113,7 +113,7 @@ public class BaseMapper {
      * @return
      */
     public <T> int insertSelective(T record) {
-        return entityMapper.insertSelective(record);
+        return commonMapper.insertSelective(record);
     }
 
     /**
@@ -125,7 +125,7 @@ public class BaseMapper {
      * @return
      */
     public <T> int delete(T record) {
-        return entityMapper.delete(record);
+        return commonMapper.delete(record);
     }
 
     /**
@@ -137,7 +137,7 @@ public class BaseMapper {
      * @return
      */
     public <T> int deleteByPrimaryKey(Class<T> entityClass, Object key) {
-        return entityMapper.deleteByPrimaryKey(entityClass, key);
+        return commonMapper.deleteByPrimaryKey(entityClass, key);
     }
 
     /**
@@ -148,7 +148,7 @@ public class BaseMapper {
      * @return
      */
     public <T> int updateByPrimaryKey(T record) {
-        return entityMapper.updateByPrimaryKey(record);
+        return commonMapper.updateByPrimaryKey(record);
     }
 
     /**
@@ -159,7 +159,7 @@ public class BaseMapper {
      * @return
      */
     public <T> int updateByPrimaryKeySelective(T record) {
-        return entityMapper.updateByPrimaryKeySelective(record);
+        return commonMapper.updateByPrimaryKeySelective(record);
     }
 
     /**
@@ -171,7 +171,7 @@ public class BaseMapper {
      * @return
      */
     public <T> int countByExample(Class<T> entityClass, Object example) {
-        return entityMapper.countByExample(entityClass, example);
+        return commonMapper.countByExample(entityClass, example);
     }
 
     /**
@@ -182,7 +182,7 @@ public class BaseMapper {
      * @return
      */
     public <T> int countByExample(Example example) {
-        return entityMapper.countByExample(example.getEntityClass(), example);
+        return commonMapper.countByExample(example.getEntityClass(), example);
     }
 
     /**
@@ -194,7 +194,7 @@ public class BaseMapper {
      * @return
      */
     public <T> int deleteByExample(Class<T> entityClass, Object example) {
-        return entityMapper.deleteByExample(entityClass, example);
+        return commonMapper.deleteByExample(entityClass, example);
     }
 
     /**
@@ -205,7 +205,7 @@ public class BaseMapper {
      * @return
      */
     public <T> int deleteByExample(Example example) {
-        return entityMapper.deleteByExample(example.getEntityClass(), example);
+        return commonMapper.deleteByExample(example.getEntityClass(), example);
     }
 
     /**
@@ -217,7 +217,7 @@ public class BaseMapper {
      * @return
      */
     public <T> List<T> selectByExample(Class<T> entityClass, Object example) {
-        return (List<T>) EntityHelper.maplist2BeanList(entityMapper.selectByExample(entityClass, example), entityClass);
+        return (List<T>) EntityHelper.maplist2BeanList(commonMapper.selectByExample(entityClass, example), entityClass);
     }
 
     /**
@@ -228,7 +228,7 @@ public class BaseMapper {
      * @return
      */
     public <T> List<T> selectByExample(Example example) {
-        return (List<T>) EntityHelper.maplist2BeanList(entityMapper.selectByExample(example.getEntityClass(), example), example.getEntityClass());
+        return (List<T>) EntityHelper.maplist2BeanList(commonMapper.selectByExample(example.getEntityClass(), example), example.getEntityClass());
     }
 
     /**
@@ -240,7 +240,7 @@ public class BaseMapper {
      * @return
      */
     public <T> int updateByExampleSelective(T record, Object example) {
-        return entityMapper.updateByExampleSelective(record, example);
+        return commonMapper.updateByExampleSelective(record, example);
     }
 
     /**
@@ -252,6 +252,6 @@ public class BaseMapper {
      * @return
      */
     public <T> int updateByExample(T record, Object example) {
-        return entityMapper.updateByExample(record, example);
+        return commonMapper.updateByExample(record, example);
     }
 }

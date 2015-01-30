@@ -33,8 +33,8 @@ import java.util.Map;
 
 /**
  * 基础类
- * <p/>
- * Created by liuzh on 2015/1/16.
+ *
+ * @author liuzh
  */
 public class BaseProvider {
 

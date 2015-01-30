@@ -29,14 +29,13 @@ import com.github.abel533.mapperhelper.MapperTemplate;
 import org.apache.ibatis.jdbc.SQL;
 import org.apache.ibatis.reflection.MetaObject;
 
-import java.util.List;
 import java.util.Map;
 
 /**
  * @author liuzh
  * @author hanxue
  */
-public class EntityProvider extends BaseProvider {
+public class CommonProvider extends BaseProvider {
 
     /**
      * 查询，入参可以是Entity.class或new Entity()
@@ -302,6 +301,73 @@ public class EntityProvider extends BaseProvider {
         }}.toString();
     }
 
+    public String countByExample(final Map<String, Object> params) {
+        return new SQL() {{
+            MetaObject example = getExample(params);
+            Class<?> entityClass = getEntityClass(params);
+            EntityHelper.EntityTable entityTable = EntityHelper.getEntityTable(entityClass);
+            SELECT("count(*)");
+            FROM(entityTable.getName());
+            applyWhere(this, example);
+        }}.toString();
+    }
 
+    public String deleteByExample(final Map<String, Object> params) {
+        return new SQL() {{
+            MetaObject example = getExample(params);
+            Class<?> entityClass = getEntityClass(params);
+            EntityHelper.EntityTable entityTable = EntityHelper.getEntityTable(entityClass);
+            DELETE_FROM(entityTable.getName());
+            applyWhere(this, example);
+        }}.toString();
+    }
 
+    public String selectByExample(final Map<String, Object> params) {
+        return new SQL() {{
+            MetaObject example = getExample(params);
+            Class<?> entityClass = getEntityClass(params);
+            EntityHelper.EntityTable entityTable = EntityHelper.getEntityTable(entityClass);
+            SELECT(EntityHelper.getAllColumns(entityClass));
+            FROM(entityTable.getName());
+            applyWhere(this, example);
+            applyOrderBy(this,example);
+        }}.toString();
+    }
+
+    public String updateByExampleSelective(final Map<String, Object> params) {
+        return new SQL() {{
+            Object entity = getEntity(params);
+            MetaObject example = getExample(params);
+            Class<?> entityClass = getEntityClass(params);
+            EntityHelper.EntityTable entityTable = EntityHelper.getEntityTable(entityClass);
+            MetaObject metaObject = MapperTemplate.forObject(entity);
+            UPDATE(entityTable.getName());
+            for (EntityHelper.EntityColumn column : entityTable.getEntityClassColumns()) {
+                Object value = metaObject.getValue(column.getProperty());
+                //更新不是ID的字段，因为根据主键查询的...更新后还是一样。
+                if (value != null) {
+                    SET(column.getColumn() + "=#{record." + column.getProperty() + "}");
+                }
+            }
+            applyWhere(this, example);
+        }}.toString();
+    }
+
+    public String updateByExample(final Map<String, Object> params) {
+        return new SQL() {{
+            Object entity = getEntity(params);
+            MetaObject example = getExample(params);
+            Class<?> entityClass = getEntityClass(params);
+            EntityHelper.EntityTable entityTable = EntityHelper.getEntityTable(entityClass);
+            MetaObject metaObject = MapperTemplate.forObject(entity);
+            UPDATE(entityTable.getName());
+            for (EntityHelper.EntityColumn column : entityTable.getEntityClassColumns()) {
+                //更新不是ID的字段，因为根据主键查询的...更新后还是一样。
+                if (!column.isId()) {
+                    SET(column.getColumn() + "=#{record." + column.getProperty() + "}");
+                }
+            }
+            applyWhere(this, example);
+        }}.toString();
+    }
 }

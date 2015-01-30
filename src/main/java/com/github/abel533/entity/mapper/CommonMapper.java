@@ -24,7 +24,7 @@
 
 package com.github.abel533.entity.mapper;
 
-import com.github.abel533.entity.EntityProvider;
+import com.github.abel533.entity.CommonProvider;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
@@ -35,7 +35,7 @@ import java.util.Map;
  *
  * @author liuzh
  */
-public interface EntityMapper extends ExampleMapper {
+public interface CommonMapper {
     /**
      * 根据参数进行查询,record可以是Class<?>类型
      * <br>查询条件为属性String类型不为空，其他类型!=null时
@@ -45,7 +45,7 @@ public interface EntityMapper extends ExampleMapper {
      * @param <T>
      * @return
      */
-	@SelectProvider(type = EntityProvider.class, method = "select")
+	@SelectProvider(type = CommonProvider.class, method = "select")
     <T> List<Map<String,Object>> select(@Param("record") T record);
 
     /**
@@ -57,7 +57,7 @@ public interface EntityMapper extends ExampleMapper {
      * @param <T>
      * @return
      */
-    @SelectProvider(type = EntityProvider.class, method = "count")
+    @SelectProvider(type = CommonProvider.class, method = "count")
     <T> int count(@Param("record") T record);
 
     /**
@@ -68,7 +68,7 @@ public interface EntityMapper extends ExampleMapper {
      * @param <T>
      * @return
      */
-    @SelectProvider(type = EntityProvider.class, method = "selectByPrimaryKey")
+    @SelectProvider(type = CommonProvider.class, method = "selectByPrimaryKey")
     <T> Map<String,Object> selectByPrimaryKey(@Param("entityClass") Class<T> entityClass, @Param("key") Object key);
 
     /**
@@ -80,7 +80,7 @@ public interface EntityMapper extends ExampleMapper {
      * @param <T>
      * @return
      */
-    @InsertProvider(type = EntityProvider.class, method = "insert")
+    @InsertProvider(type = CommonProvider.class, method = "insert")
     <T> int insert(@Param("record") T record);
 
     /**
@@ -90,7 +90,7 @@ public interface EntityMapper extends ExampleMapper {
      * @param <T>
      * @return
      */
-    @InsertProvider(type = EntityProvider.class, method = "insertSelective")
+    @InsertProvider(type = CommonProvider.class, method = "insertSelective")
     <T> int insertSelective(@Param("record") T record);
 
     /**
@@ -101,7 +101,7 @@ public interface EntityMapper extends ExampleMapper {
      * @param <T>
      * @return
      */
-    @DeleteProvider(type = EntityProvider.class, method = "delete")
+    @DeleteProvider(type = CommonProvider.class, method = "delete")
     <T> int delete(@Param("record") T record);
 
     /**
@@ -112,7 +112,7 @@ public interface EntityMapper extends ExampleMapper {
      * @param <T>
      * @return
      */
-    @DeleteProvider(type = EntityProvider.class, method = "deleteByPrimaryKey")
+    @DeleteProvider(type = CommonProvider.class, method = "deleteByPrimaryKey")
     <T> int deleteByPrimaryKey(@Param("entityClass") Class<T> entityClass, @Param("key") Object key);
 
     /**
@@ -122,7 +122,7 @@ public interface EntityMapper extends ExampleMapper {
      * @param <T>
      * @return
      */
-    @UpdateProvider(type = EntityProvider.class, method = "updateByPrimaryKey")
+    @UpdateProvider(type = CommonProvider.class, method = "updateByPrimaryKey")
     <T> int updateByPrimaryKey(@Param("record") T record);
 
     /**
@@ -132,6 +132,61 @@ public interface EntityMapper extends ExampleMapper {
      * @param <T>
      * @return
      */
-    @UpdateProvider(type = EntityProvider.class, method = "updateByPrimaryKeySelective")
+    @UpdateProvider(type = CommonProvider.class, method = "updateByPrimaryKeySelective")
     <T> int updateByPrimaryKeySelective(@Param("record") T record);
+
+    /**
+     * 通过Example类来查询count
+     *
+     * @param entityClass
+     * @param example
+     * @param <T>
+     * @return
+     */
+    @SelectProvider(type = CommonProvider.class, method = "countByExample")
+    <T> int countByExample(@Param("entityClass") Class<T> entityClass, @Param("example") Object example);
+
+    /**
+     * 通过Example删除
+     *
+     * @param entityClass
+     * @param example
+     * @param <T>
+     * @return
+     */
+    @DeleteProvider(type = CommonProvider.class, method = "deleteByExample")
+    <T> int deleteByExample(@Param("entityClass") Class<T> entityClass, @Param("example") Object example);
+
+    /**
+     * 通过Example来查询
+     *
+     * @param entityClass
+     * @param example
+     * @param <T>
+     * @return
+     */
+    @SelectProvider(type = CommonProvider.class, method = "selectByExample")
+    <T> List<Map<String,Object>> selectByExample(@Param("entityClass") Class<T> entityClass, @Param("example") Object example);
+
+    /**
+     * 通过Example进行更新非空字段
+     *
+     * @param record
+     * @param example
+     * @param <T>
+     * @return
+     */
+    @UpdateProvider(type = CommonProvider.class, method = "updateByExampleSelective")
+    <T> int updateByExampleSelective(@Param("record") T record, @Param("example") Object example);
+
+    /**
+     * 通过Example进行更新全部字段
+     *
+     * @param record
+     * @param example
+     * @param <T>
+     * @return
+     */
+    @UpdateProvider(type = CommonProvider.class, method = "updateByExample")
+    <T> int updateByExample(@Param("record") T record, @Param("example") Object example);
 }
