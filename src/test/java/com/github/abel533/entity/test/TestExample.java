@@ -24,9 +24,9 @@
 
 package com.github.abel533.entity.test;
 
-import com.github.abel533.entity.BaseMapper;
+import com.github.abel533.entity.EntityMapper;
 import com.github.abel533.entity.Example;
-import com.github.abel533.entity.mapper.EntityMapper;
+import com.github.abel533.entity.mapper.CommonMapper;
 import com.github.abel533.entity.model.Country;
 import com.github.abel533.mapper.MybatisHelper;
 import org.apache.ibatis.session.SqlSession;
@@ -49,8 +49,8 @@ public class TestExample {
     public void testCountByExample() {
         SqlSession sqlSession = MybatisHelper.getSqlSession();
         try {
-            EntityMapper entityMapper = sqlSession.getMapper(EntityMapper.class);
-            BaseMapper baseMapper = new BaseMapper(entityMapper);
+            CommonMapper entityMapper = sqlSession.getMapper(CommonMapper.class);
+            EntityMapper baseMapper = new EntityMapper(entityMapper);
 
             Example example = new Example(Country.class);
             example.createCriteria().andGreaterThan("id", 100).andLessThanOrEqualTo("id", 150);
@@ -75,8 +75,8 @@ public class TestExample {
     public void testSelectByExample() {
         SqlSession sqlSession = MybatisHelper.getSqlSession();
         try {
-            EntityMapper entityMapper = sqlSession.getMapper(EntityMapper.class);
-            BaseMapper baseMapper = new BaseMapper(entityMapper);
+            CommonMapper entityMapper = sqlSession.getMapper(CommonMapper.class);
+            EntityMapper baseMapper = new EntityMapper(entityMapper);
 
             Example example = new Example(Country.class);
             example.createCriteria().andEqualTo("countryname","China");

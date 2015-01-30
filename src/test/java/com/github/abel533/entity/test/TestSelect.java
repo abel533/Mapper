@@ -24,9 +24,8 @@
 
 package com.github.abel533.entity.test;
 
-import com.github.abel533.entity.BaseMapper;
-import com.github.abel533.entity.mapper.EntityMapper;
-import com.github.abel533.entity.mapper.ExampleMapper;
+import com.github.abel533.entity.EntityMapper;
+import com.github.abel533.entity.mapper.CommonMapper;
 import com.github.abel533.entity.model.Country;
 import com.github.abel533.entity.model.CountryExample;
 import com.github.abel533.entity.model.UserInfo;
@@ -52,7 +51,7 @@ public class TestSelect {
     public void testCommonMapper() {
         SqlSession sqlSession = MybatisHelper.getSqlSession();
         try {
-            EntityMapper mapper = sqlSession.getMapper(EntityMapper.class);
+            CommonMapper mapper = sqlSession.getMapper(CommonMapper.class);
             Country countrya = new Country();
             /*countrya.setId(1);
             countrya.setCountryname("Angola");
@@ -99,8 +98,8 @@ public class TestSelect {
     public void testBeanMapper() {
         SqlSession sqlSession = MybatisHelper.getSqlSession();
         try {
-            EntityMapper mapper = sqlSession.getMapper(EntityMapper.class);
-            BaseMapper beanMapper = new BaseMapper(mapper);
+            CommonMapper mapper = sqlSession.getMapper(CommonMapper.class);
+            EntityMapper beanMapper = new EntityMapper(mapper);
             List<Country> countryList = beanMapper.select(new Country());
             //查询总数
             Assert.assertEquals(183, countryList.size());
@@ -123,7 +122,7 @@ public class TestSelect {
     public void testExampleMapper() {
         SqlSession sqlSession = MybatisHelper.getSqlSession();
         try {
-            ExampleMapper mapper = sqlSession.getMapper(ExampleMapper.class);
+            CommonMapper mapper = sqlSession.getMapper(CommonMapper.class);
             CountryExample example = new CountryExample();
             example.createCriteria().andIdGreaterThan(100);
             List<Map<String, Object>> list = mapper.selectByExample(Country.class, example);

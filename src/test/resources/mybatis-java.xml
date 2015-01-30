@@ -29,8 +29,7 @@
 	</environments>
 
 	<mappers>
-    <mapper class="com.github.abel533.entity.mapper.EntityMapper"/>
-    <mapper class="com.github.abel533.entity.mapper.ExampleMapper"/>
+    <mapper class="com.github.abel533.entity.mapper.CommonMapper"/>
     <mapper class="com.github.abel533.mapper.CountryMapper" />
     <mapper class="com.github.abel533.mapper.Country2Mapper" />
     <mapper class="com.github.abel533.mapper.CountryTMapper" />

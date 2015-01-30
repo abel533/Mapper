@@ -24,7 +24,7 @@
 
 package com.github.abel533.entity.test;
 
-import com.github.abel533.entity.mapper.EntityMapper;
+import com.github.abel533.entity.mapper.CommonMapper;
 import com.github.abel533.entity.model.Country;
 import com.github.abel533.entity.model.UserInfo;
 import com.github.abel533.mapper.MybatisHelper;
@@ -43,7 +43,7 @@ public class TestCommonMapper {
     public void testSelect() {
         SqlSession sqlSession = MybatisHelper.getSqlSession();
         try {
-            EntityMapper mapper = sqlSession.getMapper(EntityMapper.class);
+            CommonMapper mapper = sqlSession.getMapper(CommonMapper.class);
             List<Map<String,Object>> countryList = mapper.select(new Country());
             //总数
             Assert.assertEquals(183, countryList.size());
@@ -63,7 +63,7 @@ public class TestCommonMapper {
     public void testSelectByPrimaryKey() {
         SqlSession sqlSession = MybatisHelper.getSqlSession();
         try {
-            EntityMapper mapper = sqlSession.getMapper(EntityMapper.class);
+            CommonMapper mapper = sqlSession.getMapper(CommonMapper.class);
             //主键查询
             Map country = mapper.selectByPrimaryKey(Country.class, 1);
             Assert.assertEquals(country.get("COUNTRYCODE"), "AO");
@@ -78,7 +78,7 @@ public class TestCommonMapper {
     public void testDelete() {
         SqlSession sqlSession = MybatisHelper.getSqlSession();
         try {
-            EntityMapper mapper = sqlSession.getMapper(EntityMapper.class);
+            CommonMapper mapper = sqlSession.getMapper(CommonMapper.class);
             Country countrya = new Country();
             /*countrya.setId(1);
             countrya.setCountryname("Angola");
