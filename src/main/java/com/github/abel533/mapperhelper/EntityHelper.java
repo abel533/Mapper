@@ -50,9 +50,9 @@ public class EntityHelper {
         private String catalog;
         private String schema;
         //实体类 => 全部列属性
-        private List<EntityColumn> entityClassColumns;
+        private Set<EntityColumn> entityClassColumns;
         //实体类 => 主键信息
-        private List<EntityColumn> entityClassPKColumns;
+        private Set<EntityColumn> entityClassPKColumns;
 
         public void setTable(Table table) {
             this.name = table.name();
@@ -82,11 +82,11 @@ public class EntityHelper {
             return "";
         }
 
-        public List<EntityColumn> getEntityClassColumns() {
+        public Set<EntityColumn> getEntityClassColumns() {
             return entityClassColumns;
         }
 
-        public List<EntityColumn> getEntityClassPKColumns() {
+        public Set<EntityColumn> getEntityClassPKColumns() {
             return entityClassPKColumns;
         }
     }
@@ -231,7 +231,7 @@ public class EntityHelper {
      * @param entityClass
      * @return
      */
-    public static List<EntityColumn> getColumns(Class<?> entityClass) {
+    public static Set<EntityColumn> getColumns(Class<?> entityClass) {
         return getEntityTable(entityClass).getEntityClassColumns();
     }
 
@@ -241,7 +241,7 @@ public class EntityHelper {
      * @param entityClass
      * @return
      */
-    public static List<EntityColumn> getPKColumns(Class<?> entityClass) {
+    public static Set<EntityColumn> getPKColumns(Class<?> entityClass) {
         return getEntityTable(entityClass).getEntityClassPKColumns();
     }
 
@@ -252,7 +252,7 @@ public class EntityHelper {
      * @return
      */
     public static Map<String,String> getColumnAlias(Class<?> entityClass){
-        List<EntityColumn> columnList = getColumns(entityClass);
+        Set<EntityColumn> columnList = getColumns(entityClass);
         Map<String,String> alias = new HashMap<String, String>(columnList.size());
         for (EntityColumn column : columnList) {
             alias.put(column.getColumn(),column.getProperty());
@@ -267,7 +267,7 @@ public class EntityHelper {
      * @return
      */
     public static String getSelectColumns(Class<?> entityClass) {
-        List<EntityColumn> columnList = getColumns(entityClass);
+        Set<EntityColumn> columnList = getColumns(entityClass);
         StringBuilder selectBuilder = new StringBuilder();
         boolean skipAlias = Map.class.isAssignableFrom(entityClass);
         for (EntityColumn entityColumn : columnList) {
@@ -288,7 +288,7 @@ public class EntityHelper {
      * @return
      */
     public static String getAllColumns(Class<?> entityClass) {
-        List<EntityColumn> columnList = getColumns(entityClass);
+        Set<EntityColumn> columnList = getColumns(entityClass);
         StringBuilder selectBuilder = new StringBuilder();
         for (EntityColumn entityColumn : columnList) {
             selectBuilder.append(entityColumn.getColumn()).append(",");
@@ -303,7 +303,7 @@ public class EntityHelper {
      * @return
      */
     public static String getPrimaryKeyWhere(Class<?> entityClass) {
-        List<EntityHelper.EntityColumn> entityColumns = EntityHelper.getPKColumns(entityClass);
+        Set<EntityHelper.EntityColumn> entityColumns = EntityHelper.getPKColumns(entityClass);
         StringBuilder whereBuilder = new StringBuilder();
         for (EntityHelper.EntityColumn column : entityColumns) {
             whereBuilder.append(column.getColumn()).append(" = ?").append(" AND ");
@@ -409,11 +409,11 @@ public class EntityHelper {
                 pkColumnSet.add(entityColumn);
             }
         }
-        entityTable.entityClassColumns = new ArrayList<EntityColumn>(columnSet);
+        entityTable.entityClassColumns = columnSet;
         if (pkColumnSet.size() == 0) {
-            entityTable.entityClassPKColumns = entityTable.entityClassColumns;
+            entityTable.entityClassPKColumns = columnSet;
         } else {
-            entityTable.entityClassPKColumns = new ArrayList<EntityColumn>(pkColumnSet);
+            entityTable.entityClassPKColumns = pkColumnSet;
         }
         //缓存
         entityTableMap.put(entityClass, entityTable);

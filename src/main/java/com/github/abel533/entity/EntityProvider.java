@@ -126,7 +126,7 @@ public class EntityProvider extends BaseProvider {
             SELECT(EntityHelper.getAllColumns(entityClass));
             FROM(entityTable.getName());
             if (entityTable.getEntityClassPKColumns().size() == 1) {
-                EntityHelper.EntityColumn column = entityTable.getEntityClassPKColumns().get(0);
+                EntityHelper.EntityColumn column = entityTable.getEntityClassPKColumns().iterator().next();
                 notNullKeyProperty(column.getProperty(), entity);
                 WHERE(column.getColumn() + "=#{key}");
             } else {
@@ -222,7 +222,7 @@ public class EntityProvider extends BaseProvider {
             EntityHelper.EntityTable entityTable = EntityHelper.getEntityTable(entityClass);
             DELETE_FROM(entityTable.getName());
             if (entityTable.getEntityClassPKColumns().size() == 1) {
-                EntityHelper.EntityColumn column = entityTable.getEntityClassPKColumns().get(0);
+                EntityHelper.EntityColumn column = entityTable.getEntityClassPKColumns().iterator().next();
                 notNullKeyProperty(column.getProperty(), entity);
                 WHERE(column.getColumn() + "=#{key}");
             } else {
@@ -256,7 +256,7 @@ public class EntityProvider extends BaseProvider {
                 }
             }
             if (entityTable.getEntityClassPKColumns().size() == 1) {
-                EntityHelper.EntityColumn column = entityTable.getEntityClassPKColumns().get(0);
+                EntityHelper.EntityColumn column = entityTable.getEntityClassPKColumns().iterator().next();
                 notNullKeyProperty(column.getProperty(), metaObject.getValue(column.getProperty()));
                 WHERE(column.getColumn() + "=#{record." + column.getProperty() + "}");
             } else {
@@ -290,7 +290,7 @@ public class EntityProvider extends BaseProvider {
                 }
             }
             if (entityTable.getEntityClassPKColumns().size() == 1) {
-                EntityHelper.EntityColumn column = entityTable.getEntityClassPKColumns().get(0);
+                EntityHelper.EntityColumn column = entityTable.getEntityClassPKColumns().iterator().next();
                 notNullKeyProperty(column.getProperty(), metaObject.getValue(column.getProperty()));
                 WHERE(column.getColumn() + "=#{record." + column.getProperty() + "}");
             } else {

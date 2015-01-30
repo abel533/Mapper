@@ -30,7 +30,7 @@ import com.github.abel533.mapperhelper.EntityHelper;
 import java.util.List;
 
 /**
- * 封装的EntityMapper
+ * 封装的EntityMapper,实际上只对select方法做了处理
  *
  * @author liuzh
  */

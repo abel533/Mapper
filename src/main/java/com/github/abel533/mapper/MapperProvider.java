@@ -35,6 +35,7 @@ import org.apache.ibatis.scripting.xmltags.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Mappper实现类，可以当场一个用来参考的例子
@@ -122,7 +123,7 @@ public class MapperProvider extends MapperTemplate {
         //insert into table
         sqlNodes.add(new StaticTextSqlNode("INSERT INTO " + tableName(entityClass)));
         //获取全部列
-        List<EntityHelper.EntityColumn> columnList = EntityHelper.getColumns(entityClass);
+        Set<EntityHelper.EntityColumn> columnList = EntityHelper.getColumns(entityClass);
         //Identity列只能有一个
         Boolean hasIdentityKey = false;
         //处理所有的主键策略
@@ -189,7 +190,7 @@ public class MapperProvider extends MapperTemplate {
         //insert into table
         sqlNodes.add(new StaticTextSqlNode("INSERT INTO " + tableName(entityClass)));
         //获取全部列
-        List<EntityHelper.EntityColumn> columnList = EntityHelper.getColumns(entityClass);
+        Set<EntityHelper.EntityColumn> columnList = EntityHelper.getColumns(entityClass);
         List<SqlNode> ifNodes = new ArrayList<SqlNode>();
         //Identity列只能有一个
         Boolean hasIdentityKey = false;
@@ -298,7 +299,7 @@ public class MapperProvider extends MapperTemplate {
             //update table
             UPDATE(tableName(entityClass));
             //获取全部列
-            List<EntityHelper.EntityColumn> columnList = EntityHelper.getColumns(entityClass);
+            Set<EntityHelper.EntityColumn> columnList = EntityHelper.getColumns(entityClass);
             //拼所有的set column = ?
             for (EntityHelper.EntityColumn column : columnList) {
                 SET(column.getColumn() + " = ?");
@@ -324,7 +325,7 @@ public class MapperProvider extends MapperTemplate {
         //update table
         sqlNodes.add(new StaticTextSqlNode("UPDATE " + tableName(entityClass)));
         //获取全部列
-        List<EntityHelper.EntityColumn> columnList = EntityHelper.getColumns(entityClass);
+        Set<EntityHelper.EntityColumn> columnList = EntityHelper.getColumns(entityClass);
         List<SqlNode> ifNodes = new ArrayList<SqlNode>();
         //全部的if property!=null and property!=''
         for (EntityHelper.EntityColumn column : columnList) {

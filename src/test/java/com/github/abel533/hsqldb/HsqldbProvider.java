@@ -8,6 +8,7 @@ import org.apache.ibatis.scripting.xmltags.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author liuzh
@@ -34,7 +35,7 @@ public class HsqldbProvider extends MapperTemplate {
                 + " FROM "
                 + tableName(entityClass)));
         //获取全部列
-        List<EntityHelper.EntityColumn> columnList = EntityHelper.getColumns(entityClass);
+        Set<EntityHelper.EntityColumn> columnList = EntityHelper.getColumns(entityClass);
         List<SqlNode> ifNodes = new ArrayList<SqlNode>();
         boolean first = true;
         //对所有列循环，生成<if test="property!=null">[AND] column = #{property}</if>

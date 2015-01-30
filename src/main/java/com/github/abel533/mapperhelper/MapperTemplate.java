@@ -43,10 +43,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 通用Mapper模板类，扩展通用Mapper时需要继承该类
@@ -244,7 +241,7 @@ public abstract class MapperTemplate {
      */
     protected List<ParameterMapping> getPrimaryKeyParameterMappings(MappedStatement ms) {
         Class<?> entityClass = getSelectReturnType(ms);
-        List<EntityHelper.EntityColumn> entityColumns = EntityHelper.getPKColumns(entityClass);
+        Set<EntityHelper.EntityColumn> entityColumns = EntityHelper.getPKColumns(entityClass);
         List<ParameterMapping> parameterMappings = new ArrayList<ParameterMapping>();
         for (EntityHelper.EntityColumn column : entityColumns) {
             ParameterMapping.Builder builder = new ParameterMapping.Builder(ms.getConfiguration(), column.getProperty(), column.getJavaType());
@@ -351,7 +348,7 @@ public abstract class MapperTemplate {
      */
     protected SqlNode getAllIfColumnNode(Class<?> entityClass) {
         //获取全部列
-        List<EntityHelper.EntityColumn> columnList = EntityHelper.getColumns(entityClass);
+        Set<EntityHelper.EntityColumn> columnList = EntityHelper.getColumns(entityClass);
         List<SqlNode> ifNodes = new ArrayList<SqlNode>();
         boolean first = true;
         //对所有列循环，生成<if test="property!=null">column = #{property}</if>
@@ -370,7 +367,7 @@ public abstract class MapperTemplate {
      */
     protected List<ParameterMapping> getColumnParameterMappings(MappedStatement ms) {
         Class<?> entityClass = getSelectReturnType(ms);
-        List<EntityHelper.EntityColumn> entityColumns = EntityHelper.getColumns(entityClass);
+        Set<EntityHelper.EntityColumn> entityColumns = EntityHelper.getColumns(entityClass);
         List<ParameterMapping> parameterMappings = new ArrayList<ParameterMapping>();
         for (EntityHelper.EntityColumn column : entityColumns) {
             ParameterMapping.Builder builder = new ParameterMapping.Builder(ms.getConfiguration(), column.getProperty(), column.getJavaType());
