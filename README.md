@@ -34,13 +34,23 @@ Mybatis工具群： 211286137 (Mybatis相关工具插件等等)
 
 ###3. [如何使用Mapper专用的MyBatis Generator插件](http://git.oschina.net/free/Mapper/blob/master/UseMBGInMapper.md)
 
-##最新版V1.1.0
+###4. [大部分人梦想的一种通用Mapper`EntityMapper`使用方法](http://git.oschina.net/free/Mapper/blob/master/EntityMapper.md)
 
-* 完善文档
-* 解决主键selectKey的一个bug
-* 解决@Column注解为空时的bug
-* 完善自动增长的配置，增加对JDBC的支持`@GeneratedValue(generator = "JDBC")`,详细请看下面关于主键策略的详细内容
-* 增加了一个`notEmpty`参数，该参数会影响所有使用`getAllIfColumnNode`方法的地方,具体到`Mapper<T>`,影响3个方法：select,selectCount,delete。如果设置为`true`，那么`<if ...`的条件中会包含`String`类型`property!=''`的条件。
+##最新版V2.0.0
+
+* 增加一个`CommonMapper`和包装类`EntityMapper`，建议使用`EntityMapper`
+* 有关`EntityMapper`的内容请看独立文档，这个类足以独立成一个开源项目
+* 增加对JPA注解`OrderBy`的支持，仅对`select`一个方法有效
+
+简单说明，为什么版本这么快就到了2.0?，因为`EntityMapper`，这是另一种形式的通用Mapper。
+
+这里说说`EntityMapper`和通用Mapper的区别。
+
+通用Mapper需要有继承的接口，需要指定泛型类型，可以缓存，和手写的效果一样。
+
+`EntityMapper`无需继承，可以直接使用，而且这一个对象就可以操作全部的实体对象（和通用Mapper注解要求一样，不支持主键策略）和表，是一个更接近Hibernate用法的类，这个类非常强大，支持Mybatis生成的Example查询，还支持一个通用Example查询。
+
+`EntityMapper`功能更全面，但是不支持主键策略，由于该类足以独立成一个开源项目，简单几句不能说明用法，因此详细内容请看独立的文档。
 
 ##如何使用?
 
@@ -430,6 +440,14 @@ try {
 http://git.oschina.net/free/Mybatis_Utils/tree/master/CameHumpMap  
 
 ##更新日志
+
+###V1.1.0
+
+* 完善文档
+* 解决主键selectKey的一个bug
+* 解决@Column注解为空时的bug
+* 完善自动增长的配置，增加对JDBC的支持`@GeneratedValue(generator = "JDBC")`,详细请看下面关于主键策略的详细内容
+* 增加了一个`notEmpty`参数，该参数会影响所有使用`getAllIfColumnNode`方法的地方,具体到`Mapper<T>`,影响3个方法：select,selectCount,delete。如果设置为`true`，那么`<if ...`的条件中会包含`String`类型`property!=''`的条件。
 
 ###v1.0.0正式发布版
 
