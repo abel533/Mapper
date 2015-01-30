@@ -66,6 +66,16 @@ public class MapperProvider extends MapperTemplate {
                 + tableName(entityClass)));
         //将if添加到<where>
         sqlNodes.add(new WhereSqlNode(ms.getConfiguration(), getAllIfColumnNode(entityClass)));
+        StringBuilder orderBy = new StringBuilder();
+        for (EntityHelper.EntityColumn column : EntityHelper.getColumns(entityClass)) {
+            if (column.getOrderBy() != null) {
+                orderBy.append(column.getColumn()).append(" ").append(column.getOrderBy()).append(",");
+            }
+        }
+        if (orderBy.length() > 0) {
+            orderBy.insert(0, "order by");
+            sqlNodes.add(new StaticTextSqlNode(orderBy.substring(0, orderBy.length() - 1)));
+        }
         return new MixedSqlNode(sqlNodes);
     }
 

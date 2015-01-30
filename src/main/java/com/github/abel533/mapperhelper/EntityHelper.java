@@ -103,6 +103,7 @@ public class EntityHelper {
         private boolean uuid = false;
         private boolean identity = false;
         private String generator;
+        private String orderBy;
 
         public String getProperty() {
             return property;
@@ -168,6 +169,14 @@ public class EntityHelper {
             this.generator = generator;
         }
 
+        public String getOrderBy() {
+            return orderBy;
+        }
+
+        public void setOrderBy(String orderBy) {
+            this.orderBy = orderBy;
+        }
+
         @Override
         public boolean equals(Object o) {
             if (this == o) return true;
@@ -181,6 +190,7 @@ public class EntityHelper {
             if (column != null ? !column.equals(that.column) : that.column != null) return false;
             if (generator != null ? !generator.equals(that.generator) : that.generator != null) return false;
             if (javaType != null ? !javaType.equals(that.javaType) : that.javaType != null) return false;
+            if (orderBy != null ? !orderBy.equals(that.orderBy) : that.orderBy != null) return false;
             if (property != null ? !property.equals(that.property) : that.property != null) return false;
             if (sequenceName != null ? !sequenceName.equals(that.sequenceName) : that.sequenceName != null)
                 return false;
@@ -198,6 +208,7 @@ public class EntityHelper {
             result = 31 * result + (uuid ? 1 : 0);
             result = 31 * result + (identity ? 1 : 0);
             result = 31 * result + (generator != null ? generator.hashCode() : 0);
+            result = 31 * result + (orderBy != null ? orderBy.hashCode() : 0);
             return result;
         }
     }
@@ -251,11 +262,11 @@ public class EntityHelper {
      * @param entityClass
      * @return
      */
-    public static Map<String,String> getColumnAlias(Class<?> entityClass){
+    public static Map<String, String> getColumnAlias(Class<?> entityClass) {
         Set<EntityColumn> columnList = getColumns(entityClass);
-        Map<String,String> alias = new HashMap<String, String>(columnList.size());
+        Map<String, String> alias = new HashMap<String, String>(columnList.size());
         for (EntityColumn column : columnList) {
-            alias.put(column.getColumn(),column.getProperty());
+            alias.put(column.getColumn(), column.getProperty());
         }
         return alias;
     }
@@ -357,6 +368,15 @@ public class EntityHelper {
             entityColumn.setProperty(field.getName());
             entityColumn.setColumn(columnName.toUpperCase());
             entityColumn.setJavaType(field.getType());
+            //order by
+            if (field.isAnnotationPresent(OrderBy.class)) {
+                OrderBy orderBy = field.getAnnotation(OrderBy.class);
+                if (orderBy.value().equals("")) {
+                    entityColumn.setOrderBy("ASC");
+                } else {
+                    entityColumn.setOrderBy(orderBy.value());
+                }
+            }
             //主键策略 - Oracle序列，MySql自动增长，UUID
             if (field.isAnnotationPresent(SequenceGenerator.class)) {
                 SequenceGenerator sequenceGenerator = field.getAnnotation(SequenceGenerator.class);

@@ -71,6 +71,15 @@ public class CommonProvider extends BaseProvider {
                     }
                 }
             }
+            StringBuilder orderBy = new StringBuilder();
+            for (EntityHelper.EntityColumn column : entityTable.getEntityClassColumns()) {
+                if (column.getOrderBy() != null) {
+                    orderBy.append(column.getColumn()).append(" ").append(column.getOrderBy()).append(",");
+                }
+            }
+            if (orderBy.length() > 0) {
+                ORDER_BY(orderBy.substring(0, orderBy.length() - 1));
+            }
         }}.toString();
     }
 
@@ -150,15 +159,19 @@ public class CommonProvider extends BaseProvider {
             Object entity = getEntity(params);
             Class<?> entityClass = getEntityClass(params);
             EntityHelper.EntityTable entityTable = EntityHelper.getEntityTable(entityClass);
-            MetaObject metaObject = MapperTemplate.forObject(entity);
             INSERT_INTO(entityTable.getName());
             for (EntityHelper.EntityColumn column : entityTable.getEntityClassColumns()) {
-                //TODO 关于主键为序列和UUID的情况需要特殊处理
                 VALUES(column.getColumn(), "#{record." + column.getProperty() + "}");
             }
         }}.toString();
     }
 
+    /**
+     * 新增非空字段，空字段可以使用表的默认值
+     *
+     * @param params
+     * @return
+     */
     public String insertSelective(final Map<String, Object> params) {
         return new SQL() {{
             Object entity = getEntity(params);
@@ -167,9 +180,10 @@ public class CommonProvider extends BaseProvider {
             MetaObject metaObject = MapperTemplate.forObject(entity);
             INSERT_INTO(entityTable.getName());
             for (EntityHelper.EntityColumn column : entityTable.getEntityClassColumns()) {
-                //TODO 关于主键为序列和UUID的情况需要特殊处理
-                //TODO 非主键字段如果是空，就不插入，这种情况会使用表的默认值
-                VALUES(column.getColumn(), "#{record." + column.getProperty() + "}");
+                Object value = metaObject.getValue(column.getProperty());
+                if (value != null) {
+                    VALUES(column.getColumn(), "#{record." + column.getProperty() + "}");
+                }
             }
         }}.toString();
     }
@@ -330,7 +344,7 @@ public class CommonProvider extends BaseProvider {
             SELECT(EntityHelper.getAllColumns(entityClass));
             FROM(entityTable.getName());
             applyWhere(this, example);
-            applyOrderBy(this,example);
+            applyOrderBy(this, example);
         }}.toString();
     }
 
