@@ -24,7 +24,7 @@
 
 package com.github.abel533.entity.test;
 
-import com.github.abel533.entity.mapper.ExampleMapper;
+import com.github.abel533.entity.mapper.CommonMapper;
 import com.github.abel533.entity.model.Country;
 import com.github.abel533.entity.model.CountryExample;
 import com.github.abel533.mapper.MybatisHelper;
@@ -48,7 +48,7 @@ public class TestMBGExample {
     public void testExampleMapper() {
         SqlSession sqlSession = MybatisHelper.getSqlSession();
         try {
-            ExampleMapper mapper = sqlSession.getMapper(ExampleMapper.class);
+            CommonMapper mapper = sqlSession.getMapper(CommonMapper.class);
             CountryExample example = new CountryExample();
             example.createCriteria().andIdGreaterThan(100);
             List<Map<String, Object>> list = mapper.selectByExample(Country.class, example);
