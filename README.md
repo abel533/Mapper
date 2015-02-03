@@ -34,7 +34,7 @@ Mybatis工具群： 211286137 (Mybatis相关工具插件等等)
 
 ###3. [如何使用Mapper专用的MyBatis Generator插件](http://git.oschina.net/free/Mapper/blob/master/UseMBGInMapper.md)
 
-###4. [大部分人梦想的一种通用Mapper`EntityMapper`使用方法](http://git.oschina.net/free/Mapper/blob/master/EntityMapper.md)
+###4. [通用`EntityMapper`使用方法](http://git.oschina.net/free/Mapper/blob/master/EntityMapper.md)
 
 ##最新版V2.0.0
 
@@ -56,47 +56,13 @@ Mybatis工具群： 211286137 (Mybatis相关工具插件等等)
 
 下面是通用Mapper的配置方法。
 
-###1. 引入通用Mapper的代码
-
-将本项目中的代码文件复制到你自己的项目中，代码文件如下：
-
-* `com.github.abel533.generator`包下面的是通用Mapper的MyBatis Generator插件
-
-   * `MapperCommentGenerator`:注释以及字段注解处理类。 
-
-   * `MapperPlugin`:处理主要逻辑，详细信息请看 [如何使用Mapper专用的MyBatis Generator插件](http://git.oschina.net/free/Mapper/blob/master/UseMBGInMapper.md)  
-   
-* `com.github.abel533.mapperhelper`包下面的是通用Mapper的关键类
-
-   * `EntityHelper`:实体类工具类 - 处理实体和数据库表以及字段关键的一个类  
-
-   * `MapperHelper`:处理主要逻辑，最关键的一个类  
-
-   * `MapperTemplate`:通用Mapper模板类，扩展通用Mapper时需要继承该类  
-
-* `com.github.abel533.mapper`包下面是通用Mapper自带的一个默认实现
-
-   * `Mapper`:通用Mapper接口类   
-
-   * `MapperProvider`:通用Mapper接口类对应的实现类 
-
-或者使用Maven引入依赖：  
+###1. 使用Maven引入依赖：
 
 ```xml
 <dependency>
     <groupId>com.github.abel533</groupId>
     <artifactId>mapper</artifactId>
-    <!-- 1.1.0是版本号，推荐使用最新版 -->
-    <version>1.1.0</version>
-</dependency>
-```
-
-项目依赖于JPA的注解,需要引入`persistence-api-1.0.jar`或者添加Maven依赖:
-```xml
-<dependency>
-  <groupId>javax.persistence</groupId>
-  <artifactId>persistence-api</artifactId>
-  <version>1.0</version>
+    <version>2.0.0</version>
 </dependency>
 ```
 

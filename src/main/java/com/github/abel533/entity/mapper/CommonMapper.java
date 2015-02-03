@@ -46,7 +46,7 @@ public interface CommonMapper {
      * @return
      */
     @Options(flushCache = true)
-	@SelectProvider(type = CommonProvider.class, method = "select")
+    @SelectProvider(type = CommonProvider.class, method = "select")
     <T> List<Map<String,Object>> select(@Param("record") T record);
 
     /**
