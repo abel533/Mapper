@@ -73,6 +73,30 @@ Country代码：
 
 ##[更新日志](http://git.oschina.net/free/Mapper/blob/master/wiki/Changelog.md)
 
+##Maven坐标以及下载地址
+
+最新版本2.0.0
+
+如果你使用Maven，只需要添加如下依赖：
+
+```xml
+<dependency>
+    <groupId>com.github.abel533</groupId>
+    <artifactId>mapper</artifactId>
+    <version>2.0.0</version>
+</dependency>
+```
+
+如果你想引入Jar包，你可以从下面的地址下载：
+
+https://oss.sonatype.org/content/repositories/releases/com/github/abel533/mapper/
+
+http://repo1.maven.org/maven2/com/github/abel533/mapper/
+
+由于通用Mapper依赖JPA，所以还需要下载persistence-api-1.0.jar：
+
+http://repo1.maven.org/maven2/javax/persistence/persistence-api/1.0/
+
 ##项目文档
 
 ###通用Mapper
