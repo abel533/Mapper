@@ -28,13 +28,13 @@ Mybatis工具群： 211286137 (Mybatis相关工具插件等等)
 
 ##独立文档
 
-###1. [如何开发自己的通用Mapper](http://git.oschina.net/free/Mapper/blob/master/HowToExtendMapper.md)  
+###1. [如何开发自己的通用Mapper](http://git.oschina.net/free/Mapper/blob/master/wiki/HowToExtendMapper.md)  
 
-###2. [在Spring4中使用通用Mapper](http://git.oschina.net/free/Mapper/blob/master/UseMapperInSpring4.md)  
+###2. [在Spring4中使用通用Mapper](http://git.oschina.net/free/Mapper/blob/master/wiki/UseMapperInSpring4.md)  
 
-###3. [如何使用Mapper专用的MyBatis Generator插件](http://git.oschina.net/free/Mapper/blob/master/UseMBGInMapper.md)
+###3. [如何使用Mapper专用的MyBatis Generator插件](http://git.oschina.net/free/Mapper/blob/master/wiki/UseMBGInMapper.md)
 
-###4. [通用`EntityMapper`使用方法](http://git.oschina.net/free/Mapper/blob/master/EntityMapper.md)
+###4. [通用`EntityMapper`使用方法](http://git.oschina.net/free/Mapper/blob/master/wiki/EntityMapper.md)
 
 ##最新版V2.0.0
 
