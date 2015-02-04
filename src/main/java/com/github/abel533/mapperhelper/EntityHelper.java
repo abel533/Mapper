@@ -533,6 +533,9 @@ public class EntityHelper {
      */
     public static Object map2Bean(Map map, Class<?> beanClass) {
         try {
+            if (map == null) {
+                return null;
+            }
             Object bean = beanClass.newInstance();
             Map<String, String> alias = EntityHelper.getColumnAlias(beanClass);
             MetaObject metaBean = MapperTemplate.forObject(bean);
@@ -557,6 +560,9 @@ public class EntityHelper {
      * @return
      */
     public static List<?> maplist2BeanList(List<Map<String, Object>> mapList, Class<?> beanClass) {
+        if (mapList == null || mapList.size() == 0) {
+            return null;
+        }
         List list = new ArrayList<Object>(mapList.size());
         for (Map map : mapList) {
             list.add(map2Bean(map, beanClass));
