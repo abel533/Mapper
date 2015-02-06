@@ -24,7 +24,7 @@
 
 package com.github.abel533.mapperhelper;
 
-import org.apache.ibatis.reflection.MetaObject;
+import org.apache.commons.beanutils.BeanUtils;
 
 import javax.persistence.*;
 import java.lang.reflect.Field;
@@ -525,27 +525,44 @@ public class EntityHelper {
     }
 
     /**
+     * map转换为Map
+     *
+     * @param map
+     * @param beanClass
+     * @return
+     */
+    public static Map<String, Object> map2AliasMap(Map<String, Object> map, Class<?> beanClass) {
+        try {
+            if (map == null) {
+                return null;
+            }
+            Map<String, String> alias = EntityHelper.getColumnAlias(beanClass);
+            Map<String, Object> result = new HashMap<String, Object>();
+            for (String name : map.keySet()) {
+                String alia = alias.get(name);
+                result.put(alia, map.get(name));
+            }
+            return result;
+        } catch (Exception e) {
+            throw new RuntimeException(beanClass.getCanonicalName() + "类没有默认空的构造方法!");
+        }
+    }
+
+    /**
      * map转换为bean
      *
      * @param map
      * @param beanClass
      * @return
      */
-    public static Object map2Bean(Map map, Class<?> beanClass) {
+    public static Object map2Bean(Map<String, Object> map, Class<?> beanClass) {
         try {
             if (map == null) {
                 return null;
             }
+            Map<String, Object> aliasMap = map2AliasMap(map, beanClass);
             Object bean = beanClass.newInstance();
-            Map<String, String> alias = EntityHelper.getColumnAlias(beanClass);
-            MetaObject metaBean = MapperTemplate.forObject(bean);
-            MetaObject metaMap = MapperTemplate.forObject(map);
-            for (String name : metaMap.getGetterNames()) {
-                String alia = alias.get(name);
-                if (metaBean.hasSetter(alia)) {
-                    metaBean.setValue(alia, metaMap.getValue(name));
-                }
-            }
+            BeanUtils.copyProperties(bean, aliasMap);
             return bean;
         } catch (Exception e) {
             throw new RuntimeException(beanClass.getCanonicalName() + "类没有默认空的构造方法!");
