@@ -76,7 +76,7 @@ Country代码：
 
 ##Maven坐标以及下载地址
 
-###最新版本2.0.0
+###最新版本2.0.1
 
 如果你使用Maven，只需要添加如下依赖：
 
@@ -84,7 +84,7 @@ Country代码：
 <dependency>
     <groupId>com.github.abel533</groupId>
     <artifactId>mapper</artifactId>
-    <version>2.0.0</version>
+    <version>2.0.1</version>
 </dependency>
 ```
 
