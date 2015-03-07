@@ -54,7 +54,7 @@ public class EntityHelper {
         //实体类 => 主键信息
         private Set<EntityColumn> entityClassPKColumns;
         //字段名和属性名的映射
-        private Map<String,String> aliasMap;
+        private Map<String, String> aliasMap;
 
         public void setTable(Table table) {
             this.name = table.name();
@@ -542,24 +542,20 @@ public class EntityHelper {
      * @return
      */
     public static Map<String, Object> map2AliasMap(Map<String, Object> map, Class<?> beanClass) {
-        try {
-            if (map == null) {
-                return null;
-            }
-            Map<String, String> alias = getColumnAlias(beanClass);
-            Map<String, Object> result = new HashMap<String, Object>();
-            for (String name : map.keySet()) {
-                String alia = name;
-                //sql在被其他拦截器处理后，字段可能发生变化，例如分页插件增加rownum
-                if (alias.containsKey(name)) {
-                    alia = alias.get(name);
-                }
-                result.put(alia, map.get(name));
-            }
-            return result;
-        } catch (Exception e) {
-            throw new RuntimeException(beanClass.getCanonicalName() + "类没有默认空的构造方法!");
+        if (map == null) {
+            return null;
         }
+        Map<String, String> alias = getColumnAlias(beanClass);
+        Map<String, Object> result = new HashMap<String, Object>();
+        for (String name : map.keySet()) {
+            String alia = name;
+            //sql在被其他拦截器处理后，字段可能发生变化，例如分页插件增加rownum
+            if (alias.containsKey(name)) {
+                alia = alias.get(name);
+            }
+            result.put(alia, map.get(name));
+        }
+        return result;
     }
 
     /**
@@ -578,8 +574,10 @@ public class EntityHelper {
             Object bean = beanClass.newInstance();
             BeanUtils.copyProperties(bean, aliasMap);
             return bean;
-        } catch (Exception e) {
+        } catch (InstantiationException e) {
             throw new RuntimeException(beanClass.getCanonicalName() + "类没有默认空的构造方法!");
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -596,7 +594,7 @@ public class EntityHelper {
         }
         List list = new ArrayList<Object>(mapList.size());
         for (Object map : mapList) {
-            list.add(map2Bean((Map)map, beanClass));
+            list.add(map2Bean((Map) map, beanClass));
         }
         mapList.clear();
         mapList.addAll(list);
