@@ -24,10 +24,7 @@
 
 package com.github.abel533.mapper;
 
-import org.apache.ibatis.annotations.DeleteProvider;
-import org.apache.ibatis.annotations.InsertProvider;
-import org.apache.ibatis.annotations.SelectProvider;
-import org.apache.ibatis.annotations.UpdateProvider;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -69,5 +66,20 @@ public interface Mapper<T> {
 
     @UpdateProvider(type = MapperProvider.class, method = "dynamicSQL")
     int updateByPrimaryKeySelective(T record);
+
+    @SelectProvider(type = MapperProvider.class, method = "dynamicSQL")
+    int selectCountByExample(Object example);
+
+    @DeleteProvider(type = MapperProvider.class, method = "dynamicSQL")
+    int deleteByExample(Object example);
+
+    @SelectProvider(type = MapperProvider.class, method = "dynamicSQL")
+    List<T> selectByExample(Object example);
+
+    @UpdateProvider(type = MapperProvider.class, method = "dynamicSQL")
+    int updateByExampleSelective(@Param("record") T record, @Param("example") Object example);
+
+    @UpdateProvider(type = MapperProvider.class, method = "dynamicSQL")
+    int updateByExample(@Param("record") T record, @Param("example") Object example);
 
 }

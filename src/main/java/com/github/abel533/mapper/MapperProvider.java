@@ -355,4 +355,113 @@ public class MapperProvider extends MapperTemplate {
         sqlNodes.add(new WhereSqlNode(ms.getConfiguration(), new MixedSqlNode(whereNodes)));
         return new MixedSqlNode(sqlNodes);
     }
+
+    /**
+     * 根据Example查询总数
+     *
+     * @param ms
+     * @return
+     */
+    public SqlNode selectCountByExample(MappedStatement ms) {
+        Class<?> entityClass = getSelectReturnType(ms);
+
+        List<SqlNode> sqlNodes = new ArrayList<SqlNode>();
+        //静态的sql部分:select column ... from table
+        sqlNodes.add(new StaticTextSqlNode("SELECT COUNT(*) FROM " + tableName(entityClass)));
+        IfSqlNode ifNullSqlNode = new IfSqlNode(exampleWhereClause(ms.getConfiguration()), "_parameter != null");
+        sqlNodes.add(ifNullSqlNode);
+        return new MixedSqlNode(sqlNodes);
+    }
+
+    /**
+     * 根据Example删除
+     *
+     * @param ms
+     * @return
+     */
+    public SqlNode deleteByExample(MappedStatement ms) {
+        Class<?> entityClass = getSelectReturnType(ms);
+
+        List<SqlNode> sqlNodes = new ArrayList<SqlNode>();
+        //静态的sql部分:select column ... from table
+        sqlNodes.add(new StaticTextSqlNode("DELETE FROM " + tableName(entityClass)));
+        IfSqlNode ifNullSqlNode = new IfSqlNode(exampleWhereClause(ms.getConfiguration()), "_parameter != null");
+        sqlNodes.add(ifNullSqlNode);
+        return new MixedSqlNode(sqlNodes);
+    }
+
+
+    /**
+     * 根据Example查询
+     *
+     * @param ms
+     * @return
+     */
+    public SqlNode selectByExample(MappedStatement ms) {
+        Class<?> entityClass = getSelectReturnType(ms);
+        //将返回值修改为实体类型
+        setResultType(ms, entityClass);
+        List<SqlNode> sqlNodes = new ArrayList<SqlNode>();
+        //静态的sql部分:select column ... from table
+        sqlNodes.add(new StaticTextSqlNode("SELECT"));
+        IfSqlNode distinctSqlNode = new IfSqlNode(new StaticTextSqlNode("DISTINCT"), "distinct");
+        sqlNodes.add(distinctSqlNode);
+        sqlNodes.add(new StaticTextSqlNode(EntityHelper.getSelectColumns(entityClass) + " FROM " + tableName(entityClass)));
+        IfSqlNode ifNullSqlNode = new IfSqlNode(exampleWhereClause(ms.getConfiguration()), "_parameter != null");
+        sqlNodes.add(ifNullSqlNode);
+        IfSqlNode orderByClauseSqlNode = new IfSqlNode(new TextSqlNode("order by ${orderByClause}"), "orderByClause != null");
+        sqlNodes.add(orderByClauseSqlNode);
+        return new MixedSqlNode(sqlNodes);
+    }
+
+    /**
+     * 根据Example更新非null字段
+     *
+     * @param ms
+     * @return
+     */
+    public SqlNode updateByExampleSelective(MappedStatement ms) {
+        Class<?> entityClass = getSelectReturnType(ms);
+        List<SqlNode> sqlNodes = new ArrayList<SqlNode>();
+        //update table
+        sqlNodes.add(new StaticTextSqlNode("UPDATE " + tableName(entityClass)));
+        //获取全部列
+        Set<EntityHelper.EntityColumn> columnList = EntityHelper.getColumns(entityClass);
+        List<SqlNode> ifNodes = new ArrayList<SqlNode>();
+
+        for (EntityHelper.EntityColumn column : columnList) {
+            StaticTextSqlNode columnNode = new StaticTextSqlNode(column.getColumn() + " = #{record." + column.getProperty() + "}, ");
+            ifNodes.add(new IfSqlNode(columnNode, "record." + column.getProperty() + " != null"));
+        }
+        sqlNodes.add(new SetSqlNode(ms.getConfiguration(), new MixedSqlNode(ifNodes)));
+        //Example的Where
+        IfSqlNode ifNullSqlNode = new IfSqlNode(updateByExampleWhereClause(ms.getConfiguration()), "_parameter != null");
+        sqlNodes.add(ifNullSqlNode);
+        return new MixedSqlNode(sqlNodes);
+    }
+
+    /**
+     * 根据Example更新
+     *
+     * @param ms
+     * @return
+     */
+    public SqlNode updateByExample(MappedStatement ms) {
+        Class<?> entityClass = getSelectReturnType(ms);
+        List<SqlNode> sqlNodes = new ArrayList<SqlNode>();
+        //update table
+        sqlNodes.add(new StaticTextSqlNode("UPDATE " + tableName(entityClass)));
+        //获取全部列
+        Set<EntityHelper.EntityColumn> columnList = EntityHelper.getColumns(entityClass);
+        List<SqlNode> setSqlNodes = new ArrayList<SqlNode>();
+        //全部的if property!=null and property!=''
+        for (EntityHelper.EntityColumn column : columnList) {
+            setSqlNodes.add(new StaticTextSqlNode(column.getColumn() + " = #{record." + column.getProperty() + "}, "));
+        }
+        sqlNodes.add(new SetSqlNode(ms.getConfiguration(), new MixedSqlNode(setSqlNodes)));
+        //Example的Where
+        IfSqlNode ifNullSqlNode = new IfSqlNode(updateByExampleWhereClause(ms.getConfiguration()), "_parameter != null");
+        sqlNodes.add(ifNullSqlNode);
+        return new MixedSqlNode(sqlNodes);
+    }
 }
