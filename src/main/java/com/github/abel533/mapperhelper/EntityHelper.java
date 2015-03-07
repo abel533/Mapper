@@ -539,7 +539,11 @@ public class EntityHelper {
             Map<String, String> alias = EntityHelper.getColumnAlias(beanClass);
             Map<String, Object> result = new HashMap<String, Object>();
             for (String name : map.keySet()) {
-                String alia = alias.get(name);
+                String alia = name;
+                //sql在被其他拦截器处理后，字段可能发生变化，例如分页插件增加rownum
+                if (alias.containsKey(name)) {
+                    alia = alias.get(name);
+                }
                 result.put(alia, map.get(name));
             }
             return result;
@@ -576,14 +580,16 @@ public class EntityHelper {
      * @param beanClass
      * @return
      */
-    public static List<?> maplist2BeanList(List<Map<String, Object>> mapList, Class<?> beanClass) {
+    public static List<?> maplist2BeanList(List<?> mapList, Class<?> beanClass) {
         if (mapList == null || mapList.size() == 0) {
             return null;
         }
         List list = new ArrayList<Object>(mapList.size());
-        for (Map map : mapList) {
-            list.add(map2Bean(map, beanClass));
+        for (Object map : mapList) {
+            list.add(map2Bean((Map)map, beanClass));
         }
-        return list;
+        mapList.clear();
+        mapList.addAll(list);
+        return mapList;
     }
 }
