@@ -205,6 +205,9 @@ public abstract class MapperTemplate {
      * @throws ClassNotFoundException
      */
     public static Class<?> getMapperClass(String msId) {
+        if (msId.indexOf(".") == -1) {
+            throw new RuntimeException("当前MappedStatement的id=" + msId + ",不符合MappedStatement的规则!");
+        }
         String mapperClassStr = msId.substring(0, msId.lastIndexOf("."));
         try {
             return Class.forName(mapperClassStr);
