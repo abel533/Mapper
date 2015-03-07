@@ -53,6 +53,8 @@ public class EntityHelper {
         private Set<EntityColumn> entityClassColumns;
         //实体类 => 主键信息
         private Set<EntityColumn> entityClassPKColumns;
+        //字段名和属性名的映射
+        private Map<String,String> aliasMap;
 
         public void setTable(Table table) {
             this.name = table.name();
@@ -88,6 +90,10 @@ public class EntityHelper {
 
         public Set<EntityColumn> getEntityClassPKColumns() {
             return entityClassPKColumns;
+        }
+
+        public Map<String, String> getAliasMap() {
+            return aliasMap;
         }
     }
 
@@ -263,12 +269,16 @@ public class EntityHelper {
      * @return
      */
     public static Map<String, String> getColumnAlias(Class<?> entityClass) {
-        Set<EntityColumn> columnList = getColumns(entityClass);
-        Map<String, String> alias = new HashMap<String, String>(columnList.size());
-        for (EntityColumn column : columnList) {
-            alias.put(column.getColumn(), column.getProperty());
+        EntityTable entityTable = getEntityTable(entityClass);
+        if (entityTable.aliasMap != null) {
+            return entityTable.aliasMap;
         }
-        return alias;
+        Set<EntityColumn> columnList = entityTable.getEntityClassColumns();
+        entityTable.aliasMap = new HashMap<String, String>(columnList.size());
+        for (EntityColumn column : columnList) {
+            entityTable.aliasMap.put(column.getColumn(), column.getProperty());
+        }
+        return entityTable.aliasMap;
     }
 
     /**
@@ -314,9 +324,9 @@ public class EntityHelper {
      * @return
      */
     public static String getPrimaryKeyWhere(Class<?> entityClass) {
-        Set<EntityHelper.EntityColumn> entityColumns = EntityHelper.getPKColumns(entityClass);
+        Set<EntityColumn> entityColumns = getPKColumns(entityClass);
         StringBuilder whereBuilder = new StringBuilder();
-        for (EntityHelper.EntityColumn column : entityColumns) {
+        for (EntityColumn column : entityColumns) {
             whereBuilder.append(column.getColumn()).append(" = ?").append(" AND ");
         }
         return whereBuilder.substring(0, whereBuilder.length() - 4);
@@ -536,7 +546,7 @@ public class EntityHelper {
             if (map == null) {
                 return null;
             }
-            Map<String, String> alias = EntityHelper.getColumnAlias(beanClass);
+            Map<String, String> alias = getColumnAlias(beanClass);
             Map<String, Object> result = new HashMap<String, Object>();
             for (String name : map.keySet()) {
                 String alia = name;
