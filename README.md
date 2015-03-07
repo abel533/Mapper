@@ -29,7 +29,7 @@
     //MyBatis-Generator生成的Example查询
     CountryExample example2 = new CountryExample();
     example2.createCriteria().andIdGreaterThan(100);
-    countryList = mapper.selectByExample(example);
+    countryList = mapper.selectByExample(example2);
     Assert.assertEquals(83, countryList.size());
 
 CountryMapper代码如下：
