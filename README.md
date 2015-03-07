@@ -20,6 +20,18 @@
     //总数
     Assert.assertEquals(183, countryList.size());
 
+    //通用Example查询
+    Example example = new Example(Country.class);
+    example.createCriteria().andGreaterThan("id", 100);
+    countryList = mapper.selectByExample(example);
+    Assert.assertEquals(83, countryList.size());
+
+    //MyBatis-Generator生成的Example查询
+    CountryExample example2 = new CountryExample();
+    example2.createCriteria().andIdGreaterThan(100);
+    countryList = mapper.selectByExample(example);
+    Assert.assertEquals(83, countryList.size());
+
 CountryMapper代码如下：
 
     public interface CountryMapper extends Mapper<Country> {
@@ -51,8 +63,6 @@ CountryMapper代码如下：
     count = entityMapper.countByExample(example);
     Assert.assertEquals(12, count);
 
-可以看出第二种更强大，但是第二种不支持Insert回写和二级缓存。因此建议将两者结合起来使用。
-
 ##实体类注解
 
 从上面效果来看也能感觉出这是一种类似hibernate的用法，因此也需要实体和表对应起来，因此使用了JPA注解。更详细的内容可以看下面的<b>项目文档</b>。
@@ -75,6 +85,20 @@ Country代码：
 ##[更新日志](http://git.oschina.net/free/Mapper/blob/master/wiki/Changelog.md)
 
 ##Maven坐标以及下载地址
+
+###当前开发版本2.1.0-SNAPSHOT
+
+通用Mapper接口增加Example查询方法，包括以下方法：
+
+    int selectCountByExample(Object example);
+
+    int deleteByExample(Object example);
+
+    List<T> selectByExample(Object example);
+
+    int updateByExampleSelective(@Param("record") T record, @Param("example") Object example);
+
+    int updateByExample(@Param("record") T record, @Param("example") Object example);
 
 ###最新版本2.0.1
 
