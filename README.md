@@ -86,7 +86,7 @@ Country代码：
 
 ##Maven坐标以及下载地址
 
-###当前开发版本2.1.0-SNAPSHOT
+###最新版本2.1.0
 
 通用Mapper接口增加Example查询方法，包括以下方法：
 
@@ -100,15 +100,13 @@ Country代码：
 
     int updateByExample(@Param("record") T record, @Param("example") Object example);
 
-###最新版本2.0.1
-
 如果你使用Maven，只需要添加如下依赖：
 
 ```xml
 <dependency>
     <groupId>com.github.abel533</groupId>
     <artifactId>mapper</artifactId>
-    <version>2.0.1</version>
+    <version>2.1.0</version>
 </dependency>
 ```
 

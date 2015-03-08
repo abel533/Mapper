@@ -1,10 +1,24 @@
 #更新日志
 
-##最新版V2.0.1 - 2015-02-28
+##v2.1.0 - 2015-03-07
 
-× 增加拦截器，完善相应的文档
+* 通用Mapper接口增加Example查询方法，包括以下方法：
 
-##最新版V2.0.0 - 2015-02-04
+    int selectCountByExample(Object example);
+
+    int deleteByExample(Object example);
+
+    List<T> selectByExample(Object example);
+
+    int updateByExampleSelective(@Param("record") T record, @Param("example") Object example);
+
+    int updateByExample(@Param("record") T record, @Param("example") Object example);
+
+##V2.0.1 - 2015-02-28
+
+* 增加拦截器，完善相应的文档
+
+##V2.0.0 - 2015-02-04
 
 * 增加一个`CommonMapper`和包装类`EntityMapper`，建议使用`EntityMapper`
 * 有关`EntityMapper`的内容请看独立文档，这个类足以独立成一个开源项目
