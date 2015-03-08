@@ -14,6 +14,8 @@
 
     int updateByExample(@Param("record") T record, @Param("example") Object example);
 
+* 通用`Example`增加了一个`exists`的参数，当`true`的时候如果使用的字段不存在会抛出异常，`false`时不抛出异常，但是不使用该字段的条件。
+
 ##V2.0.1 - 2015-02-28
 
 * 增加拦截器，完善相应的文档

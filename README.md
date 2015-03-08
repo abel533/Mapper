@@ -88,7 +88,7 @@ Country代码：
 
 ###最新版本2.1.0
 
-通用Mapper接口增加Example查询方法，包括以下方法：
+* 通用Mapper接口增加Example查询方法，包括以下方法：
 
     int selectCountByExample(Object example);
 
@@ -99,6 +99,8 @@ Country代码：
     int updateByExampleSelective(@Param("record") T record, @Param("example") Object example);
 
     int updateByExample(@Param("record") T record, @Param("example") Object example);
+
+* 通用`Example`增加了一个`exists`的参数，当`true`的时候如果使用的字段不存在会抛出异常，`false`时不抛出异常，但是不使用该字段的条件。
 
 如果你使用Maven，只需要添加如下依赖：
 
