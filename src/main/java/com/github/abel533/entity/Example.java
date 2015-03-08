@@ -41,6 +41,8 @@ public class Example {
 
     protected boolean distinct;
 
+    protected boolean exists;
+
     protected List<Criteria> oredCriteria;
 
     protected Class<?> entityClass;
@@ -49,7 +51,23 @@ public class Example {
     //属性和列对应
     protected Map<String, EntityHelper.EntityColumn> propertyMap;
 
+    /**
+     * 默认exists为true
+     *
+     * @param entityClass
+     */
     public Example(Class<?> entityClass) {
+        this(entityClass, true);
+    }
+
+    /**
+     * 带exists参数的构造方法
+     *
+     * @param entityClass
+     * @param exists - true时，如果字段不存在就抛出异常，false时，如果不存在就不使用该字段的条件
+     */
+    public Example(Class<?> entityClass, boolean exists) {
+        this.exists = exists;
         oredCriteria = new ArrayList<Criteria>();
         this.entityClass = entityClass;
         table = EntityHelper.getEntityTable(entityClass);
@@ -102,7 +120,7 @@ public class Example {
     }
 
     protected Criteria createCriteriaInternal() {
-        Criteria criteria = new Criteria(propertyMap);
+        Criteria criteria = new Criteria(propertyMap, exists);
         return criteria;
     }
 
@@ -114,11 +132,18 @@ public class Example {
 
     protected abstract static class GeneratedCriteria {
         protected List<Criterion> criteria;
+        //字段是否必须存在
+        protected boolean exists;
         //属性和列对应
         protected Map<String, EntityHelper.EntityColumn> propertyMap;
 
         protected GeneratedCriteria(Map<String, EntityHelper.EntityColumn> propertyMap) {
+            this(propertyMap, true);
+        }
+
+        protected GeneratedCriteria(Map<String, EntityHelper.EntityColumn> propertyMap, boolean exists) {
             super();
+            this.exists = exists;
             criteria = new ArrayList<Criterion>();
             this.propertyMap = propertyMap;
         }
@@ -126,16 +151,20 @@ public class Example {
         private String column(String property) {
             if (propertyMap.containsKey(property)) {
                 return propertyMap.get(property).getColumn();
-            } else {
+            } else if (exists) {
                 throw new RuntimeException("当前实体类不包含名为" + property + "的属性!");
+            } else {
+                return null;
             }
         }
 
         private String property(String property) {
             if (propertyMap.containsKey(property)) {
                 return property;
-            } else {
+            } else if (exists) {
                 throw new RuntimeException("当前实体类不包含名为" + property + "的属性!");
+            } else {
+                return null;
             }
         }
 
@@ -155,6 +184,9 @@ public class Example {
             if (condition == null) {
                 throw new RuntimeException("Value for condition cannot be null");
             }
+            if (condition.startsWith("null")) {
+                return;
+            }
             criteria.add(new Criterion(condition));
         }
 
@@ -162,12 +194,18 @@ public class Example {
             if (value == null) {
                 throw new RuntimeException("Value for " + property + " cannot be null");
             }
+            if (property == null) {
+                return;
+            }
             criteria.add(new Criterion(condition, value));
         }
 
         protected void addCriterion(String condition, Object value1, Object value2, String property) {
             if (value1 == null || value2 == null) {
                 throw new RuntimeException("Between values for " + property + " cannot be null");
+            }
+            if (property == null) {
+                return;
             }
             criteria.add(new Criterion(condition, value1, value2));
         }
@@ -244,9 +282,12 @@ public class Example {
     }
 
     public static class Criteria extends GeneratedCriteria {
-
         protected Criteria(Map<String, EntityHelper.EntityColumn> propertyMap) {
             super(propertyMap);
+        }
+
+        protected Criteria(Map<String, EntityHelper.EntityColumn> propertyMap, boolean exists) {
+            super(propertyMap, exists);
         }
     }
 
