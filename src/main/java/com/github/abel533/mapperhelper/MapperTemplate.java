@@ -107,7 +107,7 @@ public abstract class MapperTemplate {
      */
     public boolean supportMethod(String msId) {
         Class<?> mapperClass = getMapperClass(msId);
-        if (this.mapperClass.isAssignableFrom(mapperClass)) {
+        if (mapperClass != null && this.mapperClass.isAssignableFrom(mapperClass)) {
             String methodName = getMethodName(msId);
             return methodMap.get(methodName) != null;
         }
@@ -212,7 +212,7 @@ public abstract class MapperTemplate {
         try {
             return Class.forName(mapperClassStr);
         } catch (ClassNotFoundException e) {
-            throw new RuntimeException("无法获取Mapper接口信息:" + msId);
+            return null;
         }
     }
 
