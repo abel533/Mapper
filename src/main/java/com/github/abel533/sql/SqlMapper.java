@@ -122,48 +122,15 @@ public class SqlMapper {
             return configuration.hasStatement(msId, false);
         }
 
-        private String select(String sql) {
-            String msId = newMsId(sql, SqlCommandType.INSERT);
-            if (hasMappedStatement(msId)) {
-                return msId;
-            }
-            StaticSqlSource sqlSource = new StaticSqlSource(configuration, sql);
-            newSelectMappedStatement(msId, sqlSource, Map.class, SqlCommandType.SELECT);
-            return msId;
-        }
-
-        private String selectDynamic(String sql, Class<?> parameterType) {
-            String msId = newMsId(sql, SqlCommandType.INSERT);
-            if (hasMappedStatement(msId)) {
-                return msId;
-            }
-            SqlSource sqlSource = languageDriver.createSqlSource(configuration, sql, parameterType);
-            newSelectMappedStatement(msId, sqlSource, Map.class, SqlCommandType.SELECT);
-            return msId;
-        }
-
-        private String select(String sql, Class<?> resultType) {
-            String msId = newMsId(sql, SqlCommandType.INSERT);
-            if (hasMappedStatement(msId)) {
-                return msId;
-            }
-            StaticSqlSource sqlSource = new StaticSqlSource(configuration, sql);
-            newSelectMappedStatement(msId, sqlSource, resultType, SqlCommandType.SELECT);
-            return msId;
-        }
-
-        private String selectDynamic(String sql, Class<?> parameterType, Class<?> resultType) {
-            String msId = newMsId(sql, SqlCommandType.INSERT);
-            if (hasMappedStatement(msId)) {
-                return msId;
-            }
-            SqlSource sqlSource = languageDriver.createSqlSource(configuration, sql, parameterType);
-            newSelectMappedStatement(msId, sqlSource, resultType, SqlCommandType.SELECT);
-            return msId;
-        }
-
-        private void newSelectMappedStatement(String msId, SqlSource sqlSource, final Class<?> resultType, SqlCommandType sqlCommandType) {
-            MappedStatement ms = new MappedStatement.Builder(configuration, msId, sqlSource, sqlCommandType)
+        /**
+         * 创建一个查询的MS
+         *
+         * @param msId
+         * @param sqlSource
+         * @param resultType
+         */
+        private void newSelectMappedStatement(String msId, SqlSource sqlSource, final Class<?> resultType) {
+            MappedStatement ms = new MappedStatement.Builder(configuration, msId, sqlSource, SqlCommandType.SELECT)
                     .resultMaps(new ArrayList<ResultMap>() {
                         {
                             add(new ResultMap.Builder(configuration, "defaultResultMap", resultType, new ArrayList<ResultMapping>(0)).build());
@@ -193,6 +160,46 @@ public class SqlMapper {
             configuration.addMappedStatement(ms);
         }
 
+        private String select(String sql) {
+            String msId = newMsId(sql, SqlCommandType.SELECT);
+            if (hasMappedStatement(msId)) {
+                return msId;
+            }
+            StaticSqlSource sqlSource = new StaticSqlSource(configuration, sql);
+            newSelectMappedStatement(msId, sqlSource, Map.class);
+            return msId;
+        }
+
+        private String selectDynamic(String sql, Class<?> parameterType) {
+            String msId = newMsId(sql + parameterType, SqlCommandType.SELECT);
+            if (hasMappedStatement(msId)) {
+                return msId;
+            }
+            SqlSource sqlSource = languageDriver.createSqlSource(configuration, sql, parameterType);
+            newSelectMappedStatement(msId, sqlSource, Map.class);
+            return msId;
+        }
+
+        private String select(String sql, Class<?> resultType) {
+            String msId = newMsId(resultType + sql, SqlCommandType.SELECT);
+            if (hasMappedStatement(msId)) {
+                return msId;
+            }
+            StaticSqlSource sqlSource = new StaticSqlSource(configuration, sql);
+            newSelectMappedStatement(msId, sqlSource, resultType);
+            return msId;
+        }
+
+        private String selectDynamic(String sql, Class<?> parameterType, Class<?> resultType) {
+            String msId = newMsId(resultType + sql + parameterType, SqlCommandType.SELECT);
+            if (hasMappedStatement(msId)) {
+                return msId;
+            }
+            SqlSource sqlSource = languageDriver.createSqlSource(configuration, sql, parameterType);
+            newSelectMappedStatement(msId, sqlSource, resultType);
+            return msId;
+        }
+
         private String insert(String sql) {
             String msId = newMsId(sql, SqlCommandType.INSERT);
             if (hasMappedStatement(msId)) {
@@ -204,7 +211,7 @@ public class SqlMapper {
         }
 
         private String insertDynamic(String sql, Class<?> parameterType) {
-            String msId = newMsId(sql, SqlCommandType.INSERT);
+            String msId = newMsId(sql + parameterType, SqlCommandType.INSERT);
             if (hasMappedStatement(msId)) {
                 return msId;
             }
@@ -224,7 +231,7 @@ public class SqlMapper {
         }
 
         private String updateDynamic(String sql, Class<?> parameterType) {
-            String msId = newMsId(sql, SqlCommandType.UPDATE);
+            String msId = newMsId(sql + parameterType, SqlCommandType.UPDATE);
             if (hasMappedStatement(msId)) {
                 return msId;
             }
@@ -244,7 +251,7 @@ public class SqlMapper {
         }
 
         private String deleteDynamic(String sql, Class<?> parameterType) {
-            String msId = newMsId(sql, SqlCommandType.DELETE);
+            String msId = newMsId(sql + parameterType, SqlCommandType.DELETE);
             if (hasMappedStatement(msId)) {
                 return msId;
             }
