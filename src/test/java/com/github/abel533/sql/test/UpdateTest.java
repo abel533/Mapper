@@ -66,7 +66,6 @@ public class UpdateTest {
             Country tc = new Country();
             tc.setId(35);
             tc.setCountryname("天朝");
-            //注意这里的countrycode和countryname故意写反的
             int result = sqlMapper.update("update country set countryname = #{countryname} where id in(select id from country where countryname like 'A%')", tc);
             Assert.assertEquals(12, result);
             tc = new Country();
