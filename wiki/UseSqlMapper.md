@@ -70,16 +70,6 @@ SqlMapper sqlMapper = new SqlMapper(sqlSession);
 
 在Service中使用的时候可以直接使用`@Autowired`注入。
 
-<b>注意：</b>`SqlMapper`增加了一个构造方法`public SqlMapper(SqlSession sqlSession, boolean cached)`，可以通过`cache`控制是否缓存动态创建的`MappedStatement`。
-
-使用`public SqlMapper(SqlSession sqlSession)`时，`cached`默认为`true`，会缓存。
-
-###如何选择是否缓存动态创建的`MappedStatement`?
-
-1. 当通过前台实现执行任意SQL时，建议关闭缓存，否则每一个SQL缓存一次，最终的缓存数量会很大
-
-2. 如果是业务代码中拼的sql，建议缓存提高效率
-
 ##简单例子
 
 在`src/test/java`目录的`com.github.abel533.sql`包中包含这些方法的测试。

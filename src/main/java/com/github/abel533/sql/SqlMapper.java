@@ -20,34 +20,15 @@ import java.util.Map;
 public class SqlMapper {
     private final MSUtils msUtils;
     private final SqlSession sqlSession;
-    private boolean cached;
 
     /**
      * 构造方法，默认缓存MappedStatement
      *
-     * <br>当通过前台实现执行任意SQL时，建议关闭缓存，否则每一个SQL缓存一次，最终的缓存数量会很大
-     * <br>如果是业务代码中拼的sql，建议缓存提高效率
-     *
      * @param sqlSession
      */
     public SqlMapper(SqlSession sqlSession) {
-        this(sqlSession, true);
-    }
-
-    /**
-     * 构造方法，可以控制是否缓存MappedStatement
-     *
-     * @param sqlSession
-     * @param cached 是否缓存MappedStatement
-     */
-    public SqlMapper(SqlSession sqlSession, boolean cached) {
         this.sqlSession = sqlSession;
-        this.cached = cached;
         this.msUtils = new MSUtils(sqlSession.getConfiguration());
-    }
-
-    public void setCached(boolean cached) {
-        this.cached = cached;
     }
 
     /**
@@ -299,9 +280,7 @@ public class SqlMapper {
                     })
                     .build();
             //缓存
-            if (cached) {
-                configuration.addMappedStatement(ms);
-            }
+            configuration.addMappedStatement(ms);
         }
 
         /**
@@ -320,9 +299,7 @@ public class SqlMapper {
                     })
                     .build();
             //缓存
-            if (cached) {
-                configuration.addMappedStatement(ms);
-            }
+            configuration.addMappedStatement(ms);
         }
 
         private String select(String sql) {
