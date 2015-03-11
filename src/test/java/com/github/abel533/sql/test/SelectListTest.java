@@ -13,14 +13,14 @@ import java.util.Map;
 /**
  * Created by liuzh on 2015/3/10.
  */
-public class SelectTest {
+public class SelectListTest {
 
     @Test
-    public void testSqlHelperUpdate() {
+    public void testSqlHelperSelectList() {
         SqlSession sqlSession = MybatisHelper.getSqlSession();
         SqlMapper sqlMapper = new SqlMapper(sqlSession);
         try {
-            List<Map<String, Object>> list = sqlMapper.select("select * from country where id < 11");
+            List<Map<String, Object>> list = sqlMapper.selectList("select * from country where id < 11");
             Assert.assertEquals(10, list.size());
         } finally {
             sqlSession.close();
@@ -28,11 +28,11 @@ public class SelectTest {
     }
 
     @Test
-    public void testSqlHelperUpdate2() {
+    public void testSqlHelperSelectList2() {
         SqlSession sqlSession = MybatisHelper.getSqlSession();
         SqlMapper sqlMapper = new SqlMapper(sqlSession);
         try {
-            List<Country> list = sqlMapper.select("select * from country where id < 11", Country.class);
+            List<Country> list = sqlMapper.selectList("select * from country where id < 11", Country.class);
             Assert.assertEquals(10, list.size());
         } finally {
             sqlSession.close();
@@ -40,11 +40,11 @@ public class SelectTest {
     }
 
     @Test
-    public void testSqlHelperUpdate3() {
+    public void testSqlHelperSelectList3() {
         SqlSession sqlSession = MybatisHelper.getSqlSession();
         SqlMapper sqlMapper = new SqlMapper(sqlSession);
         try {
-            List<Map<String, Object>> list = sqlMapper.select("select * from country where id < #{id}", 11);
+            List<Map<String, Object>> list = sqlMapper.selectList("select * from country where id < #{id}", 11);
             Assert.assertEquals(10, list.size());
         } finally {
             sqlSession.close();
@@ -52,11 +52,11 @@ public class SelectTest {
     }
 
     @Test
-    public void testSqlHelperUpdate4() {
+    public void testSqlHelperSelectList4() {
         SqlSession sqlSession = MybatisHelper.getSqlSession();
         SqlMapper sqlMapper = new SqlMapper(sqlSession);
         try {
-            List<Country> list = sqlMapper.select("select * from country where id < #{id}", 11, Country.class);
+            List<Country> list = sqlMapper.selectList("select * from country where id < #{id}", 11, Country.class);
             Assert.assertEquals(10, list.size());
         } finally {
             sqlSession.close();
@@ -64,13 +64,13 @@ public class SelectTest {
     }
 
     @Test
-    public void testSqlHelperUpdate5() {
+    public void testSqlHelperSelectList5() {
         SqlSession sqlSession = MybatisHelper.getSqlSession();
         SqlMapper sqlMapper = new SqlMapper(sqlSession);
         try {
             Country country = new Country();
             country.setId(11);
-            List<Country> list = sqlMapper.select("<script>" +
+            List<Country> list = sqlMapper.selectList("<script>" +
                     "select * from country " +
                     "   <where>" +
                     "       <if test=\"id != null\">" +
