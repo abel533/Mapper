@@ -20,17 +20,41 @@ import java.util.Map;
 public class SqlMapper {
     private final MSUtils msUtils;
     private final SqlSession sqlSession;
+    private boolean cached;
 
+    /**
+     * 构造方法，默认缓存MappedStatement
+     *
+     * <br>当通过前台实现执行任意SQL时，建议关闭缓存，否则每一个SQL缓存一次，最终的缓存数量会很大
+     * <br>如果是业务代码中拼的sql，建议缓存提高效率
+     *
+     * @param sqlSession
+     */
     public SqlMapper(SqlSession sqlSession) {
+        this(sqlSession, true);
+    }
+
+    /**
+     * 构造方法，可以控制是否缓存MappedStatement
+     *
+     * @param sqlSession
+     * @param cached 是否缓存MappedStatement
+     */
+    public SqlMapper(SqlSession sqlSession, boolean cached) {
         this.sqlSession = sqlSession;
+        this.cached = cached;
         this.msUtils = new MSUtils(sqlSession.getConfiguration());
+    }
+
+    public void setCached(boolean cached) {
+        this.cached = cached;
     }
 
     /**
      * 获取List中最多只有一个的数据
      *
      * @param list List结果
-     * @param <T> 泛型类型
+     * @param <T>  泛型类型
      * @return
      */
     private <T> T getOne(List<T> list) {
@@ -57,7 +81,7 @@ public class SqlMapper {
     /**
      * 查询返回一个结果，多个结果时抛出异常
      *
-     * @param sql 执行的sql
+     * @param sql   执行的sql
      * @param value 参数
      * @return
      */
@@ -69,9 +93,9 @@ public class SqlMapper {
     /**
      * 查询返回一个结果，多个结果时抛出异常
      *
-     * @param sql 执行的sql
+     * @param sql        执行的sql
      * @param resultType 返回的结果类型
-     * @param <T> 泛型类型
+     * @param <T>        泛型类型
      * @return
      */
     public <T> T selectOne(String sql, Class<T> resultType) {
@@ -82,10 +106,10 @@ public class SqlMapper {
     /**
      * 查询返回一个结果，多个结果时抛出异常
      *
-     * @param sql 执行的sql
-     * @param value 参数
+     * @param sql        执行的sql
+     * @param value      参数
      * @param resultType 返回的结果类型
-     * @param <T> 泛型类型
+     * @param <T>        泛型类型
      * @return
      */
     public <T> T selectOne(String sql, Object value, Class<T> resultType) {
@@ -107,7 +131,7 @@ public class SqlMapper {
     /**
      * 查询返回List<Map<String, Object>>
      *
-     * @param sql 执行的sql
+     * @param sql   执行的sql
      * @param value 参数
      * @return
      */
@@ -120,9 +144,9 @@ public class SqlMapper {
     /**
      * 查询返回指定的结果类型
      *
-     * @param sql 执行的sql
+     * @param sql        执行的sql
      * @param resultType 返回的结果类型
-     * @param <T> 泛型类型
+     * @param <T>        泛型类型
      * @return
      */
     public <T> List<T> selectList(String sql, Class<T> resultType) {
@@ -138,10 +162,10 @@ public class SqlMapper {
     /**
      * 查询返回指定的结果类型
      *
-     * @param sql 执行的sql
-     * @param value 参数
+     * @param sql        执行的sql
+     * @param value      参数
      * @param resultType 返回的结果类型
-     * @param <T> 泛型类型
+     * @param <T>        泛型类型
      * @return
      */
     public <T> List<T> selectList(String sql, Object value, Class<T> resultType) {
@@ -169,7 +193,7 @@ public class SqlMapper {
     /**
      * 插入数据
      *
-     * @param sql 执行的sql
+     * @param sql   执行的sql
      * @param value 参数
      * @return
      */
@@ -193,7 +217,7 @@ public class SqlMapper {
     /**
      * 更新数据
      *
-     * @param sql 执行的sql
+     * @param sql   执行的sql
      * @param value 参数
      * @return
      */
@@ -216,8 +240,8 @@ public class SqlMapper {
 
     /**
      * 删除数据
-     * 
-     * @param sql 执行的sql
+     *
+     * @param sql   执行的sql
      * @param value 参数
      * @return
      */
@@ -263,7 +287,7 @@ public class SqlMapper {
          * 创建一个查询的MS
          *
          * @param msId
-         * @param sqlSource 执行的sqlSource
+         * @param sqlSource  执行的sqlSource
          * @param resultType 返回的结果类型
          */
         private void newSelectMappedStatement(String msId, SqlSource sqlSource, final Class<?> resultType) {
@@ -275,14 +299,16 @@ public class SqlMapper {
                     })
                     .build();
             //缓存
-            configuration.addMappedStatement(ms);
+            if (cached) {
+                configuration.addMappedStatement(ms);
+            }
         }
 
         /**
          * 创建一个简单的MS
          *
          * @param msId
-         * @param sqlSource 执行的sqlSource
+         * @param sqlSource      执行的sqlSource
          * @param sqlCommandType 执行的sqlCommandType
          */
         private void newUpdateMappedStatement(String msId, SqlSource sqlSource, SqlCommandType sqlCommandType) {
@@ -294,7 +320,9 @@ public class SqlMapper {
                     })
                     .build();
             //缓存
-            configuration.addMappedStatement(ms);
+            if (cached) {
+                configuration.addMappedStatement(ms);
+            }
         }
 
         private String select(String sql) {
