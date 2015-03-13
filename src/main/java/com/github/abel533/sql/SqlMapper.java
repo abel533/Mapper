@@ -192,7 +192,7 @@ public class SqlMapper {
      */
     public int update(String sql) {
         String msId = msUtils.update(sql);
-        return sqlSession.insert(msId);
+        return sqlSession.update(msId);
     }
 
     /**
@@ -205,7 +205,7 @@ public class SqlMapper {
     public int update(String sql, Object value) {
         Class<?> parameterType = value != null ? value.getClass() : null;
         String msId = msUtils.updateDynamic(sql, parameterType);
-        return sqlSession.insert(msId, value);
+        return sqlSession.update(msId, value);
     }
 
     /**
@@ -229,7 +229,7 @@ public class SqlMapper {
     public int delete(String sql, Object value) {
         Class<?> parameterType = value != null ? value.getClass() : null;
         String msId = msUtils.deleteDynamic(sql, parameterType);
-        return sqlSession.insert(msId, value);
+        return sqlSession.delete(msId, value);
     }
 
     private class MSUtils {
