@@ -37,6 +37,18 @@ import java.util.Map;
  */
 public interface CommonMapper {
     /**
+     * 根据参数进行查询，查询结果最多只能有一个
+     * <br>查询条件为属性String类型不为空，其他类型!=null时
+     * <br>where property = ? and property2 = ? 条件
+     *
+     * @param record
+     * @param <T>
+     * @return
+     */
+    @SelectProvider(type = CommonProvider.class, method = "selectOne")
+    <T> Map<String, Object> selectOne(@Param("record") T record);
+
+    /**
      * 根据参数进行查询,record可以是Class<?>类型
      * <br>查询条件为属性String类型不为空，其他类型!=null时
      * <br>where property = ? and property2 = ? 条件
@@ -45,9 +57,8 @@ public interface CommonMapper {
      * @param <T>
      * @return
      */
-    @Options(flushCache = true)
     @SelectProvider(type = CommonProvider.class, method = "select")
-    <T> List<Map<String,Object>> select(@Param("record") T record);
+    <T> List<Map<String, Object>> select(@Param("record") T record);
 
     /**
      * 根据参数进行查询总数,record可以是Class<?>类型
@@ -58,7 +69,6 @@ public interface CommonMapper {
      * @param <T>
      * @return
      */
-    @Options(flushCache = true)
     @SelectProvider(type = CommonProvider.class, method = "count")
     <T> int count(@Param("record") T record);
 
@@ -70,9 +80,8 @@ public interface CommonMapper {
      * @param <T>
      * @return
      */
-    @Options(flushCache = true)
     @SelectProvider(type = CommonProvider.class, method = "selectByPrimaryKey")
-    <T> Map<String,Object> selectByPrimaryKey(@Param("entityClass") Class<T> entityClass, @Param("key") Object key);
+    <T> Map<String, Object> selectByPrimaryKey(@Param("entityClass") Class<T> entityClass, @Param("key") Object key);
 
     /**
      * 插入数据库，主键字段没有值的时候不会出现在sql中
@@ -146,7 +155,6 @@ public interface CommonMapper {
      * @param <T>
      * @return
      */
-    @Options(flushCache = true)
     @SelectProvider(type = CommonProvider.class, method = "countByExample")
     <T> int countByExample(@Param("entityClass") Class<T> entityClass, @Param("example") Object example);
 
@@ -169,9 +177,8 @@ public interface CommonMapper {
      * @param <T>
      * @return
      */
-    @Options(flushCache = true)
     @SelectProvider(type = CommonProvider.class, method = "selectByExample")
-    <T> List<Map<String,Object>> selectByExample(@Param("entityClass") Class<T> entityClass, @Param("example") Object example);
+    <T> List<Map<String, Object>> selectByExample(@Param("entityClass") Class<T> entityClass, @Param("example") Object example);
 
     /**
      * 通过Example进行更新非空字段

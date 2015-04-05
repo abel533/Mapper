@@ -46,6 +46,22 @@ public class EntityMapper {
     }
 
     /**
+     * 根据参数进行查询，查询结果最多只能有一个
+     * <br>查询条件为属性String类型不为空，其他类型!=null时
+     * <br>where property = ? and property2 = ? 条件
+     *
+     * @param record
+     * @param <T>
+     * @return
+     */
+    public <T> T selectOne(T record) {
+        if (record == null) {
+            throw new NullPointerException("实体或者主键参数不能为空!");
+        }
+        return (T) EntityHelper.map2Bean(commonMapper.selectOne(record), record.getClass());
+    }
+
+    /**
      * 根据参数进行查询,record可以是Class<?>类型
      * <br>查询条件为属性String类型不为空，其他类型!=null时
      * <br>where property = ? and property2 = ? 条件

@@ -43,6 +43,37 @@ public class CommonProvider extends BaseProvider {
      * @param params
      * @return
      */
+    public String selectOne(final Map<String, Object> params) {
+        return new SQL() {{
+            Object entity = getEntity(params);
+            Class<?> entityClass = getEntityClass(params);
+            EntityHelper.EntityTable entityTable = EntityHelper.getEntityTable(entityClass);
+            SELECT(EntityHelper.getAllColumns(entityClass));
+            FROM(entityTable.getName());
+            if (entity != null) {
+                final MetaObject metaObject = MapperTemplate.forObject(entity);
+                for (EntityHelper.EntityColumn column : entityTable.getEntityClassColumns()) {
+                    Object value = metaObject.getValue(column.getProperty());
+                    if (value == null) {
+                        continue;
+                    } else if (column.getJavaType().equals(String.class)) {
+                        if (isNotEmpty((String) value)) {
+                            WHERE(column.getColumn() + "=#{record." + column.getProperty() + "}");
+                        }
+                    } else {
+                        WHERE(column.getColumn() + "=#{record." + column.getProperty() + "}");
+                    }
+                }
+            }
+        }}.toString();
+    }
+
+    /**
+     * 查询，入参可以是Entity.class或new Entity()
+     *
+     * @param params
+     * @return
+     */
     public String select(final Map<String, Object> params) {
         return new SQL() {{
             Object entity = getEntity(params);
