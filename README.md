@@ -86,7 +86,11 @@ Country代码：
 
 ##Maven坐标以及下载地址
 
-###最新版本2.1.0
+###最新版本2.2.0
+
+* 新增`SqlMapper`，可以使用MyBatis直接执行sql，[详细文档](http://git.oschina.net/free/Mapper/blob/master/wiki/UseSqlMapper.md)
+
+###2.1.0
 
 * 通用Mapper接口增加Example查询方法，包括以下方法：
 
@@ -108,7 +112,7 @@ Country代码：
 <dependency>
     <groupId>com.github.abel533</groupId>
     <artifactId>mapper</artifactId>
-    <version>2.1.0</version>
+    <version>2.2.0</version>
 </dependency>
 ```
 
@@ -143,6 +147,10 @@ http://repo1.maven.org/maven2/javax/persistence/persistence-api/1.0/
 2. [如何使用EntityMapper](http://git.oschina.net/free/Mapper/blob/master/wiki/entity/2.Use.md)
 
 3. [如何使用Mapper专用的MyBatis Generator插件](http://git.oschina.net/free/Mapper/blob/master/wiki/mapper/5.UseMBG.md)
+
+###如何使用SqlMapper
+
+1. [如何使用SqlMapper](http://git.oschina.net/free/Mapper/blob/master/wiki/UseSqlMapper.md)
 
 ##作者信息
 
