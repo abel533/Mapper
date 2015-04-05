@@ -54,6 +54,27 @@ public class MapperProvider extends MapperTemplate {
      * @param ms
      * @return
      */
+    public SqlNode selectOne(MappedStatement ms) {
+        Class<?> entityClass = getSelectReturnType(ms);
+        //修改返回值类型为实体类型
+        setResultType(ms, entityClass);
+        List<SqlNode> sqlNodes = new ArrayList<SqlNode>();
+        //静态的sql部分:select column ... from table
+        sqlNodes.add(new StaticTextSqlNode("SELECT "
+                + EntityHelper.getSelectColumns(entityClass)
+                + " FROM "
+                + tableName(entityClass)));
+        //将if添加到<where>
+        sqlNodes.add(new WhereSqlNode(ms.getConfiguration(), getAllIfColumnNode(entityClass)));
+        return new MixedSqlNode(sqlNodes);
+    }
+
+    /**
+     * 查询
+     *
+     * @param ms
+     * @return
+     */
     public SqlNode select(MappedStatement ms) {
         Class<?> entityClass = getSelectReturnType(ms);
         //修改返回值类型为实体类型
@@ -66,15 +87,9 @@ public class MapperProvider extends MapperTemplate {
                 + tableName(entityClass)));
         //将if添加到<where>
         sqlNodes.add(new WhereSqlNode(ms.getConfiguration(), getAllIfColumnNode(entityClass)));
-        StringBuilder orderBy = new StringBuilder();
-        for (EntityHelper.EntityColumn column : EntityHelper.getColumns(entityClass)) {
-            if (column.getOrderBy() != null) {
-                orderBy.append(column.getColumn()).append(" ").append(column.getOrderBy()).append(",");
-            }
-        }
-        if (orderBy.length() > 0) {
-            orderBy.insert(0, "order by");
-            sqlNodes.add(new StaticTextSqlNode(orderBy.substring(0, orderBy.length() - 1)));
+        String orderByClause = EntityHelper.getOrderByClause(entityClass);
+        if (orderByClause.length() > 0) {
+            sqlNodes.add(new StaticTextSqlNode(orderByClause));
         }
         return new MixedSqlNode(sqlNodes);
     }

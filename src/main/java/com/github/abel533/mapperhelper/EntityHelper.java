@@ -243,6 +243,28 @@ public class EntityHelper {
     }
 
     /**
+     * 获取默认的orderby语句
+     *
+     * @param entityClass
+     * @return
+     */
+    public static String getOrderByClause(Class<?> entityClass){
+        StringBuilder orderBy = new StringBuilder();
+        for (EntityHelper.EntityColumn column : getColumns(entityClass)) {
+            if (column.getOrderBy() != null) {
+                if(orderBy.length()!=0){
+                    orderBy.append(",");
+                }
+                orderBy.append(column.getColumn()).append(" ").append(column.getOrderBy());
+            }
+        }
+        if (orderBy.length() > 0) {
+            orderBy.insert(0, "ORDER BY ");
+        }
+        return orderBy.toString();
+    }
+
+    /**
      * 获取全部列
      *
      * @param entityClass

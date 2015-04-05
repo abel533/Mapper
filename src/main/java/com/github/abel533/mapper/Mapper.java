@@ -41,6 +41,9 @@ import java.util.List;
 public interface Mapper<T> {
 
     @SelectProvider(type = MapperProvider.class, method = "dynamicSQL")
+    T selectOne(T record);
+
+    @SelectProvider(type = MapperProvider.class, method = "dynamicSQL")
     List<T> select(T record);
 
     @SelectProvider(type = MapperProvider.class, method = "dynamicSQL")
