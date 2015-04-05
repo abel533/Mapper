@@ -377,7 +377,8 @@ public class EntityHelper {
         }
         if (entityTable == null) {
             entityTable = new EntityTable();
-            entityTable.name = camelhumpToUnderline(entityClass.getSimpleName()).toUpperCase();
+            //对大小写敏感的情况，这里不自动转换大小写，如果有需要，通过@Table注解实现
+            entityTable.name = camelhumpToUnderline(entityClass.getSimpleName());
         }
         //列
         List<Field> fieldList = getAllField(entityClass, null);
