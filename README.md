@@ -86,25 +86,13 @@ Country代码：
 
 ##Maven坐标以及下载地址
 
-###最新版本2.2.0
+###最新版本2.3.0 - 2015-04-05
 
-* 新增`SqlMapper`，可以使用MyBatis直接执行sql，[详细文档](http://git.oschina.net/free/Mapper/blob/master/wiki/UseSqlMapper.md)
+* Mapper接口和EntityMapper都增加了`selectOne`方法，该查询返回值最多只能有一个，存在多个时抛出异常
 
-###2.1.0
+* Mapper接口和EntityMapper中，返回List的查询方法都支持JPA的`@Orderby`注解。其中`Example`查询中的`orderby`会覆盖注解的`@Orderby`设置。
 
-* 通用Mapper接口增加Example查询方法，包括以下方法：
-
-    int selectCountByExample(Object example);
-
-    int deleteByExample(Object example);
-
-    List<T> selectByExample(Object example);
-
-    int updateByExampleSelective(@Param("record") T record, @Param("example") Object example);
-
-    int updateByExample(@Param("record") T record, @Param("example") Object example);
-
-* 通用`Example`增加了一个`exists`的参数，当`true`的时候如果使用的字段不存在会抛出异常，`false`时不抛出异常，但是不使用该字段的条件。
+* 通过实体类获取表名的时候，不对表名进行强制的大小写转换。如果数据库大小写敏感，请通过`@Table`注解和数据库保持一致。
 
 如果你使用Maven，只需要添加如下依赖：
 
@@ -112,7 +100,7 @@ Country代码：
 <dependency>
     <groupId>com.github.abel533</groupId>
     <artifactId>mapper</artifactId>
-    <version>2.2.0</version>
+    <version>2.3.0</version>
 </dependency>
 ```
 
@@ -155,8 +143,6 @@ http://repo1.maven.org/maven2/javax/persistence/persistence-api/1.0/
 ##作者信息
 
 作者博客：http://blog.csdn.net/isea533
-
-作者QQ： 120807756
 
 作者邮箱： abel533@gmail.com
 

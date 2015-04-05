@@ -1,5 +1,9 @@
 #更新日志
 
+##2.2.0 - 2015-03-11
+
+* 新增`SqlMapper`，可以使用MyBatis直接执行sql，[详细文档](http://git.oschina.net/free/Mapper/blob/master/wiki/UseSqlMapper.md)
+
 ##v2.1.0 - 2015-03-07
 
 * 通用Mapper接口增加Example查询方法，包括以下方法：
