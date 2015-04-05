@@ -65,14 +65,9 @@ public class CommonProvider extends BaseProvider {
                     }
                 }
             }
-            StringBuilder orderBy = new StringBuilder();
-            for (EntityHelper.EntityColumn column : entityTable.getEntityClassColumns()) {
-                if (column.getOrderBy() != null) {
-                    orderBy.append(column.getColumn()).append(" ").append(column.getOrderBy()).append(",");
-                }
-            }
-            if (orderBy.length() > 0) {
-                ORDER_BY(orderBy.substring(0, orderBy.length() - 1));
+            StringBuilder orderByClause = EntityHelper.getOrderByClause(entityClass);
+            if (orderByClause.length() > 0) {
+                ORDER_BY(orderByClause.toString());
             }
         }}.toString();
     }
@@ -338,7 +333,7 @@ public class CommonProvider extends BaseProvider {
             SELECT(EntityHelper.getAllColumns(entityClass));
             FROM(entityTable.getName());
             applyWhere(this, example);
-            applyOrderBy(this, example);
+            applyOrderBy(this, example, EntityHelper.getOrderByClause(entityClass).toString());
         }}.toString();
     }
 

@@ -121,13 +121,15 @@ public class BaseProvider {
     /**
      * Example条件
      */
-    protected void applyOrderBy(SQL sql, MetaObject example) {
+    protected void applyOrderBy(SQL sql, MetaObject example, String defaultOrderByClause) {
         if (example == null) {
             return;
         }
         Object orderBy = example.getValue("orderByClause");
         if (orderBy != null) {
             sql.ORDER_BY((String) orderBy);
+        } else if (defaultOrderByClause != null && defaultOrderByClause.length() > 0) {
+            sql.ORDER_BY(defaultOrderByClause);
         }
     }
 

@@ -87,9 +87,9 @@ public class MapperProvider extends MapperTemplate {
                 + tableName(entityClass)));
         //将if添加到<where>
         sqlNodes.add(new WhereSqlNode(ms.getConfiguration(), getAllIfColumnNode(entityClass)));
-        String orderByClause = EntityHelper.getOrderByClause(entityClass);
+        StringBuilder orderByClause = EntityHelper.getOrderByClause(entityClass);
         if (orderByClause.length() > 0) {
-            sqlNodes.add(new StaticTextSqlNode(orderByClause));
+            sqlNodes.add(new StaticTextSqlNode(orderByClause.insert(0, "ORDER BY ").toString()));
         }
         return new MixedSqlNode(sqlNodes);
     }
@@ -426,6 +426,11 @@ public class MapperProvider extends MapperTemplate {
         sqlNodes.add(ifNullSqlNode);
         IfSqlNode orderByClauseSqlNode = new IfSqlNode(new TextSqlNode("order by ${orderByClause}"), "orderByClause != null");
         sqlNodes.add(orderByClauseSqlNode);
+        StringBuilder orderByClause = EntityHelper.getOrderByClause(entityClass);
+        if (orderByClause.length() > 0) {
+            IfSqlNode defaultOrderByClauseSqlNode = new IfSqlNode(new StaticTextSqlNode(orderByClause.insert(0, "ORDER BY ").toString()), "orderByClause == null");
+            sqlNodes.add(defaultOrderByClauseSqlNode);
+        }
         return new MixedSqlNode(sqlNodes);
     }
 
