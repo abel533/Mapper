@@ -2,13 +2,15 @@ package com.github.abel533.model;
 
 import javax.persistence.Column;
 import javax.persistence.Id;
+import java.io.Serializable;
 
 /**
  * Description: Country
  * Author: liuzh
  * Update: liuzh(2014-06-06 13:38)
  */
-public class Country {
+public class Country implements Serializable {
+    private static final long serialVersionUID = -1626761012846137805L;
     @Id
     private Integer id;
     @Column
