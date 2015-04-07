@@ -31,6 +31,7 @@
 	<mappers>
     <mapper class="com.github.abel533.entity.mapper.CommonMapper"/>
     <mapper class="com.github.abel533.mapper.CountryMapper" />
+    <mapper class="com.github.abel533.mapper.CachedCountryMapper" />
     <mapper class="com.github.abel533.mapper.Country2Mapper" />
     <mapper class="com.github.abel533.mapper.CountryTMapper" />
     <mapper class="com.github.abel533.mapper.CountryUMapper" />
