@@ -158,12 +158,7 @@ public class CommonProvider extends BaseProvider {
                 notNullKeyProperty(column.getProperty(), entity);
                 WHERE(column.getColumn() + "=#{key}");
             } else {
-                MetaObject metaObject = MapperTemplate.forObject(entity);
-                for (EntityHelper.EntityColumn column : entityTable.getEntityClassPKColumns()) {
-                    Object value = metaObject.getValue(column.getProperty());
-                    notNullKeyProperty(column.getProperty(), value);
-                    WHERE(column.getColumn() + "=#{key." + column.getProperty() + "}");
-                }
+                applyWherePk(this, MapperTemplate.forObject(entity), entityTable.getEntityClassPKColumns(), "key");
             }
         }}.toString();
     }
@@ -176,7 +171,6 @@ public class CommonProvider extends BaseProvider {
      */
     public String insert(final Map<String, Object> params) {
         return new SQL() {{
-            Object entity = getEntity(params);
             Class<?> entityClass = getEntityClass(params);
             EntityHelper.EntityTable entityTable = EntityHelper.getEntityTable(entityClass);
             INSERT_INTO(entityTable.getName());
@@ -259,12 +253,7 @@ public class CommonProvider extends BaseProvider {
                 notNullKeyProperty(column.getProperty(), entity);
                 WHERE(column.getColumn() + "=#{key}");
             } else {
-                MetaObject metaObject = MapperTemplate.forObject(entity);
-                for (EntityHelper.EntityColumn column : entityTable.getEntityClassPKColumns()) {
-                    Object value = metaObject.getValue(column.getProperty());
-                    notNullKeyProperty(column.getProperty(), value);
-                    WHERE(column.getColumn() + "=#{key." + column.getProperty() + "}");
-                }
+                applyWherePk(this, MapperTemplate.forObject(entity), entityTable.getEntityClassPKColumns(), "key");
             }
         }}.toString();
     }
@@ -288,17 +277,7 @@ public class CommonProvider extends BaseProvider {
                     SET(column.getColumn() + "=#{record." + column.getProperty() + "}");
                 }
             }
-            if (entityTable.getEntityClassPKColumns().size() == 1) {
-                EntityHelper.EntityColumn column = entityTable.getEntityClassPKColumns().iterator().next();
-                notNullKeyProperty(column.getProperty(), metaObject.getValue(column.getProperty()));
-                WHERE(column.getColumn() + "=#{record." + column.getProperty() + "}");
-            } else {
-                for (EntityHelper.EntityColumn column : entityTable.getEntityClassPKColumns()) {
-                    Object value = metaObject.getValue(column.getProperty());
-                    notNullKeyProperty(column.getProperty(), value);
-                    WHERE(column.getColumn() + "=#{record." + column.getProperty() + "}");
-                }
-            }
+            applyWherePk(this, metaObject, entityTable.getEntityClassPKColumns(), "record");
         }}.toString();
     }
 
@@ -322,16 +301,7 @@ public class CommonProvider extends BaseProvider {
                     SET(column.getColumn() + "=#{record." + column.getProperty() + "}");
                 }
             }
-            if (entityTable.getEntityClassPKColumns().size() == 1) {
-                EntityHelper.EntityColumn column = entityTable.getEntityClassPKColumns().iterator().next();
-                notNullKeyProperty(column.getProperty(), metaObject.getValue(column.getProperty()));
-                WHERE(column.getColumn() + "=#{record." + column.getProperty() + "}");
-            } else {
-                for (EntityHelper.EntityColumn column : entityTable.getEntityClassPKColumns()) {
-                    notNullKeyProperty(column.getProperty(), metaObject.getValue(column.getProperty()));
-                    WHERE(column.getColumn() + "=#{record." + column.getProperty() + "}");
-                }
-            }
+            applyWherePk(this, metaObject, entityTable.getEntityClassPKColumns(), "record");
         }}.toString();
     }
 

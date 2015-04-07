@@ -24,12 +24,14 @@
 
 package com.github.abel533.entity;
 
+import com.github.abel533.mapperhelper.EntityHelper;
 import com.github.abel533.mapperhelper.MapperTemplate;
 import org.apache.ibatis.jdbc.SQL;
 import org.apache.ibatis.reflection.MetaObject;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * 基础类
@@ -110,12 +112,27 @@ public class BaseProvider {
         }
         //根据Example的结构，通过判断是否包含某些属性来判断条件是否为合法的example类型
         MetaObject example = MapperTemplate.forObject(result);
-        if(example.hasGetter("orderByClause")
-                &&example.hasGetter("oredCriteria")
-                &&example.hasGetter("distinct")){
+        if (example.hasGetter("orderByClause")
+                && example.hasGetter("oredCriteria")
+                && example.hasGetter("distinct")) {
             return example;
         }
         throw new IllegalArgumentException("Example参数不是合法的Mybatis Example对象!");
+    }
+
+    /**
+     * 根据主键查询
+     *
+     * @param sql
+     * @param metaObject
+     * @param columns
+     * @param suffix
+     */
+    protected void applyWherePk(SQL sql, MetaObject metaObject, Set<EntityHelper.EntityColumn> columns, String suffix) {
+        for (EntityHelper.EntityColumn column : columns) {
+            notNullKeyProperty(column.getProperty(), metaObject.getValue(column.getProperty()));
+            sql.WHERE(column.getColumn() + "=#{" + (suffix != null ? suffix + "." : "") + column.getProperty() + "}");
+        }
     }
 
     /**
