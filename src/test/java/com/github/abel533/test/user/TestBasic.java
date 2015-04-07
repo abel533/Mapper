@@ -49,6 +49,7 @@ public class TestBasic {
 
             Assert.assertEquals(1,mapper.deleteByPrimaryKey(userInfo));
         } finally {
+            sqlSession.rollback();
             sqlSession.close();
         }
     }
@@ -76,6 +77,7 @@ public class TestBasic {
             //插入
             Assert.assertEquals(1, mapper.insert(userInfo));
         } finally {
+            sqlSession.rollback();
             sqlSession.close();
         }
     }
@@ -117,6 +119,7 @@ public class TestBasic {
             Assert.assertNull(userInfo.getUsertype());
             Assert.assertEquals("abel533@gmail.com", userInfo.getEmail());
         } finally {
+            sqlSession.rollback();
             sqlSession.close();
         }
     }
@@ -140,6 +143,7 @@ public class TestBasic {
             Assert.assertEquals("1", userInfo.getUsertype());
             Assert.assertEquals("abel533@gmail.com", userInfo.getEmail());
         } finally {
+            sqlSession.rollback();
             sqlSession.close();
         }
     }

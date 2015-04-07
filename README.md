@@ -86,6 +86,10 @@ Country代码：
 
 ##Maven坐标以及下载地址
 
+###开发版2.3.1-SNAPSHOT - 2015-04-07
+
+* 完善所有和PrimaryKey有关的通用查询
+
 ###最新版本2.3.0 - 2015-04-05
 
 * Mapper接口和EntityMapper都增加了`selectOne`方法，该查询返回值最多只能有一个，存在多个时抛出异常
