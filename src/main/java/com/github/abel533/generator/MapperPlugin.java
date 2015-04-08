@@ -47,6 +47,7 @@ import java.util.Set;
  */
 public class MapperPlugin extends PluginAdapter {
     private Set<String> mappers = new HashSet<String>();
+    private boolean caseSensitive = false;
 
     @Override
     public void setContext(Context context) {
@@ -67,6 +68,10 @@ public class MapperPlugin extends PluginAdapter {
             }
         } else {
             throw new RuntimeException("Mapper插件缺少必要的mappers属性!");
+        }
+        String caseSensitive = this.properties.getProperty("caseSensitive");
+        if (StringUtility.stringHasValue(caseSensitive)) {
+            this.caseSensitive = caseSensitive.equalsIgnoreCase("TRUE");
         }
     }
 
@@ -113,7 +118,10 @@ public class MapperPlugin extends PluginAdapter {
                     + tableName
                     + context.getEndingDelimiter();
         }
-        if (!topLevelClass.getType().getShortName().equalsIgnoreCase(tableName)) {
+        //是否忽略大小写，对于区分大小写的数据库，会有用
+        if (caseSensitive && !topLevelClass.getType().getShortName().equals(tableName)) {
+            topLevelClass.addAnnotation("@Table(name = \"" + tableName + "\")");
+        } else if (!topLevelClass.getType().getShortName().equalsIgnoreCase(tableName)) {
             topLevelClass.addAnnotation("@Table(name = \"" + tableName + "\")");
         }
     }

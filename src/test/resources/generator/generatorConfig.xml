@@ -34,6 +34,7 @@
     
     <plugin type="com.github.abel533.generator.MapperPlugin">
       <property name="mappers" value="com.github.abel533.mapper.Mapper,com.github.abel533.hsqldb.HsqldbMapper"/>
+      <property name="caseSensitive" value="true"/>
     </plugin>
 
     <jdbcConnection driverClass="com.mysql.jdbc.Driver"
