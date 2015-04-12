@@ -1,5 +1,21 @@
 #更新日志
 
+##2.3.1 - 2015-04-13
+
+* 完善所有和PrimaryKey有关的通用查询
+
+* 修复Mapper<T>接口中update操作会更新主键的bug
+
+* MBG插件增加caseSensitive默认false，当数据库表名区分大小写时，可以将该属性设置为true
+
+##2.3.0 - 2015-04-05
+
+* Mapper接口和EntityMapper都增加了`selectOne`方法，该查询返回值最多只能有一个，存在多个时抛出异常
+
+* Mapper接口和EntityMapper中，返回List的查询方法都支持JPA的`@Orderby`注解。其中`Example`查询中的`orderby`会覆盖注解的`@Orderby`设置。
+
+* 通过实体类获取表名的时候，不对表名进行强制的大小写转换。如果数据库大小写敏感，请通过`@Table`注解和数据库保持一致。
+
 ##2.2.0 - 2015-03-11
 
 * 新增`SqlMapper`，可以使用MyBatis直接执行sql，[详细文档](http://git.oschina.net/free/Mapper/blob/master/wiki/UseSqlMapper.md)

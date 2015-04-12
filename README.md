@@ -86,11 +86,15 @@ Country代码：
 
 ##Maven坐标以及下载地址
 
-###开发版2.3.1-SNAPSHOT - 2015-04-07
+###最新版本2.3.1 - 2015-04-13
 
 * 完善所有和PrimaryKey有关的通用查询
 
-###最新版本2.3.0 - 2015-04-05
+* 修复Mapper<T>接口中update操作会更新主键的bug
+
+* MBG插件增加caseSensitive默认false，当数据库表名区分大小写时，可以将该属性设置为true
+
+###2.3.0 - 2015-04-05
 
 * Mapper接口和EntityMapper都增加了`selectOne`方法，该查询返回值最多只能有一个，存在多个时抛出异常
 
@@ -104,7 +108,7 @@ Country代码：
 <dependency>
     <groupId>com.github.abel533</groupId>
     <artifactId>mapper</artifactId>
-    <version>2.3.0</version>
+    <version>2.3.1</version>
 </dependency>
 ```
 
