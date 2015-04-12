@@ -457,15 +457,15 @@ public abstract class MapperTemplate {
 
     public IfSqlNode ExampleValidSqlNode(Configuration configuration) {
         List<SqlNode> whenSqlNodes = new ArrayList<SqlNode>();
-        IfSqlNode noValueSqlNode = new IfSqlNode(new TextSqlNode("and ${criterion.condition}"), "criterion.noValue");
+        IfSqlNode noValueSqlNode = new IfSqlNode(new TextSqlNode(" and ${criterion.condition}"), "criterion.noValue");
         whenSqlNodes.add(noValueSqlNode);
-        IfSqlNode singleValueSqlNode = new IfSqlNode(new TextSqlNode("and ${criterion.condition} #{criterion.value}"), "criterion.singleValue");
+        IfSqlNode singleValueSqlNode = new IfSqlNode(new TextSqlNode(" and ${criterion.condition} #{criterion.value}"), "criterion.singleValue");
         whenSqlNodes.add(singleValueSqlNode);
-        IfSqlNode betweenValueSqlNode = new IfSqlNode(new TextSqlNode("and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}"), "criterion.betweenValue");
+        IfSqlNode betweenValueSqlNode = new IfSqlNode(new TextSqlNode(" and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}"), "criterion.betweenValue");
         whenSqlNodes.add(betweenValueSqlNode);
 
         List<SqlNode> listValueContentSqlNodes = new ArrayList<SqlNode>();
-        listValueContentSqlNodes.add(new TextSqlNode("and ${criterion.condition}"));
+        listValueContentSqlNodes.add(new TextSqlNode(" and ${criterion.condition}"));
         ForEachSqlNode listValueForEachSqlNode = new ForEachSqlNode(configuration, new StaticTextSqlNode("#{listItem}"), "criterion.value", null, "listItem", "(", ")", ",");
         listValueContentSqlNodes.add(listValueForEachSqlNode);
         IfSqlNode listValueSqlNode = new IfSqlNode(new MixedSqlNode(listValueContentSqlNodes), "criterion.noValue");
@@ -487,7 +487,7 @@ public abstract class MapperTemplate {
      * @return
      */
     public WhereSqlNode exampleWhereClause(Configuration configuration) {
-        ForEachSqlNode forEachSqlNode = new ForEachSqlNode(configuration, ExampleValidSqlNode(configuration), "oredCriteria", null, "criteria", null, null, "or");
+        ForEachSqlNode forEachSqlNode = new ForEachSqlNode(configuration, ExampleValidSqlNode(configuration), "oredCriteria", null, "criteria", null, null, " or ");
         WhereSqlNode whereSqlNode = new WhereSqlNode(configuration, forEachSqlNode);
         return whereSqlNode;
     }
@@ -500,7 +500,7 @@ public abstract class MapperTemplate {
      */
     public WhereSqlNode updateByExampleWhereClause(Configuration configuration) {
         //和上面方法的区别就在"example.oredCriteria"
-        ForEachSqlNode forEachSqlNode = new ForEachSqlNode(configuration, ExampleValidSqlNode(configuration), "example.oredCriteria", null, "criteria", null, null, "or");
+        ForEachSqlNode forEachSqlNode = new ForEachSqlNode(configuration, ExampleValidSqlNode(configuration), "example.oredCriteria", null, "criteria", null, null, " or ");
         WhereSqlNode whereSqlNode = new WhereSqlNode(configuration, forEachSqlNode);
         return whereSqlNode;
     }

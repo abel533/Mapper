@@ -92,6 +92,8 @@ Country代码：
 
 * 修复Mapper<T>接口中update操作会更新主键的bug
 
+* 修复Mapper<T>接口中使用Example查询的时候，条件and前面缺少空格，导致在sqlserver中出错
+
 * MBG插件增加caseSensitive默认false，当数据库表名区分大小写时，可以将该属性设置为true
 
 ###2.3.0 - 2015-04-05

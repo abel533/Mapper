@@ -22,10 +22,11 @@ public class TestSelectByExample {
         try {
             CountryMapper mapper = sqlSession.getMapper(CountryMapper.class);
             Example example = new Example(Country.class);
-            example.createCriteria().andGreaterThan("id", 100);
+            example.createCriteria().andGreaterThan("id", 100).andLessThan("id",151);
+            example.or().andLessThan("id",41);
             List<Country> countries = mapper.selectByExample(example);
             //查询总数
-            Assert.assertEquals(83, countries.size());
+            Assert.assertEquals(90, countries.size());
         } finally {
             sqlSession.close();
         }
@@ -39,7 +40,7 @@ public class TestSelectByExample {
             Example example = new Example(Country.class);
             example.createCriteria().andLike("countryname", "A%");
             example.or().andGreaterThan("id", 100);
-            example.setDistinct(true);
+            example.            setDistinct(true);
             List<Country> countries = mapper.selectByExample(example);
             //查询总数
             Assert.assertEquals(true, countries.size() > 83);
