@@ -86,6 +86,10 @@ Country代码：
 
 ##Maven坐标以及下载地址
 
+###测试版2.3.2-SNAPSHOT - 2015-04-21
+
+* 解决Example查询中in,notin无效的bug[#24](http://git.oschina.net/free/Mapper/issues/24)
+
 ###最新版本2.3.1 - 2015-04-13
 
 * 完善所有和PrimaryKey有关的通用查询
