@@ -9,6 +9,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -27,6 +28,22 @@ public class TestSelectByExample {
             List<Country> countries = mapper.selectByExample(example);
             //查询总数
             Assert.assertEquals(90, countries.size());
+        } finally {
+            sqlSession.close();
+        }
+    }
+
+    @Test
+    public void testSelectByExampleInNotIn() {
+        SqlSession sqlSession = MybatisHelper.getSqlSession();
+        try {
+            CountryMapper mapper = sqlSession.getMapper(CountryMapper.class);
+            Example example = new Example(Country.class);
+            example.createCriteria().andIn("id", Arrays.asList(new Object[]{1,2,3,4,5,6,7,8,9,10,11}))
+                    .andNotIn("id", Arrays.asList(new Object[]{11}));
+            List<Country> countries = mapper.selectByExample(example);
+            //查询总数
+            Assert.assertEquals(10, countries.size());
         } finally {
             sqlSession.close();
         }

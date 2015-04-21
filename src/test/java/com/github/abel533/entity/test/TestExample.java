@@ -33,6 +33,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -110,6 +111,24 @@ public class TestExample {
             countries = entityMapper.selectByExample(example);
             Assert.assertEquals(1, countries.size());
             Assert.assertEquals("MY", countries.get(0).getCountrycode());
+        } finally {
+            sqlSession.close();
+        }
+    }
+
+    @Test
+    public void testSelectByExampleInNotIn() {
+        SqlSession sqlSession = MybatisHelper.getSqlSession();
+        try {
+            CommonMapper commonMapper = sqlSession.getMapper(CommonMapper.class);
+            EntityMapper entityMapper = new EntityMapper(commonMapper);
+
+            Example example = new Example(Country.class);
+            example.createCriteria().andIn("id", Arrays.asList(new Object[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11}))
+                    .andNotIn("id", Arrays.asList(new Object[]{11}));
+            List<Country> countries = entityMapper.selectByExample(example);
+            //查询总数
+            Assert.assertEquals(10, countries.size());
         } finally {
             sqlSession.close();
         }
