@@ -1,5 +1,9 @@
 #更新日志
 
+##2.3.2 - 2015-04-21
+
+* 解决Example查询中in,notin无效的bug[#24](http://git.oschina.net/free/Mapper/issues/24)
+
 ##2.3.1 - 2015-04-13
 
 * 完善所有和PrimaryKey有关的通用查询
