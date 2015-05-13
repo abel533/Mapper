@@ -457,15 +457,15 @@ public abstract class MapperTemplate {
 
     public IfSqlNode ExampleValidSqlNode(Configuration configuration) {
         List<SqlNode> whenSqlNodes = new ArrayList<SqlNode>();
-        IfSqlNode noValueSqlNode = new IfSqlNode(new TextSqlNode("and ${criterion.condition}"), "criterion.noValue");
+        IfSqlNode noValueSqlNode = new IfSqlNode(new TextSqlNode(" and ${criterion.condition}"), "criterion.noValue");
         whenSqlNodes.add(noValueSqlNode);
-        IfSqlNode singleValueSqlNode = new IfSqlNode(new TextSqlNode("and ${criterion.condition} #{criterion.value}"), "criterion.singleValue");
+        IfSqlNode singleValueSqlNode = new IfSqlNode(new TextSqlNode(" and ${criterion.condition} #{criterion.value}"), "criterion.singleValue");
         whenSqlNodes.add(singleValueSqlNode);
-        IfSqlNode betweenValueSqlNode = new IfSqlNode(new TextSqlNode("and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}"), "criterion.betweenValue");
+        IfSqlNode betweenValueSqlNode = new IfSqlNode(new TextSqlNode(" and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}"), "criterion.betweenValue");
         whenSqlNodes.add(betweenValueSqlNode);
 
         List<SqlNode> listValueContentSqlNodes = new ArrayList<SqlNode>();
-        listValueContentSqlNodes.add(new TextSqlNode("and ${criterion.condition}"));
+        listValueContentSqlNodes.add(new TextSqlNode(" and ${criterion.condition}"));
         ForEachSqlNode listValueForEachSqlNode = new ForEachSqlNode(configuration, new StaticTextSqlNode("#{listItem}"), "criterion.value", null, "listItem", "(", ")", ",");
         listValueContentSqlNodes.add(listValueForEachSqlNode);
         IfSqlNode listValueSqlNode = new IfSqlNode(new MixedSqlNode(listValueContentSqlNodes), "criterion.listValue");
