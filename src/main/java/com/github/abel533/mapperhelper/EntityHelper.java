@@ -49,7 +49,7 @@ public class EntityHelper {
         private String name;
         private String catalog;
         private String schema;
-        private StringBuilder orderByClause;
+        private String orderByClause;
         //实体类 => 全部列属性
         private Set<EntityColumn> entityClassColumns;
         //实体类 => 主键信息
@@ -249,7 +249,7 @@ public class EntityHelper {
      * @param entityClass
      * @return
      */
-    public static StringBuilder getOrderByClause(Class<?> entityClass) {
+    public static String getOrderByClause(Class<?> entityClass) {
         EntityTable table = getEntityTable(entityClass);
         if (table.orderByClause != null) {
             return table.orderByClause;
@@ -263,7 +263,7 @@ public class EntityHelper {
                 orderBy.append(column.getColumn()).append(" ").append(column.getOrderBy());
             }
         }
-        table.orderByClause = orderBy;
+        table.orderByClause = orderBy.toString();
         return table.orderByClause;
     }
 

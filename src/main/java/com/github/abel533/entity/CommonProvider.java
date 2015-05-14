@@ -96,9 +96,9 @@ public class CommonProvider extends BaseProvider {
                     }
                 }
             }
-            StringBuilder orderByClause = EntityHelper.getOrderByClause(entityClass);
+            String orderByClause = EntityHelper.getOrderByClause(entityClass);
             if (orderByClause.length() > 0) {
-                ORDER_BY(orderByClause.toString());
+                ORDER_BY(orderByClause);
             }
         }}.toString();
     }
@@ -334,7 +334,7 @@ public class CommonProvider extends BaseProvider {
             SELECT(EntityHelper.getAllColumns(entityClass));
             FROM(entityTable.getName());
             applyWhere(this, example);
-            applyOrderBy(this, example, EntityHelper.getOrderByClause(entityClass).toString());
+            applyOrderBy(this, example, EntityHelper.getOrderByClause(entityClass));
         }}.toString();
     }
 
