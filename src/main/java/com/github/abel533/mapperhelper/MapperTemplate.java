@@ -449,7 +449,8 @@ public abstract class MapperTemplate {
         try {
             MetaObject msObject = forObject(ms);
             msObject.setValue("keyGenerator", keyGenerator);
-            msObject.setValue("keyProperties", new String[]{column.getProperty()});
+            msObject.setValue("keyProperties", column.getTable().getKeyProperties());
+            msObject.setValue("keyColumns", column.getTable().getKeyColumns());
         } catch (Exception e) {
             //ignore
         }

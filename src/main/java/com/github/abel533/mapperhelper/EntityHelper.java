@@ -56,6 +56,9 @@ public class EntityHelper {
         private Set<EntityColumn> entityClassPKColumns;
         //字段名和属性名的映射
         private Map<String, String> aliasMap;
+        //useGenerator包含多列的时候需要用到
+        private List<String> keyProperties;
+        private List<String> keyColumns;
 
         public void setTable(Table table) {
             this.name = table.name();
@@ -96,12 +99,45 @@ public class EntityHelper {
         public Map<String, String> getAliasMap() {
             return aliasMap;
         }
+
+        public String[] getKeyProperties() {
+            if (keyProperties != null && keyProperties.size() > 0) {
+                return keyProperties.toArray(new String[]{});
+            }
+            return new String[]{};
+        }
+
+        public void setKeyProperties(String keyProperty) {
+            if (this.keyProperties == null) {
+                this.keyProperties = new ArrayList<String>();
+                this.keyProperties.add(keyProperty);
+            } else {
+                this.keyProperties.add(keyProperty);
+            }
+        }
+
+        public String[] getKeyColumns() {
+            if (keyColumns != null && keyColumns.size() > 0) {
+                return keyColumns.toArray(new String[]{});
+            }
+            return new String[]{};
+        }
+
+        public void setKeyColumns(String keyColumn) {
+            if (this.keyColumns == null) {
+                this.keyColumns = new ArrayList<String>();
+                this.keyColumns.add(keyColumn);
+            } else {
+                this.keyColumns.add(keyColumn);
+            }
+        }
     }
 
     /**
      * 实体字段对应数据库列的信息
      */
     public static class EntityColumn {
+        private EntityTable table;
         private String property;
         private String column;
         private Class<?> javaType;
@@ -110,8 +146,22 @@ public class EntityHelper {
         private boolean uuid = false;
         private boolean identity = false;
         private String generator;
-        private String keyProperties;//useGenerator包含多列的时候需要用到
         private String orderBy;
+
+        public EntityColumn() {
+        }
+
+        public EntityColumn(EntityTable table) {
+            this.table = table;
+        }
+
+        public EntityTable getTable() {
+            return table;
+        }
+
+        public void setTable(EntityTable table) {
+            this.table = table;
+        }
 
         public String getProperty() {
             return property;
@@ -175,14 +225,6 @@ public class EntityHelper {
 
         public void setGenerator(String generator) {
             this.generator = generator;
-        }
-
-        public String getKeyProperties() {
-            return keyProperties;
-        }
-
-        public void setKeyProperties(String keyProperties) {
-            this.keyProperties = keyProperties;
         }
 
         public String getOrderBy() {
@@ -398,7 +440,7 @@ public class EntityHelper {
             if (field.isAnnotationPresent(Transient.class)) {
                 continue;
             }
-            EntityColumn entityColumn = new EntityColumn();
+            EntityColumn entityColumn = new EntityColumn(entityTable);
             if (field.isAnnotationPresent(Id.class)) {
                 entityColumn.setId(true);
             }
@@ -436,6 +478,8 @@ public class EntityHelper {
                 } else if (generatedValue.generator().equals("JDBC")) {
                     entityColumn.setIdentity(true);
                     entityColumn.setGenerator("JDBC");
+                    entityTable.setKeyProperties(entityColumn.getProperty());
+                    entityTable.setKeyColumns(entityColumn.getColumn());
                 } else {
                     //允许通过generator来设置获取id的sql,例如mysql=CALL IDENTITY(),hsqldb=SELECT SCOPE_IDENTITY()
                     //允许通过拦截器参数设置公共的generator

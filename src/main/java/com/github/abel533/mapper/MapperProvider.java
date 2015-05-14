@@ -156,17 +156,21 @@ public class MapperProvider extends MapperTemplate {
             //序列的情况，直接写入sql中，不需要额外的获取值
             if (column.getSequenceName() != null && column.getSequenceName().length() > 0) {
             } else if (column.isIdentity()) {
+                //这种情况下,如果原先的字段有值,需要先缓存起来,否则就一定会使用自动增长
+                //这是一个bind节点
+                sqlNodes.add(new VarDeclSqlNode(column.getProperty() + "_cache", column.getProperty()));
                 //如果是Identity列，就需要插入selectKey
                 //如果已经存在Identity列，抛出异常
                 if (hasIdentityKey) {
+                    //jdbc类型只需要添加一次
+                    if (column.getGenerator() != null && column.getGenerator().equals("JDBC")) {
+                        continue;
+                    }
                     throw new RuntimeException(ms.getId() + "对应的实体类" + entityClass.getCanonicalName() + "中包含多个MySql的自动增长列,最多只能有一个!");
                 }
                 //插入selectKey
                 newSelectKeyMappedStatement(ms, column);
                 hasIdentityKey = true;
-                //这种情况下,如果原先的字段有值,需要先缓存起来,否则就一定会使用自动增长
-                //这是一个bind节点
-                sqlNodes.add(new VarDeclSqlNode(column.getProperty() + "_cache", column.getProperty()));
             } else if (column.isUuid()) {
                 //uuid的情况，直接插入bind节点
                 sqlNodes.add(new VarDeclSqlNode(column.getProperty() + "_bind", getUUID()));
@@ -226,7 +230,13 @@ public class MapperProvider extends MapperTemplate {
                 //直接将列加进去
                 ifNodes.add(new StaticTextSqlNode(column.getColumn() + ","));
             } else if (column.isIdentity()) {
+                //这种情况下,如果原先的字段有值,需要先缓存起来,否则就一定会使用自动增长
+                sqlNodes.add(new VarDeclSqlNode(column.getProperty() + "_cache", column.getProperty()));
                 if (hasIdentityKey) {
+                    //jdbc类型只需要添加一次
+                    if (column.getGenerator() != null && column.getGenerator().equals("JDBC")) {
+                        continue;
+                    }
                     throw new RuntimeException(ms.getId() + "对应的实体类" + entityClass.getCanonicalName() + "中包含多个MySql的自动增长列,最多只能有一个!");
                 }
                 //新增一个selectKey-MS
@@ -234,8 +244,6 @@ public class MapperProvider extends MapperTemplate {
                 hasIdentityKey = true;
                 //加入该列
                 ifNodes.add(new StaticTextSqlNode(column.getColumn() + ","));
-                //这种情况下,如果原先的字段有值,需要先缓存起来,否则就一定会使用自动增长
-                sqlNodes.add(new VarDeclSqlNode(column.getProperty() + "_cache", column.getProperty()));
             } else if (column.isUuid()) {
                 //将UUID的值加入bind节点
                 sqlNodes.add(new VarDeclSqlNode(column.getProperty() + "_bind", getUUID()));
