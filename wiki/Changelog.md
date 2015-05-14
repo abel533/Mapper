@@ -1,5 +1,18 @@
 #更新日志
 
+##2.3.3 - 2015-05-14
+
+* 解决Example查询中的`and`缺少空格的问题
+
+* 去掉UUID和JDBC两种主键策略类型中对字段类型的限制
+  不再限制为`String`，可以是任意简单类型，需要自己保证类型匹配。例如UUID配置的策略可以返回`Integer`,那么字段类型必须是`Integer`。
+
+* JDBC类型的主键策略可以配置多个，就相当于`keyProperties="id1,id2..."`
+
+* `EntityHelper`的`getOrderByClause`方法返回值从`StringBuilder`改为`String`，解决`@OrderBy`注解时的异常
+
+* <b>提前预告：下个版本3.0.0会将通用Mapper项目拆分为两个项目，会有一些大的改动</b>
+
 ##2.3.2 - 2015-04-21
 
 * 解决Example查询中in,notin无效的bug[#24](http://git.oschina.net/free/Mapper/issues/24)
