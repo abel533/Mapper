@@ -110,6 +110,7 @@ public class EntityHelper {
         private boolean uuid = false;
         private boolean identity = false;
         private String generator;
+        private String keyProperties;//useGenerator包含多列的时候需要用到
         private String orderBy;
 
         public String getProperty() {
@@ -174,6 +175,14 @@ public class EntityHelper {
 
         public void setGenerator(String generator) {
             this.generator = generator;
+        }
+
+        public String getKeyProperties() {
+            return keyProperties;
+        }
+
+        public void setKeyProperties(String keyProperties) {
+            this.keyProperties = keyProperties;
         }
 
         public String getOrderBy() {
@@ -423,18 +432,10 @@ public class EntityHelper {
             } else if (field.isAnnotationPresent(GeneratedValue.class)) {
                 GeneratedValue generatedValue = field.getAnnotation(GeneratedValue.class);
                 if (generatedValue.generator().equals("UUID")) {
-                    if (field.getType().equals(String.class)) {
-                        entityColumn.setUuid(true);
-                    } else {
-                        throw new RuntimeException(field.getName() + " - 该字段@GeneratedValue配置为UUID，但该字段类型不是String");
-                    }
+                    entityColumn.setUuid(true);
                 } else if (generatedValue.generator().equals("JDBC")) {
-                    if (Number.class.isAssignableFrom(field.getType())) {
-                        entityColumn.setIdentity(true);
-                        entityColumn.setGenerator("JDBC");
-                    } else {
-                        throw new RuntimeException(field.getName() + " - 该字段@GeneratedValue配置为UUID，但该字段类型不是String");
-                    }
+                    entityColumn.setIdentity(true);
+                    entityColumn.setGenerator("JDBC");
                 } else {
                     //允许通过generator来设置获取id的sql,例如mysql=CALL IDENTITY(),hsqldb=SELECT SCOPE_IDENTITY()
                     //允许通过拦截器参数设置公共的generator
@@ -473,13 +474,6 @@ public class EntityHelper {
         }
         //缓存
         entityTableMap.put(entityClass, entityTable);
-    }
-
-    public static void main(String[] args) {
-        System.out.println(camelhumpToUnderline("userName"));
-        System.out.println(camelhumpToUnderline("userPassWord"));
-        System.out.println(camelhumpToUnderline("ISO9001"));
-        System.out.println(camelhumpToUnderline("hello_world"));
     }
 
     /**

@@ -394,7 +394,7 @@ public abstract class MapperTemplate {
         Class<?> entityClass = getSelectReturnType(ms);
         //defaults
         Configuration configuration = ms.getConfiguration();
-        KeyGenerator keyGenerator = null;
+        KeyGenerator keyGenerator;
         Boolean executeBefore = getBEFORE();
         String IDENTITY = (column.getGenerator() == null || column.getGenerator().equals("")) ? getIDENTITY() : column.getGenerator();
         if (IDENTITY.equalsIgnoreCase("JDBC")) {
