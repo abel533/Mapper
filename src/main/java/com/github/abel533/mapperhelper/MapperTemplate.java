@@ -296,7 +296,11 @@ public abstract class MapperTemplate {
      * @return
      */
     protected SqlNode getIfNotNull(EntityHelper.EntityColumn column, SqlNode columnNode, boolean empty) {
-        return new IfSqlNode(columnNode, column.getProperty() + " != null " + (empty ? " and " + column.getProperty() + " != ''" : ""));
+        if (empty && column.getJavaType().equals(String.class)) {
+            return new IfSqlNode(columnNode, column.getProperty() + " != null and " + column.getProperty() + " != ''");
+        } else {
+            return new IfSqlNode(columnNode, column.getProperty() + " != null ");
+        }
     }
 
     /**
