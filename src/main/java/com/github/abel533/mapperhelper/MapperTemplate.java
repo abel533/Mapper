@@ -427,11 +427,18 @@ public abstract class MapperTemplate {
             statementBuilder.cache(null);
 
             MappedStatement statement = statementBuilder.build();
-            configuration.addMappedStatement(statement);
-
+            try {
+                configuration.addMappedStatement(statement);
+            } catch (Exception e) {
+                //ignore
+            }
             MappedStatement keyStatement = configuration.getMappedStatement(keyId, false);
             keyGenerator = new SelectKeyGenerator(keyStatement, executeBefore);
-            configuration.addKeyGenerator(keyId, keyGenerator);
+            try {
+                configuration.addKeyGenerator(keyId, keyGenerator);
+            } catch (Exception e) {
+                //ignore
+            }
         }
         //keyGenerator
         try {
