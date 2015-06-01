@@ -25,9 +25,9 @@
 package com.github.abel533.entity;
 
 import com.github.abel533.mapperhelper.EntityHelper;
-import com.github.abel533.mapperhelper.MapperTemplate;
 import org.apache.ibatis.jdbc.SQL;
 import org.apache.ibatis.reflection.MetaObject;
+import org.apache.ibatis.reflection.SystemMetaObject;
 
 import java.util.List;
 import java.util.Map;
@@ -111,7 +111,7 @@ public class BaseProvider {
             return null;
         }
         //根据Example的结构，通过判断是否包含某些属性来判断条件是否为合法的example类型
-        MetaObject example = MapperTemplate.forObject(result);
+        MetaObject example = SystemMetaObject.forObject(result);
         if (example.hasGetter("orderByClause")
                 && example.hasGetter("oredCriteria")
                 && example.hasGetter("distinct")) {
@@ -169,7 +169,7 @@ public class BaseProvider {
         List<?> oredCriteria = (List<?>) example.getValue("oredCriteria");
         boolean firstCriteria = true;
         for (int i = 0; i < oredCriteria.size(); i++) {
-            MetaObject criteria = MapperTemplate.forObject(oredCriteria.get(i));
+            MetaObject criteria = SystemMetaObject.forObject(oredCriteria.get(i));
             List<?> criterions = (List<?>) criteria.getValue("criteria");
             if (criterions.size() > 0) {
                 if (firstCriteria) {
@@ -181,7 +181,7 @@ public class BaseProvider {
                 sb.append('(');
                 boolean firstCriterion = true;
                 for (int j = 0; j < criterions.size(); j++) {
-                    MetaObject criterion = MapperTemplate.forObject(criterions.get(j));
+                    MetaObject criterion = SystemMetaObject.forObject(criterions.get(j));
                     if (firstCriterion) {
                         firstCriterion = false;
                     } else {

@@ -30,10 +30,7 @@ import org.apache.ibatis.executor.keygen.NoKeyGenerator;
 import org.apache.ibatis.executor.keygen.SelectKeyGenerator;
 import org.apache.ibatis.mapping.*;
 import org.apache.ibatis.reflection.MetaObject;
-import org.apache.ibatis.reflection.factory.DefaultObjectFactory;
-import org.apache.ibatis.reflection.factory.ObjectFactory;
-import org.apache.ibatis.reflection.wrapper.DefaultObjectWrapperFactory;
-import org.apache.ibatis.reflection.wrapper.ObjectWrapperFactory;
+import org.apache.ibatis.reflection.SystemMetaObject;
 import org.apache.ibatis.scripting.defaults.RawSqlSource;
 import org.apache.ibatis.scripting.xmltags.*;
 import org.apache.ibatis.session.Configuration;
@@ -86,19 +83,6 @@ public abstract class MapperTemplate {
         return mapperHelper.getBEFORE();
     }
 
-    private static final ObjectFactory DEFAULT_OBJECT_FACTORY = new DefaultObjectFactory();
-    private static final ObjectWrapperFactory DEFAULT_OBJECT_WRAPPER_FACTORY = new DefaultObjectWrapperFactory();
-
-    /**
-     * 反射对象，增加对低版本Mybatis的支持
-     *
-     * @param object 反射对象
-     * @return
-     */
-    public static MetaObject forObject(Object object) {
-        return MetaObject.forObject(object, DEFAULT_OBJECT_FACTORY, DEFAULT_OBJECT_WRAPPER_FACTORY);
-    }
-
     /**
      * 是否支持该通用方法
      *
@@ -122,7 +106,7 @@ public abstract class MapperTemplate {
      */
     protected void setResultType(MappedStatement ms, Class<?> entityClass) {
         ResultMap resultMap = ms.getResultMaps().get(0);
-        MetaObject metaObject = forObject(resultMap);
+        MetaObject metaObject = SystemMetaObject.forObject(resultMap);
         metaObject.setValue("type", entityClass);
     }
 
@@ -133,7 +117,7 @@ public abstract class MapperTemplate {
      * @param sqlSource
      */
     protected void setSqlSource(MappedStatement ms, SqlSource sqlSource) {
-        MetaObject msObject = forObject(ms);
+        MetaObject msObject = SystemMetaObject.forObject(ms);
         msObject.setValue("sqlSource", sqlSource);
     }
 
@@ -451,7 +435,7 @@ public abstract class MapperTemplate {
         }
         //keyGenerator
         try {
-            MetaObject msObject = forObject(ms);
+            MetaObject msObject = SystemMetaObject.forObject(ms);
             msObject.setValue("keyGenerator", keyGenerator);
             msObject.setValue("keyProperties", column.getTable().getKeyProperties());
             msObject.setValue("keyColumns", column.getTable().getKeyColumns());

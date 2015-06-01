@@ -25,9 +25,9 @@
 package com.github.abel533.entity;
 
 import com.github.abel533.mapperhelper.EntityHelper;
-import com.github.abel533.mapperhelper.MapperTemplate;
 import org.apache.ibatis.jdbc.SQL;
 import org.apache.ibatis.reflection.MetaObject;
+import org.apache.ibatis.reflection.SystemMetaObject;
 
 import java.util.Map;
 
@@ -51,7 +51,7 @@ public class CommonProvider extends BaseProvider {
             SELECT(EntityHelper.getAllColumns(entityClass));
             FROM(entityTable.getName());
             if (entity != null) {
-                final MetaObject metaObject = MapperTemplate.forObject(entity);
+                final MetaObject metaObject = SystemMetaObject.forObject(entity);
                 for (EntityHelper.EntityColumn column : entityTable.getEntityClassColumns()) {
                     Object value = metaObject.getValue(column.getProperty());
                     if (value == null) {
@@ -82,7 +82,7 @@ public class CommonProvider extends BaseProvider {
             SELECT(EntityHelper.getAllColumns(entityClass));
             FROM(entityTable.getName());
             if (entity != null) {
-                final MetaObject metaObject = MapperTemplate.forObject(entity);
+                final MetaObject metaObject = SystemMetaObject.forObject(entity);
                 for (EntityHelper.EntityColumn column : entityTable.getEntityClassColumns()) {
                     Object value = metaObject.getValue(column.getProperty());
                     if (value == null) {
@@ -123,7 +123,7 @@ public class CommonProvider extends BaseProvider {
             SELECT("count(*)");
             FROM(entityTable.getName());
             if (entity != null) {
-                MetaObject metaObject = MapperTemplate.forObject(entity);
+                MetaObject metaObject = SystemMetaObject.forObject(entity);
                 for (EntityHelper.EntityColumn column : entityTable.getEntityClassColumns()) {
                     Object value = metaObject.getValue(column.getProperty());
                     if (value == null) {
@@ -158,7 +158,7 @@ public class CommonProvider extends BaseProvider {
                 notNullKeyProperty(column.getProperty(), entity);
                 WHERE(column.getColumn() + "=#{key}");
             } else {
-                applyWherePk(this, MapperTemplate.forObject(entity), entityTable.getEntityClassPKColumns(), "key");
+                applyWherePk(this, SystemMetaObject.forObject(entity), entityTable.getEntityClassPKColumns(), "key");
             }
         }}.toString();
     }
@@ -191,7 +191,7 @@ public class CommonProvider extends BaseProvider {
             Object entity = getEntity(params);
             Class<?> entityClass = getEntityClass(params);
             EntityHelper.EntityTable entityTable = EntityHelper.getEntityTable(entityClass);
-            MetaObject metaObject = MapperTemplate.forObject(entity);
+            MetaObject metaObject = SystemMetaObject.forObject(entity);
             INSERT_INTO(entityTable.getName());
             for (EntityHelper.EntityColumn column : entityTable.getEntityClassColumns()) {
                 Object value = metaObject.getValue(column.getProperty());
@@ -213,7 +213,7 @@ public class CommonProvider extends BaseProvider {
             Object entity = getEntity(params);
             Class<?> entityClass = getEntityClass(params);
             EntityHelper.EntityTable entityTable = EntityHelper.getEntityTable(entityClass);
-            MetaObject metaObject = MapperTemplate.forObject(entity);
+            MetaObject metaObject = SystemMetaObject.forObject(entity);
             DELETE_FROM(entityTable.getName());
             boolean hasValue = false;
             for (EntityHelper.EntityColumn column : entityTable.getEntityClassColumns()) {
@@ -253,7 +253,7 @@ public class CommonProvider extends BaseProvider {
                 notNullKeyProperty(column.getProperty(), entity);
                 WHERE(column.getColumn() + "=#{key}");
             } else {
-                applyWherePk(this, MapperTemplate.forObject(entity), entityTable.getEntityClassPKColumns(), "key");
+                applyWherePk(this, SystemMetaObject.forObject(entity), entityTable.getEntityClassPKColumns(), "key");
             }
         }}.toString();
     }
@@ -269,7 +269,7 @@ public class CommonProvider extends BaseProvider {
             Object entity = getEntity(params);
             Class<?> entityClass = getEntityClass(params);
             EntityHelper.EntityTable entityTable = EntityHelper.getEntityTable(entityClass);
-            MetaObject metaObject = MapperTemplate.forObject(entity);
+            MetaObject metaObject = SystemMetaObject.forObject(entity);
             UPDATE(entityTable.getName());
             for (EntityHelper.EntityColumn column : entityTable.getEntityClassColumns()) {
                 //更新不是ID的字段，因为根据主键查询的...更新后还是一样。
@@ -292,7 +292,7 @@ public class CommonProvider extends BaseProvider {
             Object entity = getEntity(params);
             Class<?> entityClass = getEntityClass(params);
             EntityHelper.EntityTable entityTable = EntityHelper.getEntityTable(entityClass);
-            MetaObject metaObject = MapperTemplate.forObject(entity);
+            MetaObject metaObject = SystemMetaObject.forObject(entity);
             UPDATE(entityTable.getName());
             for (EntityHelper.EntityColumn column : entityTable.getEntityClassColumns()) {
                 Object value = metaObject.getValue(column.getProperty());
@@ -344,7 +344,7 @@ public class CommonProvider extends BaseProvider {
             MetaObject example = getExample(params);
             Class<?> entityClass = getEntityClass(params);
             EntityHelper.EntityTable entityTable = EntityHelper.getEntityTable(entityClass);
-            MetaObject metaObject = MapperTemplate.forObject(entity);
+            MetaObject metaObject = SystemMetaObject.forObject(entity);
             UPDATE(entityTable.getName());
             for (EntityHelper.EntityColumn column : entityTable.getEntityClassColumns()) {
                 Object value = metaObject.getValue(column.getProperty());
@@ -363,7 +363,7 @@ public class CommonProvider extends BaseProvider {
             MetaObject example = getExample(params);
             Class<?> entityClass = getEntityClass(params);
             EntityHelper.EntityTable entityTable = EntityHelper.getEntityTable(entityClass);
-            MetaObject metaObject = MapperTemplate.forObject(entity);
+            MetaObject metaObject = SystemMetaObject.forObject(entity);
             UPDATE(entityTable.getName());
             for (EntityHelper.EntityColumn column : entityTable.getEntityClassColumns()) {
                 //更新不是ID的字段，因为根据主键查询的...更新后还是一样。
