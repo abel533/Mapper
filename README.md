@@ -88,6 +88,14 @@ Country代码：
 
 ##Maven坐标以及下载地址
 
+###最新版本2.3.4 - 2015-06-01
+
+* 高并发时selectKey会产生异常，解决[#32](http://git.oschina.net/free/Mapper/issues/32)
+
+* 兼容MyBatis3.3.0版本
+
+* <b>提前预告：下个版本3.0.0会将通用Mapper项目拆分为两个项目，会有一些大的改动</b>
+
 ###最新版本2.3.3 - 2015-05-14
 
 * 解决Example查询中的`and`缺少空格的问题
@@ -129,7 +137,7 @@ Country代码：
 <dependency>
     <groupId>com.github.abel533</groupId>
     <artifactId>mapper</artifactId>
-    <version>2.3.3</version>
+    <version>2.3.4</version>
 </dependency>
 ```
 
