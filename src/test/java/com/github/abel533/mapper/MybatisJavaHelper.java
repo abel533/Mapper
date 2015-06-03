@@ -49,7 +49,7 @@ public class MybatisJavaHelper {
                 mapperHelper.setSchema("");
                 // 主键自增回写方法执行顺序,默认AFTER,可选值为(BEFORE|AFTER)
                 mapperHelper.setOrder("AFTER");
-                // 注册通用Mapper接口
+                // 注册通用Mapper接口 - 可以自动注册继承的接口
                 mapperHelper.registerMapper(Mapper.class);
                 mapperHelper.registerMapper(HsqldbMapper.class);
                 //配置完成后，执行下面的操作
