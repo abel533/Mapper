@@ -24,7 +24,7 @@
 
 package com.github.abel533.mapper.base.insert;
 
-import com.github.abel533.mapper.MapperProvider;
+import com.github.abel533.provider.MapperProvider;
 import org.apache.ibatis.annotations.InsertProvider;
 
 /**

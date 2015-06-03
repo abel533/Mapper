@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package com.github.abel533.mapper;
+package com.github.abel533.provider;
 
 import com.github.abel533.mapperhelper.EntityHelper;
 import com.github.abel533.mapperhelper.MapperHelper;

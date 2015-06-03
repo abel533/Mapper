@@ -24,7 +24,7 @@
 
 package com.github.abel533.mapper.base.delete;
 
-import com.github.abel533.mapper.MapperProvider;
+import com.github.abel533.provider.MapperProvider;
 import org.apache.ibatis.annotations.DeleteProvider;
 
 /**
