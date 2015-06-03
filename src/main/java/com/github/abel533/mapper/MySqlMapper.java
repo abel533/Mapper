@@ -22,7 +22,9 @@
  * THE SOFTWARE.
  */
 
-package com.github.abel533.mapper.mysql;
+package com.github.abel533.mapper;
+
+import com.github.abel533.mapper.special.InsertListMapper;
 
 /**
  * 通用Mapper接口,MySql独有的通用方法
