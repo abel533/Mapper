@@ -48,6 +48,7 @@ import java.util.*;
  * @author liuzh
  */
 public abstract class MapperTemplate {
+    private XMLLanguageDriver languageDriver = new XMLLanguageDriver();
     private Map<String, Method> methodMap = new HashMap<String, Method>();
     private Class<?> mapperClass;
     private MapperHelper mapperHelper;
@@ -499,5 +500,9 @@ public abstract class MapperTemplate {
         ForEachSqlNode forEachSqlNode = new ForEachSqlNode(configuration, ExampleValidSqlNode(configuration), "example.oredCriteria", null, "criteria", null, null, " or ");
         WhereSqlNode whereSqlNode = new WhereSqlNode(configuration, forEachSqlNode);
         return whereSqlNode;
+    }
+
+    public SqlSource createSqlSource(MappedStatement ms, String xmlSql) {
+        return languageDriver.createSqlSource(ms.getConfiguration(), "<script>\n\t" + xmlSql + "</script>", null);
     }
 }

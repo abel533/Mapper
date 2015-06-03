@@ -433,8 +433,8 @@ public class EntityHelper {
         }
         //列
         List<Field> fieldList = getAllField(entityClass, null);
-        Set<EntityColumn> columnSet = new HashSet<EntityColumn>();
-        Set<EntityColumn> pkColumnSet = new HashSet<EntityColumn>();
+        Set<EntityColumn> columnSet = new LinkedHashSet<EntityColumn>();
+        Set<EntityColumn> pkColumnSet = new LinkedHashSet<EntityColumn>();
         for (Field field : fieldList) {
             //排除字段
             if (field.isAnnotationPresent(Transient.class)) {
