@@ -28,16 +28,15 @@ import com.github.abel533.mapperhelper.EntityHelper;
 import com.github.abel533.mapperhelper.MapperHelper;
 import com.github.abel533.mapperhelper.MapperTemplate;
 import org.apache.ibatis.mapping.MappedStatement;
-import org.apache.ibatis.mapping.SqlSource;
 
 /**
  * Mappper实现类，可以当场一个用来参考的例子
  *
  * @author liuzh
  */
-public class MySqlProvider extends MapperTemplate {
+public class SpecialProvider extends MapperTemplate {
 
-    public MySqlProvider(Class<?> mapperClass, MapperHelper mapperHelper) {
+    public SpecialProvider(Class<?> mapperClass, MapperHelper mapperHelper) {
         super(mapperClass, mapperHelper);
     }
 
@@ -46,7 +45,7 @@ public class MySqlProvider extends MapperTemplate {
      *
      * @param ms
      */
-    public void insertList(MappedStatement ms) {
+    public String insertList(MappedStatement ms) {
         final Class<?> entityClass = getSelectReturnType(ms);
         EntityHelper.EntityTable table = EntityHelper.getEntityTable(entityClass);
         //开始拼sql
@@ -63,7 +62,7 @@ public class MySqlProvider extends MapperTemplate {
             first = false;
         }
         sql.append(") values ");
-        sql.append("<foreach collection=\"recordList\" item=\"record\" separator=\",\" >");
+        sql.append("<foreach collection=\"list\" item=\"record\" separator=\",\" >");
         sql.append("(");
         first = true;
         for (EntityHelper.EntityColumn column : table.getEntityClassColumns()) {
@@ -75,11 +74,6 @@ public class MySqlProvider extends MapperTemplate {
         }
         sql.append(")");
         sql.append("</foreach>");
-
-        SqlSource sqlSource = createSqlSource(ms, sql.toString());
-        //替换原有的SqlSource
-        setSqlSource(ms, sqlSource);
-        //将返回值修改为实体类型
-        setResultType(ms, entityClass);
+        return sql.toString();
     }
 }

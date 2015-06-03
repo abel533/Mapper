@@ -24,9 +24,9 @@
 
 package com.github.abel533.mapper.special;
 
-import com.github.abel533.provider.MySqlProvider;
+import com.github.abel533.provider.SpecialProvider;
 import org.apache.ibatis.annotations.InsertProvider;
-import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Options;
 
 import java.util.List;
 
@@ -39,14 +39,28 @@ import java.util.List;
 public interface InsertListMapper<T> {
 
     /**
-     * 批量插入，所有主键策略无效，支持数据库自增字段
+     * 批量插入，支持数据库自增字段，支持回写
      *
      * @param recordList
      * @return
      */
-    //由于目前的MyBatis没有合并https://github.com/mybatis/mybatis-3/pull/350 请求
-    //所以目前不支持批量插入id回写
-    //@Options(useGeneratedKeys = true, keyProperty = "id")
-    @InsertProvider(type = MySqlProvider.class, method = "dynamicSQL")
-    int insertList(@Param("recordList") List<T> recordList);
+    @Options(useGeneratedKeys = true, keyProperty = "id")
+    @InsertProvider(type = SpecialProvider.class, method = "dynamicSQL")
+    int insertList(List<T> recordList);
+
+    /**
+     * ======如果主键不是id怎么用？==========
+     * 假设主键的属性名是uid,那么新建一个Mapper接口如下
+     * <pre>
+        public interface InsertUidListMapper<T> {
+            @Options(useGeneratedKeys = true, keyProperty = "uid")
+            @InsertProvider(type = SpecialProvider.class, method = "dynamicSQL")
+            int insertList(List<T> recordList);
+        }
+     * 只要修改keyProperty = "uid"就可以
+     *
+     * 然后让你自己的Mapper继承InsertUidListMapper<T>即可
+     *
+     * </pre>
+     */
 }
