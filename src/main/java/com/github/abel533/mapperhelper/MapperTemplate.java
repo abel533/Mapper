@@ -112,7 +112,7 @@ public abstract class MapperTemplate {
     }
 
     /**
-     * 重新设置SqlSource
+     * 重新设置SqlSource，同时判断如果是Jdbc3KeyGenerator，就设置为MultipleJdbc3KeyGenerator
      *
      * @param ms
      * @param sqlSource
@@ -120,6 +120,11 @@ public abstract class MapperTemplate {
     protected void setSqlSource(MappedStatement ms, SqlSource sqlSource) {
         MetaObject msObject = SystemMetaObject.forObject(ms);
         msObject.setValue("sqlSource", sqlSource);
+        //如果是Jdbc3KeyGenerator，就设置为MultipleJdbc3KeyGenerator
+        KeyGenerator keyGenerator = ms.getKeyGenerator();
+        if(keyGenerator instanceof Jdbc3KeyGenerator){
+            msObject.setValue("keyGenerator", new MultipleJdbc3KeyGenerator());
+        }
     }
 
     /**
@@ -150,8 +155,13 @@ public abstract class MapperTemplate {
                 SqlNode sqlNode = (SqlNode) method.invoke(this, ms);
                 DynamicSqlSource dynamicSqlSource = new DynamicSqlSource(ms.getConfiguration(), sqlNode);
                 setSqlSource(ms, dynamicSqlSource);
+            } else if (String.class.equals(method.getReturnType())) {
+                String xmlSql = (String) method.invoke(this, ms);
+                SqlSource sqlSource = createSqlSource(ms, xmlSql);
+                //替换原有的SqlSource
+                setSqlSource(ms, sqlSource);
             } else {
-                throw new RuntimeException("自定义Mapper方法返回类型错误,可选的返回类型为void和SqlNode!");
+                throw new RuntimeException("自定义Mapper方法返回类型错误,可选的返回类型为void,SqlNode,String三种!");
             }
         } catch (IllegalAccessException e) {
             throw new RuntimeException(e);
