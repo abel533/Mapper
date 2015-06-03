@@ -172,7 +172,7 @@ public abstract class MapperTemplate {
         for (Type type : types) {
             if (type instanceof ParameterizedType) {
                 ParameterizedType t = (ParameterizedType) type;
-                if (t.getRawType() == this.mapperClass) {
+                if (t.getRawType() == this.mapperClass || this.mapperClass.isAssignableFrom((Class<?>) t.getRawType())) {
                     Class<?> returnType = (Class<?>) t.getActualTypeArguments()[0];
                     return returnType;
                 }
