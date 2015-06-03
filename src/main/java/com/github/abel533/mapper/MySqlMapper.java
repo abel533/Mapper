@@ -25,6 +25,7 @@
 package com.github.abel533.mapper;
 
 import com.github.abel533.mapper.special.InsertListMapper;
+import com.github.abel533.mapper.special.InsertUseGeneratedKeysMapper;
 
 /**
  * 通用Mapper接口,MySql独有的通用方法
@@ -32,6 +33,8 @@ import com.github.abel533.mapper.special.InsertListMapper;
  * @param <T> 不能为空
  * @author liuzh
  */
-public interface MySqlMapper<T> extends InsertListMapper<T> {
+public interface MySqlMapper<T> extends
+        InsertListMapper<T>,
+        InsertUseGeneratedKeysMapper<T> {
 
 }
