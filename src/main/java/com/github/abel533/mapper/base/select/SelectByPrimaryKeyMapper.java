@@ -22,13 +22,10 @@
  * THE SOFTWARE.
  */
 
-package com.github.abel533.mapper;
+package com.github.abel533.mapper.base.select;
 
-import com.github.abel533.mapper.base.BaseDeleteMapper;
-import com.github.abel533.mapper.base.BaseInsertMapper;
-import com.github.abel533.mapper.base.BaseSelectMapper;
-import com.github.abel533.mapper.base.BaseUpdateMapper;
-import com.github.abel533.mapper.example.ExampleMapper;
+import com.github.abel533.mapper.MapperProvider;
+import org.apache.ibatis.annotations.SelectProvider;
 
 /**
  * 通用Mapper接口,其他接口继承该接口即可
@@ -40,11 +37,9 @@ import com.github.abel533.mapper.example.ExampleMapper;
  * @param <T> 不能为空
  * @author liuzh
  */
-public interface Mapper<T> extends
-        BaseSelectMapper<T>,
-        BaseInsertMapper<T>,
-        BaseUpdateMapper<T>,
-        BaseDeleteMapper<T>,
-        ExampleMapper<T> {
+public interface SelectByPrimaryKeyMapper<T> {
+
+    @SelectProvider(type = MapperProvider.class, method = "dynamicSQL")
+    T selectByPrimaryKey(Object key);
 
 }

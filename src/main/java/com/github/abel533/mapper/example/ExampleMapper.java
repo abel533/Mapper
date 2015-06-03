@@ -22,29 +22,34 @@
  * THE SOFTWARE.
  */
 
-package com.github.abel533.mapper;
+package com.github.abel533.mapper.example;
 
-import com.github.abel533.mapper.base.BaseDeleteMapper;
-import com.github.abel533.mapper.base.BaseInsertMapper;
-import com.github.abel533.mapper.base.BaseSelectMapper;
-import com.github.abel533.mapper.base.BaseUpdateMapper;
-import com.github.abel533.mapper.example.ExampleMapper;
+import com.github.abel533.mapper.MapperProvider;
+import org.apache.ibatis.annotations.*;
+
+import java.util.List;
 
 /**
- * 通用Mapper接口,其他接口继承该接口即可
- * <p/>
- * <p>这是一个例子，自己扩展时可以参考</p>
- * <p/>
- * <p>项目地址 : <a href="https://github.com/abel533/Mapper" target="_blank">https://github.com/abel533/Mapper</a></p>
+ * 通用Mapper接口,Example查询
  *
  * @param <T> 不能为空
  * @author liuzh
  */
-public interface Mapper<T> extends
-        BaseSelectMapper<T>,
-        BaseInsertMapper<T>,
-        BaseUpdateMapper<T>,
-        BaseDeleteMapper<T>,
-        ExampleMapper<T> {
+public interface ExampleMapper<T> {
+
+    @SelectProvider(type = MapperProvider.class, method = "dynamicSQL")
+    List<T> selectByExample(Object example);
+
+    @SelectProvider(type = MapperProvider.class, method = "dynamicSQL")
+    int selectCountByExample(Object example);
+
+    @DeleteProvider(type = MapperProvider.class, method = "dynamicSQL")
+    int deleteByExample(Object example);
+
+    @UpdateProvider(type = MapperProvider.class, method = "dynamicSQL")
+    int updateByExampleSelective(@Param("record") T record, @Param("example") Object example);
+
+    @UpdateProvider(type = MapperProvider.class, method = "dynamicSQL")
+    int updateByExample(@Param("record") T record, @Param("example") Object example);
 
 }
