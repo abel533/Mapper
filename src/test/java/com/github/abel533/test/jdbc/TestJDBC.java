@@ -31,8 +31,6 @@ import org.apache.ibatis.session.SqlSession;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.util.List;
-
 /**
  * Created by liuzh on 2014/11/21.
  */
@@ -46,19 +44,11 @@ public class TestJDBC {
         try {
             CountryJDBCMapper mapper = sqlSession.getMapper(CountryJDBCMapper.class);
             CountryJDBC country = new CountryJDBC();
-            country.setId(10086);
             country.setCountrycode("CN");
             Assert.assertEquals(1, mapper.insert(country));
-
-            //查询CN结果
-            country = new CountryJDBC();
-            country.setCountrycode("CN");
-            List<CountryJDBC> list = mapper.select(country);
-
-            Assert.assertEquals(1, list.size());
-            //删除插入的数据,以免对其他测试产生影响
-            Assert.assertEquals(1, mapper.deleteByPrimaryKey(10086));
+            Assert.assertNotNull(country.getId());
         } finally {
+            sqlSession.rollback();
             sqlSession.close();
         }
     }
