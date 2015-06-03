@@ -4,10 +4,8 @@ import com.github.abel533.entity.Example;
 import com.github.abel533.mapper.CountryMapper;
 import com.github.abel533.mapper.MybatisHelper;
 import com.github.abel533.model.Country;
-import org.apache.ibatis.exceptions.PersistenceException;
 import org.apache.ibatis.session.SqlSession;
 import org.junit.Assert;
-import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +20,8 @@ public class TestInsertList {
     /**
      * 插入完整数据
      */
-    @Test
+    //该方法测试需要mysql或者h2数据库，所以这里注释掉
+    //@Test
     public void testInsert() {
         SqlSession sqlSession = MybatisHelper.getSqlSession();
         try {
