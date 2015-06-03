@@ -24,10 +24,6 @@
 
 package com.github.abel533.mapper;
 
-import com.github.abel533.mapper.base.BaseDeleteMapper;
-import com.github.abel533.mapper.base.BaseInsertMapper;
-import com.github.abel533.mapper.base.BaseSelectMapper;
-import com.github.abel533.mapper.base.BaseUpdateMapper;
 import com.github.abel533.mapper.example.ExampleMapper;
 
 /**
@@ -41,10 +37,8 @@ import com.github.abel533.mapper.example.ExampleMapper;
  * @author liuzh
  */
 public interface Mapper<T> extends
-        BaseSelectMapper<T>,
-        BaseInsertMapper<T>,
-        BaseUpdateMapper<T>,
-        BaseDeleteMapper<T>,
-        ExampleMapper<T> {
+        BaseMapper<T>,
+        ExampleMapper<T>,
+        RowBoundsMapper<T> {
 
 }

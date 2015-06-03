@@ -95,6 +95,16 @@ public class MapperProvider extends MapperTemplate {
     }
 
     /**
+     * 查询
+     *
+     * @param ms
+     * @return
+     */
+    public SqlNode selectByRowBounds(MappedStatement ms) {
+        return select(ms);
+    }
+
+    /**
      * 根据主键进行查询
      *
      * @param ms
@@ -443,6 +453,16 @@ public class MapperProvider extends MapperTemplate {
             sqlNodes.add(defaultOrderByClauseSqlNode);
         }
         return new MixedSqlNode(sqlNodes);
+    }
+
+    /**
+     * 根据Example查询
+     *
+     * @param ms
+     * @return
+     */
+    public SqlNode selectByExampleAndRowBounds(MappedStatement ms) {
+        return selectByExample(ms);
     }
 
     /**
