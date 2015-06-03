@@ -35,20 +35,20 @@ import org.apache.ibatis.session.SqlSession;
 
 import java.lang.reflect.Method;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 处理主要逻辑，最关键的一个类
- *
+ * <p/>
  * <p>项目地址 : <a href="https://github.com/abel533/Mapper" target="_blank">https://github.com/abel533/Mapper</a></p>
  *
  * @author liuzh
  */
 public class MapperHelper {
-
     /**
      * 注册的通用Mapper接口
      */
-    private Map<Class<?>, MapperTemplate> registerMapper = new HashMap<Class<?>, MapperTemplate>();
+    private Map<Class<?>, MapperTemplate> registerMapper = new ConcurrentHashMap<Class<?>, MapperTemplate>();
 
     /**
      * 缓存msid和MapperTemplate
@@ -182,7 +182,7 @@ public class MapperHelper {
      *
      * @return
      */
-    public String getSpringVersion(){
+    public String getSpringVersion() {
         return springVersion;
     }
 
@@ -223,7 +223,7 @@ public class MapperHelper {
             }
         }
         if (templateClass == null || !MapperTemplate.class.isAssignableFrom(templateClass)) {
-            throw new RuntimeException("接口中不存在包含type为MapperTemplate的Provider注解，这不是一个合法的通用Mapper接口类!");
+            templateClass = EmptyMapperProvider.class;
         }
         MapperTemplate mapperTemplate = null;
         try {
@@ -249,10 +249,15 @@ public class MapperHelper {
      * @throws Exception
      */
     public void registerMapper(Class<?> mapperClass) {
-        if (registerMapper.get(mapperClass) == null) {
+        if (!registerMapper.containsKey(mapperClass)) {
             registerMapper.put(mapperClass, fromMapperClass(mapperClass));
-        } else {
-            throw new RuntimeException("已经注册过的通用Mapper[" + mapperClass.getCanonicalName() + "]不能多次注册!");
+        }
+        //自动注册继承的接口
+        Class<?>[] interfaces = mapperClass.getInterfaces();
+        if (interfaces != null && interfaces.length > 0) {
+            for (Class<?> anInterface : interfaces) {
+                registerMapper(anInterface);
+            }
         }
     }
 
