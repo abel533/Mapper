@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package com.github.abel533.mapper.mysql;
+package com.github.abel533.mapper.special;
 
 import com.github.abel533.provider.MySqlProvider;
 import org.apache.ibatis.annotations.InsertProvider;
@@ -31,7 +31,7 @@ import org.apache.ibatis.annotations.Param;
 import java.util.List;
 
 /**
- * 通用Mapper接口,插入
+ * 通用Mapper接口,特殊方法，批量插入，支持批量插入的数据库都可以使用，例如mysql,h2等
  *
  * @param <T> 不能为空
  * @author liuzh
