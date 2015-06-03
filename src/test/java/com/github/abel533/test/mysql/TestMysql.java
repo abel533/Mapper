@@ -5,7 +5,6 @@ import com.github.abel533.mapper.MybatisHelper;
 import com.github.abel533.model.Country;
 import org.apache.ibatis.session.SqlSession;
 import org.junit.Assert;
-import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,14 +14,14 @@ import java.util.List;
  *
  * @author liuzh
  */
-public class TestInsertList {
+public class TestMysql {
 
     /**
      * 插入完整数据
      */
     //该方法测试需要mysql或者h2数据库，所以这里注释掉
-    @Test
-    public void testInsert() {
+    //@Test
+    public void testInsertList() {
         SqlSession sqlSession = MybatisHelper.getSqlSession();
         try {
             CountryMapper mapper = sqlSession.getMapper(CountryMapper.class);
@@ -38,6 +37,27 @@ public class TestInsertList {
             for (Country country : countryList) {
                 Assert.assertNotNull(country.getId());
             }
+        } finally {
+            sqlSession.rollback();
+            sqlSession.close();
+        }
+    }
+
+    /**
+     * 插入完整数据
+     */
+    //该方法测试需要mysql或者h2数据库，所以这里注释掉
+    //@Test
+    public void testInsert() {
+        SqlSession sqlSession = MybatisHelper.getSqlSession();
+        try {
+            CountryMapper mapper = sqlSession.getMapper(CountryMapper.class);
+            Country country = new Country();
+            country.setCountrycode("CN");
+            country.setCountryname("天朝");
+            int count = mapper.InsertUseGeneratedKeysMapper(country);
+            Assert.assertEquals(1, count);
+            Assert.assertNotNull(country.getId());
         } finally {
             sqlSession.rollback();
             sqlSession.close();
