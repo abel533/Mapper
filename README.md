@@ -12,7 +12,7 @@
 
 ##通用Mapper2.x
 
-[Mapper2.x版本](http://git.oschina.net/free/Mapper/tree/Mapper2.x) 是2.x版本，目前最新的3.x版本改动很大，如果正在使用2.x版本，可以去看2.x版本的文档。
+目前最新的3.x版本改动很大，如果正在使用2.x版本，可以去看2.x版本的文档：[Mapper2.x版本首页](http://git.oschina.net/free/Mapper/tree/Mapper2.x)
 
 ##通用Mapper3
 
