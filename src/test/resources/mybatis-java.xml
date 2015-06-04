@@ -24,6 +24,10 @@
 				<property name="driver" value="org.hsqldb.jdbcDriver" />
 				<property name="url" value="jdbc:hsqldb:mem:basetest" />
 				<property name="username" value="sa" />
+                <!--<property name="driver" value="com.mysql.jdbc.Driver" />
+                <property name="url" value="jdbc:mysql://192.168.1.200:3306/pagehelper" />
+                <property name="username" value="root" />
+                <property name="password" value="" />-->
 			</dataSource>
 		</environment>
 	</environments>
