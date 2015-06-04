@@ -108,15 +108,17 @@ http://repo1.maven.org/maven2/javax/persistence/persistence-api/1.0/
 
 1. [Mapper3变化](http://git.oschina.net/free/Mapper/blob/master/wiki/mapper3/1.Changes.md)
 
-2. [如何集成通用Mapper](http://git.oschina.net/free/Mapper/blob/master/wiki/mapper/1.Integration.md)
+2. [如何集成通用Mapper](http://git.oschina.net/free/Mapper/blob/master/wiki/mapper3/2.Integration.md)
 
-3. [如何使用通用Mapper](http://git.oschina.net/free/Mapper/blob/master/wiki/mapper/2.Use.md)
+3. [如何使用通用Mapper](http://git.oschina.net/free/Mapper/blob/master/wiki/mapper3/3.Use.md)
 
 4. [高级应用](http://git.oschina.net/free/Mapper/blob/master/wiki/mapper3/4.Professional.md)
 
 5. [Mapper3通用接口大全](http://git.oschina.net/free/Mapper/blob/master/wiki/mapper3/5.Mappers.md)
 
 6. [快速开发自己的通用接口](http://git.oschina.net/free/Mapper/blob/master/wiki/mapper3/6.MyMapper.md)
+
+7. [如何使用Mapper专用的MyBatis Generator插件](http://git.oschina.net/free/Mapper/blob/master/wiki/mapper3/7.UseMBG.md)
 
 ###通用Mapper 2
 
