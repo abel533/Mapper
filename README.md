@@ -14,6 +14,8 @@
 
 目前最新的3.x版本改动很大，如果正在使用2.x版本，可以去看2.x版本的文档：[Mapper2.x版本首页](http://git.oschina.net/free/Mapper/tree/Mapper2.x)
 
+如果想同时使用Mapper3和Mapper2中的EntityMapper和SqlMapper，看这里：http://git.oschina.net/free/EntityMapper
+
 ##通用Mapper3
 
 全部针对单表操作，每个实体类都需要继承通用Mapper接口来获得通用方法。
@@ -68,9 +70,17 @@ Country代码：
 
 ##Maven坐标以及下载地址
 
-###最新版本3.0.0 - 2015-06-xx
+###最新版本3.0.0 - 2015-06-04
 
-* 大量变化
+* 将`EntityMapper`和`SqlMapper`移出，现在是独立项目[EntityMapper](http://git.oschina.net/free/EntityMapper)
+* 将`Mapper<T>`全部接口方法拆分为独立接口，方便选择集成
+* 增加`MySqlMapper<T>`包含批量插入和单个插入，批量插入可以回写全部id
+* 增加`RowBoundsMapper<T>`包含两个分页查询，可以配合[PageHelper]()实现物理分页
+* 详细变化请看[Mapper3变化](http://git.oschina.net/free/Mapper/blob/master/wiki/mapper3/1.Changes.md)
+* Mapper2资深用户请看[Mapper3高级应用](http://git.oschina.net/free/Mapper/blob/master/wiki/mapper3/4.Professional.md)
+* [Mapper3通用接口大全](http://git.oschina.net/free/Mapper/blob/master/wiki/mapper3/5.Mappers.md)
+* [快速开发自己的通用接口](http://git.oschina.net/free/Mapper/blob/master/wiki/mapper3/6.MyMapper.md)
+
 
 如果你使用Maven，只需要添加如下依赖：
 
@@ -94,7 +104,7 @@ http://repo1.maven.org/maven2/javax/persistence/persistence-api/1.0/
 
 ##项目文档
 
-###通用Mapper 3.x.x
+###通用Mapper 3
 
 1. [Mapper3变化](http://git.oschina.net/free/Mapper/blob/master/wiki/mapper3/1.Changes.md)
 
@@ -108,9 +118,9 @@ http://repo1.maven.org/maven2/javax/persistence/persistence-api/1.0/
 
 6. [快速开发自己的通用接口](http://git.oschina.net/free/Mapper/blob/master/wiki/mapper3/6.MyMapper.md)
 
-###通用Mapper 2.x.x
+###通用Mapper 2
 
-[http://git.oschina.net/free/Mapper/tree/Mapper2.x](http://git.oschina.net/free/Mapper/tree/Mapper2.x)
+[Mapper2.x首页](http://git.oschina.net/free/Mapper/tree/Mapper2.x)
 
 ##作者信息
 

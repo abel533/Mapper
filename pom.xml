@@ -4,7 +4,7 @@
 
   <groupId>com.github.abel533</groupId>
   <artifactId>mapper</artifactId>
-  <version>2.3.4</version>
+  <version>3.0.0</version>
   <packaging>jar</packaging>
 
   <name>mapper</name>
