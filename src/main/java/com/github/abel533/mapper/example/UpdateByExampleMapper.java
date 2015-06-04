@@ -25,9 +25,8 @@
 package com.github.abel533.mapper.example;
 
 import com.github.abel533.provider.MapperProvider;
-import org.apache.ibatis.annotations.*;
-
-import java.util.List;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.UpdateProvider;
 
 /**
  * 通用Mapper接口,Example查询
@@ -35,19 +34,7 @@ import java.util.List;
  * @param <T> 不能为空
  * @author liuzh
  */
-public interface ExampleMapper<T> {
-
-    @SelectProvider(type = MapperProvider.class, method = "dynamicSQL")
-    List<T> selectByExample(Object example);
-
-    @SelectProvider(type = MapperProvider.class, method = "dynamicSQL")
-    int selectCountByExample(Object example);
-
-    @DeleteProvider(type = MapperProvider.class, method = "dynamicSQL")
-    int deleteByExample(Object example);
-
-    @UpdateProvider(type = MapperProvider.class, method = "dynamicSQL")
-    int updateByExampleSelective(@Param("record") T record, @Param("example") Object example);
+public interface UpdateByExampleMapper<T> {
 
     @UpdateProvider(type = MapperProvider.class, method = "dynamicSQL")
     int updateByExample(@Param("record") T record, @Param("example") Object example);
