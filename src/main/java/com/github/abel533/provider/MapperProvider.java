@@ -38,7 +38,7 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Mappper实现类，可以当场一个用来参考的例子
+ * Mappper实现类，基础方法实现类
  *
  * @author liuzh
  */

@@ -30,7 +30,7 @@ import com.github.abel533.mapperhelper.MapperTemplate;
 import org.apache.ibatis.mapping.MappedStatement;
 
 /**
- * Mappper实现类，可以当场一个用来参考的例子
+ * Mappper实现类，特殊方法实现类
  *
  * @author liuzh
  */
