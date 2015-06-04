@@ -93,15 +93,15 @@ http://repo1.maven.org/maven2/com/github/abel533/mapper/
 
 ###EntityMapper(单一Mapper操作全部实体)
 
-1. [如何集成EntityMapper](http://git.oschina.net/free/Mapper/blob/master/wiki/entity/1.Integration.md)
+1. [如何集成EntityMapper](http://git.oschina.net/free/EntityMapper/blob/master/wiki/entity/1.Integration.md)
 
-2. [如何使用EntityMapper](http://git.oschina.net/free/Mapper/blob/master/wiki/entity/2.Use.md)
+2. [如何使用EntityMapper](http://git.oschina.net/free/EntityMapper/blob/master/wiki/entity/2.Use.md)
 
-3. [如何使用Mapper专用的MyBatis Generator插件](http://git.oschina.net/free/Mapper/blob/master/wiki/mapper/5.UseMBG.md)
+3. [如何使用Mapper专用的MyBatis Generator插件](http://git.oschina.net/free/EntityMapper/blob/master/wiki/mapper/5.UseMBG.md)
 
 ###如何使用SqlMapper
 
-1. [如何使用SqlMapper](http://git.oschina.net/free/Mapper/blob/master/wiki/UseSqlMapper.md)
+1. [如何使用SqlMapper](http://git.oschina.net/free/EntityMapper/blob/master/wiki/UseSqlMapper.md)
 
 ##作者信息
 
