@@ -1,49 +1,20 @@
-#Mybatis通用Mapper
+#Mybatis通用EntityMapper
 
 ##极其方便的使用Mybatis单表的增删改查
 
 ##支持单表操作，不支持通用的多表联合查询
 
-##优点?
+##重要提示
 
-本项目支持两种类型的通用Mapper，这两种Mapper都可以极大的方便开发人员。
+EntityMapper是通用Mapper2.x版本中的一部分，通用Mapper3.x以后将EntityMapper移出了通用Mapper，所以EntityMapper独立出来。
 
-为了让您更方便的了解这两种通用Mapper，这里分别贴一段代码来看实际效果。
+建议使用通用Mapper，通用Mapper3更强大，通用方法更多，更方便扩展。
 
-##通用Mapper
-
-这是本项目提供的第一种通用Mapper，优点是可以缓存，全部针对单表操作，每个实体类都需要继承通用Mapper接口来获得通用方法。
-
-示例代码：
-
-    CountryMapper mapper = sqlSession.getMapper(CountryMapper.class);
-    //查询全部
-    List<Country> countryList = mapper.select(new Country());
-    //总数
-    Assert.assertEquals(183, countryList.size());
-
-    //通用Example查询
-    Example example = new Example(Country.class);
-    example.createCriteria().andGreaterThan("id", 100);
-    countryList = mapper.selectByExample(example);
-    Assert.assertEquals(83, countryList.size());
-
-    //MyBatis-Generator生成的Example查询
-    CountryExample example2 = new CountryExample();
-    example2.createCriteria().andIdGreaterThan(100);
-    countryList = mapper.selectByExample(example2);
-    Assert.assertEquals(83, countryList.size());
-
-CountryMapper代码如下：
-
-    public interface CountryMapper extends Mapper<Country> {
-    }
-
-这里不说更具体的内容，如果您有兴趣，可以查看下面的<b>项目文档</b>
+通用Mapper地址：http://git.oschina.net/free/Mapper
 
 ##EntityMapper
 
-这是第二种通用Mapper，EntityMapper可以像Hibernate的session一样操纵全部的实体类，由于可以操纵全部实体，因此不能使用二级缓存。EntityMapper支持通用的Example查询和MGB生成的Example查询。
+EntityMapper可以像Hibernate的session一样操纵全部的实体类，由于可以操纵全部实体，因此不能使用二级缓存。EntityMapper支持通用的Example查询和MGB生成的Example查询。
 
 示例代码：
 
@@ -82,62 +53,23 @@ Country代码：
     
 [使用Mapper专用的MyBatis Generator插件](http://git.oschina.net/free/Mapper/blob/master/wiki/mapper/5.UseMBG.md) 可以方便的生成这些（带注解的）实体类。
 
-##通用Mapper支持Mybatis-3.2.4及以上版本 
+##通用EntityMapper支持Mybatis-3.2.4及以上版本
 
-##[更新日志](http://git.oschina.net/free/Mapper/blob/master/wiki/Changelog.md)
+##[更新日志](http://git.oschina.net/free/EntityMapper/blob/master/wiki/Changelog.md)
 
 ##Maven坐标以及下载地址
 
-###最新版本2.3.4 - 2015-06-01
+###最新版本1.0.0 - 2015-06-xx
 
-* 高并发时selectKey会产生异常，解决[#32](http://git.oschina.net/free/Mapper/issues/32)
-
-* 兼容MyBatis3.3.0版本
-
-* <b>提前预告：下个版本3.0.0会将通用Mapper项目拆分为两个项目，会有一些大的改动</b>
-
-###最新版本2.3.3 - 2015-05-14
-
-* 解决Example查询中的`and`缺少空格的问题
-
-* 去掉UUID和JDBC两种主键策略类型中对字段类型的限制
-  不再限制为`String`，可以是任意简单类型，需要自己保证类型匹配。例如UUID配置的策略可以返回`Integer`,那么字段类型必须是`Integer`。
-
-* JDBC类型的主键策略可以配置多个，就相当于`keyProperties="id1,id2..."`
-
-* `EntityHelper`的`getOrderByClause`方法返回值从`StringBuilder`改为`String`，解决`@OrderBy`注解时的异常
-
-* <b>提前预告：下个版本3.0.0会将通用Mapper项目拆分为两个项目，会有一些大的改动</b>
-
-###2.3.2 - 2015-04-21
-
-* 解决Example查询中in,notin无效的bug[#24](http://git.oschina.net/free/Mapper/issues/24)
-
-###2.3.1 - 2015-04-13
-
-* 完善所有和PrimaryKey有关的通用查询
-
-* 修复Mapper<T>接口中update操作会更新主键的bug
-
-* 修复Mapper<T>接口中使用Example查询的时候，影响美观
-
-* MBG插件增加caseSensitive默认false，当数据库表名区分大小写时，可以将该属性设置为true
-
-###2.3.0 - 2015-04-05
-
-* Mapper接口和EntityMapper都增加了`selectOne`方法，该查询返回值最多只能有一个，存在多个时抛出异常
-
-* Mapper接口和EntityMapper中，返回List的查询方法都支持JPA的`@Orderby`注解。其中`Example`查询中的`orderby`会覆盖注解的`@Orderby`设置。
-
-* 通过实体类获取表名的时候，不对表名进行强制的大小写转换。如果数据库大小写敏感，请通过`@Table`注解和数据库保持一致。
+* xx
 
 如果你使用Maven，只需要添加如下依赖：
 
 ```xml
 <dependency>
     <groupId>com.github.abel533</groupId>
-    <artifactId>mapper</artifactId>
-    <version>2.3.4</version>
+    <artifactId>entitymapper</artifactId>
+    <version>1.0.0</version>
 </dependency>
 ```
 
@@ -147,23 +79,17 @@ https://oss.sonatype.org/content/repositories/releases/com/github/abel533/mapper
 
 http://repo1.maven.org/maven2/com/github/abel533/mapper/
 
-由于通用Mapper依赖JPA，所以还需要下载persistence-api-1.0.jar：
+EntityMapper依赖JPA，所以还需要下载persistence-api-1.0.jar：
 
 http://repo1.maven.org/maven2/javax/persistence/persistence-api/1.0/
 
+EntityMapper还依赖通用Mapper-3.0.0.jar:
+
+https://oss.sonatype.org/content/repositories/releases/com/github/abel533/mapper/
+
+http://repo1.maven.org/maven2/com/github/abel533/mapper/
+
 ##项目文档
-
-###通用Mapper
-
-1. [如何集成通用Mapper](http://git.oschina.net/free/Mapper/blob/master/wiki/mapper/1.Integration.md)
-
-2. [如何使用通用Mapper](http://git.oschina.net/free/Mapper/blob/master/wiki/mapper/2.Use.md)
-
-3. [如何开发自己的通用Mapper](http://git.oschina.net/free/Mapper/blob/master/wiki/mapper/3.ExtendMapper.md)
-
-4. [在Spring4中使用通用Mapper](http://git.oschina.net/free/Mapper/blob/master/wiki/mapper/4.Spring4.md)
-
-5. [如何使用Mapper专用的MyBatis Generator插件](http://git.oschina.net/free/Mapper/blob/master/wiki/mapper/5.UseMBG.md)
 
 ###EntityMapper(单一Mapper操作全部实体)
 

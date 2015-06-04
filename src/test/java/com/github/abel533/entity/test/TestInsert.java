@@ -28,7 +28,6 @@ import com.github.abel533.entity.EntityMapper;
 import com.github.abel533.entity.mapper.CommonMapper;
 import com.github.abel533.entity.model.Country;
 import com.github.abel533.mapper.MybatisHelper;
-import com.github.abel533.model.Country2;
 import org.apache.ibatis.session.SqlSession;
 import org.junit.Assert;
 import org.junit.Test;
@@ -39,27 +38,6 @@ import org.junit.Test;
  * @author liuzh
  */
 public class TestInsert {
-
-    @Test
-    public void testInsertByNew() {
-        SqlSession sqlSession = MybatisHelper.getSqlSession();
-        try {
-            CommonMapper commonMapper = sqlSession.getMapper(CommonMapper.class);
-            EntityMapper entityMapper = new EntityMapper(commonMapper);
-
-            Assert.assertEquals(0,entityMapper.count(new Country2()));
-
-            int count = entityMapper.insert(new Country2());
-
-            Assert.assertEquals(1, count);
-
-            Assert.assertEquals(1,entityMapper.count(new Country2()));
-        } finally {
-            //回滚
-            sqlSession.rollback();
-            sqlSession.close();
-        }
-    }
 
     @Test
     public void testInsertOne() {
