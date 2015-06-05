@@ -16,6 +16,10 @@
 
 如果想同时使用Mapper3和Mapper2中的EntityMapper和SqlMapper，看这里：http://git.oschina.net/free/EntityMapper
 
+##Mapper2.x升级Mapper3注意事项
+
+请看[Mapper2.x升级Mapper3](http://git.oschina.net/free/Mapper/blob/master/wiki/mapper3/8.UpdateTo3.md)
+
 ##通用Mapper3
 
 全部针对单表操作，每个实体类都需要继承通用Mapper接口来获得通用方法。
