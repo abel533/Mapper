@@ -44,7 +44,7 @@ public interface InsertUseGeneratedKeysMapper<T> {
      */
     @Options(useGeneratedKeys = true, keyProperty = "id")
     @InsertProvider(type = SpecialProvider.class, method = "dynamicSQL")
-    int InsertUseGeneratedKeysMapper(T record);
+    int insertUseGeneratedKeys(T record);
 
     /**
      * ======如果主键不是id怎么用？==========
@@ -53,7 +53,7 @@ public interface InsertUseGeneratedKeysMapper<T> {
         public interface InsertUidMapper<T> {
             @Options(useGeneratedKeys = true, keyProperty = "id")
             @InsertProvider(type = SpecialProvider.class, method = "dynamicSQL")
-            int InsertUseGeneratedKeysMapper(T record);
+            int insertUseGeneratedKeys(T record);
         }
      * 只要修改keyProperty = "uid"就可以
      *

@@ -82,7 +82,7 @@ public class SpecialProvider extends MapperTemplate {
      *
      * @param ms
      */
-    public String InsertUseGeneratedKeysMapper(MappedStatement ms) {
+    public String insertUseGeneratedKeys(MappedStatement ms) {
         final Class<?> entityClass = getSelectReturnType(ms);
         EntityHelper.EntityTable table = EntityHelper.getEntityTable(entityClass);
         //开始拼sql
