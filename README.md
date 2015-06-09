@@ -10,9 +10,9 @@
 
 为了让您更方便的了解这通用Mapper，这里贴一段代码来看实际效果。
 
-##通用Mapper2.x
+##通用Mapper2
 
-目前最新的3.x版本改动很大，如果正在使用2.x版本，可以去看2.x版本的文档：[Mapper2.x版本首页](http://git.oschina.net/free/Mapper/tree/Mapper2.x)
+目前最新的Mapper3版本改动很大，如果正在使用2.x版本，可以去看2.x版本的文档：[Mapper2.x版本首页](http://git.oschina.net/free/Mapper/tree/Mapper2.x)
 
 如果想同时使用Mapper3和Mapper2中的EntityMapper和SqlMapper，看这里：http://git.oschina.net/free/EntityMapper
 
@@ -86,21 +86,23 @@ Country代码：
 * [快速开发自己的通用接口](http://git.oschina.net/free/Mapper/blob/master/wiki/mapper3/6.MyMapper.md)
 
 
-如果你使用Maven，只需要添加如下依赖：
+##使用Maven
+
+###重要提示,3.1.0版本的groupId修改为tk.mybatis
 
 ```xml
 <dependency>
-    <groupId>com.github.abel533</groupId>
+    <groupId>tk.mybatis</groupId>
     <artifactId>mapper</artifactId>
-    <version>3.0.0</version>
+    <version>3.1.0</version>
 </dependency>
 ```
 
-如果你想引入Jar包，你可以从下面的地址下载：
+##引入Jar包，下载地址：
 
-https://oss.sonatype.org/content/repositories/releases/com/github/abel533/mapper/
+https://oss.sonatype.org/content/repositories/releases/tk/mybatis/mapper
 
-http://repo1.maven.org/maven2/com/github/abel533/mapper/
+http://repo1.maven.org/maven2/tk/mybatis/mapper
 
 由于通用Mapper依赖JPA，所以还需要下载persistence-api-1.0.jar：
 

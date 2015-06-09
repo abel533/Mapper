@@ -32,8 +32,8 @@
     <property name="beginningDelimiter" value="`"/>
     <property name="endingDelimiter" value="`"/>
     
-    <plugin type="com.github.abel533.generator.MapperPlugin">
-      <property name="mappers" value="com.github.abel533.mapper.Mapper,com.github.abel533.hsqldb.HsqldbMapper"/>
+    <plugin type="tk.mybatis.mapper.generator.MapperPlugin">
+      <property name="mappers" value="tk.mybatis.mapper.common.Mapper,tk.mybatis.mapper.hsqldb.HsqldbMapper"/>
       <property name="caseSensitive" value="true"/>
     </plugin>
 

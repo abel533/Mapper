@@ -99,37 +99,9 @@
 
 * 有关插件的使用，后续完善文档
 
-Maven坐标:
-
-```xml
-<dependency>
-    <groupId>com.github.abel533</groupId>
-    <artifactId>mapper</artifactId>
-    <version>1.0.0</version>
-</dependency>
-```
-
 ##v0.3.2版本说明
 
 移除了`MapperInterceptor`类，不在提供拦截器方式的使用。如果有需要可以自己从0.3.1版本获取。
- 
-另外调整的类的包结构，目的更明确，下面分别介绍这几个类的作用。  
-
-* `com.github.abel533.mapperhelper`包下面的是通用Mapper的关键类
-
-   * `EntityHelper`:实体类工具类 - 处理实体和数据库表以及字段关键的一个类  
-
-   * `MapperHelper`:处理主要逻辑，最关键的一个类  
-
-   * `MapperTemplate`:通用Mapper模板类，扩展通用Mapper时需要继承该类  
-
-* `com.github.abel533.mapper`包下面是通用Mapper自带的一个默认实现
-
-   * `Mapper`:通用Mapper接口类   
-
-   * `MapperProvider`:通用Mapper接口类对应的实现类 
-
-如果你不需要通用Mapper自带的默认实现类`Mapper`，你就不需要`com.github.abel533.mapper`包下面的两个类，你可以根据文档和自己的需求自行扩展。  
 
 ##v0.3.1版本说明
 
