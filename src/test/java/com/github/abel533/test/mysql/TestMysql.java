@@ -55,7 +55,7 @@ public class TestMysql {
             Country country = new Country();
             country.setCountrycode("CN");
             country.setCountryname("天朝");
-            int count = mapper.InsertUseGeneratedKeysMapper(country);
+            int count = mapper.insertUseGeneratedKeys(country);
             Assert.assertEquals(1, count);
             Assert.assertNotNull(country.getId());
         } finally {

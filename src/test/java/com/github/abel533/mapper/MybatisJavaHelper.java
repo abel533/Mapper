@@ -53,6 +53,7 @@ public class MybatisJavaHelper {
                 mapperHelper.registerMapper(Mapper.class);
                 mapperHelper.registerMapper(HsqldbMapper.class);
                 mapperHelper.registerMapper(MySqlMapper.class);
+                mapperHelper.registerMapper(SqlServerMapper.class);
                 //配置完成后，执行下面的操作
                 mapperHelper.processConfiguration(session.getConfiguration());
                 //OK - mapperHelper的任务已经完成，可以不管了

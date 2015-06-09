@@ -33,7 +33,7 @@ import javax.persistence.Table;
  * Author: liuzh
  * Update: liuzh(2014-06-06 13:38)
  */
-@Table(name = "country_jdbc")
+@Table(name = "country")
 public class CountryJDBC {
     @Id
     @GeneratedValue(generator = "JDBC")

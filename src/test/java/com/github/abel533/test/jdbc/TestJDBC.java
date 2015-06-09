@@ -31,20 +31,23 @@ import org.apache.ibatis.session.SqlSession;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
- * Created by liuzh on 2014/11/21.
+ * sqlserver测试
  */
 public class TestJDBC {
-    /**
-     * 插入完整数据
-     */
+
     @Test
     public void testJDBC() {
         SqlSession sqlSession = MybatisHelper.getSqlSession();
         try {
             CountryJDBCMapper mapper = sqlSession.getMapper(CountryJDBCMapper.class);
             CountryJDBC country = new CountryJDBC();
+            country.setId(1);
             country.setCountrycode("CN");
+            country.setCountryname("China");
             Assert.assertEquals(1, mapper.insert(country));
             Assert.assertNotNull(country.getId());
         } finally {
@@ -53,21 +56,19 @@ public class TestJDBC {
         }
     }
 
-    /**
-     * 插入完整数据
-     */
     @Test
     public void testJDBC2() {
         SqlSession sqlSession = MybatisHelper.getSqlSession();
         try {
             CountryJDBCMapper mapper = sqlSession.getMapper(CountryJDBCMapper.class);
             CountryJDBC country = new CountryJDBC();
+            country.setId(1);
             country.setCountrycode("CN");
-            country.setCountryname("天朝");
-            Assert.assertEquals(1, mapper.insert(country));
-            //删除插入的数据,以免对其他测试产生影响
-            Assert.assertEquals(1, mapper.deleteByPrimaryKey(country.getId()));
+            country.setCountryname("China");
+            Assert.assertEquals(1, mapper.insertSelective(country));
+            Assert.assertNotNull(country.getId());
         } finally {
+            sqlSession.rollback();
             sqlSession.close();
         }
     }
