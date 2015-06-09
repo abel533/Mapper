@@ -109,7 +109,7 @@ public class EntityHelper {
 
         public void setKeyProperties(String keyProperty) {
             if (this.keyProperties == null) {
-                this.keyProperties = new ArrayList<String>();
+                this.keyProperties = new LinkedList<String>();
                 this.keyProperties.add(keyProperty);
             } else {
                 this.keyProperties.add(keyProperty);
@@ -125,7 +125,7 @@ public class EntityHelper {
 
         public void setKeyColumns(String keyColumn) {
             if (this.keyColumns == null) {
-                this.keyColumns = new ArrayList<String>();
+                this.keyColumns = new LinkedList<String>();
                 this.keyColumns.add(keyColumn);
             } else {
                 this.keyColumns.add(keyColumn);
@@ -575,7 +575,7 @@ public class EntityHelper {
      */
     private static List<Field> getAllField(Class<?> entityClass, List<Field> fieldList) {
         if (fieldList == null) {
-            fieldList = new ArrayList<Field>();
+            fieldList = new LinkedList<Field>();
         }
         if (entityClass.equals(Object.class)) {
             return fieldList;
@@ -656,7 +656,7 @@ public class EntityHelper {
         if (mapList == null || mapList.size() == 0) {
             return null;
         }
-        List list = new ArrayList<Object>(mapList.size());
+        List list = new LinkedList<Object>();
         for (Object map : mapList) {
             list.add(map2Bean((Map) map, beanClass));
         }

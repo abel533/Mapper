@@ -240,7 +240,7 @@ public abstract class MapperTemplate {
     protected List<ParameterMapping> getPrimaryKeyParameterMappings(MappedStatement ms) {
         Class<?> entityClass = getSelectReturnType(ms);
         Set<EntityHelper.EntityColumn> entityColumns = EntityHelper.getPKColumns(entityClass);
-        List<ParameterMapping> parameterMappings = new ArrayList<ParameterMapping>();
+        List<ParameterMapping> parameterMappings = new LinkedList<ParameterMapping>();
         for (EntityHelper.EntityColumn column : entityColumns) {
             ParameterMapping.Builder builder = new ParameterMapping.Builder(ms.getConfiguration(), column.getProperty(), column.getJavaType());
             builder.mode(ParameterMode.IN);
@@ -351,7 +351,7 @@ public abstract class MapperTemplate {
     protected SqlNode getAllIfColumnNode(Class<?> entityClass) {
         //获取全部列
         Set<EntityHelper.EntityColumn> columnList = EntityHelper.getColumns(entityClass);
-        List<SqlNode> ifNodes = new ArrayList<SqlNode>();
+        List<SqlNode> ifNodes = new LinkedList<SqlNode>();
         boolean first = true;
         //对所有列循环，生成<if test="property!=null">column = #{property}</if>
         for (EntityHelper.EntityColumn column : columnList) {
@@ -370,7 +370,7 @@ public abstract class MapperTemplate {
     protected List<ParameterMapping> getColumnParameterMappings(MappedStatement ms) {
         Class<?> entityClass = getSelectReturnType(ms);
         Set<EntityHelper.EntityColumn> entityColumns = EntityHelper.getColumns(entityClass);
-        List<ParameterMapping> parameterMappings = new ArrayList<ParameterMapping>();
+        List<ParameterMapping> parameterMappings = new LinkedList<ParameterMapping>();
         for (EntityHelper.EntityColumn column : entityColumns) {
             ParameterMapping.Builder builder = new ParameterMapping.Builder(ms.getConfiguration(), column.getProperty(), column.getJavaType());
             builder.mode(ParameterMode.IN);
@@ -414,7 +414,7 @@ public abstract class MapperTemplate {
             statementBuilder.resulSets(null);
             statementBuilder.timeout(configuration.getDefaultStatementTimeout());
 
-            List<ParameterMapping> parameterMappings = new ArrayList<ParameterMapping>();
+            List<ParameterMapping> parameterMappings = new LinkedList<ParameterMapping>();
             ParameterMap.Builder inlineParameterMapBuilder = new ParameterMap.Builder(
                     configuration,
                     statementBuilder.id() + "-Inline",
@@ -422,12 +422,12 @@ public abstract class MapperTemplate {
                     parameterMappings);
             statementBuilder.parameterMap(inlineParameterMapBuilder.build());
 
-            List<ResultMap> resultMaps = new ArrayList<ResultMap>();
+            List<ResultMap> resultMaps = new LinkedList<ResultMap>();
             ResultMap.Builder inlineResultMapBuilder = new ResultMap.Builder(
                     configuration,
                     statementBuilder.id() + "-Inline",
                     column.getJavaType(),
-                    new ArrayList<ResultMapping>(),
+                    new LinkedList<ResultMapping>(),
                     null);
             resultMaps.add(inlineResultMapBuilder.build());
             statementBuilder.resultMaps(resultMaps);
@@ -463,7 +463,7 @@ public abstract class MapperTemplate {
     }
 
     public IfSqlNode ExampleValidSqlNode(Configuration configuration) {
-        List<SqlNode> whenSqlNodes = new ArrayList<SqlNode>();
+        List<SqlNode> whenSqlNodes = new LinkedList<SqlNode>();
         IfSqlNode noValueSqlNode = new IfSqlNode(new TextSqlNode(" and ${criterion.condition}"), "criterion.noValue");
         whenSqlNodes.add(noValueSqlNode);
         IfSqlNode singleValueSqlNode = new IfSqlNode(new TextSqlNode(" and ${criterion.condition} #{criterion.value}"), "criterion.singleValue");
@@ -471,7 +471,7 @@ public abstract class MapperTemplate {
         IfSqlNode betweenValueSqlNode = new IfSqlNode(new TextSqlNode(" and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}"), "criterion.betweenValue");
         whenSqlNodes.add(betweenValueSqlNode);
 
-        List<SqlNode> listValueContentSqlNodes = new ArrayList<SqlNode>();
+        List<SqlNode> listValueContentSqlNodes = new LinkedList<SqlNode>();
         listValueContentSqlNodes.add(new TextSqlNode(" and ${criterion.condition}"));
         ForEachSqlNode listValueForEachSqlNode = new ForEachSqlNode(configuration, new StaticTextSqlNode("#{listItem}"), "criterion.value", null, "listItem", "(", ")", ",");
         listValueContentSqlNodes.add(listValueForEachSqlNode);

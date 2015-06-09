@@ -26,7 +26,7 @@ package com.github.abel533.entity;
 
 import com.github.abel533.mapperhelper.EntityHelper;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -68,7 +68,7 @@ public class Example {
      */
     public Example(Class<?> entityClass, boolean exists) {
         this.exists = exists;
-        oredCriteria = new ArrayList<Criteria>();
+        oredCriteria = new LinkedList<Criteria>();
         this.entityClass = entityClass;
         table = EntityHelper.getEntityTable(entityClass);
         propertyMap = new HashMap<String, EntityHelper.EntityColumn>(table.getEntityClassColumns().size());
@@ -144,7 +144,7 @@ public class Example {
         protected GeneratedCriteria(Map<String, EntityHelper.EntityColumn> propertyMap, boolean exists) {
             super();
             this.exists = exists;
-            criteria = new ArrayList<Criterion>();
+            criteria = new LinkedList<Criterion>();
             this.propertyMap = propertyMap;
         }
 
