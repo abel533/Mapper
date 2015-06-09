@@ -12,7 +12,9 @@
 
 ##通用Mapper2
 
-目前最新的Mapper3版本改动很大，如果正在使用2.x版本，可以去看2.x版本的文档：[Mapper2.x版本首页](http://git.oschina.net/free/Mapper/tree/Mapper2.x)
+目前最新的Mapper3版本改动很大，如果正在使用2.x版本，可以去看2.x版本的文档：
+
+[Mapper2.x版本首页http://git.oschina.net/free/Mapper2](http://git.oschina.net/free/Mapper2)
 
 如果想同时使用Mapper3和Mapper2中的EntityMapper和SqlMapper，看这里：http://git.oschina.net/free/EntityMapper
 
@@ -88,7 +90,7 @@ Country代码：
 
 ##使用Maven
 
-###重要提示,3.1.0版本的groupId修改为tk.mybatis
+###重要提示,3.1.0及以后版本的groupId修改为tk.mybatis，artifactId为mapper
 
 ```xml
 <dependency>
@@ -130,7 +132,7 @@ http://repo1.maven.org/maven2/javax/persistence/persistence-api/1.0/
 
 ###通用Mapper 2
 
-[Mapper2.x首页](http://git.oschina.net/free/Mapper/tree/Mapper2.x)
+[Mapper2.x首页](http://git.oschina.net/free/Mapper2)
 
 ##作者信息
 
