@@ -42,17 +42,12 @@
             <artifactId>persistence-api</artifactId>
             <version>1.0</version>
         </dependency>
-        <dependency>
-            <groupId>commons-beanutils</groupId>
-            <artifactId>commons-beanutils</artifactId>
-            <version>1.9.2</version>
-        </dependency>
 
         <!--可选依赖-->
         <dependency>
             <groupId>org.mybatis</groupId>
             <artifactId>mybatis</artifactId>
-            <version>3.2.6</version>
+            <version>3.2.8</version>
             <scope>compile</scope>
             <optional>true</optional>
         </dependency>

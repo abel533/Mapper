@@ -519,4 +519,65 @@ public class MapperProvider extends MapperTemplate {
         sqlNodes.add(ifNullSqlNode);
         return new MixedSqlNode(sqlNodes);
     }
+
+    /**
+     * 根据Condition查询总数
+     *
+     * @param ms
+     * @return
+     */
+    public SqlNode selectCountByCondition(MappedStatement ms) {
+        return selectCountByExample(ms);
+    }
+
+    /**
+     * 根据Condition删除
+     *
+     * @param ms
+     * @return
+     */
+    public SqlNode deleteByCondition(MappedStatement ms) {
+        return deleteByExample(ms);
+    }
+
+
+    /**
+     * 根据Condition查询
+     *
+     * @param ms
+     * @return
+     */
+    public SqlNode selectByCondition(MappedStatement ms) {
+        return selectByCondition(ms);
+    }
+
+    /**
+     * 根据Condition查询
+     *
+     * @param ms
+     * @return
+     */
+    public SqlNode selectByConditionAndRowBounds(MappedStatement ms) {
+        return selectByExample(ms);
+    }
+
+    /**
+     * 根据Example更新非null字段
+     *
+     * @param ms
+     * @return
+     */
+    public SqlNode updateByConditionSelective(MappedStatement ms) {
+        return updateByExampleSelective(ms);
+    }
+
+    /**
+     * 根据Condition更新
+     *
+     * @param ms
+     * @return
+     */
+    public SqlNode updateByCondition(MappedStatement ms) {
+        return updateByCondition(ms);
+    }
 }

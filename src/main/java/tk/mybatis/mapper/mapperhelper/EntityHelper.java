@@ -24,8 +24,6 @@
 
 package tk.mybatis.mapper.mapperhelper;
 
-import org.apache.commons.beanutils.BeanUtils;
-
 import javax.persistence.*;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -596,72 +594,5 @@ public class EntityHelper {
             return getAllField(entityClass.getSuperclass(), fieldList);
         }
         return fieldList;
-    }
-
-    /**
-     * map转换为Map
-     *
-     * @param map
-     * @param beanClass
-     * @return
-     */
-    public static Map<String, Object> map2AliasMap(Map<String, Object> map, Class<?> beanClass) {
-        if (map == null) {
-            return null;
-        }
-        Map<String, String> alias = getColumnAlias(beanClass);
-        Map<String, Object> result = new HashMap<String, Object>();
-        for (String name : map.keySet()) {
-            String alia = name;
-            //sql在被其他拦截器处理后，字段可能发生变化，例如分页插件增加rownum
-            if (alias.containsKey(name)) {
-                alia = alias.get(name);
-            }
-            result.put(alia, map.get(name));
-        }
-        return result;
-    }
-
-    /**
-     * map转换为bean
-     *
-     * @param map
-     * @param beanClass
-     * @return
-     */
-    public static Object map2Bean(Map<String, Object> map, Class<?> beanClass) {
-        try {
-            if (map == null) {
-                return null;
-            }
-            Map<String, Object> aliasMap = map2AliasMap(map, beanClass);
-            Object bean = beanClass.newInstance();
-            BeanUtils.copyProperties(bean, aliasMap);
-            return bean;
-        } catch (InstantiationException e) {
-            throw new RuntimeException(beanClass.getCanonicalName() + "类没有默认空的构造方法!");
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    /**
-     * mapList转换为beanList
-     *
-     * @param mapList
-     * @param beanClass
-     * @return
-     */
-    public static List<?> maplist2BeanList(List<?> mapList, Class<?> beanClass) {
-        if (mapList == null || mapList.size() == 0) {
-            return null;
-        }
-        List list = new LinkedList<Object>();
-        for (Object map : mapList) {
-            list.add(map2Bean((Map) map, beanClass));
-        }
-        mapList.clear();
-        mapList.addAll(list);
-        return mapList;
     }
 }
