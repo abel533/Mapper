@@ -39,7 +39,7 @@ import java.util.List;
  */
 public class TestJDBC {
 
-    @Test
+//    @Test
     public void testJDBC() {
         SqlSession sqlSession = MybatisHelper.getSqlSession();
         try {
@@ -56,7 +56,7 @@ public class TestJDBC {
         }
     }
 
-    @Test
+//    @Test
     public void testJDBC2() {
         SqlSession sqlSession = MybatisHelper.getSqlSession();
         try {
