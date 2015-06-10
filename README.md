@@ -76,17 +76,24 @@ Country代码：
 
 ##Maven坐标以及下载地址
 
-###最新版本3.0.0 - 2015-06-04
+###最新版本3.1.0 - 2015-06-10
+
+* 基础包名从`com.github.abel533`改为`tk.mybatis.mapper`
+* Maven的groupId改为`tk.mybatis`,artifactId为`mapper`
+* 增加和Example功能类似的Condition查询，仅仅名字不同
+* 更多详细变化请看[Mapper3通用接口大全](http://git.oschina.net/free/Mapper/blob/master/wiki/mapper3/5.Mappers.md)
+* 关于3.0.x版本请看[Mapper3.0.x](http://git.oschina.net/free/Mapper/tree/Mapper3.0.x/)
+
+###3.0.0 - 2015-06-04
 
 * 将`EntityMapper`和`SqlMapper`移出，现在是独立项目[EntityMapper](http://git.oschina.net/free/EntityMapper)
 * 将`Mapper<T>`全部接口方法拆分为独立接口，方便选择集成
 * 增加`MySqlMapper<T>`包含批量插入和单个插入，批量插入可以回写全部id
-* 增加`RowBoundsMapper<T>`包含两个分页查询，可以配合[PageHelper]()实现物理分页
+* 增加`RowBoundsMapper<T>`包含两个分页查询，可以配合[PageHelper](http://git.oschina.net/free/Mybatis_PageHelper)实现物理分页
 * 详细变化请看[Mapper3变化](http://git.oschina.net/free/Mapper/blob/master/wiki/mapper3/1.Changes.md)
 * Mapper2资深用户请看[Mapper3高级应用](http://git.oschina.net/free/Mapper/blob/master/wiki/mapper3/4.Professional.md)
 * [Mapper3通用接口大全](http://git.oschina.net/free/Mapper/blob/master/wiki/mapper3/5.Mappers.md)
 * [快速开发自己的通用接口](http://git.oschina.net/free/Mapper/blob/master/wiki/mapper3/6.MyMapper.md)
-
 
 ##使用Maven
 
