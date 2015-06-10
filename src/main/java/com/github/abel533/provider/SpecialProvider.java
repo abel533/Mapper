@@ -55,6 +55,9 @@ public class SpecialProvider extends MapperTemplate {
         sql.append("(");
         boolean first = true;
         for (EntityHelper.EntityColumn column : table.getEntityClassColumns()) {
+            if (column.isId()) {
+                continue;
+            }
             if(!first) {
                 sql.append(",");
             }
@@ -66,7 +69,10 @@ public class SpecialProvider extends MapperTemplate {
         sql.append("(");
         first = true;
         for (EntityHelper.EntityColumn column : table.getEntityClassColumns()) {
-            if(!first) {
+            if (column.isId()) {
+                continue;
+            }
+            if (!first) {
                 sql.append(",");
             }
             sql.append("#{record.").append(column.getProperty()).append("}");
@@ -92,6 +98,9 @@ public class SpecialProvider extends MapperTemplate {
         sql.append("(");
         boolean first = true;
         for (EntityHelper.EntityColumn column : table.getEntityClassColumns()) {
+            if (column.isId()) {
+                continue;
+            }
             if(!first) {
                 sql.append(",");
             }
@@ -101,6 +110,9 @@ public class SpecialProvider extends MapperTemplate {
         sql.append(") values(");
         first = true;
         for (EntityHelper.EntityColumn column : table.getEntityClassColumns()) {
+            if (column.isId()) {
+                continue;
+            }
             if(!first) {
                 sql.append(",");
             }

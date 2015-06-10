@@ -74,6 +74,12 @@ Country代码：
 
 ##Maven坐标以及下载地址
 
+###最新版本3.0.1 - 2015-06-10
+
+* `InsertUseGeneratedKeysMapper`方法改名为`insertUseGeneratedKeys`
+* `insertUseGeneratedKeys`和`insertList`方法的sql中，去掉主键列，主键列必须是数据库自增类型
+* 增加两个SqlServer专用的insert方法，详细内容看[Mapper3通用接口大全](http://git.oschina.net/free/Mapper/blob/master/wiki/mapper3/5.Mappers.md)
+
 ###最新版本3.0.0 - 2015-06-04
 
 * 将`EntityMapper`和`SqlMapper`移出，现在是独立项目[EntityMapper](http://git.oschina.net/free/EntityMapper)
