@@ -38,6 +38,6 @@ import java.util.List;
 public interface SelectByConditionMapper<T> {
 
     @SelectProvider(type = MapperProvider.class, method = "dynamicSQL")
-    List<T> selectByCondition(Object Condition);
+    List<T> selectByCondition(Object condition);
 
 }

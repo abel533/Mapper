@@ -22,10 +22,13 @@
  * THE SOFTWARE.
  */
 
-package tk.mybatis.mapper.common.condition;
+package tk.mybatis.mapper.common.rowbounds;
 
-import org.apache.ibatis.annotations.DeleteProvider;
+import org.apache.ibatis.annotations.SelectProvider;
+import org.apache.ibatis.session.RowBounds;
 import tk.mybatis.mapper.provider.MapperProvider;
+
+import java.util.List;
 
 /**
  * 通用Mapper接口,Condition查询
@@ -33,9 +36,9 @@ import tk.mybatis.mapper.provider.MapperProvider;
  * @param <T> 不能为空
  * @author liuzh
  */
-public interface DeleteByConditionMapper<T> {
+public interface SelectByConditionRowBoundsMapper<T> {
 
-    @DeleteProvider(type = MapperProvider.class, method = "dynamicSQL")
-    int deleteByCondition(Object condition);
+    @SelectProvider(type = MapperProvider.class, method = "dynamicSQL")
+    List<T> selectByConditionAndRowBounds(Object condition, RowBounds rowBounds);
 
 }
