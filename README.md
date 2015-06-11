@@ -135,7 +135,9 @@ http://repo1.maven.org/maven2/javax/persistence/persistence-api/1.0/
 
 7. [如何使用Mapper专用的MyBatis Generator插件](http://git.oschina.net/free/Mapper/blob/master/wiki/mapper3/7.UseMBG.md)
 
-8. [在Spring4中使用通用Mapper](http://git.oschina.net/free/Mapper/blob/master/wiki/mapper/4.Spring4.md)
+8. [在Spring4中使用通用Mapper](http://git.oschina.net/free/Mapper2/blob/master/wiki/mapper/4.Spring4.md)
+
+9. [Mapper3常见问题和用法](http://git.oschina.net/free/Mapper/blob/master/wiki/mapper3/9.QA.md)
 
 ###通用Mapper 2
 
