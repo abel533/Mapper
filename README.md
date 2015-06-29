@@ -68,7 +68,7 @@ Country代码：
         //省略setter和getter方法
     }
     
-[使用Mapper专用的MyBatis Generator插件](http://git.oschina.net/free/Mapper/blob/master/wiki/mapper/5.UseMBG.md) 可以方便的生成这些（带注解的）实体类。
+[使用Mapper专用的MyBatis Generator插件](http://git.oschina.net/free/Mapper/blob/master/wiki/mapper3/7.UseMBG.md) 可以方便的生成这些（带注解的）实体类。
 
 ##通用Mapper支持Mybatis-3.2.4及以上版本 
 
@@ -133,7 +133,7 @@ http://repo1.maven.org/maven2/javax/persistence/persistence-api/1.0/
 
 6. [快速开发自己的通用接口](http://git.oschina.net/free/Mapper/blob/master/wiki/mapper3/6.MyMapper.md)
 
-7. [如何使用Mapper专用的MyBatis Generator插件](http://git.oschina.net/free/Mapper/blob/master/wiki/mapper3/7.UseMBG.md)
+7. [如何使用Mapper专用的MyBatis Generator插件](http://git.oschina.net/free/Mapper2/blob/master/wiki/mapper3/7.UseMBG.md)
 
 8. [在Spring4中使用通用Mapper](http://git.oschina.net/free/Mapper2/blob/master/wiki/mapper/4.Spring4.md)
 
