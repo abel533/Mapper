@@ -76,7 +76,11 @@ Country代码：
 
 ##Maven坐标以及下载地址
 
-###最新版本3.1.0 - 2015-06-10
+###最新版本3.1.1 - 2015-07-01
+
+* 解决`ConditionMapper`中`selectByCondition`和`updateByCondition`方法错误
+
+###3.1.0 - 2015-06-10
 
 * 基础包名从`com.github.abel533`改为`tk.mybatis.mapper`
 * Maven的groupId改为`tk.mybatis`,artifactId为`mapper`

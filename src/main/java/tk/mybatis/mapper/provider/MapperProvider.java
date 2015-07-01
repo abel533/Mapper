@@ -24,14 +24,14 @@
 
 package tk.mybatis.mapper.provider;
 
-import tk.mybatis.mapper.mapperhelper.EntityHelper;
-import tk.mybatis.mapper.mapperhelper.MapperHelper;
-import tk.mybatis.mapper.mapperhelper.MapperTemplate;
 import org.apache.ibatis.builder.StaticSqlSource;
 import org.apache.ibatis.jdbc.SQL;
 import org.apache.ibatis.mapping.MappedStatement;
 import org.apache.ibatis.mapping.ParameterMapping;
 import org.apache.ibatis.scripting.xmltags.*;
+import tk.mybatis.mapper.mapperhelper.EntityHelper;
+import tk.mybatis.mapper.mapperhelper.MapperHelper;
+import tk.mybatis.mapper.mapperhelper.MapperTemplate;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -548,7 +548,7 @@ public class MapperProvider extends MapperTemplate {
      * @return
      */
     public SqlNode selectByCondition(MappedStatement ms) {
-        return selectByCondition(ms);
+        return selectByExample(ms);
     }
 
     /**
@@ -578,6 +578,6 @@ public class MapperProvider extends MapperTemplate {
      * @return
      */
     public SqlNode updateByCondition(MappedStatement ms) {
-        return updateByCondition(ms);
+        return updateByExample(ms);
     }
 }
