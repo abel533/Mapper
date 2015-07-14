@@ -79,6 +79,7 @@ Country代码：
 ###测试版本3.1.3-SNAPSHOT - 2015-07-14
 
 * 新增`MapperOnceInterceptor`拦截器，该拦截器执行后会自动卸载，以后不会再进入该方法，只需要将`MapperInterceptor`替换为`MapperOnceInterceptor`即可
+* 由于`MapperHelper`的配置方式容易出现错误，因此从3.1.3以后废弃这种配置方法
 
 ###最新版本3.1.2 - 2015-07-14
 
