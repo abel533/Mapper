@@ -16,7 +16,7 @@
   </typeAliases>
 
 	<plugins>
-		<plugin interceptor="tk.mybatis.mapper.mapperhelper.MapperInterceptor">
+        <plugin interceptor="tk.mybatis.mapper.mapperhelper.MapperOnceInterceptor">
 			<!--================================================-->
 			<!--可配置参数说明(一般无需修改)-->
 			<!--================================================-->
@@ -65,6 +65,7 @@
     <mapper class="tk.mybatis.mapper.mapper.UserInfoMapMapper" />
     <mapper class="tk.mybatis.mapper.mapper.UserLoginMapper" />
     <mapper class="tk.mybatis.mapper.mapper.UserLogin2Mapper" />
+        <mapper class="tk.mybatis.mapper.mapper.CachedCountryMapper"/>
 	</mappers>
 
 </configuration>

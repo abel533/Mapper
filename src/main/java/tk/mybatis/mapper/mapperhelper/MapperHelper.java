@@ -31,7 +31,6 @@ import org.apache.ibatis.annotations.UpdateProvider;
 import org.apache.ibatis.builder.annotation.ProviderSqlSource;
 import org.apache.ibatis.mapping.MappedStatement;
 import org.apache.ibatis.session.Configuration;
-import org.apache.ibatis.session.SqlSession;
 
 import java.lang.reflect.Method;
 import java.util.*;
@@ -46,24 +45,17 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class MapperHelper {
     /**
+     * 缓存skip结果
+     */
+    private final Map<String, Boolean> msIdSkip = new HashMap<String, Boolean>();
+    /**
      * 注册的通用Mapper接口
      */
     private Map<Class<?>, MapperTemplate> registerMapper = new ConcurrentHashMap<Class<?>, MapperTemplate>();
-
     /**
      * 缓存msid和MapperTemplate
      */
     private Map<String, MapperTemplate> msIdCache = new HashMap<String, MapperTemplate>();
-    /**
-     * 缓存skip结果
-     */
-    private final Map<String, Boolean> msIdSkip = new HashMap<String, Boolean>();
-
-    /**
-     * 缓存已经处理过的Collection<MappedStatement>
-     */
-    private Set<Collection<MappedStatement>> collectionSet = new HashSet<Collection<MappedStatement>>();
-
     /**
      * 是否使用的Spring
      */
@@ -83,11 +75,13 @@ public class MapperHelper {
      * 对于一般的getAllIfColumnNode，是否判断!=''，默认不判断
      */
     private boolean notEmpty = false;
+    private Config config = new Config();
 
     /**
      * 默认构造方法
      */
     public MapperHelper() {
+        initSpringVersion();
     }
 
     /**
@@ -96,23 +90,8 @@ public class MapperHelper {
      * @param properties
      */
     public MapperHelper(Properties properties) {
+        this();
         setProperties(properties);
-    }
-
-    /**
-     * 缓存初始化时的SqlSession
-     */
-    private List<SqlSession> sqlSessions = new ArrayList<SqlSession>();
-
-    /**
-     * 针对Spring注入需要处理的SqlSession
-     *
-     * @param sqlSessions
-     */
-    public void setSqlSessions(SqlSession[] sqlSessions) {
-        if (sqlSessions != null && sqlSessions.length > 0) {
-            this.sqlSessions.addAll(Arrays.asList(sqlSessions));
-        }
     }
 
     public boolean isNotEmpty() {
@@ -121,19 +100,6 @@ public class MapperHelper {
 
     public void setNotEmpty(boolean notEmpty) {
         this.notEmpty = notEmpty;
-    }
-
-    /**
-     * Spring初始化方法，使用Spring时需要配置init-method="initMapper"
-     */
-    public void initMapper() {
-        //只有Spring会执行这个方法,所以Spring配置的时候,从这儿可以尝试获取Spring的版本
-        //先判断Spring版本,对下面的操作有影响
-        //Spring4以上支持泛型注入,因此可以扫描通用Mapper
-        initSpringVersion();
-        for (SqlSession sqlSession : sqlSessions) {
-            processConfiguration(sqlSession.getConfiguration());
-        }
     }
 
     /**
@@ -289,108 +255,12 @@ public class MapperHelper {
     }
 
     /**
-     * IDENTITY的可选值
-     */
-    public enum IdentityDialect {
-        DB2("VALUES IDENTITY_VAL_LOCAL()"),
-        MYSQL("SELECT LAST_INSERT_ID()"),
-        SQLSERVER("SELECT SCOPE_IDENTITY()"),
-        CLOUDSCAPE("VALUES IDENTITY_VAL_LOCAL()"),
-        DERBY("VALUES IDENTITY_VAL_LOCAL()"),
-        HSQLDB("CALL IDENTITY()"),
-        SYBASE("SELECT @@IDENTITY"),
-        DB2_MF("SELECT IDENTITY_VAL_LOCAL() FROM SYSIBM.SYSDUMMY1"),
-        INFORMIX("select dbinfo('sqlca.sqlerrd1') from systables where tabid=1");
-
-        private String identityRetrievalStatement;
-
-        private IdentityDialect(String identityRetrievalStatement) {
-            this.identityRetrievalStatement = identityRetrievalStatement;
-        }
-
-        public String getIdentityRetrievalStatement() {
-            return identityRetrievalStatement;
-        }
-
-        public static IdentityDialect getDatabaseDialect(String database) {
-            IdentityDialect returnValue = null;
-            if ("DB2".equalsIgnoreCase(database)) {
-                returnValue = DB2;
-            } else if ("MySQL".equalsIgnoreCase(database)) {
-                returnValue = MYSQL;
-            } else if ("SqlServer".equalsIgnoreCase(database)) {
-                returnValue = SQLSERVER;
-            } else if ("Cloudscape".equalsIgnoreCase(database)) {
-                returnValue = CLOUDSCAPE;
-            } else if ("Derby".equalsIgnoreCase(database)) {
-                returnValue = DERBY;
-            } else if ("HSQLDB".equalsIgnoreCase(database)) {
-                returnValue = HSQLDB;
-            } else if ("SYBASE".equalsIgnoreCase(database)) {
-                returnValue = SYBASE;
-            } else if ("DB2_MF".equalsIgnoreCase(database)) {
-                returnValue = DB2_MF;
-            } else if ("Informix".equalsIgnoreCase(database)) {
-                returnValue = INFORMIX;
-            }
-            return returnValue;
-        }
-    }
-
-    //基础可配置项
-    private class Config {
-        private String UUID;
-        private String IDENTITY;
-        private boolean BEFORE = false;
-        private String seqFormat;
-        private String catalog;
-        private String schema;
-    }
-
-    private Config config = new Config();
-
-    /**
-     * 设置UUID生成策略
-     * <br>配置UUID生成策略需要使用OGNL表达式
-     * <br>默认值32位长度:@java.util.UUID@randomUUID().toString().replace("-", "")
-     *
-     * @param UUID
-     */
-    public void setUUID(String UUID) {
-        config.UUID = UUID;
-    }
-
-    /**
-     * 主键自增回写方法,默认值MYSQL,详细说明请看文档
-     *
-     * @param IDENTITY
-     */
-    public void setIDENTITY(String IDENTITY) {
-        IdentityDialect identityDialect = IdentityDialect.getDatabaseDialect(IDENTITY);
-        if (identityDialect != null) {
-            config.IDENTITY = identityDialect.getIdentityRetrievalStatement();
-        } else {
-            config.IDENTITY = IDENTITY;
-        }
-    }
-
-    /**
      * 主键自增回写方法执行顺序,默认AFTER,可选值为(BEFORE|AFTER)
      *
      * @param order
      */
     public void setOrder(String order) {
         config.BEFORE = "BEFORE".equalsIgnoreCase(order);
-    }
-
-    /**
-     * 序列的获取规则,使用{num}格式化参数，默认值为{0}.nextval，针对Oracle
-     * <br>可选参数一共3个，对应0,1,2,分别为SequenceName，ColumnName, PropertyName
-     *
-     * @param seqFormat
-     */
-    public void setSeqFormat(String seqFormat) {
-        config.seqFormat = seqFormat;
     }
 
     /**
@@ -440,6 +310,17 @@ public class MapperHelper {
     }
 
     /**
+     * 设置UUID生成策略
+     * <br>配置UUID生成策略需要使用OGNL表达式
+     * <br>默认值32位长度:@java.util.UUID@randomUUID().toString().replace("-", "")
+     *
+     * @param UUID
+     */
+    public void setUUID(String UUID) {
+        config.UUID = UUID;
+    }
+
+    /**
      * 获取主键自增回写SQL
      *
      * @return
@@ -450,6 +331,20 @@ public class MapperHelper {
         }
         //针对mysql的默认值
         return IdentityDialect.MYSQL.getIdentityRetrievalStatement();
+    }
+
+    /**
+     * 主键自增回写方法,默认值MYSQL,详细说明请看文档
+     *
+     * @param IDENTITY
+     */
+    public void setIDENTITY(String IDENTITY) {
+        IdentityDialect identityDialect = IdentityDialect.getDatabaseDialect(IDENTITY);
+        if (identityDialect != null) {
+            config.IDENTITY = identityDialect.getIdentityRetrievalStatement();
+        } else {
+            config.IDENTITY = IDENTITY;
+        }
     }
 
     /**
@@ -471,6 +366,16 @@ public class MapperHelper {
             return config.seqFormat;
         }
         return "{0}.nextval";
+    }
+
+    /**
+     * 序列的获取规则,使用{num}格式化参数，默认值为{0}.nextval，针对Oracle
+     * <br>可选参数一共3个，对应0,1,2,分别为SequenceName，ColumnName, PropertyName
+     *
+     * @param seqFormat
+     */
+    public void setSeqFormat(String seqFormat) {
+        config.seqFormat = seqFormat;
     }
 
     /**
@@ -607,12 +512,6 @@ public class MapperHelper {
      */
     public void processConfiguration(Configuration configuration) {
         Collection<MappedStatement> collection = configuration.getMappedStatements();
-        //防止反复处理一个
-        if (collectionSet.contains(collection)) {
-            return;
-        } else {
-            collectionSet.add(collection);
-        }
         int size = collection.size();
         Iterator<?> iterator = collection.iterator();
         while (iterator.hasNext()) {
@@ -631,5 +530,64 @@ public class MapperHelper {
                 iterator = collection.iterator();
             }
         }
+    }
+
+    /**
+     * IDENTITY的可选值
+     */
+    public enum IdentityDialect {
+        DB2("VALUES IDENTITY_VAL_LOCAL()"),
+        MYSQL("SELECT LAST_INSERT_ID()"),
+        SQLSERVER("SELECT SCOPE_IDENTITY()"),
+        CLOUDSCAPE("VALUES IDENTITY_VAL_LOCAL()"),
+        DERBY("VALUES IDENTITY_VAL_LOCAL()"),
+        HSQLDB("CALL IDENTITY()"),
+        SYBASE("SELECT @@IDENTITY"),
+        DB2_MF("SELECT IDENTITY_VAL_LOCAL() FROM SYSIBM.SYSDUMMY1"),
+        INFORMIX("select dbinfo('sqlca.sqlerrd1') from systables where tabid=1");
+
+        private String identityRetrievalStatement;
+
+        private IdentityDialect(String identityRetrievalStatement) {
+            this.identityRetrievalStatement = identityRetrievalStatement;
+        }
+
+        public static IdentityDialect getDatabaseDialect(String database) {
+            IdentityDialect returnValue = null;
+            if ("DB2".equalsIgnoreCase(database)) {
+                returnValue = DB2;
+            } else if ("MySQL".equalsIgnoreCase(database)) {
+                returnValue = MYSQL;
+            } else if ("SqlServer".equalsIgnoreCase(database)) {
+                returnValue = SQLSERVER;
+            } else if ("Cloudscape".equalsIgnoreCase(database)) {
+                returnValue = CLOUDSCAPE;
+            } else if ("Derby".equalsIgnoreCase(database)) {
+                returnValue = DERBY;
+            } else if ("HSQLDB".equalsIgnoreCase(database)) {
+                returnValue = HSQLDB;
+            } else if ("SYBASE".equalsIgnoreCase(database)) {
+                returnValue = SYBASE;
+            } else if ("DB2_MF".equalsIgnoreCase(database)) {
+                returnValue = DB2_MF;
+            } else if ("Informix".equalsIgnoreCase(database)) {
+                returnValue = INFORMIX;
+            }
+            return returnValue;
+        }
+
+        public String getIdentityRetrievalStatement() {
+            return identityRetrievalStatement;
+        }
+    }
+
+    //基础可配置项
+    private class Config {
+        private String UUID;
+        private String IDENTITY;
+        private boolean BEFORE = false;
+        private String seqFormat;
+        private String catalog;
+        private String schema;
     }
 }
