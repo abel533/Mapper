@@ -76,6 +76,10 @@ Country代码：
 
 ##Maven坐标以及下载地址
 
+###测试版本3.1.3-SNAPSHOT - 2015-07-14
+
+* 新增`MapperOnceInterceptor`拦截器，该拦截器执行后会自动卸载，以后不会再进入该方法，只需要将`MapperInterceptor`替换为`MapperOnceInterceptor`即可
+
 ###最新版本3.1.2 - 2015-07-14
 
 * 解决别名时的一种特殊情况，例如`@Column(name="`desc`")`的时候，就不需要自动添加别名
