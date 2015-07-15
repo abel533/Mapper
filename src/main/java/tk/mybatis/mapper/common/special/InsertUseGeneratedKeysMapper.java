@@ -24,9 +24,9 @@
 
 package tk.mybatis.mapper.common.special;
 
-import tk.mybatis.mapper.provider.SpecialProvider;
 import org.apache.ibatis.annotations.InsertProvider;
 import org.apache.ibatis.annotations.Options;
+import tk.mybatis.mapper.provider.SpecialProvider;
 
 /**
  * 通用Mapper接口,特殊方法，批量插入，支持批量插入的数据库都可以使用，例如mysql,h2等
@@ -37,7 +37,7 @@ import org.apache.ibatis.annotations.Options;
 public interface InsertUseGeneratedKeysMapper<T> {
 
     /**
-     * 插入，支持数据库自增字段必须是id，支持回写
+     * 插入数据，限制为实体包含`id`属性并且必须为自增列，实体配置的主键策略无效
      *
      * @param record
      * @return

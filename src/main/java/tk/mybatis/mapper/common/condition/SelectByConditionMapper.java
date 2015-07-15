@@ -37,6 +37,12 @@ import java.util.List;
  */
 public interface SelectByConditionMapper<T> {
 
+    /**
+     * 根据Condition条件进行查询
+     *
+     * @param condition
+     * @return
+     */
     @SelectProvider(type = MapperProvider.class, method = "dynamicSQL")
     List<T> selectByCondition(Object condition);
 

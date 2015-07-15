@@ -24,9 +24,9 @@
 
 package tk.mybatis.mapper.common.example;
 
-import tk.mybatis.mapper.provider.MapperProvider;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.UpdateProvider;
+import tk.mybatis.mapper.provider.MapperProvider;
 
 /**
  * 通用Mapper接口,Example查询
@@ -36,6 +36,13 @@ import org.apache.ibatis.annotations.UpdateProvider;
  */
 public interface UpdateByExampleSelectiveMapper<T> {
 
+    /**
+     * 根据Example条件更新实体`record`包含的不是null的属性值
+     *
+     * @param record
+     * @param example
+     * @return
+     */
     @UpdateProvider(type = MapperProvider.class, method = "dynamicSQL")
     int updateByExampleSelective(@Param("record") T record, @Param("example") Object example);
 

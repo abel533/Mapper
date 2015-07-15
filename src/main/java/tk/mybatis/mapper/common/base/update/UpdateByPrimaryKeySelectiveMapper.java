@@ -24,8 +24,8 @@
 
 package tk.mybatis.mapper.common.base.update;
 
-import tk.mybatis.mapper.provider.MapperProvider;
 import org.apache.ibatis.annotations.UpdateProvider;
+import tk.mybatis.mapper.provider.MapperProvider;
 
 /**
  * 通用Mapper接口,更新
@@ -35,6 +35,12 @@ import org.apache.ibatis.annotations.UpdateProvider;
  */
 public interface UpdateByPrimaryKeySelectiveMapper<T> {
 
+    /**
+     * 根据主键更新属性不为null的值
+     *
+     * @param record
+     * @return
+     */
     @UpdateProvider(type = MapperProvider.class, method = "dynamicSQL")
     int updateByPrimaryKeySelective(T record);
 

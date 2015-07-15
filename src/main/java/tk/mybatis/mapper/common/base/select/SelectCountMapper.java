@@ -24,8 +24,8 @@
 
 package tk.mybatis.mapper.common.base.select;
 
-import tk.mybatis.mapper.provider.MapperProvider;
 import org.apache.ibatis.annotations.SelectProvider;
+import tk.mybatis.mapper.provider.MapperProvider;
 
 /**
  * 通用Mapper接口,查询
@@ -35,6 +35,12 @@ import org.apache.ibatis.annotations.SelectProvider;
  */
 public interface SelectCountMapper<T> {
 
+    /**
+     * 根据实体中的属性查询总数，查询条件使用等号
+     *
+     * @param record
+     * @return
+     */
     @SelectProvider(type = MapperProvider.class, method = "dynamicSQL")
     int selectCount(T record);
 

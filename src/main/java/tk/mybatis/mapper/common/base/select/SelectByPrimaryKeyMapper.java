@@ -24,8 +24,8 @@
 
 package tk.mybatis.mapper.common.base.select;
 
-import tk.mybatis.mapper.provider.MapperProvider;
 import org.apache.ibatis.annotations.SelectProvider;
+import tk.mybatis.mapper.provider.MapperProvider;
 
 /**
  * 通用Mapper接口,其他接口继承该接口即可
@@ -39,6 +39,12 @@ import org.apache.ibatis.annotations.SelectProvider;
  */
 public interface SelectByPrimaryKeyMapper<T> {
 
+    /**
+     * 根据主键字段进行查询，方法参数必须包含完整的主键属性，查询条件使用等号
+     *
+     * @param key
+     * @return
+     */
     @SelectProvider(type = MapperProvider.class, method = "dynamicSQL")
     T selectByPrimaryKey(Object key);
 

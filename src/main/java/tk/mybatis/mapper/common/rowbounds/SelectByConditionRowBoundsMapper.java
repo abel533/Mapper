@@ -38,6 +38,13 @@ import java.util.List;
  */
 public interface SelectByConditionRowBoundsMapper<T> {
 
+    /**
+     * 根据example条件和RowBounds进行分页查询，该方法和selectByExampleAndRowBounds完全一样，只是名字改成了Condition
+     *
+     * @param condition
+     * @param rowBounds
+     * @return
+     */
     @SelectProvider(type = MapperProvider.class, method = "dynamicSQL")
     List<T> selectByConditionAndRowBounds(Object condition, RowBounds rowBounds);
 

@@ -36,6 +36,13 @@ import tk.mybatis.mapper.provider.MapperProvider;
  */
 public interface UpdateByConditionSelectiveMapper<T> {
 
+    /**
+     * 根据Condition条件更新实体`record`包含的不是null的属性值
+     *
+     * @param record
+     * @param condition
+     * @return
+     */
     @UpdateProvider(type = MapperProvider.class, method = "dynamicSQL")
     int updateByConditionSelective(@Param("record") T record, @Param("example") Object condition);
 

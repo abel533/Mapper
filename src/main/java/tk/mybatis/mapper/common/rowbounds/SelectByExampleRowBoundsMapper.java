@@ -24,9 +24,9 @@
 
 package tk.mybatis.mapper.common.rowbounds;
 
-import tk.mybatis.mapper.provider.MapperProvider;
 import org.apache.ibatis.annotations.SelectProvider;
 import org.apache.ibatis.session.RowBounds;
+import tk.mybatis.mapper.provider.MapperProvider;
 
 import java.util.List;
 
@@ -38,6 +38,13 @@ import java.util.List;
  */
 public interface SelectByExampleRowBoundsMapper<T> {
 
+    /**
+     * 根据example条件和RowBounds进行分页查询
+     *
+     * @param example
+     * @param rowBounds
+     * @return
+     */
     @SelectProvider(type = MapperProvider.class, method = "dynamicSQL")
     List<T> selectByExampleAndRowBounds(Object example, RowBounds rowBounds);
 

@@ -36,6 +36,13 @@ import tk.mybatis.mapper.provider.MapperProvider;
  */
 public interface UpdateByConditionMapper<T> {
 
+    /**
+     * 根据Condition条件更新实体`record`包含的全部属性，null值会被更新
+     *
+     * @param record
+     * @param condition
+     * @return
+     */
     @UpdateProvider(type = MapperProvider.class, method = "dynamicSQL")
     int updateByCondition(@Param("record") T record, @Param("example") Object condition);
 

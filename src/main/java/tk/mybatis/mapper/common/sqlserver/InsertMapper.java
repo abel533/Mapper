@@ -24,9 +24,9 @@
 
 package tk.mybatis.mapper.common.sqlserver;
 
-import tk.mybatis.mapper.provider.SqlServerProvider;
 import org.apache.ibatis.annotations.InsertProvider;
 import org.apache.ibatis.annotations.Options;
+import tk.mybatis.mapper.provider.SqlServerProvider;
 
 /**
  * 通用Mapper接口,插入
@@ -36,6 +36,12 @@ import org.apache.ibatis.annotations.Options;
  */
 public interface InsertMapper<T> {
 
+    /**
+     * 插入数据库，`null`值也会插入，不会使用列的默认值
+     *
+     * @param record
+     * @return
+     */
     @Options(useGeneratedKeys = true, keyProperty = "id")
     @InsertProvider(type = SqlServerProvider.class, method = "dynamicSQL")
     int insert(T record);

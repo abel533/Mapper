@@ -24,8 +24,8 @@
 
 package tk.mybatis.mapper.common.base.insert;
 
-import tk.mybatis.mapper.provider.MapperProvider;
 import org.apache.ibatis.annotations.InsertProvider;
+import tk.mybatis.mapper.provider.MapperProvider;
 
 /**
  * 通用Mapper接口,插入
@@ -35,6 +35,12 @@ import org.apache.ibatis.annotations.InsertProvider;
  */
 public interface InsertSelectiveMapper<T> {
 
+    /**
+     * 保存一个实体，null的属性不会保存，会使用数据库默认值
+     *
+     * @param record
+     * @return
+     */
     @InsertProvider(type = MapperProvider.class, method = "dynamicSQL")
     int insertSelective(T record);
 

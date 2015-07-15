@@ -35,6 +35,12 @@ import tk.mybatis.mapper.provider.MapperProvider;
  */
 public interface SelectCountByConditionMapper<T> {
 
+    /**
+     * 根据Condition条件进行查询总数
+     *
+     * @param condition
+     * @return
+     */
     @SelectProvider(type = MapperProvider.class, method = "dynamicSQL")
     int selectCountByCondition(Object condition);
 

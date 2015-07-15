@@ -24,8 +24,8 @@
 
 package tk.mybatis.mapper.common.base.delete;
 
-import tk.mybatis.mapper.provider.MapperProvider;
 import org.apache.ibatis.annotations.DeleteProvider;
+import tk.mybatis.mapper.provider.MapperProvider;
 
 /**
  * 通用Mapper接口,删除
@@ -35,6 +35,12 @@ import org.apache.ibatis.annotations.DeleteProvider;
  */
 public interface DeleteByPrimaryKeyMapper<T> {
 
+    /**
+     * 根据主键字段进行删除，方法参数必须包含完整的主键属性
+     *
+     * @param key
+     * @return
+     */
     @DeleteProvider(type = MapperProvider.class, method = "dynamicSQL")
     int deleteByPrimaryKey(Object key);
 

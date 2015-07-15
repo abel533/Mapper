@@ -24,8 +24,8 @@
 
 package tk.mybatis.mapper.common.example;
 
-import tk.mybatis.mapper.provider.MapperProvider;
 import org.apache.ibatis.annotations.SelectProvider;
+import tk.mybatis.mapper.provider.MapperProvider;
 
 /**
  * 通用Mapper接口,Example查询
@@ -35,6 +35,12 @@ import org.apache.ibatis.annotations.SelectProvider;
  */
 public interface SelectCountByExampleMapper<T> {
 
+    /**
+     * 根据Example条件进行查询总数
+     *
+     * @param example
+     * @return
+     */
     @SelectProvider(type = MapperProvider.class, method = "dynamicSQL")
     int selectCountByExample(Object example);
 

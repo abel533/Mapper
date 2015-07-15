@@ -35,6 +35,12 @@ import tk.mybatis.mapper.provider.MapperProvider;
  */
 public interface DeleteByConditionMapper<T> {
 
+    /**
+     * 根据Condition条件删除数据
+     *
+     * @param condition
+     * @return
+     */
     @DeleteProvider(type = MapperProvider.class, method = "dynamicSQL")
     int deleteByCondition(Object condition);
 

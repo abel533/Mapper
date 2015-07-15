@@ -24,8 +24,8 @@
 
 package tk.mybatis.mapper.common.base.select;
 
-import tk.mybatis.mapper.provider.MapperProvider;
 import org.apache.ibatis.annotations.SelectProvider;
+import tk.mybatis.mapper.provider.MapperProvider;
 
 import java.util.List;
 
@@ -37,6 +37,12 @@ import java.util.List;
  */
 public interface SelectMapper<T> {
 
+    /**
+     * 根据实体中的属性值进行查询，查询条件使用等号
+     *
+     * @param record
+     * @return
+     */
     @SelectProvider(type = MapperProvider.class, method = "dynamicSQL")
     List<T> select(T record);
 

@@ -24,9 +24,9 @@
 
 package tk.mybatis.mapper.common.special;
 
-import tk.mybatis.mapper.provider.SpecialProvider;
 import org.apache.ibatis.annotations.InsertProvider;
 import org.apache.ibatis.annotations.Options;
+import tk.mybatis.mapper.provider.SpecialProvider;
 
 import java.util.List;
 
@@ -39,7 +39,7 @@ import java.util.List;
 public interface InsertListMapper<T> {
 
     /**
-     * 批量插入，支持数据库自增字段，支持回写
+     * 批量插入，支持批量插入的数据库可以使用，例如MySQL,H2等，另外该接口限制实体包含`id`属性并且必须为自增列
      *
      * @param recordList
      * @return
