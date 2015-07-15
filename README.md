@@ -14,8 +14,6 @@
 
 ###在你打算使用通用Mapper前，一定要看看下面的文档，许多人在初次使用时遇到的问题，99%都在文档中有说明！！
 
-###通用Mapper 3
-
 1. [Mapper3变化](http://git.oschina.net/free/Mapper/blob/master/wiki/mapper3/1.Changes.md)
 
 2. [如何集成通用Mapper](http://git.oschina.net/free/Mapper/blob/master/wiki/mapper3/2.Integration.md)
@@ -34,19 +32,7 @@
 
 9. [Mapper3常见问题和用法](http://git.oschina.net/free/Mapper/blob/master/wiki/mapper3/9.QA.md)
 
-##通用Mapper2
-
-目前最新的Mapper3版本改动很大，如果正在使用2.x版本，可以去看2.x版本的文档：
-
-[Mapper2.x版本首页http://git.oschina.net/free/Mapper2](http://git.oschina.net/free/Mapper2)
-
-如果想同时使用Mapper3和Mapper2中的EntityMapper和SqlMapper，看这里：http://git.oschina.net/free/EntityMapper
-
-##Mapper2.x升级Mapper3注意事项
-
-请看[Mapper2.x升级Mapper3](http://git.oschina.net/free/Mapper/blob/master/wiki/mapper3/8.UpdateTo3.md)
-
-##通用Mapper3 - 简单用法示例
+##通用Mapper - 简单用法示例
 
 全部针对单表操作，每个实体类都需要继承通用Mapper接口来获得通用方法。
 
