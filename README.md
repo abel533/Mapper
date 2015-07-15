@@ -8,7 +8,32 @@
 
 通用Mapper都可以极大的方便开发人员。可以随意的按照自己的需要选择通用方法，还可以很方便的开发自己的通用方法。
 
-为了让您更方便的了解这通用Mapper，这里贴一段代码来看实际效果。
+##MyBatis工具网站:[http://mybatis.tk](http://www.mybatis.tk)
+
+##项目文档
+
+<b>在你打算使用通用Mapper前，一定要看看下面的问题，许多人在初次使用时遇到的问题，99%都在文档中有说明！！</b>
+
+###通用Mapper 3
+
+1. [Mapper3变化](http://git.oschina.net/free/Mapper/blob/master/wiki/mapper3/1.Changes.md)
+
+2. [如何集成通用Mapper](http://git.oschina.net/free/Mapper/blob/master/wiki/mapper3/2.Integration.md)
+
+3. [如何使用通用Mapper](http://git.oschina.net/free/Mapper/blob/master/wiki/mapper3/3.Use.md)
+
+4. [高级应用](http://git.oschina.net/free/Mapper/blob/master/wiki/mapper3/4.Professional.md)
+
+5. [Mapper3通用接口大全](http://git.oschina.net/free/Mapper/blob/master/wiki/mapper3/5.Mappers.md)
+
+6. [快速开发自己的通用接口](http://git.oschina.net/free/Mapper/blob/master/wiki/mapper3/6.MyMapper.md)
+
+7. [如何使用Mapper专用的MyBatis Generator插件](http://git.oschina.net/free/Mapper2/blob/master/wiki/mapper3/7.UseMBG.md)
+
+8. [在Spring4中使用通用Mapper](http://git.oschina.net/free/Mapper2/blob/master/wiki/mapper/4.Spring4.md)
+
+9. [Mapper3常见问题和用法](http://git.oschina.net/free/Mapper/blob/master/wiki/mapper3/9.QA.md)
+
 
 ##通用Mapper2
 
@@ -22,7 +47,7 @@
 
 请看[Mapper2.x升级Mapper3](http://git.oschina.net/free/Mapper/blob/master/wiki/mapper3/8.UpdateTo3.md)
 
-##通用Mapper3
+##通用Mapper3 - 简单用法示例
 
 全部针对单表操作，每个实体类都需要继承通用Mapper接口来获得通用方法。
 
@@ -72,6 +97,28 @@ Country代码：
 
 ##通用Mapper支持Mybatis-3.2.4及以上版本 
 
+##使用Maven
+
+###重要提示,3.1.0及以后版本的groupId修改为tk.mybatis，artifactId为mapper
+
+```xml
+<dependency>
+    <groupId>tk.mybatis</groupId>
+    <artifactId>mapper</artifactId>
+    <version>3.1.2</version>
+</dependency>
+```
+
+##引入Jar包，下载地址：
+
+https://oss.sonatype.org/content/repositories/releases/tk/mybatis/mapper
+
+http://repo1.maven.org/maven2/tk/mybatis/mapper
+
+由于通用Mapper依赖JPA，所以还需要下载persistence-api-1.0.jar：
+
+http://repo1.maven.org/maven2/javax/persistence/persistence-api/1.0/
+
 ##[更新日志](http://git.oschina.net/free/Mapper/blob/master/wiki/Changelog.md)
 
 ##Maven坐标以及下载地址
@@ -109,60 +156,12 @@ Country代码：
 * [Mapper3通用接口大全](http://git.oschina.net/free/Mapper/blob/master/wiki/mapper3/5.Mappers.md)
 * [快速开发自己的通用接口](http://git.oschina.net/free/Mapper/blob/master/wiki/mapper3/6.MyMapper.md)
 
-##使用Maven
-
-###重要提示,3.1.0及以后版本的groupId修改为tk.mybatis，artifactId为mapper
-
-```xml
-<dependency>
-    <groupId>tk.mybatis</groupId>
-    <artifactId>mapper</artifactId>
-    <version>3.1.2</version>
-</dependency>
-```
-
-##引入Jar包，下载地址：
-
-https://oss.sonatype.org/content/repositories/releases/tk/mybatis/mapper
-
-http://repo1.maven.org/maven2/tk/mybatis/mapper
-
-由于通用Mapper依赖JPA，所以还需要下载persistence-api-1.0.jar：
-
-http://repo1.maven.org/maven2/javax/persistence/persistence-api/1.0/
-
-##项目文档
-
-###通用Mapper 3
-
-1. [Mapper3变化](http://git.oschina.net/free/Mapper/blob/master/wiki/mapper3/1.Changes.md)
-
-2. [如何集成通用Mapper](http://git.oschina.net/free/Mapper/blob/master/wiki/mapper3/2.Integration.md)
-
-3. [如何使用通用Mapper](http://git.oschina.net/free/Mapper/blob/master/wiki/mapper3/3.Use.md)
-
-4. [高级应用](http://git.oschina.net/free/Mapper/blob/master/wiki/mapper3/4.Professional.md)
-
-5. [Mapper3通用接口大全](http://git.oschina.net/free/Mapper/blob/master/wiki/mapper3/5.Mappers.md)
-
-6. [快速开发自己的通用接口](http://git.oschina.net/free/Mapper/blob/master/wiki/mapper3/6.MyMapper.md)
-
-7. [如何使用Mapper专用的MyBatis Generator插件](http://git.oschina.net/free/Mapper2/blob/master/wiki/mapper3/7.UseMBG.md)
-
-8. [在Spring4中使用通用Mapper](http://git.oschina.net/free/Mapper2/blob/master/wiki/mapper/4.Spring4.md)
-
-9. [Mapper3常见问题和用法](http://git.oschina.net/free/Mapper/blob/master/wiki/mapper3/9.QA.md)
-
-###通用Mapper 2
-
-[Mapper2.x首页](http://git.oschina.net/free/Mapper2)
-
 ##作者信息
 
 作者博客：http://blog.csdn.net/isea533
 
 作者邮箱： abel533@gmail.com
 
-Mybatis工具群： 211286137 (Mybatis相关工具插件等等)
+Mybatis工具群： <a target="_blank" href="http://shang.qq.com/wpa/qunwpa?idkey=29e4cce8ac3c65d14a1dc40c9ba5c8e71304f143f3ad759ac0b05146e0952044"><img border="0" src="http://pub.idqqimg.com/wpa/images/group.png" alt="Mybatis工具" title="Mybatis工具"></a>
 
 推荐使用Mybatis分页插件:[PageHelper分页插件](https://github.com/pagehelper/Mybatis-PageHelper)
