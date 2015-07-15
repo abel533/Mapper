@@ -12,7 +12,7 @@
 
 ##项目文档
 
-<b>在你打算使用通用Mapper前，一定要看看下面的问题，许多人在初次使用时遇到的问题，99%都在文档中有说明！！</b>
+<b>在你打算使用通用Mapper前，一定要看看下面的文档，许多人在初次使用时遇到的问题，99%都在文档中有说明！！</b>
 
 ###通用Mapper 3
 
@@ -33,7 +33,6 @@
 8. [在Spring4中使用通用Mapper](http://git.oschina.net/free/Mapper2/blob/master/wiki/mapper/4.Spring4.md)
 
 9. [Mapper3常见问题和用法](http://git.oschina.net/free/Mapper/blob/master/wiki/mapper3/9.QA.md)
-
 
 ##通用Mapper2
 
