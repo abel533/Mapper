@@ -112,7 +112,7 @@ http://repo1.maven.org/maven2/javax/persistence/persistence-api/1.0/
 
 * 新增`MapperOnceInterceptor`拦截器，该拦截器执行后会自动卸载，以后不会再进入该方法，只需要将`MapperInterceptor`替换为`MapperOnceInterceptor`即可
 * 由于`MapperHelper`的配置方式容易出现错误，因此从3.1.3以后废弃这种配置方法
-* `Example`增加`andEqualTo(实体对象)`方法，可以将一个实体放进去，会自动根据属性和值拼出column=value的条件[by - Bob](0haizhu0@gmail.com)
+* `Example`增加`andEqualTo(实体对象)`方法，可以将一个实体放进去，会自动根据属性和值拼出column=value的条件 <b>Bob - 0haizhu0@gmail.com 提供</b>
 
 ###最新版本3.1.2 - 2015-07-14
 
