@@ -24,11 +24,12 @@
 
 package tk.mybatis.mapper.entity;
 
+import org.apache.ibatis.reflection.MetaObject;
+import org.apache.ibatis.reflection.SystemMetaObject;
 import tk.mybatis.mapper.mapperhelper.EntityHelper;
 
-import java.lang.reflect.Field;
-import java.util.LinkedList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -65,7 +66,7 @@ public class Example {
      * 带exists参数的构造方法
      *
      * @param entityClass
-     * @param exists - true时，如果字段不存在就抛出异常，false时，如果不存在就不使用该字段的条件
+     * @param exists      - true时，如果字段不存在就抛出异常，false时，如果不存在就不使用该字段的条件
      */
     public Example(Class<?> entityClass, boolean exists) {
         this.exists = exists;
@@ -82,20 +83,20 @@ public class Example {
         return entityClass;
     }
 
-    public void setOrderByClause(String orderByClause) {
-        this.orderByClause = orderByClause;
-    }
-
     public String getOrderByClause() {
         return orderByClause;
     }
 
-    public void setDistinct(boolean distinct) {
-        this.distinct = distinct;
+    public void setOrderByClause(String orderByClause) {
+        this.orderByClause = orderByClause;
     }
 
     public boolean isDistinct() {
         return distinct;
+    }
+
+    public void setDistinct(boolean distinct) {
+        this.distinct = distinct;
     }
 
     public List<Criteria> getOredCriteria() {
@@ -283,28 +284,22 @@ public class Example {
 
         /**
          * 将此对象的不为空的字段参数作为相等查询条件
-         * 
-         * @param obj 参数对象
+         *
+         * @param param 参数对象
          * @author Bob {@link}0haizhu0@gmail.com
          * @Date 2015年7月17日 下午12:48:08
          */
-        public Criteria setEqualParam(Object obj) {
-            Class<?> clazz = obj.getClass();
-            Field[] fields = clazz.getDeclaredFields();
-            for (Field field : fields) {
-                field.setAccessible(true);
-                String property = field.getName();
-                try {
-                    Object value = field.get(obj);
-                    // 【必须同时满足】以下条件才添加此属性到过滤条件
-                    // 1、属性和列对应Map中有此属性；2、属性值不为空；3、当前过滤条件中不包含此属性的其他条件
-                    if (null != propertyMap.get(property) && null != value && !criteria.contains(property)) {
+        public Criteria andEqualTo(Object param) {
+            MetaObject metaObject = SystemMetaObject.forObject(param);
+            String[] properties = metaObject.getGetterNames();
+            for (String property : properties) {
+                //属性和列对应Map中有此属性
+                if (propertyMap.get(property) != null) {
+                    Object value = metaObject.getValue(property);
+                    //属性值不为空
+                    if (value != null) {
                         andEqualTo(property, value);
                     }
-                } catch (IllegalArgumentException e) {
-                    throw new RuntimeException("当前实体类的" + property + "属性解析出错!");
-                } catch (IllegalAccessException e) {
-                    throw new RuntimeException("当前实体类的" + property + "属性访问权限受限!");
                 }
             }
             return (Criteria) this;
@@ -337,38 +332,6 @@ public class Example {
         private boolean listValue;
 
         private String typeHandler;
-
-        public String getCondition() {
-            return condition;
-        }
-
-        public Object getValue() {
-            return value;
-        }
-
-        public Object getSecondValue() {
-            return secondValue;
-        }
-
-        public boolean isNoValue() {
-            return noValue;
-        }
-
-        public boolean isSingleValue() {
-            return singleValue;
-        }
-
-        public boolean isBetweenValue() {
-            return betweenValue;
-        }
-
-        public boolean isListValue() {
-            return listValue;
-        }
-
-        public String getTypeHandler() {
-            return typeHandler;
-        }
 
         protected Criterion(String condition) {
             super();
@@ -404,6 +367,38 @@ public class Example {
 
         protected Criterion(String condition, Object value, Object secondValue) {
             this(condition, value, secondValue, null);
+        }
+
+        public String getCondition() {
+            return condition;
+        }
+
+        public Object getValue() {
+            return value;
+        }
+
+        public Object getSecondValue() {
+            return secondValue;
+        }
+
+        public boolean isNoValue() {
+            return noValue;
+        }
+
+        public boolean isSingleValue() {
+            return singleValue;
+        }
+
+        public boolean isBetweenValue() {
+            return betweenValue;
+        }
+
+        public boolean isListValue() {
+            return listValue;
+        }
+
+        public String getTypeHandler() {
+            return typeHandler;
         }
     }
 }

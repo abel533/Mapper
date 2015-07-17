@@ -1,13 +1,13 @@
 package tk.mybatis.mapper.test.example;
 
-import tk.mybatis.mapper.mapper.MybatisHelper;
-import tk.mybatis.mapper.model.Country;
-import tk.mybatis.mapper.entity.Example;
-import tk.mybatis.mapper.entity.model.CountryExample;
-import tk.mybatis.mapper.mapper.CountryMapper;
 import org.apache.ibatis.session.SqlSession;
 import org.junit.Assert;
 import org.junit.Test;
+import tk.mybatis.mapper.entity.Example;
+import tk.mybatis.mapper.entity.model.CountryExample;
+import tk.mybatis.mapper.mapper.CountryMapper;
+import tk.mybatis.mapper.mapper.MybatisHelper;
+import tk.mybatis.mapper.model.Country;
 
 import java.util.Arrays;
 import java.util.List;
@@ -92,7 +92,7 @@ public class TestSelectByExample {
 
             CountryMapper mapper = sqlSession.getMapper(CountryMapper.class);
             Example example = new Example(Country.class);
-            example.createCriteria().andGreaterThan("id", 20).setEqualParam(ct);
+            example.createCriteria().andGreaterThan("id", 20).andEqualTo(ct);
             List<Country> countries = mapper.selectByExample(example);
             //查询总数
             System.out.println(countries.get(0).toString());
