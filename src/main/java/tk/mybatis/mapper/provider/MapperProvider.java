@@ -442,6 +442,7 @@ public class MapperProvider extends MapperTemplate {
         sqlNodes.add(new StaticTextSqlNode("SELECT"));
         IfSqlNode distinctSqlNode = new IfSqlNode(new StaticTextSqlNode("DISTINCT"), "distinct");
         sqlNodes.add(distinctSqlNode);
+        //TODO 增加Example中指定查询列的功能
         sqlNodes.add(new StaticTextSqlNode(EntityHelper.getSelectColumns(entityClass) + " FROM " + tableName(entityClass)));
         IfSqlNode ifNullSqlNode = new IfSqlNode(exampleWhereClause(ms.getConfiguration()), "_parameter != null");
         sqlNodes.add(ifNullSqlNode);

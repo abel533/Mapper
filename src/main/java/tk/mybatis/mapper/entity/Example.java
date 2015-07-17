@@ -28,10 +28,7 @@ import org.apache.ibatis.reflection.MetaObject;
 import org.apache.ibatis.reflection.SystemMetaObject;
 import tk.mybatis.mapper.mapperhelper.EntityHelper;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 通用的Example查询对象
@@ -44,6 +41,8 @@ public class Example {
     protected boolean distinct;
 
     protected boolean exists;
+
+    protected Set<String> selectColumns;
 
     protected List<Criteria> oredCriteria;
 
@@ -89,6 +88,24 @@ public class Example {
 
     public void setOrderByClause(String orderByClause) {
         this.orderByClause = orderByClause;
+    }
+
+    public Set<String> getSelectColumns() {
+        return selectColumns;
+    }
+
+    public Example selectProperties(String... properties) {
+        if (properties != null && properties.length > 0) {
+            if (this.selectColumns == null) {
+                this.selectColumns = new LinkedHashSet<String>();
+            }
+            for (String property : properties) {
+                if (propertyMap.containsKey(property)) {
+                    this.selectColumns.add(property);
+                }
+            }
+        }
+        return this;
     }
 
     public boolean isDistinct() {
