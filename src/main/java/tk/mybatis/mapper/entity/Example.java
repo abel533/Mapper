@@ -26,6 +26,7 @@ package tk.mybatis.mapper.entity;
 
 import tk.mybatis.mapper.mapperhelper.EntityHelper;
 
+import java.lang.reflect.Field;
 import java.util.LinkedList;
 import java.util.HashMap;
 import java.util.List;
@@ -277,6 +278,35 @@ public class Example {
 
         public Criteria andNotLike(String property, String value) {
             addCriterion(column(property) + "  not like", value, property(property));
+            return (Criteria) this;
+        }
+
+        /**
+         * 将此对象的不为空的字段参数作为相等查询条件
+         * 
+         * @param obj 参数对象
+         * @author Bob {@link}0haizhu0@gmail.com
+         * @Date 2015年7月17日 下午12:48:08
+         */
+        public Criteria setEqualParam(Object obj) {
+            Class<?> clazz = obj.getClass();
+            Field[] fields = clazz.getDeclaredFields();
+            for (Field field : fields) {
+                field.setAccessible(true);
+                String property = field.getName();
+                try {
+                    Object value = field.get(obj);
+                    // 【必须同时满足】以下条件才添加此属性到过滤条件
+                    // 1、属性和列对应Map中有此属性；2、属性值不为空；3、当前过滤条件中不包含此属性的其他条件
+                    if (null != propertyMap.get(property) && null != value && !criteria.contains(property)) {
+                        andEqualTo(property, value);
+                    }
+                } catch (IllegalArgumentException e) {
+                    throw new RuntimeException("当前实体类的" + property + "属性解析出错!");
+                } catch (IllegalAccessException e) {
+                    throw new RuntimeException("当前实体类的" + property + "属性访问权限受限!");
+                }
+            }
             return (Criteria) this;
         }
     }
