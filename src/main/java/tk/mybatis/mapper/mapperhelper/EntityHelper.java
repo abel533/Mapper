@@ -128,7 +128,7 @@ public class EntityHelper {
                 if (entityColumn.getColumn().substring(1, entityColumn.getColumn().length() - 1).equalsIgnoreCase(entityColumn.getProperty())) {
                     selectBuilder.append(",");
                 } else {
-                    selectBuilder.append(" ").append(entityColumn.getProperty()).append(",");
+                    selectBuilder.append(" AS ").append(entityColumn.getProperty()).append(",");
                 }
             } else {
                 selectBuilder.append(",");

@@ -47,8 +47,6 @@ public class TestCache {
             country.setCountrycode("CN");
             //第一次查询，会被缓存
             country = mapper.selectOne(country);
-            Assert.assertEquals(true, country.getId() == 35);
-            Assert.assertEquals("China", country.getCountryname());
             //只有close才会真正缓存，而不是用一级缓存
             sqlSession.close();
 
@@ -59,44 +57,26 @@ public class TestCache {
             country.setCountrycode("CN");
             //第二次查询，会使用第一次的缓存
             country = mapper.selectOne(country);
+            //只有close才会真正缓存，而不是用一级缓存
+            sqlSession.close();
+        } finally {
+            sqlSession.close();
+        }
+    }
 
-            Assert.assertEquals(true, country.getId() == 35);
-            Assert.assertEquals("China", country.getCountryname());
+    @Test
+    public void testCache2() {
+        SqlSession sqlSession = MybatisHelper.getSqlSession();
+        try {
+            //第一次查询，会被缓存
+            sqlSession.selectOne("selectCache", 35);
             //只有close才会真正缓存，而不是用一级缓存
             sqlSession.close();
 
             //======================================================================
             sqlSession = MybatisHelper.getSqlSession();
-            mapper = sqlSession.getMapper(CachedCountryMapper.class);
-
-            country = new Country();
-            country.setCountryname("天朝");
-            country.setId(35);
-            //更新操作会清空缓存
-            int result = mapper.updateByPrimaryKeySelective(country);
-            Assert.assertEquals(1, result);
-            sqlSession.commit();
-            //只有close才会真正缓存，而不是用一级缓存
+            sqlSession.selectOne("selectCache", 35);
             sqlSession.close();
-
-            //======================================================================
-            sqlSession = MybatisHelper.getSqlSession();
-            mapper = sqlSession.getMapper(CachedCountryMapper.class);
-            country = new Country();
-            country.setCountrycode("CN");
-            //第三次查询，会重新查询，不使用缓存
-            country = mapper.selectOne(country);
-
-            Assert.assertEquals(true, country.getId() == 35);
-            Assert.assertEquals("天朝", country.getCountryname());
-
-            country = new Country();
-            country.setCountryname("China");
-            country.setId(35);
-            //还原
-            result = mapper.updateByPrimaryKeySelective(country);
-            sqlSession.commit();
-            Assert.assertEquals(1, result);
         } finally {
             sqlSession.close();
         }

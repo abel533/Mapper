@@ -32,6 +32,7 @@ import org.apache.ibatis.annotations.CacheNamespace;
 /**
  * Created by liuzh on 2014/11/19.
  */
-@CacheNamespace
+//@CacheNamespace
 public interface CachedCountryMapper extends Mapper<Country>,HsqldbMapper<Country> {
+    int selectCache(int id);
 }

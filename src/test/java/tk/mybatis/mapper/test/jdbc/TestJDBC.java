@@ -31,7 +31,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.junit.Assert;
 
 /**
- * sqlserver测试
+ * sqlserver测试 - 该类注释所有测试方法是因为该测试是针对sqlserver的，而项目测试用的hsqldb，所以这些测试不能运行，需要换为sqlserver才可以
  */
 public class TestJDBC {
 
