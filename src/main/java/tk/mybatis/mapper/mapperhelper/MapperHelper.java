@@ -31,6 +31,7 @@ import org.apache.ibatis.annotations.UpdateProvider;
 import org.apache.ibatis.builder.annotation.ProviderSqlSource;
 import org.apache.ibatis.mapping.MappedStatement;
 import org.apache.ibatis.session.Configuration;
+import org.apache.ibatis.session.SqlSession;
 
 import java.lang.reflect.Method;
 import java.util.*;
@@ -56,6 +57,10 @@ public class MapperHelper {
      * 缓存msid和MapperTemplate
      */
     private Map<String, MapperTemplate> msIdCache = new HashMap<String, MapperTemplate>();
+    /**
+     * 缓存已经处理过的Collection<MappedStatement>
+     */
+    private Set<Collection<MappedStatement>> collectionSet = new HashSet<Collection<MappedStatement>>();
     /**
      * 是否使用的Spring
      */
@@ -100,6 +105,22 @@ public class MapperHelper {
         setProperties(properties);
     }
 
+    /**
+     * 缓存初始化时的SqlSession
+     */
+    private List<SqlSession> sqlSessions = new ArrayList<SqlSession>();
+
+    /**
+     * 针对Spring注入需要处理的SqlSession
+     *
+     * @param sqlSessions
+     */
+    public void setSqlSessions(SqlSession[] sqlSessions) {
+        if (sqlSessions != null && sqlSessions.length > 0) {
+            this.sqlSessions.addAll(Arrays.asList(sqlSessions));
+        }
+    }
+
     public boolean isNotEmpty() {
         return notEmpty;
     }
@@ -110,6 +131,19 @@ public class MapperHelper {
 
     public Style getStyle() {
         return style;
+    }
+
+    /**
+     * Spring初始化方法，使用Spring时需要配置init-method="initMapper"
+     */
+    public void initMapper() {
+        //只有Spring会执行这个方法,所以Spring配置的时候,从这儿可以尝试获取Spring的版本
+        //先判断Spring版本,对下面的操作有影响
+        //Spring4以上支持泛型注入,因此可以扫描通用Mapper
+        initSpringVersion();
+        for (SqlSession sqlSession : sqlSessions) {
+            processConfiguration(sqlSession.getConfiguration());
+        }
     }
 
     /**
@@ -533,6 +567,12 @@ public class MapperHelper {
      */
     public void processConfiguration(Configuration configuration) {
         Collection<MappedStatement> collection = configuration.getMappedStatements();
+        //防止反复处理一个
+        if (collectionSet.contains(collection)) {
+            return;
+        } else {
+            collectionSet.add(collection);
+        }
         int size = collection.size();
         Iterator<?> iterator = collection.iterator();
         while (iterator.hasNext()) {

@@ -54,11 +54,14 @@ public class EntityHelper {
     public static EntityTable getEntityTable(Class<?> entityClass) {
         EntityTable entityTable = entityTableMap.get(entityClass);
         if (entityTable == null) {
-            throw new RuntimeException("无法获取实体类" + entityClass.getCanonicalName() + "对应的数据库信息!");
+            initEntityNameMap(entityClass, Style.camelhump);
+            entityTable = entityTableMap.get(entityClass);
+        }
+        if (entityTable == null) {
+            throw new RuntimeException("无法获取实体类" + entityClass.getCanonicalName() + "对应的表名!");
         }
         return entityTable;
     }
-
 
     /**
      * 获取默认的orderby语句
