@@ -1,5 +1,8 @@
 package tk.mybatis.mapper.model;
 
+import tk.mybatis.mapper.mapperhelper.NameStyle;
+import tk.mybatis.mapper.mapperhelper.Style;
+
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -9,6 +12,7 @@ import javax.persistence.Id;
  * Author: liuzh
  * Update: liuzh(2014-06-06 13:38)
  */
+@NameStyle(Style.camelhump)
 public class CountryI {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

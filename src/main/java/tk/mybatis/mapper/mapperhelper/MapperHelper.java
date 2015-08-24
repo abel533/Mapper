@@ -75,6 +75,12 @@ public class MapperHelper {
      * 对于一般的getAllIfColumnNode，是否判断!=''，默认不判断
      */
     private boolean notEmpty = false;
+
+    /**
+     * 字段转换风格，默认驼峰转下划线
+     */
+    private Style style;
+
     private Config config = new Config();
 
     /**
@@ -100,6 +106,10 @@ public class MapperHelper {
 
     public void setNotEmpty(boolean notEmpty) {
         this.notEmpty = notEmpty;
+    }
+
+    public Style getStyle() {
+        return style;
     }
 
     /**
@@ -491,6 +501,17 @@ public class MapperHelper {
         String notEmpty = properties.getProperty("notEmpty");
         if (notEmpty != null && notEmpty.length() > 0) {
             this.notEmpty = notEmpty.equalsIgnoreCase("TRUE");
+        }
+        String styleStr = properties.getProperty("style");
+        if (styleStr != null && styleStr.length() > 0) {
+            try {
+                this.style = Style.valueOf(styleStr);
+            } catch (IllegalArgumentException e){
+                throw new RuntimeException(styleStr + "不是合法的Style值!");
+            }
+        } else {
+            //默认驼峰
+            this.style = Style.camelhump;
         }
         //注册通用接口
         String mapper = properties.getProperty("mappers");

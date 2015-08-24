@@ -54,14 +54,11 @@ public class EntityHelper {
     public static EntityTable getEntityTable(Class<?> entityClass) {
         EntityTable entityTable = entityTableMap.get(entityClass);
         if (entityTable == null) {
-            initEntityNameMap(entityClass);
-            entityTable = entityTableMap.get(entityClass);
-        }
-        if (entityTable == null) {
-            throw new RuntimeException("无法获取实体类" + entityClass.getCanonicalName() + "对应的表名!");
+            throw new RuntimeException("无法获取实体类" + entityClass.getCanonicalName() + "对应的数据库信息!");
         }
         return entityTable;
     }
+
 
     /**
      * 获取默认的orderby语句
@@ -172,10 +169,16 @@ public class EntityHelper {
      * 初始化实体属性
      *
      * @param entityClass
+     * @param style
      */
-    public static synchronized void initEntityNameMap(Class<?> entityClass) {
+    public static synchronized void initEntityNameMap(Class<?> entityClass, Style style) {
         if (entityTableMap.get(entityClass) != null) {
             return;
+        }
+        //style，该注解优先于全局配置
+        if(entityClass.isAnnotationPresent(NameStyle.class)){
+            NameStyle nameStyle = entityClass.getAnnotation(NameStyle.class);
+            style = nameStyle.value();
         }
         //表名
         EntityTable entityTable = null;
@@ -188,9 +191,10 @@ public class EntityHelper {
         }
         if (entityTable == null) {
             entityTable = new EntityTable();
-            //对大小写敏感的情况，这里不自动转换大小写，如果有需要，通过@Table注解实现
-            entityTable.name = camelhumpToUnderline(entityClass.getSimpleName());
+            //可以通过stye控制
+            entityTable.name = convertByStyle(entityClass.getSimpleName(), style);
         }
+
         //列
         List<Field> fieldList = getAllField(entityClass, null);
         Set<EntityColumn> columnSet = new LinkedHashSet<EntityColumn>();
@@ -210,7 +214,7 @@ public class EntityHelper {
                 columnName = column.name();
             }
             if (columnName == null || columnName.equals("")) {
-                columnName = camelhumpToUnderline(field.getName());
+                columnName = convertByStyle(field.getName(), style);
             }
             entityColumn.setProperty(field.getName());
             entityColumn.setColumn(columnName);
@@ -278,6 +282,27 @@ public class EntityHelper {
         }
         //缓存
         entityTableMap.put(entityClass, entityTable);
+    }
+
+    /**
+     * 根据指定的样式进行转换
+     *
+     * @param str
+     * @param style
+     * @return
+     */
+    public static String convertByStyle(String str, Style style){
+        switch (style){
+            case camelhump:
+                return camelhumpToUnderline(str);
+            case uppercase:
+                return str.toUpperCase();
+            case lowercase:
+                return str.toLowerCase();
+            case normal:
+            default:
+                return str;
+        }
     }
 
     /**

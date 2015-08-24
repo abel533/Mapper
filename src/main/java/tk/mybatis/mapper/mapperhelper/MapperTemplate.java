@@ -51,6 +51,7 @@ import java.util.*;
 public abstract class MapperTemplate {
     private XMLLanguageDriver languageDriver = new XMLLanguageDriver();
     private Map<String, Method> methodMap = new HashMap<String, Method>();
+    private Map<String, Class<?>> entityClassMap = new HashMap<String, Class<?>>();
     private Class<?> mapperClass;
     private MapperHelper mapperHelper;
 
@@ -204,14 +205,21 @@ public abstract class MapperTemplate {
      */
     public Class<?> getSelectReturnType(MappedStatement ms) {
         String msId = ms.getId();
-        Class<?> mapperClass = getMapperClass(msId);
-        Type[] types = mapperClass.getGenericInterfaces();
-        for (Type type : types) {
-            if (type instanceof ParameterizedType) {
-                ParameterizedType t = (ParameterizedType) type;
-                if (t.getRawType() == this.mapperClass || this.mapperClass.isAssignableFrom((Class<?>) t.getRawType())) {
-                    Class<?> returnType = (Class<?>) t.getActualTypeArguments()[0];
-                    return returnType;
+        if(entityClassMap.containsKey(msId)){
+            return entityClassMap.get(msId);
+        } else {
+            Class<?> mapperClass = getMapperClass(msId);
+            Type[] types = mapperClass.getGenericInterfaces();
+            for (Type type : types) {
+                if (type instanceof ParameterizedType) {
+                    ParameterizedType t = (ParameterizedType) type;
+                    if (t.getRawType() == this.mapperClass || this.mapperClass.isAssignableFrom((Class<?>) t.getRawType())) {
+                        Class<?> returnType = (Class<?>) t.getActualTypeArguments()[0];
+                        //获取该类型后，第一次对该类型进行初始化
+                        EntityHelper.initEntityNameMap(returnType, mapperHelper.getStyle());
+                        entityClassMap.put(msId, returnType);
+                        return returnType;
+                    }
                 }
             }
         }
