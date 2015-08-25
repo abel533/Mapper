@@ -1,6 +1,15 @@
 #更新日志
 
-###3.1.2 - 2015-07-14
+##3.1.3 - 2015-08-25
+
+* 去掉了3.1.3-SNAPSHOT版本中的`MapperOnceInterceptor`拦截器，下个版本会完善`MapperHelper`的配置方式
+* `Example`增加了`example.selectProperties("id", "countryname", ...)`方法，可以指定查询列，注意这里参数写的是属性名，`Example`会自动映射到列名
+* `Example`增加`andEqualTo(实体对象)`方法，可以将一个实体放进去，会自动根据属性和值拼出column=value的条件 <b>Bob - 0haizhu0@gmail.com 提供</b>
+* MyBatis在处理`<cache/>`和`@CacheNamespace`的时候不统一，只有一个能生效，这导致xml中配置二级缓存对通用Mapper注解形式的方法无效，该问题已解决
+* 二级缓存配置方法，如果接口有对应的xml，在xml中配置二级缓存。如果只有接口没有xml，用注解配置二级缓存即可
+* 需要注意的是，二级缓存在xml配置时，只对通用Mapper方法有效，自己用`@Select`等注解定义的这种仍然无效，这种情况只能在xml中定义
+
+##3.1.2 - 2015-07-14
 
 * 解决别名时的一种特殊情况，例如`@Column(name="`desc`")`的时候，就不需要自动添加别名
 * 反射获取所有列名的时候，不在自动转换为大写形式，对数据库区分大小写的情况有用

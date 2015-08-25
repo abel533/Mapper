@@ -261,7 +261,6 @@ public class MapperHelper {
      * 注册通用Mapper接口
      *
      * @param mapperClass
-     * @throws Exception
      */
     public void registerMapper(Class<?> mapperClass) {
         if (!registerMapper.containsKey(mapperClass)) {
@@ -280,7 +279,6 @@ public class MapperHelper {
      * 注册通用Mapper接口
      *
      * @param mapperClass
-     * @throws Exception
      */
     public void registerMapper(String mapperClass) {
         try {

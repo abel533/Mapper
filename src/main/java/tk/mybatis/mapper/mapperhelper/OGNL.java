@@ -7,7 +7,7 @@ import tk.mybatis.mapper.entity.Example;
  *
  * @author liuzh
  */
-public class OGNL {
+public abstract class OGNL {
 
     /**
      * 是否包含自定义查询列

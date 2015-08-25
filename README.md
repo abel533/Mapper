@@ -12,6 +12,8 @@
 
 ##项目文档
 
+初学者如果感觉下面的文档太多不方便入手，那么可以下载[通用Mapper简单实用文档.pdf](http://git.oschina.net/free/Mapper/attach_files/download?i=15246&u=http%3A%2F%2Ffiles.git.oschina.net%2Fgroup1%2FM00%2F00%2F99%2FfMqNk1XbGl2AQA8mAAKDipSqnlc703.pdf%3Ftoken%3D14d69a3d1526cb5b4dc3e1d2cc030b2c%26ts%3D1440516629)学习基本的配置和使用！
+
 ###在你打算使用通用Mapper前，一定要看看下面的文档，许多人在初次使用时遇到的问题，99%都在文档中有说明！！
 
 1. [Mapper3变化](http://git.oschina.net/free/Mapper/blob/master/wiki/mapper3/1.Changes.md)
@@ -108,17 +110,16 @@ http://repo1.maven.org/maven2/javax/persistence/persistence-api/1.0/
 
 ##Maven坐标以及下载地址
 
-###测试版本3.1.3-SNAPSHOT- 2015-08-02
+###最新版本3.1.3 - 2015-08-25
 
-* 新增`MapperOnceInterceptor`拦截器，该拦截器执行后会自动卸载，以后不会再进入该方法，只需要将`MapperInterceptor`替换为`MapperOnceInterceptor`即可
-* 大家可以尝试`MapperOnceInterceptor`拦截器，发现问题可以提issue
-* 由于Spring中的`MapperHelper`的配置方式容易出现错误，因此从3.1.3以后废弃这种配置方法
+* 去掉了3.1.3-SNAPSHOT版本中的`MapperOnceInterceptor`拦截器，下个版本会完善`MapperHelper`的配置方式
+* `Example`增加了`example.selectProperties("id", "countryname", ...)`方法，可以指定查询列，注意这里参数写的是属性名，`Example`会自动映射到列名
 * `Example`增加`andEqualTo(实体对象)`方法，可以将一个实体放进去，会自动根据属性和值拼出column=value的条件 <b>Bob - 0haizhu0@gmail.com 提供</b>
 * MyBatis在处理`<cache/>`和`@CacheNamespace`的时候不统一，只有一个能生效，这导致xml中配置二级缓存对通用Mapper注解形式的方法无效，该问题已解决
 * 二级缓存配置方法，如果接口有对应的xml，在xml中配置二级缓存。如果只有接口没有xml，用注解配置二级缓存即可
 * 需要注意的是，二级缓存在xml配置时，只对通用Mapper方法有效，自己用`@Select`等注解定义的这种仍然无效，这种情况只能在xml中定义
 
-###最新版本3.1.2 - 2015-07-14
+###3.1.2 - 2015-07-14
 
 * 解决别名时的一种特殊情况，例如`@Column(name="`desc`")`的时候，就不需要自动添加别名
 * 反射获取所有列名的时候，不在自动转换为大写形式，对数据库区分大小写的情况有用
