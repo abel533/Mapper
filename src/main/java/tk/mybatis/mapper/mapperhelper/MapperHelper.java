@@ -129,8 +129,13 @@ public class MapperHelper {
         this.notEmpty = notEmpty;
     }
 
+    public void setStyle(Style style) {
+        this.style = style;
+    }
+
     public Style getStyle() {
-        return style;
+        //TODO 先默认
+        return Style.camelhump;
     }
 
     /**

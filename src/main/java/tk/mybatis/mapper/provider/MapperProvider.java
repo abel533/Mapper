@@ -442,8 +442,15 @@ public class MapperProvider extends MapperTemplate {
         sqlNodes.add(new StaticTextSqlNode("SELECT"));
         IfSqlNode distinctSqlNode = new IfSqlNode(new StaticTextSqlNode("DISTINCT"), "distinct");
         sqlNodes.add(distinctSqlNode);
-        //TODO 增加Example中指定查询列的功能
-        sqlNodes.add(new StaticTextSqlNode(EntityHelper.getSelectColumns(entityClass) + " FROM " + tableName(entityClass)));
+
+        ForEachSqlNode forEachSelectColumns = new ForEachSqlNode(ms.getConfiguration(), new TextSqlNode("${selectColumn}"), "_parameter.selectColumns", null, "selectColumn", null, null, ",");
+        IfSqlNode ifSelectColumns = new IfSqlNode(forEachSelectColumns, "@tk.mybatis.mapper.mapperhelper.OGNL@hasSelectColumns(_parameter)");
+        sqlNodes.add(ifSelectColumns);
+
+        IfSqlNode ifNoSelectColumns = new IfSqlNode(new StaticTextSqlNode(EntityHelper.getSelectColumns(entityClass)), "@tk.mybatis.mapper.mapperhelper.OGNL@hasNoSelectColumns(_parameter)");
+        sqlNodes.add(ifNoSelectColumns);
+
+        sqlNodes.add(new StaticTextSqlNode(" FROM " + tableName(entityClass)));
         IfSqlNode ifNullSqlNode = new IfSqlNode(exampleWhereClause(ms.getConfiguration()), "_parameter != null");
         sqlNodes.add(ifNullSqlNode);
         IfSqlNode orderByClauseSqlNode = new IfSqlNode(new TextSqlNode("order by ${orderByClause}"), "orderByClause != null");
