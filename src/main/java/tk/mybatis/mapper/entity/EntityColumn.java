@@ -14,6 +14,7 @@ public class EntityColumn {
     private boolean id = false;
     private boolean uuid = false;
     private boolean identity = false;
+    private boolean key = false;
     private String generator;
     private String orderBy;
 
@@ -102,6 +103,14 @@ public class EntityColumn {
 
     public void setOrderBy(String orderBy) {
         this.orderBy = orderBy;
+    }
+
+    public boolean isKey() {
+        return key;
+    }
+
+    public void setKey(boolean key) {
+        this.key = key;
     }
 
     @Override

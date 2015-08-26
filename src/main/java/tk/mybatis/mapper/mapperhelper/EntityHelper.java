@@ -24,6 +24,7 @@
 
 package tk.mybatis.mapper.mapperhelper;
 
+import tk.mybatis.mapper.annotation.KeyProperty;
 import tk.mybatis.mapper.annotation.NameStyle;
 import tk.mybatis.mapper.code.IdentityDialect;
 import tk.mybatis.mapper.code.Style;
@@ -209,10 +210,12 @@ public class EntityHelper {
             if (field.isAnnotationPresent(Transient.class)) {
                 continue;
             }
+            //Id
             EntityColumn entityColumn = new EntityColumn(entityTable);
             if (field.isAnnotationPresent(Id.class)) {
                 entityColumn.setId(true);
             }
+            //Column
             String columnName = null;
             if (field.isAnnotationPresent(Column.class)) {
                 Column column = field.getAnnotation(Column.class);
@@ -224,7 +227,7 @@ public class EntityHelper {
             entityColumn.setProperty(field.getName());
             entityColumn.setColumn(columnName);
             entityColumn.setJavaType(field.getType());
-            //order by
+            //OrderBy
             if (field.isAnnotationPresent(OrderBy.class)) {
                 OrderBy orderBy = field.getAnnotation(OrderBy.class);
                 if (orderBy.value().equals("")) {
@@ -232,6 +235,10 @@ public class EntityHelper {
                 } else {
                     entityColumn.setOrderBy(orderBy.value());
                 }
+            }
+            //KeyProperty
+            if (field.isAnnotationPresent(KeyProperty.class)) {
+                entityColumn.setKey(true);
             }
             //主键策略 - Oracle序列，MySql自动增长，UUID
             if (field.isAnnotationPresent(SequenceGenerator.class)) {
