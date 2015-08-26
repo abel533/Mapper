@@ -31,7 +31,9 @@ import org.apache.ibatis.annotations.UpdateProvider;
 import org.apache.ibatis.builder.annotation.ProviderSqlSource;
 import org.apache.ibatis.mapping.MappedStatement;
 import org.apache.ibatis.session.Configuration;
-import org.apache.ibatis.session.SqlSession;
+import tk.mybatis.mapper.code.IdentityDialect;
+import tk.mybatis.mapper.code.Style;
+import tk.mybatis.mapper.entity.EntityTable;
 
 import java.lang.reflect.Method;
 import java.util.*;
@@ -57,20 +59,6 @@ public class MapperHelper {
      * 缓存msid和MapperTemplate
      */
     private Map<String, MapperTemplate> msIdCache = new HashMap<String, MapperTemplate>();
-    /**
-     * 是否使用的Spring
-     */
-    private boolean spring = false;
-
-    /**
-     * 是否为Spring4.x以上版本
-     */
-    private boolean spring4 = false;
-
-    /**
-     * Spring版本号
-     */
-    private String springVersion;
 
     /**
      * 对于一般的getAllIfColumnNode，是否判断!=''，默认不判断
@@ -87,9 +75,7 @@ public class MapperHelper {
     /**
      * 默认构造方法
      */
-    public MapperHelper() {
-        initSpringVersion();
-    }
+    public MapperHelper() {}
 
     /**
      * 带配置的构造方法
@@ -99,22 +85,6 @@ public class MapperHelper {
     public MapperHelper(Properties properties) {
         this();
         setProperties(properties);
-    }
-
-    /**
-     * 缓存初始化时的SqlSession
-     */
-    private List<SqlSession> sqlSessions = new ArrayList<SqlSession>();
-
-    /**
-     * 针对Spring注入需要处理的SqlSession
-     *
-     * @param sqlSessions
-     */
-    public void setSqlSessions(SqlSession[] sqlSessions) {
-        if (sqlSessions != null && sqlSessions.length > 0) {
-            this.sqlSessions.addAll(Arrays.asList(sqlSessions));
-        }
     }
 
     public boolean isNotEmpty() {
@@ -131,56 +101,6 @@ public class MapperHelper {
 
     public Style getStyle() {
         return this.style == null ? Style.camelhump : this.style;
-    }
-
-    /**
-     * 检测Spring版本号,Spring4.x以上支持泛型注入
-     */
-    private void initSpringVersion() {
-        try {
-            //反射获取SpringVersion
-            Class<?> springVersionClass = Class.forName("org.springframework.core.SpringVersion");
-            springVersion = (String) springVersionClass.getDeclaredMethod("getVersion", new Class<?>[0]).invoke(null, new Object[0]);
-            spring = true;
-            if (springVersion.indexOf(".") > 0) {
-                int MajorVersion = Integer.parseInt(springVersion.substring(0, springVersion.indexOf(".")));
-                if (MajorVersion > 3) {
-                    spring4 = true;
-                } else {
-                    spring4 = false;
-                }
-            }
-        } catch (Throwable e) {
-            spring = false;
-            spring4 = false;
-        }
-    }
-
-    /**
-     * 是否为Spring4.x以上版本
-     *
-     * @return
-     */
-    public boolean isSpring4() {
-        return spring4;
-    }
-
-    /**
-     * 是否为Spring4.x以上版本
-     *
-     * @return
-     */
-    public boolean isSpring() {
-        return spring;
-    }
-
-    /**
-     * 获取Spring版本号
-     *
-     * @return
-     */
-    public String getSpringVersion() {
-        return springVersion;
     }
 
     /**
@@ -317,10 +237,10 @@ public class MapperHelper {
      * @return
      */
     public String getPrefix() {
-        if (config.catalog != null && config.catalog.length() > 0) {
+        if (StringUtil.isNotEmpty(config.catalog)) {
             return config.catalog;
         }
-        if (config.schema != null && config.schema.length() > 0) {
+        if (StringUtil.isNotEmpty(config.schema)) {
             return config.catalog;
         }
         return "";
@@ -332,7 +252,7 @@ public class MapperHelper {
      * @return
      */
     public String getUUID() {
-        if (config.UUID != null && config.UUID.length() > 0) {
+        if (StringUtil.isNotEmpty(config.UUID)) {
             return config.UUID;
         }
         return "@java.util.UUID@randomUUID().toString().replace(\"-\", \"\")";
@@ -355,7 +275,7 @@ public class MapperHelper {
      * @return
      */
     public String getIDENTITY() {
-        if (config.IDENTITY != null && config.IDENTITY.length() > 0) {
+        if (StringUtil.isNotEmpty(config.IDENTITY)) {
             return config.IDENTITY;
         }
         //针对mysql的默认值
@@ -391,7 +311,7 @@ public class MapperHelper {
      * @return
      */
     public String getSeqFormat() {
-        if (config.seqFormat != null && config.seqFormat.length() > 0) {
+        if (StringUtil.isNotEmpty(config.seqFormat)) {
             return config.seqFormat;
         }
         return "{0}.nextval";
@@ -414,7 +334,7 @@ public class MapperHelper {
      * @return
      */
     public String getTableName(Class<?> entityClass) {
-        EntityHelper.EntityTable entityTable = EntityHelper.getEntityTable(entityClass);
+        EntityTable entityTable = EntityHelper.getEntityTable(entityClass);
         String prefix = entityTable.getPrefix();
         if (prefix.equals("")) {
             //使用全局配置
@@ -494,35 +414,35 @@ public class MapperHelper {
             return;
         }
         String UUID = properties.getProperty("UUID");
-        if (UUID != null && UUID.length() > 0) {
+        if (StringUtil.isNotEmpty(UUID)) {
             setUUID(UUID);
         }
         String IDENTITY = properties.getProperty("IDENTITY");
-        if (IDENTITY != null && IDENTITY.length() > 0) {
+        if (StringUtil.isNotEmpty(IDENTITY)) {
             setIDENTITY(IDENTITY);
         }
         String seqFormat = properties.getProperty("seqFormat");
-        if (seqFormat != null && seqFormat.length() > 0) {
+        if (StringUtil.isNotEmpty(seqFormat)) {
             setSeqFormat(seqFormat);
         }
         String catalog = properties.getProperty("catalog");
-        if (catalog != null && catalog.length() > 0) {
+        if (StringUtil.isNotEmpty(catalog)) {
             setCatalog(catalog);
         }
         String schema = properties.getProperty("schema");
-        if (schema != null && schema.length() > 0) {
+        if (StringUtil.isNotEmpty(schema)) {
             setSchema(schema);
         }
         String ORDER = properties.getProperty("ORDER");
-        if (ORDER != null && ORDER.length() > 0) {
+        if (StringUtil.isNotEmpty(ORDER)) {
             setOrder(ORDER);
         }
         String notEmpty = properties.getProperty("notEmpty");
-        if (notEmpty != null && notEmpty.length() > 0) {
+        if (StringUtil.isNotEmpty(notEmpty)) {
             this.notEmpty = notEmpty.equalsIgnoreCase("TRUE");
         }
         String styleStr = properties.getProperty("style");
-        if (styleStr != null && styleStr.length() > 0) {
+        if (StringUtil.isNotEmpty(styleStr)) {
             try {
                 this.style = Style.valueOf(styleStr);
             } catch (IllegalArgumentException e){
@@ -534,7 +454,9 @@ public class MapperHelper {
         }
         //注册通用接口
         String mapper = properties.getProperty("mappers");
-        if (mapper != null && mapper.length() > 0) {
+        if(StringUtil.isEmpty(mapper)){
+            throw new RuntimeException("使用通用Mapper时必须配置mappers属性!");
+        } else {
             String[] mappers = mapper.split(",");
             for (String mapperClass : mappers) {
                 if (mapperClass.length() > 0) {
@@ -569,55 +491,6 @@ public class MapperHelper {
                 size = collection.size();
                 iterator = collection.iterator();
             }
-        }
-    }
-
-    /**
-     * IDENTITY的可选值
-     */
-    public enum IdentityDialect {
-        DB2("VALUES IDENTITY_VAL_LOCAL()"),
-        MYSQL("SELECT LAST_INSERT_ID()"),
-        SQLSERVER("SELECT SCOPE_IDENTITY()"),
-        CLOUDSCAPE("VALUES IDENTITY_VAL_LOCAL()"),
-        DERBY("VALUES IDENTITY_VAL_LOCAL()"),
-        HSQLDB("CALL IDENTITY()"),
-        SYBASE("SELECT @@IDENTITY"),
-        DB2_MF("SELECT IDENTITY_VAL_LOCAL() FROM SYSIBM.SYSDUMMY1"),
-        INFORMIX("select dbinfo('sqlca.sqlerrd1') from systables where tabid=1");
-
-        private String identityRetrievalStatement;
-
-        private IdentityDialect(String identityRetrievalStatement) {
-            this.identityRetrievalStatement = identityRetrievalStatement;
-        }
-
-        public static IdentityDialect getDatabaseDialect(String database) {
-            IdentityDialect returnValue = null;
-            if ("DB2".equalsIgnoreCase(database)) {
-                returnValue = DB2;
-            } else if ("MySQL".equalsIgnoreCase(database)) {
-                returnValue = MYSQL;
-            } else if ("SqlServer".equalsIgnoreCase(database)) {
-                returnValue = SQLSERVER;
-            } else if ("Cloudscape".equalsIgnoreCase(database)) {
-                returnValue = CLOUDSCAPE;
-            } else if ("Derby".equalsIgnoreCase(database)) {
-                returnValue = DERBY;
-            } else if ("HSQLDB".equalsIgnoreCase(database)) {
-                returnValue = HSQLDB;
-            } else if ("SYBASE".equalsIgnoreCase(database)) {
-                returnValue = SYBASE;
-            } else if ("DB2_MF".equalsIgnoreCase(database)) {
-                returnValue = DB2_MF;
-            } else if ("Informix".equalsIgnoreCase(database)) {
-                returnValue = INFORMIX;
-            }
-            return returnValue;
-        }
-
-        public String getIdentityRetrievalStatement() {
-            return identityRetrievalStatement;
         }
     }
 

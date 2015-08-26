@@ -35,6 +35,7 @@ import org.apache.ibatis.reflection.SystemMetaObject;
 import org.apache.ibatis.scripting.defaults.RawSqlSource;
 import org.apache.ibatis.scripting.xmltags.*;
 import org.apache.ibatis.session.Configuration;
+import tk.mybatis.mapper.entity.EntityColumn;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -161,16 +162,7 @@ public abstract class MapperTemplate {
      */
     public void setSqlSource(MappedStatement ms) throws Exception {
         if (this.mapperClass == getMapperClass(ms.getId())) {
-            if (mapperHelper.isSpring4()) {
-                return;
-            } else if (mapperHelper.isSpring()) {
-                throw new RuntimeException("Spring4.x.x 及以上版本支持泛型注入," +
-                        "您当前的Spring版本为" + mapperHelper.getSpringVersion() + ",不能使用泛型注入," +
-                        "因此在配置MapperScannerConfigurer时,不要扫描通用Mapper接口类," +
-                        "也不要在您Mybatis的xml配置文件中的<mappers>中指定通用Mapper接口类.");
-            } else {
-                throw new RuntimeException("请不要在您Mybatis的xml配置文件中的<mappers>中指定通用Mapper接口类.");
-            }
+            throw new RuntimeException("请不要配置或扫描通用Mapper接口类：" + this.mapperClass);
         }
         Method method = methodMap.get(getMethodName(ms));
         try {
@@ -273,9 +265,9 @@ public abstract class MapperTemplate {
      */
     protected List<ParameterMapping> getPrimaryKeyParameterMappings(MappedStatement ms) {
         Class<?> entityClass = getSelectReturnType(ms);
-        Set<EntityHelper.EntityColumn> entityColumns = EntityHelper.getPKColumns(entityClass);
+        Set<EntityColumn> entityColumns = EntityHelper.getPKColumns(entityClass);
         List<ParameterMapping> parameterMappings = new LinkedList<ParameterMapping>();
-        for (EntityHelper.EntityColumn column : entityColumns) {
+        for (EntityColumn column : entityColumns) {
             ParameterMapping.Builder builder = new ParameterMapping.Builder(ms.getConfiguration(), column.getProperty(), column.getJavaType());
             builder.mode(ParameterMode.IN);
             parameterMappings.add(builder.build());
@@ -289,7 +281,7 @@ public abstract class MapperTemplate {
      * @param column
      * @return
      */
-    protected String getSeqNextVal(EntityHelper.EntityColumn column) {
+    protected String getSeqNextVal(EntityColumn column) {
         return MessageFormat.format(mapperHelper.getSeqFormat(), column.getSequenceName(), column.getColumn(), column.getProperty());
     }
 
@@ -311,7 +303,7 @@ public abstract class MapperTemplate {
      * @param columnNode
      * @return
      */
-    protected SqlNode getIfNotNull(EntityHelper.EntityColumn column, SqlNode columnNode) {
+    protected SqlNode getIfNotNull(EntityColumn column, SqlNode columnNode) {
         return getIfNotNull(column, columnNode, false);
     }
 
@@ -324,7 +316,7 @@ public abstract class MapperTemplate {
      * @param empty      是否包含!=''条件
      * @return
      */
-    protected SqlNode getIfNotNull(EntityHelper.EntityColumn column, SqlNode columnNode, boolean empty) {
+    protected SqlNode getIfNotNull(EntityColumn column, SqlNode columnNode, boolean empty) {
         if (empty && column.getJavaType().equals(String.class)) {
             return new IfSqlNode(columnNode, column.getProperty() + " != null and " + column.getProperty() + " != ''");
         } else {
@@ -339,7 +331,7 @@ public abstract class MapperTemplate {
      * @param column
      * @return
      */
-    protected SqlNode getIfIsNull(EntityHelper.EntityColumn column, SqlNode columnNode) {
+    protected SqlNode getIfIsNull(EntityColumn column, SqlNode columnNode) {
         return new IfSqlNode(columnNode, column.getProperty() + " == null ");
     }
 
@@ -350,7 +342,7 @@ public abstract class MapperTemplate {
      * @param column
      * @return
      */
-    protected SqlNode getIfCacheNotNull(EntityHelper.EntityColumn column, SqlNode columnNode) {
+    protected SqlNode getIfCacheNotNull(EntityColumn column, SqlNode columnNode) {
         return new IfSqlNode(columnNode, column.getProperty() + "_cache != null ");
     }
 
@@ -361,7 +353,7 @@ public abstract class MapperTemplate {
      * @param column
      * @return
      */
-    protected SqlNode getIfCacheIsNull(EntityHelper.EntityColumn column, SqlNode columnNode) {
+    protected SqlNode getIfCacheIsNull(EntityColumn column, SqlNode columnNode) {
         return new IfSqlNode(columnNode, column.getProperty() + "_cache == null ");
     }
 
@@ -372,7 +364,7 @@ public abstract class MapperTemplate {
      * @param first
      * @return
      */
-    protected SqlNode getColumnEqualsProperty(EntityHelper.EntityColumn column, boolean first) {
+    protected SqlNode getColumnEqualsProperty(EntityColumn column, boolean first) {
         return new StaticTextSqlNode((first ? "" : " AND ") + column.getColumn() + " = #{" + column.getProperty() + "} ");
     }
 
@@ -384,11 +376,11 @@ public abstract class MapperTemplate {
      */
     protected SqlNode getAllIfColumnNode(Class<?> entityClass) {
         //获取全部列
-        Set<EntityHelper.EntityColumn> columnList = EntityHelper.getColumns(entityClass);
+        Set<EntityColumn> columnList = EntityHelper.getColumns(entityClass);
         List<SqlNode> ifNodes = new LinkedList<SqlNode>();
         boolean first = true;
         //对所有列循环，生成<if test="property!=null">column = #{property}</if>
-        for (EntityHelper.EntityColumn column : columnList) {
+        for (EntityColumn column : columnList) {
             ifNodes.add(getIfNotNull(column, getColumnEqualsProperty(column, first), mapperHelper.isNotEmpty()));
             first = false;
         }
@@ -403,9 +395,9 @@ public abstract class MapperTemplate {
      */
     protected List<ParameterMapping> getColumnParameterMappings(MappedStatement ms) {
         Class<?> entityClass = getSelectReturnType(ms);
-        Set<EntityHelper.EntityColumn> entityColumns = EntityHelper.getColumns(entityClass);
+        Set<EntityColumn> entityColumns = EntityHelper.getColumns(entityClass);
         List<ParameterMapping> parameterMappings = new LinkedList<ParameterMapping>();
-        for (EntityHelper.EntityColumn column : entityColumns) {
+        for (EntityColumn column : entityColumns) {
             ParameterMapping.Builder builder = new ParameterMapping.Builder(ms.getConfiguration(), column.getProperty(), column.getJavaType());
             builder.mode(ParameterMode.IN);
             parameterMappings.add(builder.build());
@@ -419,7 +411,7 @@ public abstract class MapperTemplate {
      * @param ms
      * @param column
      */
-    protected void newSelectKeyMappedStatement(MappedStatement ms, EntityHelper.EntityColumn column) {
+    protected void newSelectKeyMappedStatement(MappedStatement ms, EntityColumn column) {
         String keyId = ms.getId() + SelectKeyGenerator.SELECT_KEY_SUFFIX;
         if (ms.getConfiguration().hasKeyGenerator(keyId)) {
             return;

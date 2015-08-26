@@ -48,9 +48,9 @@ public class Example {
 
     protected Class<?> entityClass;
 
-    protected EntityHelper.EntityTable table;
+    protected EntityTable table;
     //属性和列对应
-    protected Map<String, EntityHelper.EntityColumn> propertyMap;
+    protected Map<String, EntityColumn> propertyMap;
 
     /**
      * 默认exists为true
@@ -72,8 +72,8 @@ public class Example {
         oredCriteria = new LinkedList<Criteria>();
         this.entityClass = entityClass;
         table = EntityHelper.getEntityTable(entityClass);
-        propertyMap = new HashMap<String, EntityHelper.EntityColumn>(table.getEntityClassColumns().size());
-        for (EntityHelper.EntityColumn column : table.getEntityClassColumns()) {
+        propertyMap = new HashMap<String, EntityColumn>(table.getEntityClassColumns().size());
+        for (EntityColumn column : table.getEntityClassColumns()) {
             propertyMap.put(column.getProperty(), column);
         }
     }
@@ -154,13 +154,13 @@ public class Example {
         //字段是否必须存在
         protected boolean exists;
         //属性和列对应
-        protected Map<String, EntityHelper.EntityColumn> propertyMap;
+        protected Map<String, EntityColumn> propertyMap;
 
-        protected GeneratedCriteria(Map<String, EntityHelper.EntityColumn> propertyMap) {
+        protected GeneratedCriteria(Map<String, EntityColumn> propertyMap) {
             this(propertyMap, true);
         }
 
-        protected GeneratedCriteria(Map<String, EntityHelper.EntityColumn> propertyMap, boolean exists) {
+        protected GeneratedCriteria(Map<String, EntityColumn> propertyMap, boolean exists) {
             super();
             this.exists = exists;
             criteria = new LinkedList<Criterion>();
@@ -324,11 +324,11 @@ public class Example {
     }
 
     public static class Criteria extends GeneratedCriteria {
-        protected Criteria(Map<String, EntityHelper.EntityColumn> propertyMap) {
+        protected Criteria(Map<String, EntityColumn> propertyMap) {
             super(propertyMap);
         }
 
-        protected Criteria(Map<String, EntityHelper.EntityColumn> propertyMap, boolean exists) {
+        protected Criteria(Map<String, EntityColumn> propertyMap, boolean exists) {
             super(propertyMap, exists);
         }
     }

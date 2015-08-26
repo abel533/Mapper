@@ -113,7 +113,6 @@ http://repo1.maven.org/maven2/javax/persistence/persistence-api/1.0/
 ###最新版本3.2.0 - 2015-08-26
 
 * 移除`MapperInterceptor`拦截器，以后不能在通过拦截器配置
-*
 * 增加mybatis-spring特殊支持，主要是根据mybatis-spring项目增加了下面3个类：
    - `tk.mybatis.spring.mapper.MapperScannerConfigurer`
    - `tk.mybatis.spring.mapper.ClassPathMapperScanner`
@@ -132,6 +131,13 @@ http://repo1.maven.org/maven2/javax/persistence/persistence-api/1.0/
 </bean>
 ```
 * 这种配置方式是不是简单的不能再简单了?
+* 增加`style`属性配置，用来配置对象名/字段和表名/字段之间的转换方式，可选值：
+   - `normal`:使用实体类名/属性名作为表名/字段名
+   - `camelhump`:<b>这是默认值</b>，驼峰转换为下划线形式
+   - `uppercase`:转换为大写
+   - `lowercase`:转换为小写
+* 增加实体注解`@NameStyle`，该注解优先于全局配置`style`
+
 
 ###3.1.3 - 2015-08-25
 

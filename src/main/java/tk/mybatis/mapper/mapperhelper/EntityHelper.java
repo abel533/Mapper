@@ -25,6 +25,10 @@
 package tk.mybatis.mapper.mapperhelper;
 
 import tk.mybatis.mapper.annotation.NameStyle;
+import tk.mybatis.mapper.code.IdentityDialect;
+import tk.mybatis.mapper.code.Style;
+import tk.mybatis.mapper.entity.EntityColumn;
+import tk.mybatis.mapper.entity.EntityTable;
 
 import javax.persistence.*;
 import java.lang.reflect.Field;
@@ -56,10 +60,6 @@ public class EntityHelper {
     public static EntityTable getEntityTable(Class<?> entityClass) {
         EntityTable entityTable = entityTableMap.get(entityClass);
         if (entityTable == null) {
-            initEntityNameMap(entityClass, Style.camelhump);
-            entityTable = entityTableMap.get(entityClass);
-        }
-        if (entityTable == null) {
             throw new RuntimeException("无法获取实体类" + entityClass.getCanonicalName() + "对应的表名!");
         }
         return entityTable;
@@ -73,11 +73,11 @@ public class EntityHelper {
      */
     public static String getOrderByClause(Class<?> entityClass) {
         EntityTable table = getEntityTable(entityClass);
-        if (table.orderByClause != null) {
-            return table.orderByClause;
+        if (table.getOrderByClause() != null) {
+            return table.getOrderByClause();
         }
         StringBuilder orderBy = new StringBuilder();
-        for (EntityHelper.EntityColumn column : table.getEntityClassColumns()) {
+        for (EntityColumn column : table.getEntityClassColumns()) {
             if (column.getOrderBy() != null) {
                 if (orderBy.length() != 0) {
                     orderBy.append(",");
@@ -85,8 +85,8 @@ public class EntityHelper {
                 orderBy.append(column.getColumn()).append(" ").append(column.getOrderBy());
             }
         }
-        table.orderByClause = orderBy.toString();
-        return table.orderByClause;
+        table.setOrderByClause(orderBy.toString());
+        return table.getOrderByClause();
     }
 
     /**
@@ -117,8 +117,8 @@ public class EntityHelper {
      */
     public static String getSelectColumns(Class<?> entityClass) {
         EntityTable entityTable = getEntityTable(entityClass);
-        if (entityTable.baseSelect != null) {
-            return entityTable.baseSelect;
+        if (entityTable.getBaseSelect() != null) {
+            return entityTable.getBaseSelect();
         }
         Set<EntityColumn> columnList = getColumns(entityClass);
         StringBuilder selectBuilder = new StringBuilder();
@@ -136,8 +136,8 @@ public class EntityHelper {
                 selectBuilder.append(",");
             }
         }
-        entityTable.baseSelect = selectBuilder.substring(0, selectBuilder.length() - 1);
-        return entityTable.baseSelect;
+        entityTable.setBaseSelect(selectBuilder.substring(0, selectBuilder.length() - 1));
+        return entityTable.getBaseSelect();
     }
 
     /**
@@ -197,7 +197,7 @@ public class EntityHelper {
         if (entityTable == null) {
             entityTable = new EntityTable();
             //可以通过stye控制
-            entityTable.name = convertByStyle(entityClass.getSimpleName(), style);
+            entityTable.setName(StringUtil.convertByStyle(entityClass.getSimpleName(), style));
         }
 
         //列
@@ -219,7 +219,7 @@ public class EntityHelper {
                 columnName = column.name();
             }
             if (columnName == null || columnName.equals("")) {
-                columnName = convertByStyle(field.getName(), style);
+                columnName = StringUtil.convertByStyle(field.getName(), style);
             }
             entityColumn.setProperty(field.getName());
             entityColumn.setColumn(columnName);
@@ -257,7 +257,7 @@ public class EntityHelper {
                         entityColumn.setIdentity(true);
                         if (!generatedValue.generator().equals("")) {
                             String generator = null;
-                            MapperHelper.IdentityDialect identityDialect = MapperHelper.IdentityDialect.getDatabaseDialect(generatedValue.generator());
+                            IdentityDialect identityDialect = IdentityDialect.getDatabaseDialect(generatedValue.generator());
                             if (identityDialect != null) {
                                 generator = identityDialect.getIdentityRetrievalStatement();
                             } else {
@@ -279,82 +279,16 @@ public class EntityHelper {
                 pkColumnSet.add(entityColumn);
             }
         }
-        entityTable.entityClassColumns = columnSet;
+        entityTable.setEntityClassColumns(columnSet);
         if (pkColumnSet.size() == 0) {
-            entityTable.entityClassPKColumns = columnSet;
+            entityTable.setEntityClassPKColumns(columnSet);
         } else {
-            entityTable.entityClassPKColumns = pkColumnSet;
+            entityTable.setEntityClassPKColumns(pkColumnSet);
         }
         //缓存
         entityTableMap.put(entityClass, entityTable);
     }
 
-    /**
-     * 根据指定的样式进行转换
-     *
-     * @param str
-     * @param style
-     * @return
-     */
-    public static String convertByStyle(String str, Style style){
-        switch (style){
-            case camelhump:
-                return camelhumpToUnderline(str);
-            case uppercase:
-                return str.toUpperCase();
-            case lowercase:
-                return str.toLowerCase();
-            case normal:
-            default:
-                return str;
-        }
-    }
-
-    /**
-     * 将驼峰风格替换为下划线风格
-     */
-    public static String camelhumpToUnderline(String str) {
-        final int size;
-        final char[] chars;
-        final StringBuilder sb = new StringBuilder(
-                (size = (chars = str.toCharArray()).length) * 3 / 2 + 1);
-        char c;
-        for (int i = 0; i < size; i++) {
-            c = chars[i];
-            if (isUppercaseAlpha(c)) {
-                sb.append('_').append(c);
-            } else {
-                sb.append(toUpperAscii(c));
-            }
-        }
-        return sb.charAt(0) == '_' ? sb.substring(1) : sb.toString();
-    }
-
-    /**
-     * 将下划线风格替换为驼峰风格
-     */
-    public static String underlineToCamelhump(String str) {
-        Matcher matcher = Pattern.compile("_[a-z]").matcher(str);
-        StringBuilder builder = new StringBuilder(str);
-        for (int i = 0; matcher.find(); i++) {
-            builder.replace(matcher.start() - i, matcher.end() - i, matcher.group().substring(1).toUpperCase());
-        }
-        if (Character.isUpperCase(builder.charAt(0))) {
-            builder.replace(0, 1, String.valueOf(Character.toLowerCase(builder.charAt(0))));
-        }
-        return builder.toString();
-    }
-
-    public static boolean isUppercaseAlpha(char c) {
-        return (c >= 'A') && (c <= 'Z');
-    }
-
-    public static char toUpperAscii(char c) {
-        if (isUppercaseAlpha(c)) {
-            c -= (char) 0x20;
-        }
-        return c;
-    }
 
     /**
      * 获取全部的Field
@@ -386,233 +320,5 @@ public class EntityHelper {
             return getAllField(entityClass.getSuperclass(), fieldList);
         }
         return fieldList;
-    }
-
-    /**
-     * 实体对应表的配置信息
-     */
-    public static class EntityTable {
-        private String name;
-        private String catalog;
-        private String schema;
-        private String orderByClause;
-        private String baseSelect;
-        //实体类 => 全部列属性
-        private Set<EntityColumn> entityClassColumns;
-        //实体类 => 主键信息
-        private Set<EntityColumn> entityClassPKColumns;
-        //useGenerator包含多列的时候需要用到
-        private List<String> keyProperties;
-        private List<String> keyColumns;
-
-        public void setTable(Table table) {
-            this.name = table.name();
-            this.catalog = table.catalog();
-            this.schema = table.schema();
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public String getCatalog() {
-            return catalog;
-        }
-
-        public String getSchema() {
-            return schema;
-        }
-
-        public String getBaseSelect() {
-            return baseSelect;
-        }
-
-        public String getPrefix() {
-            if (catalog != null && catalog.length() > 0) {
-                return catalog;
-            }
-            if (schema != null && schema.length() > 0) {
-                return catalog;
-            }
-            return "";
-        }
-
-        public Set<EntityColumn> getEntityClassColumns() {
-            return entityClassColumns;
-        }
-
-        public Set<EntityColumn> getEntityClassPKColumns() {
-            return entityClassPKColumns;
-        }
-
-        public String[] getKeyProperties() {
-            if (keyProperties != null && keyProperties.size() > 0) {
-                return keyProperties.toArray(new String[]{});
-            }
-            return new String[]{};
-        }
-
-        public void setKeyProperties(String keyProperty) {
-            if (this.keyProperties == null) {
-                this.keyProperties = new LinkedList<String>();
-                this.keyProperties.add(keyProperty);
-            } else {
-                this.keyProperties.add(keyProperty);
-            }
-        }
-
-        public String[] getKeyColumns() {
-            if (keyColumns != null && keyColumns.size() > 0) {
-                return keyColumns.toArray(new String[]{});
-            }
-            return new String[]{};
-        }
-
-        public void setKeyColumns(String keyColumn) {
-            if (this.keyColumns == null) {
-                this.keyColumns = new LinkedList<String>();
-                this.keyColumns.add(keyColumn);
-            } else {
-                this.keyColumns.add(keyColumn);
-            }
-        }
-    }
-
-    /**
-     * 实体字段对应数据库列的信息
-     */
-    public static class EntityColumn {
-        private EntityTable table;
-        private String property;
-        private String column;
-        private Class<?> javaType;
-        private String sequenceName;
-        private boolean id = false;
-        private boolean uuid = false;
-        private boolean identity = false;
-        private String generator;
-        private String orderBy;
-
-        public EntityColumn() {
-        }
-
-        public EntityColumn(EntityTable table) {
-            this.table = table;
-        }
-
-        public EntityTable getTable() {
-            return table;
-        }
-
-        public void setTable(EntityTable table) {
-            this.table = table;
-        }
-
-        public String getProperty() {
-            return property;
-        }
-
-        public void setProperty(String property) {
-            this.property = property;
-        }
-
-        public String getColumn() {
-            return column;
-        }
-
-        public void setColumn(String column) {
-            this.column = column;
-        }
-
-        public Class<?> getJavaType() {
-            return javaType;
-        }
-
-        public void setJavaType(Class<?> javaType) {
-            this.javaType = javaType;
-        }
-
-        public String getSequenceName() {
-            return sequenceName;
-        }
-
-        public void setSequenceName(String sequenceName) {
-            this.sequenceName = sequenceName;
-        }
-
-        public boolean isId() {
-            return id;
-        }
-
-        public void setId(boolean id) {
-            this.id = id;
-        }
-
-        public boolean isUuid() {
-            return uuid;
-        }
-
-        public void setUuid(boolean uuid) {
-            this.uuid = uuid;
-        }
-
-        public boolean isIdentity() {
-            return identity;
-        }
-
-        public void setIdentity(boolean identity) {
-            this.identity = identity;
-        }
-
-        public String getGenerator() {
-            return generator;
-        }
-
-        public void setGenerator(String generator) {
-            this.generator = generator;
-        }
-
-        public String getOrderBy() {
-            return orderBy;
-        }
-
-        public void setOrderBy(String orderBy) {
-            this.orderBy = orderBy;
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-
-            EntityColumn that = (EntityColumn) o;
-
-            if (id != that.id) return false;
-            if (identity != that.identity) return false;
-            if (uuid != that.uuid) return false;
-            if (column != null ? !column.equals(that.column) : that.column != null) return false;
-            if (generator != null ? !generator.equals(that.generator) : that.generator != null) return false;
-            if (javaType != null ? !javaType.equals(that.javaType) : that.javaType != null) return false;
-            if (orderBy != null ? !orderBy.equals(that.orderBy) : that.orderBy != null) return false;
-            if (property != null ? !property.equals(that.property) : that.property != null) return false;
-            if (sequenceName != null ? !sequenceName.equals(that.sequenceName) : that.sequenceName != null)
-                return false;
-
-            return true;
-        }
-
-        @Override
-        public int hashCode() {
-            int result = property != null ? property.hashCode() : 0;
-            result = 31 * result + (column != null ? column.hashCode() : 0);
-            result = 31 * result + (javaType != null ? javaType.hashCode() : 0);
-            result = 31 * result + (sequenceName != null ? sequenceName.hashCode() : 0);
-            result = 31 * result + (id ? 1 : 0);
-            result = 31 * result + (uuid ? 1 : 0);
-            result = 31 * result + (identity ? 1 : 0);
-            result = 31 * result + (generator != null ? generator.hashCode() : 0);
-            result = 31 * result + (orderBy != null ? orderBy.hashCode() : 0);
-            return result;
-        }
     }
 }

@@ -1,4 +1,4 @@
-package tk.mybatis.mapper.mapperhelper;
+package tk.mybatis.mapper.code;
 
 /**
  * 字段转换方式

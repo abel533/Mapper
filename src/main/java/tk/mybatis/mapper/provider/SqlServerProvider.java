@@ -24,6 +24,8 @@
 
 package tk.mybatis.mapper.provider;
 
+import tk.mybatis.mapper.entity.EntityColumn;
+import tk.mybatis.mapper.entity.EntityTable;
 import tk.mybatis.mapper.mapperhelper.EntityHelper;
 import tk.mybatis.mapper.mapperhelper.MapperHelper;
 import tk.mybatis.mapper.mapperhelper.MapperTemplate;
@@ -52,14 +54,14 @@ public class SqlServerProvider extends MapperTemplate {
      */
     public String insert(MappedStatement ms) {
         final Class<?> entityClass = getSelectReturnType(ms);
-        EntityHelper.EntityTable table = EntityHelper.getEntityTable(entityClass);
+        EntityTable table = EntityHelper.getEntityTable(entityClass);
         //开始拼sql
         StringBuilder sql = new StringBuilder();
         sql.append("insert into ");
         sql.append(table.getName());
         sql.append("(");
         boolean first = true;
-        for (EntityHelper.EntityColumn column : table.getEntityClassColumns()) {
+        for (EntityColumn column : table.getEntityClassColumns()) {
             if (column.isId()) {
                 continue;
             }
@@ -71,7 +73,7 @@ public class SqlServerProvider extends MapperTemplate {
         }
         sql.append(") values(");
         first = true;
-        for (EntityHelper.EntityColumn column : table.getEntityClassColumns()) {
+        for (EntityColumn column : table.getEntityClassColumns()) {
             if (column.isId()) {
                 continue;
             }
@@ -97,12 +99,12 @@ public class SqlServerProvider extends MapperTemplate {
         //insert into table
         sqlNodes.add(new StaticTextSqlNode("INSERT INTO " + tableName(entityClass)));
         //获取全部列
-        Set<EntityHelper.EntityColumn> columnList = EntityHelper.getColumns(entityClass);
+        Set<EntityColumn> columnList = EntityHelper.getColumns(entityClass);
         List<SqlNode> ifNodes = new LinkedList<SqlNode>();
         //Identity列只能有一个
         Boolean hasIdentityKey = false;
         //当某个列有主键策略时，不需要考虑他的属性是否为空，因为如果为空，一定会根据主键策略给他生成一个值
-        for (EntityHelper.EntityColumn column : columnList) {
+        for (EntityColumn column : columnList) {
             //当使用序列时
             if (!column.isId()) {
                 ifNodes.add(getIfNotNull(column, new StaticTextSqlNode(column.getColumn() + ",")));
@@ -113,7 +115,7 @@ public class SqlServerProvider extends MapperTemplate {
 
         ifNodes = new LinkedList<SqlNode>();
         //处理values(#{property},#{property}...)
-        for (EntityHelper.EntityColumn column : columnList) {
+        for (EntityColumn column : columnList) {
             //当参数中的属性值不为空的时候,使用传入的值
             if (!column.isId()) {
                 ifNodes.add(new IfSqlNode(new StaticTextSqlNode("#{" + column.getProperty() + "},"), column.getProperty() + " != null "));

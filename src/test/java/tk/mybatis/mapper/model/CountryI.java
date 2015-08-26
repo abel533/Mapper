@@ -1,7 +1,7 @@
 package tk.mybatis.mapper.model;
 
 import tk.mybatis.mapper.annotation.NameStyle;
-import tk.mybatis.mapper.mapperhelper.Style;
+import tk.mybatis.mapper.code.Style;
 
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;

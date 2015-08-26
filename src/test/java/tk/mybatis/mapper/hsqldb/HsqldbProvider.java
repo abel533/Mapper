@@ -1,5 +1,6 @@
 package tk.mybatis.mapper.hsqldb;
 
+import tk.mybatis.mapper.entity.EntityColumn;
 import tk.mybatis.mapper.mapperhelper.EntityHelper;
 import tk.mybatis.mapper.mapperhelper.MapperHelper;
 import tk.mybatis.mapper.mapperhelper.MapperTemplate;
@@ -35,11 +36,11 @@ public class HsqldbProvider extends MapperTemplate {
                 + " FROM "
                 + tableName(entityClass)));
         //获取全部列
-        Set<EntityHelper.EntityColumn> columnList = EntityHelper.getColumns(entityClass);
+        Set<EntityColumn> columnList = EntityHelper.getColumns(entityClass);
         List<SqlNode> ifNodes = new ArrayList<SqlNode>();
         boolean first = true;
         //对所有列循环，生成<if test="property!=null">[AND] column = #{property}</if>
-        for (EntityHelper.EntityColumn column : columnList) {
+        for (EntityColumn column : columnList) {
             StaticTextSqlNode columnNode
                     = new StaticTextSqlNode((first ? "" : " AND ") + column.getColumn() + " = #{entity." + column.getProperty() + "} ");
             if (column.getJavaType().equals(String.class)) {

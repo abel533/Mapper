@@ -29,9 +29,11 @@ import org.apache.ibatis.jdbc.SQL;
 import org.apache.ibatis.mapping.MappedStatement;
 import org.apache.ibatis.mapping.ParameterMapping;
 import org.apache.ibatis.scripting.xmltags.*;
+import tk.mybatis.mapper.entity.EntityColumn;
 import tk.mybatis.mapper.mapperhelper.EntityHelper;
 import tk.mybatis.mapper.mapperhelper.MapperHelper;
 import tk.mybatis.mapper.mapperhelper.MapperTemplate;
+import tk.mybatis.mapper.mapperhelper.StringUtil;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -158,13 +160,13 @@ public class MapperProvider extends MapperTemplate {
         //insert into table
         sqlNodes.add(new StaticTextSqlNode("INSERT INTO " + tableName(entityClass)));
         //获取全部列
-        Set<EntityHelper.EntityColumn> columnList = EntityHelper.getColumns(entityClass);
+        Set<EntityColumn> columnList = EntityHelper.getColumns(entityClass);
         //Identity列只能有一个
         Boolean hasIdentityKey = false;
         //处理所有的主键策略
-        for (EntityHelper.EntityColumn column : columnList) {
+        for (EntityColumn column : columnList) {
             //序列的情况，直接写入sql中，不需要额外的获取值
-            if (column.getSequenceName() != null && column.getSequenceName().length() > 0) {
+            if (StringUtil.isNotEmpty(column.getSequenceName())) {
             } else if (column.isIdentity()) {
                 //这种情况下,如果原先的字段有值,需要先缓存起来,否则就一定会使用自动增长
                 //这是一个bind节点
@@ -190,7 +192,7 @@ public class MapperProvider extends MapperTemplate {
         sqlNodes.add(new StaticTextSqlNode("(" + EntityHelper.getAllColumns(entityClass) + ")"));
         List<SqlNode> ifNodes = new LinkedList<SqlNode>();
         //处理所有的values(属性值,属性值...)
-        for (EntityHelper.EntityColumn column : columnList) {
+        for (EntityColumn column : columnList) {
             //优先使用传入的属性值,当原属性property!=null时，用原属性
             //自增的情况下,如果默认有值,就会备份到property_cache中,所以这里需要先判断备份的值是否存在
             if (column.isIdentity()) {
@@ -201,7 +203,7 @@ public class MapperProvider extends MapperTemplate {
             }
             //当属性为null时，如果存在主键策略，会自动获取值，如果不存在，则使用null
             //序列的情况
-            if (column.getSequenceName() != null && column.getSequenceName().length() > 0) {
+            if (StringUtil.isNotEmpty(column.getSequenceName())) {
                 ifNodes.add(getIfIsNull(column, new StaticTextSqlNode(getSeqNextVal(column) + " ,")));
             } else if (column.isIdentity()) {
                 ifNodes.add(getIfCacheIsNull(column, new StaticTextSqlNode("#{" + column.getProperty() + " },")));
@@ -229,14 +231,14 @@ public class MapperProvider extends MapperTemplate {
         //insert into table
         sqlNodes.add(new StaticTextSqlNode("INSERT INTO " + tableName(entityClass)));
         //获取全部列
-        Set<EntityHelper.EntityColumn> columnList = EntityHelper.getColumns(entityClass);
+        Set<EntityColumn> columnList = EntityHelper.getColumns(entityClass);
         List<SqlNode> ifNodes = new LinkedList<SqlNode>();
         //Identity列只能有一个
         Boolean hasIdentityKey = false;
         //当某个列有主键策略时，不需要考虑他的属性是否为空，因为如果为空，一定会根据主键策略给他生成一个值
-        for (EntityHelper.EntityColumn column : columnList) {
+        for (EntityColumn column : columnList) {
             //当使用序列时
-            if (column.getSequenceName() != null && column.getSequenceName().length() > 0) {
+            if (StringUtil.isNotEmpty(column.getSequenceName())) {
                 //直接将列加进去
                 ifNodes.add(new StaticTextSqlNode(column.getColumn() + ","));
             } else if (column.isIdentity()) {
@@ -267,7 +269,7 @@ public class MapperProvider extends MapperTemplate {
 
         ifNodes = new LinkedList<SqlNode>();
         //处理values(#{property},#{property}...)
-        for (EntityHelper.EntityColumn column : columnList) {
+        for (EntityColumn column : columnList) {
             //当参数中的属性值不为空的时候,使用传入的值
             //自增的情况下,如果默认有值,就会备份到property_cache中
             if (column.isIdentity()) {
@@ -275,7 +277,7 @@ public class MapperProvider extends MapperTemplate {
             } else {
                 ifNodes.add(new IfSqlNode(new StaticTextSqlNode("#{" + column.getProperty() + "},"), column.getProperty() + " != null "));
             }
-            if (column.getSequenceName() != null && column.getSequenceName().length() > 0) {
+            if (StringUtil.isNotEmpty(column.getSequenceName())) {
                 ifNodes.add(getIfIsNull(column, new StaticTextSqlNode(getSeqNextVal(column) + " ,")));
             } else if (column.isIdentity()) {
                 ifNodes.add(getIfCacheIsNull(column, new StaticTextSqlNode("#{" + column.getProperty() + " },")));
@@ -336,9 +338,9 @@ public class MapperProvider extends MapperTemplate {
         //update table
         sqlNodes.add(new StaticTextSqlNode("UPDATE " + tableName(entityClass)));
         //获取全部列
-        Set<EntityHelper.EntityColumn> columnList = EntityHelper.getColumns(entityClass);
+        Set<EntityColumn> columnList = EntityHelper.getColumns(entityClass);
         List<SqlNode> ifNodes = new LinkedList<SqlNode>();
-        for (EntityHelper.EntityColumn column : columnList) {
+        for (EntityColumn column : columnList) {
             if (!column.isId()) {
                 ifNodes.add(new StaticTextSqlNode(column.getColumn() + " = #{" + column.getProperty() + "}, "));
             }
@@ -349,7 +351,7 @@ public class MapperProvider extends MapperTemplate {
         List<SqlNode> whereNodes = new LinkedList<SqlNode>();
         boolean first = true;
         //where 主键=#{property} 条件
-        for (EntityHelper.EntityColumn column : columnList) {
+        for (EntityColumn column : columnList) {
             whereNodes.add(getColumnEqualsProperty(column, first));
             first = false;
         }
@@ -369,10 +371,10 @@ public class MapperProvider extends MapperTemplate {
         //update table
         sqlNodes.add(new StaticTextSqlNode("UPDATE " + tableName(entityClass)));
         //获取全部列
-        Set<EntityHelper.EntityColumn> columnList = EntityHelper.getColumns(entityClass);
+        Set<EntityColumn> columnList = EntityHelper.getColumns(entityClass);
         List<SqlNode> ifNodes = new LinkedList<SqlNode>();
         //全部的if property!=null and property!=''
-        for (EntityHelper.EntityColumn column : columnList) {
+        for (EntityColumn column : columnList) {
             if (!column.isId()) {
                 StaticTextSqlNode columnNode = new StaticTextSqlNode(column.getColumn() + " = #{" + column.getProperty() + "}, ");
                 ifNodes.add(getIfNotNull(column, columnNode));
@@ -384,7 +386,7 @@ public class MapperProvider extends MapperTemplate {
         List<SqlNode> whereNodes = new LinkedList<SqlNode>();
         boolean first = true;
         //where 主键=#{property} 条件
-        for (EntityHelper.EntityColumn column : columnList) {
+        for (EntityColumn column : columnList) {
             whereNodes.add(getColumnEqualsProperty(column, first));
             first = false;
         }
@@ -485,10 +487,10 @@ public class MapperProvider extends MapperTemplate {
         //update table
         sqlNodes.add(new StaticTextSqlNode("UPDATE " + tableName(entityClass)));
         //获取全部列
-        Set<EntityHelper.EntityColumn> columnList = EntityHelper.getColumns(entityClass);
+        Set<EntityColumn> columnList = EntityHelper.getColumns(entityClass);
         List<SqlNode> ifNodes = new LinkedList<SqlNode>();
 
-        for (EntityHelper.EntityColumn column : columnList) {
+        for (EntityColumn column : columnList) {
             if (!column.isId()) {
                 StaticTextSqlNode columnNode = new StaticTextSqlNode(column.getColumn() + " = #{record." + column.getProperty() + "}, ");
                 ifNodes.add(new IfSqlNode(columnNode, "record." + column.getProperty() + " != null"));
@@ -513,10 +515,10 @@ public class MapperProvider extends MapperTemplate {
         //update table
         sqlNodes.add(new StaticTextSqlNode("UPDATE " + tableName(entityClass)));
         //获取全部列
-        Set<EntityHelper.EntityColumn> columnList = EntityHelper.getColumns(entityClass);
+        Set<EntityColumn> columnList = EntityHelper.getColumns(entityClass);
         List<SqlNode> setSqlNodes = new LinkedList<SqlNode>();
         //全部的if property!=null and property!=''
-        for (EntityHelper.EntityColumn column : columnList) {
+        for (EntityColumn column : columnList) {
             if (!column.isId()) {
                 setSqlNodes.add(new StaticTextSqlNode(column.getColumn() + " = #{record." + column.getProperty() + "}, "));
             }

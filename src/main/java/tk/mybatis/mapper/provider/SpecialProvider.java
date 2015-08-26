@@ -24,6 +24,8 @@
 
 package tk.mybatis.mapper.provider;
 
+import tk.mybatis.mapper.entity.EntityColumn;
+import tk.mybatis.mapper.entity.EntityTable;
 import tk.mybatis.mapper.mapperhelper.EntityHelper;
 import tk.mybatis.mapper.mapperhelper.MapperHelper;
 import tk.mybatis.mapper.mapperhelper.MapperTemplate;
@@ -47,14 +49,14 @@ public class SpecialProvider extends MapperTemplate {
      */
     public String insertList(MappedStatement ms) {
         final Class<?> entityClass = getSelectReturnType(ms);
-        EntityHelper.EntityTable table = EntityHelper.getEntityTable(entityClass);
+        EntityTable table = EntityHelper.getEntityTable(entityClass);
         //开始拼sql
         StringBuilder sql = new StringBuilder();
         sql.append("insert into ");
         sql.append(table.getName());
         sql.append("(");
         boolean first = true;
-        for (EntityHelper.EntityColumn column : table.getEntityClassColumns()) {
+        for (EntityColumn column : table.getEntityClassColumns()) {
             if (column.isId()) {
                 continue;
             }
@@ -68,7 +70,7 @@ public class SpecialProvider extends MapperTemplate {
         sql.append("<foreach collection=\"list\" item=\"record\" separator=\",\" >");
         sql.append("(");
         first = true;
-        for (EntityHelper.EntityColumn column : table.getEntityClassColumns()) {
+        for (EntityColumn column : table.getEntityClassColumns()) {
             if (column.isId()) {
                 continue;
             }
@@ -90,14 +92,14 @@ public class SpecialProvider extends MapperTemplate {
      */
     public String insertUseGeneratedKeys(MappedStatement ms) {
         final Class<?> entityClass = getSelectReturnType(ms);
-        EntityHelper.EntityTable table = EntityHelper.getEntityTable(entityClass);
+        EntityTable table = EntityHelper.getEntityTable(entityClass);
         //开始拼sql
         StringBuilder sql = new StringBuilder();
         sql.append("insert into ");
         sql.append(table.getName());
         sql.append("(");
         boolean first = true;
-        for (EntityHelper.EntityColumn column : table.getEntityClassColumns()) {
+        for (EntityColumn column : table.getEntityClassColumns()) {
             if (column.isId()) {
                 continue;
             }
@@ -109,7 +111,7 @@ public class SpecialProvider extends MapperTemplate {
         }
         sql.append(") values(");
         first = true;
-        for (EntityHelper.EntityColumn column : table.getEntityClassColumns()) {
+        for (EntityColumn column : table.getEntityClassColumns()) {
             if (column.isId()) {
                 continue;
             }
