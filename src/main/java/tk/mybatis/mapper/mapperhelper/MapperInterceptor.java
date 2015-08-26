@@ -36,8 +36,10 @@ import java.util.Properties;
 /**
  * 通用Mapper拦截器
  *
+ * @deprecated 使用MapperHelper直接配置效果更好
  * @author liuzh
  */
+@Deprecated
 @Intercepts({
         @Signature(type = Executor.class, method = "query", args = {MappedStatement.class, Object.class, RowBounds.class, ResultHandler.class}),
         @Signature(type = Executor.class, method = "update", args = {MappedStatement.class, Object.class})

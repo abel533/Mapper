@@ -58,10 +58,6 @@ public class MapperHelper {
      */
     private Map<String, MapperTemplate> msIdCache = new HashMap<String, MapperTemplate>();
     /**
-     * 缓存已经处理过的Collection<MappedStatement>
-     */
-    private Set<Collection<MappedStatement>> collectionSet = new HashSet<Collection<MappedStatement>>();
-    /**
      * 是否使用的Spring
      */
     private boolean spring = false;
@@ -570,12 +566,6 @@ public class MapperHelper {
      */
     public void processConfiguration(Configuration configuration) {
         Collection<MappedStatement> collection = configuration.getMappedStatements();
-        //防止反复处理一个
-        if (collectionSet.contains(collection)) {
-            return;
-        } else {
-            collectionSet.add(collection);
-        }
         int size = collection.size();
         Iterator<?> iterator = collection.iterator();
         while (iterator.hasNext()) {
