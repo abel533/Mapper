@@ -120,6 +120,7 @@ http://repo1.maven.org/maven2/javax/persistence/persistence-api/1.0/
 * 这三个类和MyBatis提供的区别是增加了MapperHelper属性，通过在`MapperScannerConfigurer`中使用`properties`属性注入配置
 * 这三个类，在全名上和MyBatis的区别是`org.mybatis.xxx`改为了`tk.mybatis.xxx`，名字相近，更方便修改配置
 * 和Spring集成方法：
+
 ```xml
 <bean class="tk.mybatis.spring.mapper.MapperScannerConfigurer">
     <property name="basePackage" value="com.isea533.mybatis.mapper"/>
@@ -130,6 +131,7 @@ http://repo1.maven.org/maven2/javax/persistence/persistence-api/1.0/
     </property>
 </bean>
 ```
+
 * 这种配置方式是不是简单的不能再简单了?
 * 增加`style`属性配置，用来配置对象名/字段和表名/字段之间的转换方式，可选值：
    - `normal`:使用实体类名/属性名作为表名/字段名
