@@ -130,21 +130,7 @@ public class MapperHelper {
     }
 
     public Style getStyle() {
-        //TODO 先默认
-        return Style.camelhump;
-    }
-
-    /**
-     * Spring初始化方法，使用Spring时需要配置init-method="initMapper"
-     */
-    public void initMapper() {
-        //只有Spring会执行这个方法,所以Spring配置的时候,从这儿可以尝试获取Spring的版本
-        //先判断Spring版本,对下面的操作有影响
-        //Spring4以上支持泛型注入,因此可以扫描通用Mapper
-        initSpringVersion();
-        for (SqlSession sqlSession : sqlSessions) {
-            processConfiguration(sqlSession.getConfiguration());
-        }
+        return this.style == null ? Style.camelhump : this.style;
     }
 
     /**
@@ -164,7 +150,7 @@ public class MapperHelper {
                     spring4 = false;
                 }
             }
-        } catch (Exception e) {
+        } catch (Throwable e) {
             spring = false;
             spring4 = false;
         }

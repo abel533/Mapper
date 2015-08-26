@@ -1,4 +1,6 @@
-package tk.mybatis.mapper.mapperhelper;
+package tk.mybatis.mapper.annotation;
+
+import tk.mybatis.mapper.mapperhelper.Style;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

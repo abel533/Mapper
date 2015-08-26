@@ -24,6 +24,8 @@
 
 package tk.mybatis.mapper.mapperhelper;
 
+import tk.mybatis.mapper.annotation.NameStyle;
+
 import javax.persistence.*;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
