@@ -51,6 +51,12 @@ public class MapperHelper {
      * 缓存skip结果
      */
     private final Map<String, Boolean> msIdSkip = new HashMap<String, Boolean>();
+
+    /**
+     * 注册的接口
+     */
+    private List<Class<?>> registerClass = new ArrayList<Class<?>>();
+
     /**
      * 注册的通用Mapper接口
      */
@@ -95,12 +101,12 @@ public class MapperHelper {
         this.notEmpty = notEmpty;
     }
 
-    public void setStyle(Style style) {
-        this.style = style;
-    }
-
     public Style getStyle() {
         return this.style == null ? Style.camelhump : this.style;
+    }
+
+    public void setStyle(Style style) {
+        this.style = style;
     }
 
     /**
@@ -166,6 +172,7 @@ public class MapperHelper {
      */
     public void registerMapper(Class<?> mapperClass) {
         if (!registerMapper.containsKey(mapperClass)) {
+            registerClass.add(mapperClass);
             registerMapper.put(mapperClass, fromMapperClass(mapperClass));
         }
         //自动注册继承的接口
@@ -367,6 +374,21 @@ public class MapperHelper {
     }
 
     /**
+     * 判断接口是否包含通用接口
+     *
+     * @param mapperInterface
+     * @return
+     */
+    public boolean extendCommonMapper(Class<?> mapperInterface) {
+        for (Class<?> mapperClass : registerClass) {
+            if (mapperClass.isAssignableFrom(mapperInterface)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
      * 获取MapperTemplate
      *
      * @param msId
@@ -473,23 +495,30 @@ public class MapperHelper {
      * @param configuration
      */
     public void processConfiguration(Configuration configuration) {
-        Collection<MappedStatement> collection = configuration.getMappedStatements();
-        int size = collection.size();
-        Iterator<?> iterator = collection.iterator();
-        while (iterator.hasNext()) {
-            Object object = iterator.next();
+        processConfiguration(configuration, null);
+    }
+
+    /**
+     * 配置指定的接口
+     *
+     * @param configuration
+     * @param mapperInterface
+     */
+    public void processConfiguration(Configuration configuration, Class<?> mapperInterface) {
+        String prefix;
+        if (mapperInterface != null) {
+            prefix = mapperInterface.getCanonicalName();
+        } else {
+            prefix = "";
+        }
+        for (Object object : new ArrayList<Object>(configuration.getMappedStatements())) {
             if (object instanceof MappedStatement) {
                 MappedStatement ms = (MappedStatement) object;
-                if (isMapperMethod(ms.getId())) {
+                if (ms.getId().startsWith(prefix) && isMapperMethod(ms.getId())) {
                     if (ms.getSqlSource() instanceof ProviderSqlSource) {
                         setSqlSource(ms);
                     }
                 }
-            }
-            //处理过程中可能会新增selectKey，导致ms增多，所以这里判断大小，重新循环
-            if (collection.size() != size) {
-                size = collection.size();
-                iterator = collection.iterator();
             }
         }
     }
