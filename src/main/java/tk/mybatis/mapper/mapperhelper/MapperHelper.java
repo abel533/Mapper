@@ -455,13 +455,13 @@ public class MapperHelper {
         //注册通用接口
         String mapper = properties.getProperty("mappers");
         if(StringUtil.isEmpty(mapper)){
-            throw new RuntimeException("使用通用Mapper时必须配置mappers属性!");
-        } else {
-            String[] mappers = mapper.split(",");
-            for (String mapperClass : mappers) {
-                if (mapperClass.length() > 0) {
-                    registerMapper(mapperClass);
-                }
+            //默认包名
+            mapper = "tk.mybatis.mapper.common.Mapper";
+        }
+        String[] mappers = mapper.split(",");
+        for (String mapperClass : mappers) {
+            if (mapperClass.length() > 0) {
+                registerMapper(mapperClass);
             }
         }
     }

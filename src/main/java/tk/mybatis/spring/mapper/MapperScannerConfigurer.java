@@ -106,7 +106,7 @@ public class MapperScannerConfigurer implements BeanDefinitionRegistryPostProces
 
     private BeanNameGenerator nameGenerator;
 
-    private final MapperHelper mapperHelper = new MapperHelper();
+    private MapperHelper mapperHelper;
 
     /**
      * This property lets you set the base package for your mapper interface files.
@@ -268,6 +268,9 @@ public class MapperScannerConfigurer implements BeanDefinitionRegistryPostProces
     }
 
     public void setProperties(Properties properties) {
+        if(mapperHelper == null){
+            mapperHelper = new MapperHelper();
+        }
         mapperHelper.setProperties(properties);
     }
 
@@ -308,6 +311,10 @@ public class MapperScannerConfigurer implements BeanDefinitionRegistryPostProces
         scanner.setSqlSessionTemplateBeanName(this.sqlSessionTemplateBeanName);
         scanner.setResourceLoader(this.applicationContext);
         scanner.setBeanNameGenerator(this.nameGenerator);
+        if(mapperHelper == null){
+            mapperHelper = new MapperHelper();
+            mapperHelper.setProperties(new Properties());
+        }
         scanner.setMapperHelper(this.mapperHelper);
         scanner.registerFilters();
         scanner.scan(StringUtils.tokenizeToStringArray(this.basePackage, ConfigurableApplicationContext.CONFIG_LOCATION_DELIMITERS));
