@@ -25,7 +25,7 @@
 package tk.mybatis.mapper.common.example;
 
 import org.apache.ibatis.annotations.SelectProvider;
-import tk.mybatis.mapper.provider.MapperProvider;
+import tk.mybatis.mapper.provider.ExampleProvider;
 
 import java.util.List;
 
@@ -43,7 +43,7 @@ public interface SelectByExampleMapper<T> {
      * @param example
      * @return
      */
-    @SelectProvider(type = MapperProvider.class, method = "dynamicSQL")
+    @SelectProvider(type = ExampleProvider.class, method = "dynamicSQL")
     List<T> selectByExample(Object example);
 
 }

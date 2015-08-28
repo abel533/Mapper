@@ -30,13 +30,12 @@ import tk.mybatis.mapper.code.IdentityDialect;
 import tk.mybatis.mapper.code.Style;
 import tk.mybatis.mapper.entity.EntityColumn;
 import tk.mybatis.mapper.entity.EntityTable;
+import tk.mybatis.mapper.util.StringUtil;
 
 import javax.persistence.*;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * 实体类工具类 - 处理实体和数据库表以及字段关键的一个类

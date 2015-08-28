@@ -26,7 +26,7 @@ package tk.mybatis.mapper.common.rowbounds;
 
 import org.apache.ibatis.annotations.SelectProvider;
 import org.apache.ibatis.session.RowBounds;
-import tk.mybatis.mapper.provider.MapperProvider;
+import tk.mybatis.mapper.provider.base.BaseSelectProvider;
 
 import java.util.List;
 
@@ -45,7 +45,7 @@ public interface SelectRowBoundsMapper<T> {
      * @param rowBounds
      * @return
      */
-    @SelectProvider(type = MapperProvider.class, method = "dynamicSQL")
+    @SelectProvider(type = BaseSelectProvider.class, method = "dynamicSQL")
     List<T> selectByRowBounds(T record, RowBounds rowBounds);
 
 }

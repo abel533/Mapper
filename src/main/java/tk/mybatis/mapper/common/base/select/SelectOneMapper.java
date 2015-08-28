@@ -25,7 +25,7 @@
 package tk.mybatis.mapper.common.base.select;
 
 import org.apache.ibatis.annotations.SelectProvider;
-import tk.mybatis.mapper.provider.MapperProvider;
+import tk.mybatis.mapper.provider.base.BaseSelectProvider;
 
 /**
  * 通用Mapper接口,查询
@@ -41,7 +41,7 @@ public interface SelectOneMapper<T> {
      * @param record
      * @return
      */
-    @SelectProvider(type = MapperProvider.class, method = "dynamicSQL")
+    @SelectProvider(type = BaseSelectProvider.class, method = "dynamicSQL")
     T selectOne(T record);
 
 }

@@ -73,7 +73,7 @@ public class MapperFactoryBean<T> extends SqlSessionDaoSupport implements Factor
             }
         }
         //通用Mapper
-        if (mapperHelper.extendCommonMapper(mapperInterface)) {
+        if (mapperHelper.isExtendCommonMapper(mapperInterface)) {
             mapperHelper.processConfiguration(configuration, mapperInterface);
         }
     }

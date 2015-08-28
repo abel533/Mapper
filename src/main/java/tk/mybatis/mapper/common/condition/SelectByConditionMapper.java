@@ -25,7 +25,7 @@
 package tk.mybatis.mapper.common.condition;
 
 import org.apache.ibatis.annotations.SelectProvider;
-import tk.mybatis.mapper.provider.MapperProvider;
+import tk.mybatis.mapper.provider.ConditionProvider;
 
 import java.util.List;
 
@@ -43,7 +43,7 @@ public interface SelectByConditionMapper<T> {
      * @param condition
      * @return
      */
-    @SelectProvider(type = MapperProvider.class, method = "dynamicSQL")
+    @SelectProvider(type = ConditionProvider.class, method = "dynamicSQL")
     List<T> selectByCondition(Object condition);
 
 }

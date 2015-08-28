@@ -25,7 +25,7 @@
 package tk.mybatis.mapper.common.base.delete;
 
 import org.apache.ibatis.annotations.DeleteProvider;
-import tk.mybatis.mapper.provider.MapperProvider;
+import tk.mybatis.mapper.provider.base.BaseDeleteProvider;
 
 /**
  * 通用Mapper接口,删除
@@ -41,7 +41,7 @@ public interface DeleteMapper<T> {
      * @param record
      * @return
      */
-    @DeleteProvider(type = MapperProvider.class, method = "dynamicSQL")
+    @DeleteProvider(type = BaseDeleteProvider.class, method = "dynamicSQL")
     int delete(T record);
 
 }

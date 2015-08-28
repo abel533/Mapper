@@ -25,7 +25,7 @@
 package tk.mybatis.mapper.common.condition;
 
 import org.apache.ibatis.annotations.SelectProvider;
-import tk.mybatis.mapper.provider.MapperProvider;
+import tk.mybatis.mapper.provider.ConditionProvider;
 
 /**
  * 通用Mapper接口,Condition查询
@@ -41,7 +41,7 @@ public interface SelectCountByConditionMapper<T> {
      * @param condition
      * @return
      */
-    @SelectProvider(type = MapperProvider.class, method = "dynamicSQL")
+    @SelectProvider(type = ConditionProvider.class, method = "dynamicSQL")
     int selectCountByCondition(Object condition);
 
 }

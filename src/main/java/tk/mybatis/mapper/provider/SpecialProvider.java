@@ -24,12 +24,12 @@
 
 package tk.mybatis.mapper.provider;
 
+import org.apache.ibatis.mapping.MappedStatement;
 import tk.mybatis.mapper.entity.EntityColumn;
 import tk.mybatis.mapper.entity.EntityTable;
 import tk.mybatis.mapper.mapperhelper.EntityHelper;
 import tk.mybatis.mapper.mapperhelper.MapperHelper;
 import tk.mybatis.mapper.mapperhelper.MapperTemplate;
-import org.apache.ibatis.mapping.MappedStatement;
 
 /**
  * Mappper实现类，特殊方法实现类

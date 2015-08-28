@@ -25,7 +25,7 @@
 package tk.mybatis.mapper.common.condition;
 
 import org.apache.ibatis.annotations.DeleteProvider;
-import tk.mybatis.mapper.provider.MapperProvider;
+import tk.mybatis.mapper.provider.ConditionProvider;
 
 /**
  * 通用Mapper接口,Condition查询
@@ -41,7 +41,7 @@ public interface DeleteByConditionMapper<T> {
      * @param condition
      * @return
      */
-    @DeleteProvider(type = MapperProvider.class, method = "dynamicSQL")
+    @DeleteProvider(type = ConditionProvider.class, method = "dynamicSQL")
     int deleteByCondition(Object condition);
 
 }

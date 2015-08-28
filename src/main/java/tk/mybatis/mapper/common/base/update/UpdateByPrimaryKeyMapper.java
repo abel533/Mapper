@@ -25,7 +25,7 @@
 package tk.mybatis.mapper.common.base.update;
 
 import org.apache.ibatis.annotations.UpdateProvider;
-import tk.mybatis.mapper.provider.MapperProvider;
+import tk.mybatis.mapper.provider.base.BaseUpdateProvider;
 
 /**
  * 通用Mapper接口,更新
@@ -41,7 +41,7 @@ public interface UpdateByPrimaryKeyMapper<T> {
      * @param record
      * @return
      */
-    @UpdateProvider(type = MapperProvider.class, method = "dynamicSQL")
+    @UpdateProvider(type = BaseUpdateProvider.class, method = "dynamicSQL")
     int updateByPrimaryKey(T record);
 
 }

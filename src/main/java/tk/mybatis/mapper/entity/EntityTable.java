@@ -1,6 +1,6 @@
 package tk.mybatis.mapper.entity;
 
-import tk.mybatis.mapper.mapperhelper.StringUtil;
+import tk.mybatis.mapper.util.StringUtil;
 
 import javax.persistence.Table;
 import java.util.LinkedList;
@@ -32,32 +32,12 @@ public class EntityTable {
         this.schema = table.schema();
     }
 
-    public void setBaseSelect(String baseSelect) {
-        this.baseSelect = baseSelect;
-    }
-
-    public void setCatalog(String catalog) {
-        this.catalog = catalog;
-    }
-
-    public void setEntityClassColumns(Set<EntityColumn> entityClassColumns) {
-        this.entityClassColumns = entityClassColumns;
-    }
-
-    public void setEntityClassPKColumns(Set<EntityColumn> entityClassPKColumns) {
-        this.entityClassPKColumns = entityClassPKColumns;
-    }
-
     public void setKeyColumns(List<String> keyColumns) {
         this.keyColumns = keyColumns;
     }
 
     public void setKeyProperties(List<String> keyProperties) {
         this.keyProperties = keyProperties;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getOrderByClause() {
@@ -68,24 +48,36 @@ public class EntityTable {
         this.orderByClause = orderByClause;
     }
 
-    public void setSchema(String schema) {
-        this.schema = schema;
-    }
-
     public String getName() {
         return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getCatalog() {
         return catalog;
     }
 
+    public void setCatalog(String catalog) {
+        this.catalog = catalog;
+    }
+
     public String getSchema() {
         return schema;
     }
 
+    public void setSchema(String schema) {
+        this.schema = schema;
+    }
+
     public String getBaseSelect() {
         return baseSelect;
+    }
+
+    public void setBaseSelect(String baseSelect) {
+        this.baseSelect = baseSelect;
     }
 
     public String getPrefix() {
@@ -102,8 +94,16 @@ public class EntityTable {
         return entityClassColumns;
     }
 
+    public void setEntityClassColumns(Set<EntityColumn> entityClassColumns) {
+        this.entityClassColumns = entityClassColumns;
+    }
+
     public Set<EntityColumn> getEntityClassPKColumns() {
         return entityClassPKColumns;
+    }
+
+    public void setEntityClassPKColumns(Set<EntityColumn> entityClassPKColumns) {
+        this.entityClassPKColumns = entityClassPKColumns;
     }
 
     public String[] getKeyProperties() {

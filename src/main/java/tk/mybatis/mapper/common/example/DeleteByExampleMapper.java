@@ -25,7 +25,7 @@
 package tk.mybatis.mapper.common.example;
 
 import org.apache.ibatis.annotations.DeleteProvider;
-import tk.mybatis.mapper.provider.MapperProvider;
+import tk.mybatis.mapper.provider.ExampleProvider;
 
 /**
  * 通用Mapper接口,Example查询
@@ -41,7 +41,7 @@ public interface DeleteByExampleMapper<T> {
      * @param example
      * @return
      */
-    @DeleteProvider(type = MapperProvider.class, method = "dynamicSQL")
+    @DeleteProvider(type = ExampleProvider.class, method = "dynamicSQL")
     int deleteByExample(Object example);
 
 }

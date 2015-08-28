@@ -31,9 +31,9 @@ import org.apache.ibatis.annotations.UpdateProvider;
 import org.apache.ibatis.builder.annotation.ProviderSqlSource;
 import org.apache.ibatis.mapping.MappedStatement;
 import org.apache.ibatis.session.Configuration;
-import tk.mybatis.mapper.code.IdentityDialect;
-import tk.mybatis.mapper.code.Style;
-import tk.mybatis.mapper.entity.EntityTable;
+import tk.mybatis.mapper.entity.Config;
+import tk.mybatis.mapper.provider.EmptyProvider;
+import tk.mybatis.mapper.util.StringUtil;
 
 import java.lang.reflect.Method;
 import java.util.*;
@@ -61,27 +61,22 @@ public class MapperHelper {
      * 注册的通用Mapper接口
      */
     private Map<Class<?>, MapperTemplate> registerMapper = new ConcurrentHashMap<Class<?>, MapperTemplate>();
+
     /**
      * 缓存msid和MapperTemplate
      */
     private Map<String, MapperTemplate> msIdCache = new HashMap<String, MapperTemplate>();
 
     /**
-     * 对于一般的getAllIfColumnNode，是否判断!=''，默认不判断
+     * 通用Mapper配置
      */
-    private boolean notEmpty = false;
-
-    /**
-     * 字段转换风格，默认驼峰转下划线
-     */
-    private Style style;
-
     private Config config = new Config();
 
     /**
      * 默认构造方法
      */
-    public MapperHelper() {}
+    public MapperHelper() {
+    }
 
     /**
      * 带配置的构造方法
@@ -93,20 +88,22 @@ public class MapperHelper {
         setProperties(properties);
     }
 
-    public boolean isNotEmpty() {
-        return notEmpty;
+    /**
+     * 获取通用Mapper配置
+     *
+     * @return
+     */
+    public Config getConfig() {
+        return config;
     }
 
-    public void setNotEmpty(boolean notEmpty) {
-        this.notEmpty = notEmpty;
-    }
-
-    public Style getStyle() {
-        return this.style == null ? Style.camelhump : this.style;
-    }
-
-    public void setStyle(Style style) {
-        this.style = style;
+    /**
+     * 设置通用Mapper配置
+     *
+     * @param config
+     */
+    public void setConfig(Config config) {
+        this.config = config;
     }
 
     /**
@@ -146,7 +143,7 @@ public class MapperHelper {
             }
         }
         if (templateClass == null || !MapperTemplate.class.isAssignableFrom(templateClass)) {
-            templateClass = EmptyMapperProvider.class;
+            templateClass = EmptyProvider.class;
         }
         MapperTemplate mapperTemplate = null;
         try {
@@ -198,162 +195,6 @@ public class MapperHelper {
     }
 
     /**
-     * 方便Spring注入
-     *
-     * @param mappers
-     */
-    public void setMappers(String[] mappers) {
-        if (mappers != null && mappers.length > 0) {
-            for (String mapper : mappers) {
-                registerMapper(mapper);
-            }
-        }
-    }
-
-    /**
-     * 主键自增回写方法执行顺序,默认AFTER,可选值为(BEFORE|AFTER)
-     *
-     * @param order
-     */
-    public void setOrder(String order) {
-        config.BEFORE = "BEFORE".equalsIgnoreCase(order);
-    }
-
-    /**
-     * 设置全局的catalog,默认为空，如果设置了值，操作表时的sql会是catalog.tablename
-     *
-     * @param catalog
-     */
-    public void setCatalog(String catalog) {
-        config.catalog = catalog;
-    }
-
-    /**
-     * 设置全局的schema,默认为空，如果设置了值，操作表时的sql会是schema.tablename
-     * <br>如果同时设置了catalog,优先使用catalog.tablename
-     *
-     * @param schema
-     */
-    public void setSchema(String schema) {
-        config.schema = schema;
-    }
-
-    /**
-     * 获取表前缀，带catalog或schema
-     *
-     * @return
-     */
-    public String getPrefix() {
-        if (StringUtil.isNotEmpty(config.catalog)) {
-            return config.catalog;
-        }
-        if (StringUtil.isNotEmpty(config.schema)) {
-            return config.catalog;
-        }
-        return "";
-    }
-
-    /**
-     * 获取UUID生成规则
-     *
-     * @return
-     */
-    public String getUUID() {
-        if (StringUtil.isNotEmpty(config.UUID)) {
-            return config.UUID;
-        }
-        return "@java.util.UUID@randomUUID().toString().replace(\"-\", \"\")";
-    }
-
-    /**
-     * 设置UUID生成策略
-     * <br>配置UUID生成策略需要使用OGNL表达式
-     * <br>默认值32位长度:@java.util.UUID@randomUUID().toString().replace("-", "")
-     *
-     * @param UUID
-     */
-    public void setUUID(String UUID) {
-        config.UUID = UUID;
-    }
-
-    /**
-     * 获取主键自增回写SQL
-     *
-     * @return
-     */
-    public String getIDENTITY() {
-        if (StringUtil.isNotEmpty(config.IDENTITY)) {
-            return config.IDENTITY;
-        }
-        //针对mysql的默认值
-        return IdentityDialect.MYSQL.getIdentityRetrievalStatement();
-    }
-
-    /**
-     * 主键自增回写方法,默认值MYSQL,详细说明请看文档
-     *
-     * @param IDENTITY
-     */
-    public void setIDENTITY(String IDENTITY) {
-        IdentityDialect identityDialect = IdentityDialect.getDatabaseDialect(IDENTITY);
-        if (identityDialect != null) {
-            config.IDENTITY = identityDialect.getIdentityRetrievalStatement();
-        } else {
-            config.IDENTITY = IDENTITY;
-        }
-    }
-
-    /**
-     * 获取SelectKey的Order
-     *
-     * @return
-     */
-    public boolean getBEFORE() {
-        return config.BEFORE;
-    }
-
-    /**
-     * 获取序列格式化模板
-     *
-     * @return
-     */
-    public String getSeqFormat() {
-        if (StringUtil.isNotEmpty(config.seqFormat)) {
-            return config.seqFormat;
-        }
-        return "{0}.nextval";
-    }
-
-    /**
-     * 序列的获取规则,使用{num}格式化参数，默认值为{0}.nextval，针对Oracle
-     * <br>可选参数一共3个，对应0,1,2,分别为SequenceName，ColumnName, PropertyName
-     *
-     * @param seqFormat
-     */
-    public void setSeqFormat(String seqFormat) {
-        config.seqFormat = seqFormat;
-    }
-
-    /**
-     * 获取表名
-     *
-     * @param entityClass
-     * @return
-     */
-    public String getTableName(Class<?> entityClass) {
-        EntityTable entityTable = EntityHelper.getEntityTable(entityClass);
-        String prefix = entityTable.getPrefix();
-        if (prefix.equals("")) {
-            //使用全局配置
-            prefix = getPrefix();
-        }
-        if (!prefix.equals("")) {
-            return prefix + "." + entityTable.getName();
-        }
-        return entityTable.getName();
-    }
-
-    /**
      * 判断当前的接口方法是否需要进行拦截
      *
      * @param msId
@@ -366,6 +207,7 @@ public class MapperHelper {
         for (Map.Entry<Class<?>, MapperTemplate> entry : registerMapper.entrySet()) {
             if (entry.getValue().supportMethod(msId)) {
                 msIdSkip.put(msId, true);
+                msIdCache.put(msId, entry.getValue());
                 return true;
             }
         }
@@ -379,7 +221,7 @@ public class MapperHelper {
      * @param mapperInterface
      * @return
      */
-    public boolean extendCommonMapper(Class<?> mapperInterface) {
+    public boolean isExtendCommonMapper(Class<?> mapperInterface) {
         for (Class<?> mapperClass : registerClass) {
             if (mapperClass.isAssignableFrom(mapperInterface)) {
                 return true;
@@ -389,34 +231,14 @@ public class MapperHelper {
     }
 
     /**
-     * 获取MapperTemplate
-     *
-     * @param msId
-     * @return
-     */
-    private MapperTemplate getMapperTemplate(String msId) {
-        MapperTemplate mapperTemplate = null;
-        if (msIdCache.get(msId) != null) {
-            mapperTemplate = msIdCache.get(msId);
-        } else {
-            for (Map.Entry<Class<?>, MapperTemplate> entry : registerMapper.entrySet()) {
-                if (entry.getValue().supportMethod(msId)) {
-                    mapperTemplate = entry.getValue();
-                    break;
-                }
-            }
-            msIdCache.put(msId, mapperTemplate);
-        }
-        return mapperTemplate;
-    }
-
-    /**
      * 重新设置SqlSource
+     *
+     * 执行该方法前必须使用isMapperMethod判断，否则msIdCache会空
      *
      * @param ms
      */
     public void setSqlSource(MappedStatement ms) {
-        MapperTemplate mapperTemplate = getMapperTemplate(ms.getId());
+        MapperTemplate mapperTemplate = msIdCache.get(ms.getId());
         try {
             if (mapperTemplate != null) {
                 mapperTemplate.setSqlSource(ms);
@@ -432,50 +254,12 @@ public class MapperHelper {
      * @param properties
      */
     public void setProperties(Properties properties) {
-        if (properties == null) {
-            return;
-        }
-        String UUID = properties.getProperty("UUID");
-        if (StringUtil.isNotEmpty(UUID)) {
-            setUUID(UUID);
-        }
-        String IDENTITY = properties.getProperty("IDENTITY");
-        if (StringUtil.isNotEmpty(IDENTITY)) {
-            setIDENTITY(IDENTITY);
-        }
-        String seqFormat = properties.getProperty("seqFormat");
-        if (StringUtil.isNotEmpty(seqFormat)) {
-            setSeqFormat(seqFormat);
-        }
-        String catalog = properties.getProperty("catalog");
-        if (StringUtil.isNotEmpty(catalog)) {
-            setCatalog(catalog);
-        }
-        String schema = properties.getProperty("schema");
-        if (StringUtil.isNotEmpty(schema)) {
-            setSchema(schema);
-        }
-        String ORDER = properties.getProperty("ORDER");
-        if (StringUtil.isNotEmpty(ORDER)) {
-            setOrder(ORDER);
-        }
-        String notEmpty = properties.getProperty("notEmpty");
-        if (StringUtil.isNotEmpty(notEmpty)) {
-            this.notEmpty = notEmpty.equalsIgnoreCase("TRUE");
-        }
-        String styleStr = properties.getProperty("style");
-        if (StringUtil.isNotEmpty(styleStr)) {
-            try {
-                this.style = Style.valueOf(styleStr);
-            } catch (IllegalArgumentException e){
-                throw new RuntimeException(styleStr + "不是合法的Style值!");
-            }
-        } else {
-            //默认驼峰
-            this.style = Style.camelhump;
-        }
+        config.setProperties(properties);
         //注册通用接口
-        String mapper = properties.getProperty("mappers");
+        String mapper = null;
+        if (properties != null) {
+            mapper = properties.getProperty("mappers");
+        }
         if(StringUtil.isEmpty(mapper)){
             //默认包名
             mapper = "tk.mybatis.mapper.common.Mapper";
@@ -523,13 +307,4 @@ public class MapperHelper {
         }
     }
 
-    //基础可配置项
-    private class Config {
-        private String UUID;
-        private String IDENTITY;
-        private boolean BEFORE = false;
-        private String seqFormat;
-        private String catalog;
-        private String schema;
-    }
 }

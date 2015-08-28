@@ -24,13 +24,13 @@
 
 package tk.mybatis.mapper.provider;
 
+import org.apache.ibatis.mapping.MappedStatement;
+import org.apache.ibatis.scripting.xmltags.*;
 import tk.mybatis.mapper.entity.EntityColumn;
 import tk.mybatis.mapper.entity.EntityTable;
 import tk.mybatis.mapper.mapperhelper.EntityHelper;
 import tk.mybatis.mapper.mapperhelper.MapperHelper;
 import tk.mybatis.mapper.mapperhelper.MapperTemplate;
-import org.apache.ibatis.mapping.MappedStatement;
-import org.apache.ibatis.scripting.xmltags.*;
 
 import java.util.LinkedList;
 import java.util.List;

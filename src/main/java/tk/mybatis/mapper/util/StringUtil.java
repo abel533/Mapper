@@ -1,4 +1,4 @@
-package tk.mybatis.mapper.mapperhelper;
+package tk.mybatis.mapper.util;
 
 import tk.mybatis.mapper.code.Style;
 

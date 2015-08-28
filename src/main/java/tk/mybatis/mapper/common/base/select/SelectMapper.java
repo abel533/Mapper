@@ -25,7 +25,7 @@
 package tk.mybatis.mapper.common.base.select;
 
 import org.apache.ibatis.annotations.SelectProvider;
-import tk.mybatis.mapper.provider.MapperProvider;
+import tk.mybatis.mapper.provider.base.BaseSelectProvider;
 
 import java.util.List;
 
@@ -43,7 +43,7 @@ public interface SelectMapper<T> {
      * @param record
      * @return
      */
-    @SelectProvider(type = MapperProvider.class, method = "dynamicSQL")
+    @SelectProvider(type = BaseSelectProvider.class, method = "dynamicSQL")
     List<T> select(T record);
 
 }

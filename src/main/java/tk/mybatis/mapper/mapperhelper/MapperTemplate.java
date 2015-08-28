@@ -36,6 +36,8 @@ import org.apache.ibatis.scripting.defaults.RawSqlSource;
 import org.apache.ibatis.scripting.xmltags.*;
 import org.apache.ibatis.session.Configuration;
 import tk.mybatis.mapper.entity.EntityColumn;
+import tk.mybatis.mapper.entity.EntityTable;
+import tk.mybatis.mapper.util.StringUtil;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -61,6 +63,45 @@ public abstract class MapperTemplate {
         this.mapperHelper = mapperHelper;
     }
 
+    /**
+     * 根据msId获取接口类
+     *
+     * @param msId
+     * @return
+     * @throws ClassNotFoundException
+     */
+    public static Class<?> getMapperClass(String msId) {
+        if (msId.indexOf(".") == -1) {
+            throw new RuntimeException("当前MappedStatement的id=" + msId + ",不符合MappedStatement的规则!");
+        }
+        String mapperClassStr = msId.substring(0, msId.lastIndexOf("."));
+        try {
+            return Class.forName(mapperClassStr);
+        } catch (ClassNotFoundException e) {
+            return null;
+        }
+    }
+
+    /**
+     * 获取执行的方法名
+     *
+     * @param ms
+     * @return
+     */
+    public static String getMethodName(MappedStatement ms) {
+        return getMethodName(ms.getId());
+    }
+
+    /**
+     * 获取执行的方法名
+     *
+     * @param msId
+     * @return
+     */
+    public static String getMethodName(String msId) {
+        return msId.substring(msId.lastIndexOf(".") + 1);
+    }
+
     public String dynamicSQL(Object record) {
         return "dynamicSQL";
     }
@@ -76,15 +117,15 @@ public abstract class MapperTemplate {
     }
 
     public String getUUID() {
-        return mapperHelper.getUUID();
+        return mapperHelper.getConfig().getUUID();
     }
 
     public String getIDENTITY() {
-        return mapperHelper.getIDENTITY();
+        return mapperHelper.getConfig().getIDENTITY();
     }
 
     public boolean getBEFORE() {
-        return mapperHelper.getBEFORE();
+        return mapperHelper.getConfig().getBEFORE();
     }
 
     /**
@@ -125,7 +166,7 @@ public abstract class MapperTemplate {
         msObject.setValue("sqlSource", sqlSource);
         //如果是Jdbc3KeyGenerator，就设置为MultipleJdbc3KeyGenerator
         KeyGenerator keyGenerator = ms.getKeyGenerator();
-        if(keyGenerator instanceof Jdbc3KeyGenerator){
+        if (keyGenerator instanceof Jdbc3KeyGenerator) {
             msObject.setValue("keyGenerator", new MultipleJdbc3KeyGenerator());
         }
     }
@@ -137,7 +178,7 @@ public abstract class MapperTemplate {
      * @throws Exception
      */
     private void checkCache(MappedStatement ms) throws Exception {
-        if(ms.getCache() == null){
+        if (ms.getCache() == null) {
             String nameSpace = ms.getId().substring(0, ms.getId().lastIndexOf("."));
             Cache cache = null;
             try {
@@ -146,7 +187,7 @@ public abstract class MapperTemplate {
             } catch (IllegalArgumentException e) {
                 return;
             }
-            if(cache != null){
+            if (cache != null) {
                 MetaObject metaObject = SystemMetaObject.forObject(ms);
                 metaObject.setValue("cache", cache);
             }
@@ -197,7 +238,7 @@ public abstract class MapperTemplate {
      */
     public Class<?> getSelectReturnType(MappedStatement ms) {
         String msId = ms.getId();
-        if(entityClassMap.containsKey(msId)){
+        if (entityClassMap.containsKey(msId)) {
             return entityClassMap.get(msId);
         } else {
             Class<?> mapperClass = getMapperClass(msId);
@@ -208,7 +249,7 @@ public abstract class MapperTemplate {
                     if (t.getRawType() == this.mapperClass || this.mapperClass.isAssignableFrom((Class<?>) t.getRawType())) {
                         Class<?> returnType = (Class<?>) t.getActualTypeArguments()[0];
                         //获取该类型后，第一次对该类型进行初始化
-                        EntityHelper.initEntityNameMap(returnType, mapperHelper.getStyle());
+                        EntityHelper.initEntityNameMap(returnType, mapperHelper.getConfig().getStyle());
                         entityClassMap.put(msId, returnType);
                         return returnType;
                     }
@@ -216,45 +257,6 @@ public abstract class MapperTemplate {
             }
         }
         throw new RuntimeException("无法获取Mapper<T>泛型类型:" + msId);
-    }
-
-    /**
-     * 根据msId获取接口类
-     *
-     * @param msId
-     * @return
-     * @throws ClassNotFoundException
-     */
-    public static Class<?> getMapperClass(String msId) {
-        if (msId.indexOf(".") == -1) {
-            throw new RuntimeException("当前MappedStatement的id=" + msId + ",不符合MappedStatement的规则!");
-        }
-        String mapperClassStr = msId.substring(0, msId.lastIndexOf("."));
-        try {
-            return Class.forName(mapperClassStr);
-        } catch (ClassNotFoundException e) {
-            return null;
-        }
-    }
-
-    /**
-     * 获取执行的方法名
-     *
-     * @param ms
-     * @return
-     */
-    public static String getMethodName(MappedStatement ms) {
-        return getMethodName(ms.getId());
-    }
-
-    /**
-     * 获取执行的方法名
-     *
-     * @param msId
-     * @return
-     */
-    public static String getMethodName(String msId) {
-        return msId.substring(msId.lastIndexOf(".") + 1);
     }
 
     /**
@@ -282,7 +284,7 @@ public abstract class MapperTemplate {
      * @return
      */
     protected String getSeqNextVal(EntityColumn column) {
-        return MessageFormat.format(mapperHelper.getSeqFormat(), column.getSequenceName(), column.getColumn(), column.getProperty());
+        return MessageFormat.format(mapperHelper.getConfig().getSeqFormat(), column.getSequenceName(), column.getColumn(), column.getProperty());
     }
 
     /**
@@ -292,7 +294,16 @@ public abstract class MapperTemplate {
      * @return
      */
     protected String tableName(Class<?> entityClass) {
-        return mapperHelper.getTableName(entityClass);
+        EntityTable entityTable = EntityHelper.getEntityTable(entityClass);
+        String prefix = entityTable.getPrefix();
+        if (StringUtil.isEmpty(prefix)) {
+            //使用全局配置
+            prefix = mapperHelper.getConfig().getPrefix();
+        }
+        if (StringUtil.isNotEmpty(prefix)) {
+            return prefix + "." + entityTable.getName();
+        }
+        return entityTable.getName();
     }
 
     /**
@@ -381,7 +392,7 @@ public abstract class MapperTemplate {
         boolean first = true;
         //对所有列循环，生成<if test="property!=null">column = #{property}</if>
         for (EntityColumn column : columnList) {
-            ifNodes.add(getIfNotNull(column, getColumnEqualsProperty(column, first), mapperHelper.isNotEmpty()));
+            ifNodes.add(getIfNotNull(column, getColumnEqualsProperty(column, first), mapperHelper.getConfig().isNotEmpty()));
             first = false;
         }
         return new MixedSqlNode(ifNodes);
