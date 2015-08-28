@@ -24,10 +24,7 @@
 
 package tk.mybatis.mapper.common.base;
 
-import tk.mybatis.mapper.common.base.select.SelectByPrimaryKeyMapper;
-import tk.mybatis.mapper.common.base.select.SelectCountMapper;
-import tk.mybatis.mapper.common.base.select.SelectMapper;
-import tk.mybatis.mapper.common.base.select.SelectOneMapper;
+import tk.mybatis.mapper.common.base.select.*;
 
 /**
  * 通用Mapper接口,基础查询
@@ -38,6 +35,7 @@ import tk.mybatis.mapper.common.base.select.SelectOneMapper;
 public interface BaseSelectMapper<T> extends
         SelectOneMapper<T>,
         SelectMapper<T>,
+        SelectAllMapper<T>,
         SelectCountMapper<T>,
         SelectByPrimaryKeyMapper<T> {
 

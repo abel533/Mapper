@@ -147,4 +147,21 @@ public class BaseSelectProvider extends MapperTemplate {
         sqlNodes.add(new WhereSqlNode(ms.getConfiguration(), getAllIfColumnNode(entityClass)));
         return new MixedSqlNode(sqlNodes);
     }
+
+    /**
+     * 查询全部结果
+     *
+     * @param ms
+     * @return
+     */
+    public String selectAll(MappedStatement ms) {
+        final Class<?> entityClass = getSelectReturnType(ms);
+        //修改返回值类型为实体类型
+        setResultType(ms, entityClass);
+        //开始拼sql
+        StringBuilder sql = new StringBuilder();
+        sql.append("select ").append(EntityHelper.getSelectColumns(entityClass)).append(" from ");
+        sql.append(tableName(entityClass));
+        return sql.toString();
+    }
 }
