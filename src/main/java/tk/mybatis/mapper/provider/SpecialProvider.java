@@ -32,7 +32,7 @@ import tk.mybatis.mapper.mapperhelper.MapperHelper;
 import tk.mybatis.mapper.mapperhelper.MapperTemplate;
 
 /**
- * Mappper实现类，特殊方法实现类
+ * SpecialProvider实现类，特殊方法实现类
  *
  * @author liuzh
  */

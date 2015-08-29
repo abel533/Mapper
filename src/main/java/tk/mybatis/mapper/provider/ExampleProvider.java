@@ -36,7 +36,7 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Mappper实现类，基础方法实现类
+ * ExampleProvider实现类，基础方法实现类
  *
  * @author liuzh
  */

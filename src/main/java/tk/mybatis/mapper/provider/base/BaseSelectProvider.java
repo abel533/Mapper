@@ -40,7 +40,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * Mappper实现类，基础方法实现类
+ * BaseSelectProvider实现类，基础方法实现类
  *
  * @author liuzh
  */
