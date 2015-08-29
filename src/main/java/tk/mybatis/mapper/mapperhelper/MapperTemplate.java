@@ -102,6 +102,12 @@ public abstract class MapperTemplate {
         return msId.substring(msId.lastIndexOf(".") + 1);
     }
 
+    /**
+     * 该方法仅仅用来初始化ProviderSqlSource
+     *
+     * @param record
+     * @return
+     */
     public String dynamicSQL(Object record) {
         return "dynamicSQL";
     }
@@ -126,6 +132,10 @@ public abstract class MapperTemplate {
 
     public boolean getBEFORE() {
         return mapperHelper.getConfig().getBEFORE();
+    }
+
+    public boolean isNotEmpty() {
+        return mapperHelper.getConfig().isNotEmpty();
     }
 
     /**
@@ -172,7 +182,7 @@ public abstract class MapperTemplate {
     }
 
     /**
-     * check ms cache
+     * 检查是否配置过缓存
      *
      * @param ms
      * @throws Exception
@@ -180,7 +190,7 @@ public abstract class MapperTemplate {
     private void checkCache(MappedStatement ms) throws Exception {
         if (ms.getCache() == null) {
             String nameSpace = ms.getId().substring(0, ms.getId().lastIndexOf("."));
-            Cache cache = null;
+            Cache cache;
             try {
                 //不存在的时候会抛出异常
                 cache = ms.getConfiguration().getCache(nameSpace);
@@ -207,13 +217,18 @@ public abstract class MapperTemplate {
         }
         Method method = methodMap.get(getMethodName(ms));
         try {
+            //第一种，直接操作ms，不需要返回值
             if (method.getReturnType() == Void.TYPE) {
                 method.invoke(this, ms);
-            } else if (SqlNode.class.isAssignableFrom(method.getReturnType())) {
+            }
+            //第二种，返回SqlNode
+            else if (SqlNode.class.isAssignableFrom(method.getReturnType())) {
                 SqlNode sqlNode = (SqlNode) method.invoke(this, ms);
                 DynamicSqlSource dynamicSqlSource = new DynamicSqlSource(ms.getConfiguration(), sqlNode);
                 setSqlSource(ms, dynamicSqlSource);
-            } else if (String.class.equals(method.getReturnType())) {
+            }
+            //第三种，返回xml形式的sql字符串
+            else if (String.class.equals(method.getReturnType())) {
                 String xmlSql = (String) method.invoke(this, ms);
                 SqlSource sqlSource = createSqlSource(ms, xmlSql);
                 //替换原有的SqlSource
@@ -228,6 +243,17 @@ public abstract class MapperTemplate {
         } catch (InvocationTargetException e) {
             throw new RuntimeException(e.getTargetException() != null ? e.getTargetException() : e);
         }
+    }
+
+    /**
+     * 通过xmlSql创建sqlSource
+     *
+     * @param ms
+     * @param xmlSql
+     * @return
+     */
+    public SqlSource createSqlSource(MappedStatement ms, String xmlSql) {
+        return languageDriver.createSqlSource(ms.getConfiguration(), "<script>\n\t" + xmlSql + "</script>", null);
     }
 
     /**
@@ -392,7 +418,7 @@ public abstract class MapperTemplate {
         boolean first = true;
         //对所有列循环，生成<if test="property!=null">column = #{property}</if>
         for (EntityColumn column : columnList) {
-            ifNodes.add(getIfNotNull(column, getColumnEqualsProperty(column, first), mapperHelper.getConfig().isNotEmpty()));
+            ifNodes.add(getIfNotNull(column, getColumnEqualsProperty(column, first), isNotEmpty()));
             first = false;
         }
         return new MixedSqlNode(ifNodes);
@@ -547,9 +573,5 @@ public abstract class MapperTemplate {
         ForEachSqlNode forEachSqlNode = new ForEachSqlNode(configuration, ExampleValidSqlNode(configuration), "example.oredCriteria", null, "criteria", null, null, " or ");
         WhereSqlNode whereSqlNode = new WhereSqlNode(configuration, forEachSqlNode);
         return whereSqlNode;
-    }
-
-    public SqlSource createSqlSource(MappedStatement ms, String xmlSql) {
-        return languageDriver.createSqlSource(ms.getConfiguration(), "<script>\n\t" + xmlSql + "</script>", null);
     }
 }
