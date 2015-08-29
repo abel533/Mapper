@@ -24,7 +24,6 @@
 
 package tk.mybatis.mapper.mapperhelper;
 
-import tk.mybatis.mapper.annotation.KeyProperty;
 import tk.mybatis.mapper.annotation.NameStyle;
 import tk.mybatis.mapper.code.IdentityDialect;
 import tk.mybatis.mapper.code.Style;
@@ -234,10 +233,6 @@ public class EntityHelper {
                 } else {
                     entityColumn.setOrderBy(orderBy.value());
                 }
-            }
-            //KeyProperty
-            if (field.isAnnotationPresent(KeyProperty.class)) {
-                entityColumn.setKey(true);
             }
             //主键策略 - Oracle序列，MySql自动增长，UUID
             if (field.isAnnotationPresent(SequenceGenerator.class)) {
