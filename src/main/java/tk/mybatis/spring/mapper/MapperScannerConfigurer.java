@@ -12,9 +12,7 @@ public class MapperScannerConfigurer extends org.mybatis.spring.mapper.MapperSca
     private MapperHelper mapperHelper;
 
     public void setProperties(Properties properties) {
-        if(mapperHelper == null){
-            mapperHelper = new MapperHelper();
-        }
+        mapperHelper = new MapperHelper();
         mapperHelper.setProperties(properties);
     }
 
@@ -26,6 +24,9 @@ public class MapperScannerConfigurer extends org.mybatis.spring.mapper.MapperSca
     @Override
     public void postProcessBeanDefinitionRegistry(BeanDefinitionRegistry registry) {
         super.postProcessBeanDefinitionRegistry(registry);
+        if (mapperHelper == null) {
+            mapperHelper = new MapperHelper();
+        }
         String[] names = registry.getBeanDefinitionNames();
         GenericBeanDefinition definition;
         for (String name : names) {

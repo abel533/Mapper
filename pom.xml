@@ -33,6 +33,7 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <spring.version>3.2.12.RELEASE</spring.version>
     </properties>
 
     <dependencies>
@@ -52,14 +53,14 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
-            <version>3.2.12.RELEASE</version>
+            <version>${spring.version}</version>
             <scope>compile</scope>
             <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-tx</artifactId>
-            <version>3.2.12.RELEASE</version>
+            <version>${spring.version}</version>
             <scope>compile</scope>
             <optional>true</optional>
         </dependency>
