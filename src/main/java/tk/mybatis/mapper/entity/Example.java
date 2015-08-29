@@ -94,6 +94,12 @@ public class Example {
         return selectColumns;
     }
 
+    /**
+     * 指定要查询的属性列 - 这里会自动映射到表字段
+     *
+     * @param properties
+     * @return
+     */
     public Example selectProperties(String... properties) {
         if (properties != null && properties.length > 0) {
             if (this.selectColumns == null) {
@@ -101,7 +107,7 @@ public class Example {
             }
             for (String property : properties) {
                 if (propertyMap.containsKey(property)) {
-                    this.selectColumns.add(property);
+                    this.selectColumns.add(propertyMap.get(property).getColumn());
                 }
             }
         }
