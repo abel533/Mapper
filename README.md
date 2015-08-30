@@ -111,12 +111,11 @@ http://repo1.maven.org/maven2/javax/persistence/persistence-api/1.0/
 ###最新版本3.2.0 - 2015-08-29
 
 * 移除`MapperInterceptor`拦截器，以后不能在通过拦截器配置
-* 增加mybatis-spring特殊支持，主要是根据mybatis-spring项目增加了下面3个类：
+* 增加mybatis-spring特殊支持，主要是根据mybatis-spring项目增加了下面两个类：
    - `tk.mybatis.spring.mapper.MapperScannerConfigurer`
-   - `tk.mybatis.spring.mapper.ClassPathMapperScanner`
    - `tk.mybatis.spring.mapper.MapperFactoryBean`
-* 这三个类和MyBatis提供的区别是增加了MapperHelper属性，通过在`MapperScannerConfigurer`中使用`properties`属性注入配置
-* 这三个类，在全名上和MyBatis的区别是`org.mybatis.xxx`改为了`tk.mybatis.xxx`，名字相近，更方便修改配置
+* 这两个类和MyBatis提供的区别是增加了MapperHelper属性，通过在`MapperScannerConfigurer`中使用`properties`属性注入配置
+* 这两个类，在全名上和MyBatis的区别是`org.mybatis.xxx`改为了`tk.mybatis.xxx`，名字相近，更方便修改配置
 * 和Spring集成方法：
 
 ```xml
