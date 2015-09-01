@@ -1,5 +1,35 @@
 #更新日志
 
+##3.2.0 - 2015-09-02
+
+* 移除`MapperInterceptor`拦截器，以后不能在通过拦截器配置
+* 增加mybatis-spring特殊支持，主要是根据mybatis-spring项目增加了下面两个类：
+   - `tk.mybatis.spring.mapper.MapperScannerConfigurer`
+   - `tk.mybatis.spring.mapper.MapperFactoryBean`
+* 这两个类和MyBatis提供的区别是增加了MapperHelper属性，通过在`MapperScannerConfigurer`中使用`properties`属性注入配置
+* 这两个类，在全名上和MyBatis的区别是`org.mybatis.xxx`改为了`tk.mybatis.xxx`，名字相近，更方便修改配置
+* 和Spring集成方法：
+
+```xml
+<bean class="tk.mybatis.spring.mapper.MapperScannerConfigurer">
+    <property name="basePackage" value="com.isea533.mybatis.mapper"/>
+    <property name="properties">
+        <value>
+            mappers=tk.mybatis.mapper.common.Mapper
+        </value>
+    </property>
+</bean>
+```
+
+* 这种配置方式是不是简单的不能再简单了?
+* 增加`style`属性配置，用来配置对象名/字段和表名/字段之间的转换方式，可选值：
+   - `normal`:使用实体类名/属性名作为表名/字段名
+   - `camelhump`:<b>这是默认值</b>，驼峰转换为下划线形式
+   - `uppercase`:转换为大写
+   - `lowercase`:转换为小写
+* 增加实体注解`@NameStyle`，该注解优先于全局配置`style`
+* 解决`example.selectProperties`映射错误的bug[#48](http://git.oschina.net/free/Mapper/issues/48)
+
 ##3.1.3 - 2015-08-25
 
 * 去掉了3.1.3-SNAPSHOT版本中的`MapperOnceInterceptor`拦截器，下个版本会完善`MapperHelper`的配置方式

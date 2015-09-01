@@ -108,7 +108,7 @@ http://repo1.maven.org/maven2/javax/persistence/persistence-api/1.0/
 
 ##Maven坐标以及下载地址
 
-###最新版本3.2.0 - 2015-08-29
+###最新版本3.2.0 - 2015-09-02
 
 * 移除`MapperInterceptor`拦截器，以后不能在通过拦截器配置
 * 增加mybatis-spring特殊支持，主要是根据mybatis-spring项目增加了下面两个类：
