@@ -108,7 +108,12 @@ http://repo1.maven.org/maven2/javax/persistence/persistence-api/1.0/
 
 ##Maven坐标以及下载地址
 
-###最新版本3.2.0 - 2015-09-02
+###最新版本3.2.1 - 2015-09-02
+
+* 解决spring集成中可能出现definition.getBeanClassName()空指针异常bug[#49](http://git.oschina.net/free/Mapper/issues/49)
+* 关于3.2.x版本，请仔细看3.2.0的更新日志，最新版本的文档也是针对3.2.x版本的
+
+###3.2.0 - 2015-09-01
 
 * 移除`MapperInterceptor`拦截器，以后不能在通过拦截器配置
 * 增加mybatis-spring特殊支持，主要是根据mybatis-spring项目增加了下面两个类：

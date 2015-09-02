@@ -5,6 +5,7 @@ import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.GenericBeanDefinition;
 import tk.mybatis.mapper.entity.Config;
 import tk.mybatis.mapper.mapperhelper.MapperHelper;
+import tk.mybatis.mapper.util.StringUtil;
 
 import java.util.Properties;
 
@@ -49,7 +50,8 @@ public class MapperScannerConfigurer extends org.mybatis.spring.mapper.MapperSca
             BeanDefinition beanDefinition = registry.getBeanDefinition(name);
             if (beanDefinition instanceof GenericBeanDefinition) {
                 definition = (GenericBeanDefinition) beanDefinition;
-                if (definition.getBeanClassName().equals("org.mybatis.spring.mapper.MapperFactoryBean")) {
+                if (StringUtil.isNotEmpty(definition.getBeanClassName())
+                        && definition.getBeanClassName().equals("org.mybatis.spring.mapper.MapperFactoryBean")) {
                     definition.setBeanClass(MapperFactoryBean.class);
                     definition.getPropertyValues().add("mapperHelper", this.mapperHelper);
                 }
