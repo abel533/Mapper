@@ -108,7 +108,12 @@ http://repo1.maven.org/maven2/javax/persistence/persistence-api/1.0/
 
 ##Maven坐标以及下载地址
 
-###最新版本3.2.1 - 2015-09-02
+###最新版本3.2.2 - 2015-09-06
+
+* 和Spring集成时，允许通过`markerInterface`属性配置通用接口（注意该属性的原有作用不变），想要让该接口自动注册，该接口就需要继承`tk.mybatis.mapper.common.Marker`接口，`Mapper<T>`默认继承该接口，所以如果自己的接口是继承`Mapper<T>`的，不需要再继承。
+* 解决注册默认接口时存在的bug
+
+###3.2.1 - 2015-09-02
 
 * 解决spring集成中可能出现definition.getBeanClassName()空指针异常bug[#49](http://git.oschina.net/free/Mapper/issues/49)
 * 关于3.2.x版本，请仔细看3.2.0的更新日志，最新版本的文档也是针对3.2.x版本的

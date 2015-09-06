@@ -260,15 +260,22 @@ public class MapperHelper {
         if (properties != null) {
             mapper = properties.getProperty("mappers");
         }
-        if(StringUtil.isEmpty(mapper)){
-            //默认包名
-            mapper = "tk.mybatis.mapper.common.Mapper";
-        }
-        String[] mappers = mapper.split(",");
-        for (String mapperClass : mappers) {
-            if (mapperClass.length() > 0) {
-                registerMapper(mapperClass);
+        if (StringUtil.isNotEmpty(mapper)) {
+            String[] mappers = mapper.split(",");
+            for (String mapperClass : mappers) {
+                if (mapperClass.length() > 0) {
+                    registerMapper(mapperClass);
+                }
             }
+        }
+    }
+
+    /**
+     * 如果当前注册的接口为空，自动注册默认接口
+     */
+    public void ifEmptyRegisterDefaultInterface() {
+        if (registerClass.size() == 0) {
+            registerMapper("tk.mybatis.mapper.common.Mapper");
         }
     }
 
