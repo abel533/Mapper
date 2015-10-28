@@ -162,6 +162,11 @@ public class BaseSelectProvider extends MapperTemplate {
         StringBuilder sql = new StringBuilder();
         sql.append("select ").append(EntityHelper.getSelectColumns(entityClass)).append(" from ");
         sql.append(tableName(entityClass));
+
+        String orderByClause = EntityHelper.getOrderByClause(entityClass);
+        if (orderByClause.length() > 0) {
+            sql.append(" ORDER BY ").append(orderByClause);
+        }
         return sql.toString();
     }
 }

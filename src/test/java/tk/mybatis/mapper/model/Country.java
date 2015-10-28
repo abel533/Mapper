@@ -2,6 +2,7 @@ package tk.mybatis.mapper.model;
 
 import javax.persistence.Column;
 import javax.persistence.Id;
+import javax.persistence.OrderBy;
 import java.io.Serializable;
 
 /**
@@ -11,8 +12,11 @@ import java.io.Serializable;
  */
 public class Country implements Serializable {
     private static final long serialVersionUID = -1626761012846137805L;
+
     @Id
+    @OrderBy("desc")
     private Integer id;
+
     @Column
     private String countryname;
     private String countrycode;
