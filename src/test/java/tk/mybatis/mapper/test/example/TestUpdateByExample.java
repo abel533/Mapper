@@ -1,13 +1,13 @@
 package tk.mybatis.mapper.test.example;
 
-import tk.mybatis.mapper.mapper.MybatisHelper;
-import tk.mybatis.mapper.model.Country;
-import tk.mybatis.mapper.entity.Example;
-import tk.mybatis.mapper.entity.model.CountryExample;
-import tk.mybatis.mapper.mapper.CountryMapper;
 import org.apache.ibatis.session.SqlSession;
 import org.junit.Assert;
 import org.junit.Test;
+import tk.mybatis.mapper.entity.Example;
+import tk.mybatis.mapper.entity.model.CountryExample;
+import tk.mybatis.mapper.mapper.CountryMapper;
+import tk.mybatis.mapper.mapper.MybatisHelper;
+import tk.mybatis.mapper.model.Country;
 
 /**
  * 由于主键的原因，这里实际只能更新一个，在没有主键的表中，可以更新多个
@@ -24,6 +24,7 @@ public class TestUpdateByExample {
             Example example = new Example(Country.class);
             example.createCriteria().andEqualTo("id", 35);
             Country country = new Country();
+            country.setDynamicTableName("country");
             country.setCountryname("天朝");
             country.setId(1000);
             int count = mapper.updateByExample(country, example);

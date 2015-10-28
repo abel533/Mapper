@@ -57,7 +57,9 @@ public class ExampleProvider extends MapperTemplate {
 
         List<SqlNode> sqlNodes = new LinkedList<SqlNode>();
         //静态的sql部分:select column ... from table
-        sqlNodes.add(new StaticTextSqlNode("SELECT COUNT(*) FROM " + tableName(entityClass)));
+        sqlNodes.add(new StaticTextSqlNode("SELECT COUNT(*) FROM "));
+        sqlNodes.add(getDynamicTableNameNode(entityClass));
+
         IfSqlNode ifNullSqlNode = new IfSqlNode(exampleWhereClause(ms.getConfiguration()), "_parameter != null");
         sqlNodes.add(ifNullSqlNode);
         return new MixedSqlNode(sqlNodes);
@@ -74,7 +76,9 @@ public class ExampleProvider extends MapperTemplate {
 
         List<SqlNode> sqlNodes = new LinkedList<SqlNode>();
         //静态的sql部分:select column ... from table
-        sqlNodes.add(new StaticTextSqlNode("DELETE FROM " + tableName(entityClass)));
+        sqlNodes.add(new StaticTextSqlNode("DELETE FROM "));
+        sqlNodes.add(getDynamicTableNameNode(entityClass));
+
         IfSqlNode ifNullSqlNode = new IfSqlNode(exampleWhereClause(ms.getConfiguration()), "_parameter != null");
         sqlNodes.add(ifNullSqlNode);
         return new MixedSqlNode(sqlNodes);
@@ -104,7 +108,9 @@ public class ExampleProvider extends MapperTemplate {
         IfSqlNode ifNoSelectColumns = new IfSqlNode(new StaticTextSqlNode(EntityHelper.getSelectColumns(entityClass)), "@tk.mybatis.mapper.util.OGNL@hasNoSelectColumns(_parameter)");
         sqlNodes.add(ifNoSelectColumns);
 
-        sqlNodes.add(new StaticTextSqlNode(" FROM " + tableName(entityClass)));
+        sqlNodes.add(new StaticTextSqlNode(" FROM "));
+        sqlNodes.add(getDynamicTableNameNode(entityClass));
+
         IfSqlNode ifNullSqlNode = new IfSqlNode(exampleWhereClause(ms.getConfiguration()), "_parameter != null");
         sqlNodes.add(ifNullSqlNode);
         IfSqlNode orderByClauseSqlNode = new IfSqlNode(new TextSqlNode("order by ${orderByClause}"), "orderByClause != null");
@@ -137,7 +143,9 @@ public class ExampleProvider extends MapperTemplate {
         Class<?> entityClass = getSelectReturnType(ms);
         List<SqlNode> sqlNodes = new LinkedList<SqlNode>();
         //update table
-        sqlNodes.add(new StaticTextSqlNode("UPDATE " + tableName(entityClass)));
+        sqlNodes.add(new StaticTextSqlNode("UPDATE "));
+        sqlNodes.add(getDynamicTableNameNode(entityClass, "record"));
+
         //获取全部列
         Set<EntityColumn> columnList = EntityHelper.getColumns(entityClass);
         List<SqlNode> ifNodes = new LinkedList<SqlNode>();
@@ -165,7 +173,9 @@ public class ExampleProvider extends MapperTemplate {
         Class<?> entityClass = getSelectReturnType(ms);
         List<SqlNode> sqlNodes = new LinkedList<SqlNode>();
         //update table
-        sqlNodes.add(new StaticTextSqlNode("UPDATE " + tableName(entityClass)));
+        sqlNodes.add(new StaticTextSqlNode("UPDATE "));
+        sqlNodes.add(getDynamicTableNameNode(entityClass, "record"));
+
         //获取全部列
         Set<EntityColumn> columnList = EntityHelper.getColumns(entityClass);
         List<SqlNode> setSqlNodes = new LinkedList<SqlNode>();

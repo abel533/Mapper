@@ -1,11 +1,11 @@
 package tk.mybatis.mapper.test.country;
 
-import tk.mybatis.mapper.mapper.CountryMapper;
-import tk.mybatis.mapper.mapper.MybatisHelper;
-import tk.mybatis.mapper.model.Country;
 import org.apache.ibatis.session.SqlSession;
 import org.junit.Assert;
 import org.junit.Test;
+import tk.mybatis.mapper.mapper.CountryMapper;
+import tk.mybatis.mapper.mapper.MybatisHelper;
+import tk.mybatis.mapper.model.Country;
 
 import java.util.List;
 
@@ -24,7 +24,15 @@ public class TestSelect {
         SqlSession sqlSession = MybatisHelper.getSqlSession();
         try {
             CountryMapper mapper = sqlSession.getMapper(CountryMapper.class);
-            List<Country> countryList = mapper.select(new Country());
+            Country country = new Country();
+            List<Country> countryList;
+//            country.setDynamicTableName("country_123");
+//            countryList = mapper.select(country);
+//            //查询总数
+//            Assert.assertEquals(2, countryList.size());
+
+            country.setDynamicTableName(null);
+            countryList = mapper.select(country);
             //查询总数
             Assert.assertEquals(183, countryList.size());
         } finally {
@@ -107,18 +115,6 @@ public class TestSelect {
         }
     }
 
-    class Key extends Country {
-        private String countrytel;
-
-        public String getCountrytel() {
-            return countrytel;
-        }
-
-        public void setCountrytel(String countrytel) {
-            this.countrytel = countrytel;
-        }
-    }
-
     /**
      * 继承类可以使用,但多出来的属性无效
      */
@@ -136,6 +132,18 @@ public class TestSelect {
             Assert.assertEquals(1, mapper.select(key).size());
         } finally {
             sqlSession.close();
+        }
+    }
+
+    class Key extends Country {
+        private String countrytel;
+
+        public String getCountrytel() {
+            return countrytel;
+        }
+
+        public void setCountrytel(String countrytel) {
+            this.countrytel = countrytel;
         }
     }
 

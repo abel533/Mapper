@@ -57,7 +57,9 @@ public class BaseInsertProvider extends MapperTemplate {
         Class<?> entityClass = getSelectReturnType(ms);
         List<SqlNode> sqlNodes = new LinkedList<SqlNode>();
         //insert into table
-        sqlNodes.add(new StaticTextSqlNode("INSERT INTO " + tableName(entityClass)));
+        sqlNodes.add(new StaticTextSqlNode("INSERT INTO "));
+        sqlNodes.add(getDynamicTableNameNode(entityClass));
+
         //获取全部列
         Set<EntityColumn> columnList = EntityHelper.getColumns(entityClass);
         //Identity列只能有一个
@@ -128,7 +130,9 @@ public class BaseInsertProvider extends MapperTemplate {
         Class<?> entityClass = getSelectReturnType(ms);
         List<SqlNode> sqlNodes = new LinkedList<SqlNode>();
         //insert into table
-        sqlNodes.add(new StaticTextSqlNode("INSERT INTO " + tableName(entityClass)));
+        sqlNodes.add(new StaticTextSqlNode("INSERT INTO "));
+        sqlNodes.add(getDynamicTableNameNode(entityClass));
+
         //获取全部列
         Set<EntityColumn> columnList = EntityHelper.getColumns(entityClass);
         List<SqlNode> ifNodes = new LinkedList<SqlNode>();

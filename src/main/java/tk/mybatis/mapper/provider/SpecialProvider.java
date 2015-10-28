@@ -53,7 +53,7 @@ public class SpecialProvider extends MapperTemplate {
         //开始拼sql
         StringBuilder sql = new StringBuilder();
         sql.append("insert into ");
-        sql.append(table.getName());
+        sql.append(getDynamicTableName(entityClass));
         sql.append("(");
         boolean first = true;
         for (EntityColumn column : table.getEntityClassColumns()) {
@@ -96,7 +96,7 @@ public class SpecialProvider extends MapperTemplate {
         //开始拼sql
         StringBuilder sql = new StringBuilder();
         sql.append("insert into ");
-        sql.append(table.getName());
+        sql.append(getDynamicTableName(entityClass));
         sql.append("(");
         boolean first = true;
         for (EntityColumn column : table.getEntityClassColumns()) {

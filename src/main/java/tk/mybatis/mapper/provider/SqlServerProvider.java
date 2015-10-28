@@ -58,7 +58,7 @@ public class SqlServerProvider extends MapperTemplate {
         //开始拼sql
         StringBuilder sql = new StringBuilder();
         sql.append("insert into ");
-        sql.append(table.getName());
+        sql.append(getDynamicTableName(entityClass));
         sql.append("(");
         boolean first = true;
         for (EntityColumn column : table.getEntityClassColumns()) {
@@ -97,7 +97,9 @@ public class SqlServerProvider extends MapperTemplate {
         Class<?> entityClass = getSelectReturnType(ms);
         List<SqlNode> sqlNodes = new LinkedList<SqlNode>();
         //insert into table
-        sqlNodes.add(new StaticTextSqlNode("INSERT INTO " + tableName(entityClass)));
+        sqlNodes.add(new StaticTextSqlNode("INSERT INTO "));
+        sqlNodes.add(getDynamicTableNameNode(entityClass));
+
         //获取全部列
         Set<EntityColumn> columnList = EntityHelper.getColumns(entityClass);
         List<SqlNode> ifNodes = new LinkedList<SqlNode>();

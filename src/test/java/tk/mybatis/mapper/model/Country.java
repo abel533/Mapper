@@ -1,8 +1,11 @@
 package tk.mybatis.mapper.model;
 
+import tk.mybatis.mapper.mapperhelper.IDynamicTableName;
+
 import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.OrderBy;
+import javax.persistence.Transient;
 import java.io.Serializable;
 
 /**
@@ -10,7 +13,7 @@ import java.io.Serializable;
  * Author: liuzh
  * Update: liuzh(2014-06-06 13:38)
  */
-public class Country implements Serializable {
+public class Country implements Serializable, IDynamicTableName {
     private static final long serialVersionUID = -1626761012846137805L;
 
     @Id
@@ -20,6 +23,9 @@ public class Country implements Serializable {
     @Column
     private String countryname;
     private String countrycode;
+
+    @Transient
+    private String dynamicTableName123;
 
     public Integer getId() {
         return id;
@@ -52,5 +58,15 @@ public class Country implements Serializable {
                 ", countryname='" + countryname + '\'' +
                 ", countrycode='" + countrycode + '\'' +
                 '}';
+    }
+
+    @Override
+    public String getDynamicTableName() {
+        return dynamicTableName123;
+    }
+
+    @Override
+    public void setDynamicTableName(String dynamicTableName) {
+        this.dynamicTableName123 = dynamicTableName;
     }
 }

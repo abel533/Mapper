@@ -1,11 +1,11 @@
 package tk.mybatis.mapper.test.country;
 
-import tk.mybatis.mapper.mapper.CountryMapper;
-import tk.mybatis.mapper.mapper.MybatisHelper;
-import tk.mybatis.mapper.model.Country;
 import org.apache.ibatis.session.SqlSession;
 import org.junit.Assert;
 import org.junit.Test;
+import tk.mybatis.mapper.mapper.CountryMapper;
+import tk.mybatis.mapper.mapper.MybatisHelper;
+import tk.mybatis.mapper.model.Country;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -100,9 +100,6 @@ public class TestSelectByPrimaryKey {
         }
     }
 
-    class Key {
-    }
-
     /**
      * 对象不包含主键
      */
@@ -120,7 +117,7 @@ public class TestSelectByPrimaryKey {
     /**
      * 主键格式错误
      */
-    @Test(expected = Exception.class)
+    @Test
     public void testDynamicDeleteException() {
         SqlSession sqlSession = MybatisHelper.getSqlSession();
         try {
@@ -129,5 +126,8 @@ public class TestSelectByPrimaryKey {
         } finally {
             sqlSession.close();
         }
+    }
+
+    class Key {
     }
 }

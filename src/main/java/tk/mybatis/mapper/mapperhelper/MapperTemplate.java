@@ -333,6 +333,80 @@ public abstract class MapperTemplate {
     }
 
     /**
+     * 获取表名 - 支持动态表名
+     *
+     * @param entityClass
+     * @return
+     */
+    protected SqlNode getDynamicTableNameNode(Class<?> entityClass) {
+        if (IDynamicTableName.class.isAssignableFrom(entityClass)) {
+            List<SqlNode> ifSqlNodes = new ArrayList<SqlNode>();
+            ifSqlNodes.add(new IfSqlNode(new TextSqlNode("${dynamicTableName}"), "@tk.mybatis.mapper.util.OGNL@isDynamicParameter(_parameter) and dynamicTableName != null and dynamicTableName != ''"));
+            ifSqlNodes.add(new IfSqlNode(new StaticTextSqlNode(tableName(entityClass)), "@tk.mybatis.mapper.util.OGNL@isNotDynamicParameter(_parameter) or dynamicTableName == null or dynamicTableName == ''"));
+            return new MixedSqlNode(ifSqlNodes);
+        } else {
+            return new StaticTextSqlNode(tableName(entityClass));
+        }
+    }
+
+    /**
+     * 获取表名 - 支持动态表名，该方法用于多个入参时，通过parameterName指定入参中实体类的@Param的注解值
+     *
+     * @param entityClass
+     * @param parameterName
+     * @return
+     */
+    protected SqlNode getDynamicTableNameNode(Class<?> entityClass, String parameterName) {
+        if (IDynamicTableName.class.isAssignableFrom(entityClass)) {
+            List<SqlNode> ifSqlNodes = new ArrayList<SqlNode>();
+            ifSqlNodes.add(new IfSqlNode(new TextSqlNode("${" + parameterName + ".dynamicTableName}"), "@tk.mybatis.mapper.util.OGNL@isDynamicParameter(" + parameterName + ") and " + parameterName + ".dynamicTableName != null and  " + parameterName + ".dynamicTableName != ''"));
+            ifSqlNodes.add(new IfSqlNode(new StaticTextSqlNode(tableName(entityClass)), "@tk.mybatis.mapper.util.OGNL@isNotDynamicParameter(" + parameterName + ") or " + parameterName + ".dynamicTableName == null or " + parameterName + ".dynamicTableName == ''"));
+            return new MixedSqlNode(ifSqlNodes);
+        } else {
+            return new StaticTextSqlNode(tableName(entityClass));
+        }
+    }
+
+    /**
+     * 获取表名 - 支持动态表名
+     *
+     * @param entityClass
+     * @return
+     */
+    protected String getDynamicTableName(Class<?> entityClass) {
+        if (IDynamicTableName.class.isAssignableFrom(entityClass)) {
+            return "<if test=\"@tk.mybatis.mapper.util.OGNL@isDynamicParameter(_parameter) and dynamicTableName != null and dynamicTableName != ''\">\n" +
+                    "${dynamicTableName}\n" +
+                    "</if>\n" +
+                    "<if test=\"@tk.mybatis.mapper.util.OGNL@isNotDynamicParameter(_parameter) or dynamicTableName == null or dynamicTableName == ''\">\n" +
+                    tableName(entityClass) + "\n" +
+                    "</if>";
+        } else {
+            return tableName(entityClass);
+        }
+    }
+
+    /**
+     * 获取表名 - 支持动态表名，该方法用于多个入参时，通过parameterName指定入参中实体类的@Param的注解值
+     *
+     * @param entityClass
+     * @param parameterName
+     * @return
+     */
+    protected String getDynamicTableName(Class<?> entityClass, String parameterName) {
+        if (IDynamicTableName.class.isAssignableFrom(entityClass)) {
+            return "<if test=\"@tk.mybatis.mapper.util.OGNL@isDynamicParameter(" + parameterName + ") and " + parameterName + ".dynamicTableName != null and " + parameterName + ".dynamicTableName != ''\">\n" +
+                    "${" + parameterName + ".dynamicTableName}\n" +
+                    "</if>\n" +
+                    "<if test=\"@tk.mybatis.mapper.util.OGNL@isNotDynamicParameter(" + parameterName + ") or " + parameterName + ".dynamicTableName == null or " + parameterName + ".dynamicTableName == ''\">\n" +
+                    tableName(entityClass) + "\n" +
+                    "</if>";
+        } else {
+            return tableName(entityClass);
+        }
+    }
+
+    /**
      * 返回if条件的sqlNode
      * <p>一般类型：<code>&lt;if test="property!=null"&gt;columnNode&lt;/if&gt;</code></p>
      *

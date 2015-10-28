@@ -55,7 +55,9 @@ public class BaseUpdateProvider extends MapperTemplate {
         Class<?> entityClass = getSelectReturnType(ms);
         List<SqlNode> sqlNodes = new LinkedList<SqlNode>();
         //update table
-        sqlNodes.add(new StaticTextSqlNode("UPDATE " + tableName(entityClass)));
+        sqlNodes.add(new StaticTextSqlNode("UPDATE "));
+        sqlNodes.add(getDynamicTableNameNode(entityClass));
+
         //获取全部列
         Set<EntityColumn> columnList = EntityHelper.getColumns(entityClass);
         List<SqlNode> ifNodes = new LinkedList<SqlNode>();
@@ -88,7 +90,9 @@ public class BaseUpdateProvider extends MapperTemplate {
         Class<?> entityClass = getSelectReturnType(ms);
         List<SqlNode> sqlNodes = new LinkedList<SqlNode>();
         //update table
-        sqlNodes.add(new StaticTextSqlNode("UPDATE " + tableName(entityClass)));
+        sqlNodes.add(new StaticTextSqlNode("UPDATE "));
+        sqlNodes.add(getDynamicTableNameNode(entityClass));
+
         //获取全部列
         Set<EntityColumn> columnList = EntityHelper.getColumns(entityClass);
         List<SqlNode> ifNodes = new LinkedList<SqlNode>();

@@ -24,10 +24,7 @@
 
 package tk.mybatis.mapper.provider.base;
 
-import org.apache.ibatis.builder.StaticSqlSource;
-import org.apache.ibatis.jdbc.SQL;
 import org.apache.ibatis.mapping.MappedStatement;
-import org.apache.ibatis.mapping.ParameterMapping;
 import org.apache.ibatis.scripting.xmltags.MixedSqlNode;
 import org.apache.ibatis.scripting.xmltags.SqlNode;
 import org.apache.ibatis.scripting.xmltags.StaticTextSqlNode;
@@ -64,8 +61,8 @@ public class BaseSelectProvider extends MapperTemplate {
         //静态的sql部分:select column ... from table
         sqlNodes.add(new StaticTextSqlNode("SELECT "
                 + EntityHelper.getSelectColumns(entityClass)
-                + " FROM "
-                + tableName(entityClass)));
+                + " FROM "));
+        sqlNodes.add(getDynamicTableNameNode(entityClass));
         //将if添加到<where>
         sqlNodes.add(new WhereSqlNode(ms.getConfiguration(), getAllIfColumnNode(entityClass)));
         return new MixedSqlNode(sqlNodes);
@@ -85,8 +82,8 @@ public class BaseSelectProvider extends MapperTemplate {
         //静态的sql部分:select column ... from table
         sqlNodes.add(new StaticTextSqlNode("SELECT "
                 + EntityHelper.getSelectColumns(entityClass)
-                + " FROM "
-                + tableName(entityClass)));
+                + " FROM "));
+        sqlNodes.add(getDynamicTableNameNode(entityClass));
         //将if添加到<where>
         sqlNodes.add(new WhereSqlNode(ms.getConfiguration(), getAllIfColumnNode(entityClass)));
         String orderByClause = EntityHelper.getOrderByClause(entityClass);
@@ -111,25 +108,18 @@ public class BaseSelectProvider extends MapperTemplate {
      *
      * @param ms
      */
-    public void selectByPrimaryKey(MappedStatement ms) {
+    public String selectByPrimaryKey(MappedStatement ms) {
         final Class<?> entityClass = getSelectReturnType(ms);
-        //获取主键字段映射
-        List<ParameterMapping> parameterMappings = getPrimaryKeyParameterMappings(ms);
-        //开始拼sql
-        String sql = new SQL() {{
-            //select全部列
-            SELECT(EntityHelper.getSelectColumns(entityClass));
-            //from表
-            FROM(tableName(entityClass));
-            //where条件，主键字段=#{property}
-            WHERE(EntityHelper.getPrimaryKeyWhere(entityClass));
-        }}.toString();
-        //使用静态SqlSource
-        StaticSqlSource sqlSource = new StaticSqlSource(ms.getConfiguration(), sql, parameterMappings);
-        //替换原有的SqlSource
-        setSqlSource(ms, sqlSource);
         //将返回值修改为实体类型
         setResultType(ms, entityClass);
+        StringBuilder sql = new StringBuilder();
+        sql.append("select ");
+        sql.append(EntityHelper.getSelectColumns(entityClass));
+        sql.append(" from ");
+        sql.append(getDynamicTableName(entityClass));
+        sql.append(" where ");
+        sql.append(EntityHelper.getPrimaryKeyWhere(entityClass));
+        return sql.toString();
     }
 
     /**
@@ -142,7 +132,8 @@ public class BaseSelectProvider extends MapperTemplate {
         Class<?> entityClass = getSelectReturnType(ms);
         List<SqlNode> sqlNodes = new LinkedList<SqlNode>();
         //select count(*) from table
-        sqlNodes.add(new StaticTextSqlNode("SELECT COUNT(*) FROM " + tableName(entityClass)));
+        sqlNodes.add(new StaticTextSqlNode("SELECT COUNT(*) FROM "));
+        sqlNodes.add(getDynamicTableNameNode(entityClass));
         //获取全部列的where,if条件
         sqlNodes.add(new WhereSqlNode(ms.getConfiguration(), getAllIfColumnNode(entityClass)));
         return new MixedSqlNode(sqlNodes);
@@ -161,6 +152,7 @@ public class BaseSelectProvider extends MapperTemplate {
         //开始拼sql
         StringBuilder sql = new StringBuilder();
         sql.append("select ").append(EntityHelper.getSelectColumns(entityClass)).append(" from ");
+        //不支持动态表名，因为没参数...
         sql.append(tableName(entityClass));
 
         String orderByClause = EntityHelper.getOrderByClause(entityClass);
