@@ -275,7 +275,7 @@ public abstract class MapperTemplate {
                     if (t.getRawType() == this.mapperClass || this.mapperClass.isAssignableFrom((Class<?>) t.getRawType())) {
                         Class<?> returnType = (Class<?>) t.getActualTypeArguments()[0];
                         //获取该类型后，第一次对该类型进行初始化
-                        EntityHelper.initEntityNameMap(returnType, mapperHelper.getConfig().getStyle());
+                        EntityHelper.initEntityNameMap(returnType, mapperHelper.getConfig());
                         entityClassMap.put(msId, returnType);
                         return returnType;
                     }

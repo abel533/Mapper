@@ -27,6 +27,7 @@ package tk.mybatis.mapper.mapperhelper;
 import tk.mybatis.mapper.annotation.NameStyle;
 import tk.mybatis.mapper.code.IdentityDialect;
 import tk.mybatis.mapper.code.Style;
+import tk.mybatis.mapper.entity.Config;
 import tk.mybatis.mapper.entity.EntityColumn;
 import tk.mybatis.mapper.entity.EntityTable;
 import tk.mybatis.mapper.util.StringUtil;
@@ -173,12 +174,13 @@ public class EntityHelper {
      * 初始化实体属性
      *
      * @param entityClass
-     * @param style
+     * @param config
      */
-    public static synchronized void initEntityNameMap(Class<?> entityClass, Style style) {
+    public static synchronized void initEntityNameMap(Class<?> entityClass, Config config) {
         if (entityTableMap.get(entityClass) != null) {
             return;
         }
+        Style style = config.getStyle();
         //style，该注解优先于全局配置
         if(entityClass.isAnnotationPresent(NameStyle.class)){
             NameStyle nameStyle = entityClass.getAnnotation(NameStyle.class);
