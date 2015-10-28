@@ -1,7 +1,7 @@
 package tk.mybatis.mapper.util;
 
 import tk.mybatis.mapper.entity.Example;
-import tk.mybatis.mapper.mapperhelper.IDynamicTableName;
+import tk.mybatis.mapper.entity.IDynamicTableName;
 
 /**
  * OGNL静态方法

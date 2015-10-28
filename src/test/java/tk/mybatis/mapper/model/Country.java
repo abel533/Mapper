@@ -1,6 +1,6 @@
 package tk.mybatis.mapper.model;
 
-import tk.mybatis.mapper.mapperhelper.IDynamicTableName;
+import tk.mybatis.mapper.entity.IDynamicTableName;
 
 import javax.persistence.Column;
 import javax.persistence.Id;
