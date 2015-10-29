@@ -33,7 +33,7 @@ import tk.mybatis.mapper.mapperhelper.EntityHelper;
 import tk.mybatis.mapper.mapperhelper.MapperHelper;
 import tk.mybatis.mapper.mapperhelper.MapperTemplate;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -55,7 +55,7 @@ public class BaseDeleteProvider extends MapperTemplate {
      */
     public SqlNode delete(MappedStatement ms) {
         Class<?> entityClass = getSelectReturnType(ms);
-        List<SqlNode> sqlNodes = new LinkedList<SqlNode>();
+        List<SqlNode> sqlNodes = new ArrayList<SqlNode>();
         //delete from table
         sqlNodes.add(new StaticTextSqlNode("DELETE FROM "));
         sqlNodes.add(getDynamicTableNameNode(entityClass));

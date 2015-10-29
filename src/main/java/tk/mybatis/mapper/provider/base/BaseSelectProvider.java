@@ -33,7 +33,7 @@ import tk.mybatis.mapper.mapperhelper.EntityHelper;
 import tk.mybatis.mapper.mapperhelper.MapperHelper;
 import tk.mybatis.mapper.mapperhelper.MapperTemplate;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -57,7 +57,7 @@ public class BaseSelectProvider extends MapperTemplate {
         Class<?> entityClass = getSelectReturnType(ms);
         //修改返回值类型为实体类型
         setResultType(ms, entityClass);
-        List<SqlNode> sqlNodes = new LinkedList<SqlNode>();
+        List<SqlNode> sqlNodes = new ArrayList<SqlNode>();
         //静态的sql部分:select column ... from table
         sqlNodes.add(new StaticTextSqlNode("SELECT "
                 + EntityHelper.getSelectColumns(entityClass)
@@ -78,7 +78,7 @@ public class BaseSelectProvider extends MapperTemplate {
         Class<?> entityClass = getSelectReturnType(ms);
         //修改返回值类型为实体类型
         setResultType(ms, entityClass);
-        List<SqlNode> sqlNodes = new LinkedList<SqlNode>();
+        List<SqlNode> sqlNodes = new ArrayList<SqlNode>();
         //静态的sql部分:select column ... from table
         sqlNodes.add(new StaticTextSqlNode("SELECT "
                 + EntityHelper.getSelectColumns(entityClass)
@@ -130,7 +130,7 @@ public class BaseSelectProvider extends MapperTemplate {
      */
     public SqlNode selectCount(MappedStatement ms) {
         Class<?> entityClass = getSelectReturnType(ms);
-        List<SqlNode> sqlNodes = new LinkedList<SqlNode>();
+        List<SqlNode> sqlNodes = new ArrayList<SqlNode>();
         //select count(*) from table
         sqlNodes.add(new StaticTextSqlNode("SELECT COUNT(*) FROM "));
         sqlNodes.add(getDynamicTableNameNode(entityClass));

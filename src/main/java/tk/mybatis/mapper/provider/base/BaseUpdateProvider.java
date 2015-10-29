@@ -31,7 +31,7 @@ import tk.mybatis.mapper.mapperhelper.EntityHelper;
 import tk.mybatis.mapper.mapperhelper.MapperHelper;
 import tk.mybatis.mapper.mapperhelper.MapperTemplate;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -53,14 +53,14 @@ public class BaseUpdateProvider extends MapperTemplate {
      */
     public SqlNode updateByPrimaryKey(MappedStatement ms) {
         Class<?> entityClass = getSelectReturnType(ms);
-        List<SqlNode> sqlNodes = new LinkedList<SqlNode>();
+        List<SqlNode> sqlNodes = new ArrayList<SqlNode>();
         //update table
         sqlNodes.add(new StaticTextSqlNode("UPDATE "));
         sqlNodes.add(getDynamicTableNameNode(entityClass));
 
         //获取全部列
         Set<EntityColumn> columnList = EntityHelper.getColumns(entityClass);
-        List<SqlNode> ifNodes = new LinkedList<SqlNode>();
+        List<SqlNode> ifNodes = new ArrayList<SqlNode>();
         for (EntityColumn column : columnList) {
             if (!column.isId()) {
                 ifNodes.add(new StaticTextSqlNode(column.getColumn() + " = #{" + column.getProperty() + "}, "));
@@ -69,7 +69,7 @@ public class BaseUpdateProvider extends MapperTemplate {
         sqlNodes.add(new SetSqlNode(ms.getConfiguration(), new MixedSqlNode(ifNodes)));
         //获取全部的主键的列
         columnList = EntityHelper.getPKColumns(entityClass);
-        List<SqlNode> whereNodes = new LinkedList<SqlNode>();
+        List<SqlNode> whereNodes = new ArrayList<SqlNode>();
         boolean first = true;
         //where 主键=#{property} 条件
         for (EntityColumn column : columnList) {
@@ -88,14 +88,14 @@ public class BaseUpdateProvider extends MapperTemplate {
      */
     public SqlNode updateByPrimaryKeySelective(MappedStatement ms) {
         Class<?> entityClass = getSelectReturnType(ms);
-        List<SqlNode> sqlNodes = new LinkedList<SqlNode>();
+        List<SqlNode> sqlNodes = new ArrayList<SqlNode>();
         //update table
         sqlNodes.add(new StaticTextSqlNode("UPDATE "));
         sqlNodes.add(getDynamicTableNameNode(entityClass));
 
         //获取全部列
         Set<EntityColumn> columnList = EntityHelper.getColumns(entityClass);
-        List<SqlNode> ifNodes = new LinkedList<SqlNode>();
+        List<SqlNode> ifNodes = new ArrayList<SqlNode>();
         //全部的if property!=null and property!=''
         for (EntityColumn column : columnList) {
             if (!column.isId()) {
@@ -106,7 +106,7 @@ public class BaseUpdateProvider extends MapperTemplate {
         sqlNodes.add(new SetSqlNode(ms.getConfiguration(), new MixedSqlNode(ifNodes)));
         //获取全部的主键的列
         columnList = EntityHelper.getPKColumns(entityClass);
-        List<SqlNode> whereNodes = new LinkedList<SqlNode>();
+        List<SqlNode> whereNodes = new ArrayList<SqlNode>();
         boolean first = true;
         //where 主键=#{property} 条件
         for (EntityColumn column : columnList) {

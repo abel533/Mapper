@@ -3,7 +3,7 @@ package tk.mybatis.mapper.entity;
 import tk.mybatis.mapper.util.StringUtil;
 
 import javax.persistence.Table;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -115,7 +115,7 @@ public class EntityTable {
 
     public void setKeyProperties(String keyProperty) {
         if (this.keyProperties == null) {
-            this.keyProperties = new LinkedList<String>();
+            this.keyProperties = new ArrayList<String>();
             this.keyProperties.add(keyProperty);
         } else {
             this.keyProperties.add(keyProperty);
@@ -131,7 +131,7 @@ public class EntityTable {
 
     public void setKeyColumns(String keyColumn) {
         if (this.keyColumns == null) {
-            this.keyColumns = new LinkedList<String>();
+            this.keyColumns = new ArrayList<String>();
             this.keyColumns.add(keyColumn);
         } else {
             this.keyColumns.add(keyColumn);

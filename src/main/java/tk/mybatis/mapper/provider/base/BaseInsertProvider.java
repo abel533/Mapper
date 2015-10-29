@@ -32,7 +32,7 @@ import tk.mybatis.mapper.mapperhelper.MapperHelper;
 import tk.mybatis.mapper.mapperhelper.MapperTemplate;
 import tk.mybatis.mapper.util.StringUtil;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -55,7 +55,7 @@ public class BaseInsertProvider extends MapperTemplate {
      */
     public SqlNode insert(MappedStatement ms) {
         Class<?> entityClass = getSelectReturnType(ms);
-        List<SqlNode> sqlNodes = new LinkedList<SqlNode>();
+        List<SqlNode> sqlNodes = new ArrayList<SqlNode>();
         //insert into table
         sqlNodes.add(new StaticTextSqlNode("INSERT INTO "));
         sqlNodes.add(getDynamicTableNameNode(entityClass));
@@ -91,7 +91,7 @@ public class BaseInsertProvider extends MapperTemplate {
         }
         //插入全部的(列名,列名...)
         sqlNodes.add(new StaticTextSqlNode("(" + EntityHelper.getAllColumns(entityClass) + ")"));
-        List<SqlNode> ifNodes = new LinkedList<SqlNode>();
+        List<SqlNode> ifNodes = new ArrayList<SqlNode>();
         //处理所有的values(属性值,属性值...)
         for (EntityColumn column : columnList) {
             //优先使用传入的属性值,当原属性property!=null时，用原属性
@@ -128,14 +128,14 @@ public class BaseInsertProvider extends MapperTemplate {
      */
     public SqlNode insertSelective(MappedStatement ms) {
         Class<?> entityClass = getSelectReturnType(ms);
-        List<SqlNode> sqlNodes = new LinkedList<SqlNode>();
+        List<SqlNode> sqlNodes = new ArrayList<SqlNode>();
         //insert into table
         sqlNodes.add(new StaticTextSqlNode("INSERT INTO "));
         sqlNodes.add(getDynamicTableNameNode(entityClass));
 
         //获取全部列
         Set<EntityColumn> columnList = EntityHelper.getColumns(entityClass);
-        List<SqlNode> ifNodes = new LinkedList<SqlNode>();
+        List<SqlNode> ifNodes = new ArrayList<SqlNode>();
         //Identity列只能有一个
         Boolean hasIdentityKey = false;
         //当某个列有主键策略时，不需要考虑他的属性是否为空，因为如果为空，一定会根据主键策略给他生成一个值
@@ -170,7 +170,7 @@ public class BaseInsertProvider extends MapperTemplate {
         //将动态的列加入sqlNodes
         sqlNodes.add(new TrimSqlNode(ms.getConfiguration(), new MixedSqlNode(ifNodes), "(", null, ")", ","));
 
-        ifNodes = new LinkedList<SqlNode>();
+        ifNodes = new ArrayList<SqlNode>();
         //处理values(#{property},#{property}...)
         for (EntityColumn column : columnList) {
             //当参数中的属性值不为空的时候,使用传入的值

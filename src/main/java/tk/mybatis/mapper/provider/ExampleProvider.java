@@ -31,7 +31,7 @@ import tk.mybatis.mapper.mapperhelper.EntityHelper;
 import tk.mybatis.mapper.mapperhelper.MapperHelper;
 import tk.mybatis.mapper.mapperhelper.MapperTemplate;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -55,7 +55,7 @@ public class ExampleProvider extends MapperTemplate {
     public SqlNode selectCountByExample(MappedStatement ms) {
         Class<?> entityClass = getSelectReturnType(ms);
 
-        List<SqlNode> sqlNodes = new LinkedList<SqlNode>();
+        List<SqlNode> sqlNodes = new ArrayList<SqlNode>();
         //静态的sql部分:select column ... from table
         sqlNodes.add(new StaticTextSqlNode("SELECT COUNT(*) FROM "));
         sqlNodes.add(getDynamicTableNameNode(entityClass));
@@ -74,7 +74,7 @@ public class ExampleProvider extends MapperTemplate {
     public SqlNode deleteByExample(MappedStatement ms) {
         Class<?> entityClass = getSelectReturnType(ms);
 
-        List<SqlNode> sqlNodes = new LinkedList<SqlNode>();
+        List<SqlNode> sqlNodes = new ArrayList<SqlNode>();
         //静态的sql部分:select column ... from table
         sqlNodes.add(new StaticTextSqlNode("DELETE FROM "));
         sqlNodes.add(getDynamicTableNameNode(entityClass));
@@ -95,7 +95,7 @@ public class ExampleProvider extends MapperTemplate {
         Class<?> entityClass = getSelectReturnType(ms);
         //将返回值修改为实体类型
         setResultType(ms, entityClass);
-        List<SqlNode> sqlNodes = new LinkedList<SqlNode>();
+        List<SqlNode> sqlNodes = new ArrayList<SqlNode>();
         //静态的sql部分:select column ... from table
         sqlNodes.add(new StaticTextSqlNode("SELECT"));
         IfSqlNode distinctSqlNode = new IfSqlNode(new StaticTextSqlNode("DISTINCT"), "distinct");
@@ -141,14 +141,14 @@ public class ExampleProvider extends MapperTemplate {
      */
     public SqlNode updateByExampleSelective(MappedStatement ms) {
         Class<?> entityClass = getSelectReturnType(ms);
-        List<SqlNode> sqlNodes = new LinkedList<SqlNode>();
+        List<SqlNode> sqlNodes = new ArrayList<SqlNode>();
         //update table
         sqlNodes.add(new StaticTextSqlNode("UPDATE "));
         sqlNodes.add(getDynamicTableNameNode(entityClass, "record"));
 
         //获取全部列
         Set<EntityColumn> columnList = EntityHelper.getColumns(entityClass);
-        List<SqlNode> ifNodes = new LinkedList<SqlNode>();
+        List<SqlNode> ifNodes = new ArrayList<SqlNode>();
 
         for (EntityColumn column : columnList) {
             if (!column.isId()) {
@@ -171,14 +171,14 @@ public class ExampleProvider extends MapperTemplate {
      */
     public SqlNode updateByExample(MappedStatement ms) {
         Class<?> entityClass = getSelectReturnType(ms);
-        List<SqlNode> sqlNodes = new LinkedList<SqlNode>();
+        List<SqlNode> sqlNodes = new ArrayList<SqlNode>();
         //update table
         sqlNodes.add(new StaticTextSqlNode("UPDATE "));
         sqlNodes.add(getDynamicTableNameNode(entityClass, "record"));
 
         //获取全部列
         Set<EntityColumn> columnList = EntityHelper.getColumns(entityClass);
-        List<SqlNode> setSqlNodes = new LinkedList<SqlNode>();
+        List<SqlNode> setSqlNodes = new ArrayList<SqlNode>();
         //全部的if property!=null and property!=''
         for (EntityColumn column : columnList) {
             if (!column.isId()) {

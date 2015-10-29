@@ -70,7 +70,7 @@ public class Example {
      */
     public Example(Class<?> entityClass, boolean exists) {
         this.exists = exists;
-        oredCriteria = new LinkedList<Criteria>();
+        oredCriteria = new ArrayList<Criteria>();
         this.entityClass = entityClass;
         table = EntityHelper.getEntityTable(entityClass);
         propertyMap = new HashMap<String, EntityColumn>(table.getEntityClassColumns().size());
@@ -170,7 +170,7 @@ public class Example {
         protected GeneratedCriteria(Map<String, EntityColumn> propertyMap, boolean exists) {
             super();
             this.exists = exists;
-            criteria = new LinkedList<Criterion>();
+            criteria = new ArrayList<Criterion>();
             this.propertyMap = propertyMap;
         }
 
