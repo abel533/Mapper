@@ -26,6 +26,7 @@ package tk.mybatis.mapper.entity;
 
 import org.apache.ibatis.reflection.MetaObject;
 import org.apache.ibatis.reflection.SystemMetaObject;
+import org.apache.ibatis.type.TypeHandler;
 import tk.mybatis.mapper.mapperhelper.EntityHelper;
 
 import java.util.*;
@@ -302,6 +303,55 @@ public class Example {
 
         public Criteria andNotLike(String property, String value) {
             addCriterion(column(property) + "  not like", value, property(property));
+            return (Criteria) this;
+        }
+
+        /**
+         * 手写条件
+         *
+         * @param condition 例如 "length(countryname)<5"
+         * @return
+         */
+        public Criteria andCondition(String condition) {
+            addCriterion(condition);
+            return (Criteria) this;
+        }
+
+        /**
+         * 手写左边条件，右边用value值
+         *
+         * @param condition 例如 "length(countryname)="
+         * @param value     例如 5
+         * @return
+         */
+        public Criteria andCondition(String condition, Object value) {
+            criteria.add(new Criterion(condition, value));
+            return (Criteria) this;
+        }
+
+        /**
+         * 手写左边条件，右边用value值
+         *
+         * @param condition   例如 "length(countryname)="
+         * @param value       例如 5
+         * @param typeHandler 类型处理
+         * @return
+         */
+        public Criteria andCondition(String condition, Object value, String typeHandler) {
+            criteria.add(new Criterion(condition, value, typeHandler));
+            return (Criteria) this;
+        }
+
+        /**
+         * 手写左边条件，右边用value值
+         *
+         * @param condition   例如 "length(countryname)="
+         * @param value       例如 5
+         * @param typeHandler 类型处理
+         * @return
+         */
+        public Criteria andCondition(String condition, Object value, Class<? extends TypeHandler> typeHandler) {
+            criteria.add(new Criterion(condition, value, typeHandler.getCanonicalName()));
             return (Criteria) this;
         }
 

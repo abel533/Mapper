@@ -1,6 +1,7 @@
 package tk.mybatis.mapper.test.example;
 
 import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.type.StringTypeHandler;
 import org.junit.Assert;
 import org.junit.Test;
 import tk.mybatis.mapper.entity.Example;
@@ -28,6 +29,24 @@ public class TestSelectByExample {
             List<Country> countries = mapper.selectByExample(example);
             //查询总数
             Assert.assertEquals(90, countries.size());
+        } finally {
+            sqlSession.close();
+        }
+    }
+
+    @Test
+    public void testAndExample() {
+        SqlSession sqlSession = MybatisHelper.getSqlSession();
+        try {
+            CountryMapper mapper = sqlSession.getMapper(CountryMapper.class);
+            Example example = new Example(Country.class);
+            example.createCriteria()
+                    .andCondition("countryname like 'C%' and id < 100")
+                    .andCondition("length(countryname) = ", 5)
+                    .andCondition("countrycode =", "CN", StringTypeHandler.class);
+            List<Country> countries = mapper.selectByExample(example);
+            //查询总数
+            Assert.assertEquals(1, countries.size());
         } finally {
             sqlSession.close();
         }
