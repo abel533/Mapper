@@ -46,6 +46,10 @@ public class StringUtil {
                 return str.toUpperCase();
             case lowercase:
                 return str.toLowerCase();
+            case camelhumpAndLowercase:
+                return camelhumpToUnderline(str).toLowerCase();
+            case camelhumpAndUppercase:
+                return camelhumpToUnderline(str).toUpperCase();
             case normal:
             default:
                 return str;
