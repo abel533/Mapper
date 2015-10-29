@@ -477,7 +477,7 @@ public abstract class MapperTemplate {
      * @return
      */
     protected SqlNode getColumnEqualsProperty(EntityColumn column, boolean first) {
-        return new StaticTextSqlNode((first ? "" : " AND ") + column.getColumn() + " = #{" + column.getProperty() + "} ");
+        return new StaticTextSqlNode((first ? "" : " AND ") + column.getColumnEqualsHolder());
     }
 
     /**

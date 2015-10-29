@@ -77,7 +77,7 @@ public class SpecialProvider extends MapperTemplate {
             if(!first) {
                 sql.append(",");
             }
-            sql.append("#{record.").append(column.getProperty()).append("}");
+            sql.append(column.getColumnHolder("record"));
             first = false;
         }
         sql.append(")");
@@ -118,7 +118,7 @@ public class SpecialProvider extends MapperTemplate {
             if(!first) {
                 sql.append(",");
             }
-            sql.append("#{").append(column.getProperty()).append("}");
+            sql.append(column.getColumnHolder());
             first = false;
         }
         sql.append(")");

@@ -100,19 +100,19 @@ public class BaseInsertProvider extends MapperTemplate {
                 ifNodes.add(getIfCacheNotNull(column, new StaticTextSqlNode("#{" + column.getProperty() + "_cache },")));
             } else {
                 //其他情况值仍然存在原property中
-                ifNodes.add(getIfNotNull(column, new StaticTextSqlNode("#{" + column.getProperty() + "},")));
+                ifNodes.add(getIfNotNull(column, new StaticTextSqlNode(column.getColumnHolder() + ",")));
             }
             //当属性为null时，如果存在主键策略，会自动获取值，如果不存在，则使用null
             //序列的情况
             if (StringUtil.isNotEmpty(column.getSequenceName())) {
                 ifNodes.add(getIfIsNull(column, new StaticTextSqlNode(getSeqNextVal(column) + " ,")));
             } else if (column.isIdentity()) {
-                ifNodes.add(getIfCacheIsNull(column, new StaticTextSqlNode("#{" + column.getProperty() + " },")));
+                ifNodes.add(getIfCacheIsNull(column, new StaticTextSqlNode(column.getColumnHolder() + ",")));
             } else if (column.isUuid()) {
                 ifNodes.add(getIfIsNull(column, new StaticTextSqlNode("#{" + column.getProperty() + "_bind },")));
             } else {
                 //当null的时候，如果不指定jdbcType，oracle可能会报异常，指定VARCHAR不影响其他
-                ifNodes.add(getIfIsNull(column, new StaticTextSqlNode("#{" + column.getProperty() + ",jdbcType=VARCHAR},")));
+                ifNodes.add(getIfIsNull(column, new StaticTextSqlNode(column.getColumnHolder() + ",")));
             }
         }
         //values(#{property},#{property}...)
@@ -178,12 +178,12 @@ public class BaseInsertProvider extends MapperTemplate {
             if (column.isIdentity()) {
                 ifNodes.add(new IfSqlNode(new StaticTextSqlNode("#{" + column.getProperty() + "_cache },"), column.getProperty() + "_cache != null "));
             } else {
-                ifNodes.add(new IfSqlNode(new StaticTextSqlNode("#{" + column.getProperty() + "},"), column.getProperty() + " != null "));
+                ifNodes.add(new IfSqlNode(new StaticTextSqlNode(column.getColumnHolder() + ","), column.getProperty() + " != null "));
             }
             if (StringUtil.isNotEmpty(column.getSequenceName())) {
                 ifNodes.add(getIfIsNull(column, new StaticTextSqlNode(getSeqNextVal(column) + " ,")));
             } else if (column.isIdentity()) {
-                ifNodes.add(getIfCacheIsNull(column, new StaticTextSqlNode("#{" + column.getProperty() + " },")));
+                ifNodes.add(getIfCacheIsNull(column, new StaticTextSqlNode(column.getColumnHolder() + ",")));
             } else if (column.isUuid()) {
                 ifNodes.add(getIfIsNull(column, new StaticTextSqlNode("#{" + column.getProperty() + "_bind },")));
             }

@@ -80,7 +80,7 @@ public class SqlServerProvider extends MapperTemplate {
             if(!first) {
                 sql.append(",");
             }
-            sql.append("#{").append(column.getProperty()).append("}");
+            sql.append(column.getColumnHolder());
             first = false;
         }
         sql.append(")");
@@ -120,7 +120,7 @@ public class SqlServerProvider extends MapperTemplate {
         for (EntityColumn column : columnList) {
             //当参数中的属性值不为空的时候,使用传入的值
             if (!column.isId()) {
-                ifNodes.add(new IfSqlNode(new StaticTextSqlNode("#{" + column.getProperty() + "},"), column.getProperty() + " != null "));
+                ifNodes.add(new IfSqlNode(new StaticTextSqlNode(column.getColumnHolder() +","), column.getProperty() + " != null "));
             }
         }
         //values(#{property},#{property}...)

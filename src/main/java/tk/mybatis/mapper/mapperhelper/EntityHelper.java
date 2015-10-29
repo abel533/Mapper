@@ -24,6 +24,9 @@
 
 package tk.mybatis.mapper.mapperhelper;
 
+import org.apache.ibatis.type.JdbcType;
+import org.apache.ibatis.type.UnknownTypeHandler;
+import tk.mybatis.mapper.annotation.ColumnType;
 import tk.mybatis.mapper.annotation.NameStyle;
 import tk.mybatis.mapper.code.IdentityDialect;
 import tk.mybatis.mapper.code.Style;
@@ -165,7 +168,7 @@ public class EntityHelper {
         Set<EntityColumn> entityColumns = getPKColumns(entityClass);
         StringBuilder whereBuilder = new StringBuilder();
         for (EntityColumn column : entityColumns) {
-            whereBuilder.append(column.getColumn()).append(" = #{").append(column.getProperty()).append("} AND ");
+            whereBuilder.append(column.getColumnEqualsHolder()).append(" AND ");
         }
         return whereBuilder.substring(0, whereBuilder.length() - 4);
     }
@@ -221,7 +224,22 @@ public class EntityHelper {
                 Column column = field.getAnnotation(Column.class);
                 columnName = column.name();
             }
-            if (columnName == null || columnName.equals("")) {
+            //ColumnType
+            if (field.isAnnotationPresent(ColumnType.class)) {
+                ColumnType columnType = field.getAnnotation(ColumnType.class);
+                //column可以起到别名的作用
+                if(StringUtil.isEmpty(columnName) && StringUtil.isNotEmpty(columnType.column())){
+                    columnName = columnType.column();
+                }
+                if(columnType.jdbcType() != JdbcType.UNDEFINED){
+                    entityColumn.setJdbcType(columnType.jdbcType());
+                }
+                if(columnType.typeHandler() != UnknownTypeHandler.class){
+                    entityColumn.setTypeHandler(columnType.typeHandler());
+                }
+            }
+            //表名
+            if (StringUtil.isEmpty(columnName)) {
                 columnName = StringUtil.convertByStyle(field.getName(), style);
             }
             entityColumn.setProperty(field.getName());
@@ -302,7 +320,7 @@ public class EntityHelper {
      */
     private static List<Field> getAllField(Class<?> entityClass, List<Field> fieldList) {
         if (fieldList == null) {
-            fieldList = new LinkedList<Field>();
+            fieldList = new ArrayList<Field>();
         }
         if (entityClass.equals(Object.class)) {
             return fieldList;
