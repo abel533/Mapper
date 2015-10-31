@@ -33,7 +33,7 @@ public class Config {
      *
      * @return
      */
-    public boolean getBEFORE() {
+    public boolean isBEFORE() {
         return BEFORE;
     }
 

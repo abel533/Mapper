@@ -276,12 +276,12 @@ public class Example {
             return (Criteria) this;
         }
 
-        public Criteria andIn(String property, List<Object> values) {
+        public Criteria andIn(String property, List<?> values) {
             addCriterion(column(property) + " in", values, property(property));
             return (Criteria) this;
         }
 
-        public Criteria andNotIn(String property, List<Object> values) {
+        public Criteria andNotIn(String property, List<?> values) {
             addCriterion(column(property) + " not in", values, property(property));
             return (Criteria) this;
         }

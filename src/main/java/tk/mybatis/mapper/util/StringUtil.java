@@ -68,7 +68,7 @@ public class StringUtil {
         for (int i = 0; i < size; i++) {
             c = chars[i];
             if (isUppercaseAlpha(c)) {
-                sb.append('_').append(c);
+                sb.append('_').append(toLowerAscii(c));
             } else {
                 sb.append(toUpperAscii(c));
             }
@@ -95,9 +95,20 @@ public class StringUtil {
         return (c >= 'A') && (c <= 'Z');
     }
 
+    public static boolean isLowercaseAlpha(char c) {
+        return (c >= 'a') && (c <= 'z');
+    }
+
     public static char toUpperAscii(char c) {
         if (isUppercaseAlpha(c)) {
             c -= (char) 0x20;
+        }
+        return c;
+    }
+
+    public static char toLowerAscii(char c) {
+        if (isUppercaseAlpha(c)) {
+            c += (char) 0x20;
         }
         return c;
     }

@@ -69,8 +69,7 @@ public class Country implements Serializable, IDynamicTableName {
         return dynamicTableName123;
     }
 
-    @Override
-    public void setDynamicTableName(String dynamicTableName) {
+    public void setDynamicTableName123(String dynamicTableName) {
         this.dynamicTableName123 = dynamicTableName;
     }
 }

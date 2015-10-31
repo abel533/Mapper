@@ -26,12 +26,12 @@ public class TestSelect {
             CountryMapper mapper = sqlSession.getMapper(CountryMapper.class);
             Country country = new Country();
             List<Country> countryList;
-//            country.setDynamicTableName("country_123");
-//            countryList = mapper.select(country);
-//            //查询总数
-//            Assert.assertEquals(2, countryList.size());
+            //country.setDynamicTableName123("country_123");
+            //countryList = mapper.select(country);
+            //查询总数
+            //Assert.assertEquals(2, countryList.size());
 
-            country.setDynamicTableName(null);
+            country.setDynamicTableName123(null);
             countryList = mapper.select(country);
             //查询总数
             Assert.assertEquals(183, countryList.size());

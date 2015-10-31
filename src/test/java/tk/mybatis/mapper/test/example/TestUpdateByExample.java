@@ -24,7 +24,7 @@ public class TestUpdateByExample {
             Example example = new Example(Country.class);
             example.createCriteria().andEqualTo("id", 35);
             Country country = new Country();
-            country.setDynamicTableName("country");
+            //country.setDynamicTableName123("country_123");
             country.setCountryname("天朝");
             country.setId(1000);
             int count = mapper.updateByExample(country, example);

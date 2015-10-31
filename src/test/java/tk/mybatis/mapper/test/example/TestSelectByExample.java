@@ -58,7 +58,7 @@ public class TestSelectByExample {
         try {
             CountryMapper mapper = sqlSession.getMapper(CountryMapper.class);
             Example example = new Example(Country.class);
-            example.createCriteria().andIn("id", Arrays.asList(new Object[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11}))
+            example.createCriteria().andIn("id", Arrays.asList(new Integer[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11}))
                     .andNotIn("id", Arrays.asList(new Object[]{11}));
             List<Country> countries = mapper.selectByExample(example);
             //查询总数
