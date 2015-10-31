@@ -1,11 +1,11 @@
 package tk.mybatis.mapper.hsqldb;
 
+import org.apache.ibatis.mapping.MappedStatement;
+import org.apache.ibatis.scripting.xmltags.*;
 import tk.mybatis.mapper.entity.EntityColumn;
 import tk.mybatis.mapper.mapperhelper.EntityHelper;
 import tk.mybatis.mapper.mapperhelper.MapperHelper;
 import tk.mybatis.mapper.mapperhelper.MapperTemplate;
-import org.apache.ibatis.mapping.MappedStatement;
-import org.apache.ibatis.scripting.xmltags.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +25,7 @@ public class HsqldbProvider extends MapperTemplate {
      * @return
      */
     public SqlNode selectPage(MappedStatement ms) {
-        Class<?> entityClass = getSelectReturnType(ms);
+        Class<?> entityClass = getEntityClass(ms);
         //修改返回值类型为实体类型
         setResultType(ms, entityClass);
 

@@ -54,7 +54,7 @@ public class BaseSelectProvider extends MapperTemplate {
      * @return
      */
     public SqlNode selectOne(MappedStatement ms) {
-        Class<?> entityClass = getSelectReturnType(ms);
+        Class<?> entityClass = getEntityClass(ms);
         //修改返回值类型为实体类型
         setResultType(ms, entityClass);
         List<SqlNode> sqlNodes = new ArrayList<SqlNode>();
@@ -75,7 +75,7 @@ public class BaseSelectProvider extends MapperTemplate {
      * @return
      */
     public SqlNode select(MappedStatement ms) {
-        Class<?> entityClass = getSelectReturnType(ms);
+        Class<?> entityClass = getEntityClass(ms);
         //修改返回值类型为实体类型
         setResultType(ms, entityClass);
         List<SqlNode> sqlNodes = new ArrayList<SqlNode>();
@@ -109,7 +109,7 @@ public class BaseSelectProvider extends MapperTemplate {
      * @param ms
      */
     public String selectByPrimaryKey(MappedStatement ms) {
-        final Class<?> entityClass = getSelectReturnType(ms);
+        final Class<?> entityClass = getEntityClass(ms);
         //将返回值修改为实体类型
         setResultType(ms, entityClass);
         StringBuilder sql = new StringBuilder();
@@ -129,7 +129,7 @@ public class BaseSelectProvider extends MapperTemplate {
      * @return
      */
     public SqlNode selectCount(MappedStatement ms) {
-        Class<?> entityClass = getSelectReturnType(ms);
+        Class<?> entityClass = getEntityClass(ms);
         List<SqlNode> sqlNodes = new ArrayList<SqlNode>();
         //select count(*) from table
         sqlNodes.add(new StaticTextSqlNode("SELECT COUNT(*) FROM "));
@@ -146,7 +146,7 @@ public class BaseSelectProvider extends MapperTemplate {
      * @return
      */
     public String selectAll(MappedStatement ms) {
-        final Class<?> entityClass = getSelectReturnType(ms);
+        final Class<?> entityClass = getEntityClass(ms);
         //修改返回值类型为实体类型
         setResultType(ms, entityClass);
         //开始拼sql

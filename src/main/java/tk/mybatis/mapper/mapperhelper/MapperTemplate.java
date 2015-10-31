@@ -53,7 +53,7 @@ import java.util.*;
  * @author liuzh
  */
 public abstract class MapperTemplate {
-    private XMLLanguageDriver languageDriver = new XMLLanguageDriver();
+    private static final XMLLanguageDriver languageDriver = new XMLLanguageDriver();
     private Map<String, Method> methodMap = new HashMap<String, Method>();
     private Map<String, Class<?>> entityClassMap = new HashMap<String, Class<?>>();
     private Class<?> mapperClass;
@@ -69,7 +69,6 @@ public abstract class MapperTemplate {
      *
      * @param msId
      * @return
-     * @throws ClassNotFoundException
      */
     public static Class<?> getMapperClass(String msId) {
         if (msId.indexOf(".") == -1) {
@@ -131,8 +130,8 @@ public abstract class MapperTemplate {
         return mapperHelper.getConfig().getIDENTITY();
     }
 
-    public boolean getBEFORE() {
-        return mapperHelper.getConfig().getBEFORE();
+    public boolean isBEFORE() {
+        return mapperHelper.getConfig().isBEFORE();
     }
 
     public boolean isNotEmpty() {
@@ -265,7 +264,7 @@ public abstract class MapperTemplate {
      * @param ms
      * @return
      */
-    public Class<?> getSelectReturnType(MappedStatement ms) {
+    public Class<?> getEntityClass(MappedStatement ms) {
         String msId = ms.getId();
         if (entityClassMap.containsKey(msId)) {
             return entityClassMap.get(msId);
@@ -295,7 +294,7 @@ public abstract class MapperTemplate {
      * @return
      */
     protected List<ParameterMapping> getPrimaryKeyParameterMappings(MappedStatement ms) {
-        Class<?> entityClass = getSelectReturnType(ms);
+        Class<?> entityClass = getEntityClass(ms);
         Set<EntityColumn> entityColumns = EntityHelper.getPKColumns(entityClass);
         List<ParameterMapping> parameterMappings = new ArrayList<ParameterMapping>();
         for (EntityColumn column : entityColumns) {
@@ -508,7 +507,7 @@ public abstract class MapperTemplate {
      * @return
      */
     protected List<ParameterMapping> getColumnParameterMappings(MappedStatement ms) {
-        Class<?> entityClass = getSelectReturnType(ms);
+        Class<?> entityClass = getEntityClass(ms);
         Set<EntityColumn> entityColumns = EntityHelper.getColumns(entityClass);
         List<ParameterMapping> parameterMappings = new ArrayList<ParameterMapping>();
         for (EntityColumn column : entityColumns) {
@@ -530,11 +529,11 @@ public abstract class MapperTemplate {
         if (ms.getConfiguration().hasKeyGenerator(keyId)) {
             return;
         }
-        Class<?> entityClass = getSelectReturnType(ms);
+        Class<?> entityClass = getEntityClass(ms);
         //defaults
         Configuration configuration = ms.getConfiguration();
         KeyGenerator keyGenerator;
-        Boolean executeBefore = getBEFORE();
+        Boolean executeBefore = isBEFORE();
         String IDENTITY = (column.getGenerator() == null || column.getGenerator().equals("")) ? getIDENTITY() : column.getGenerator();
         if (IDENTITY.equalsIgnoreCase("JDBC")) {
             keyGenerator = new Jdbc3KeyGenerator();

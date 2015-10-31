@@ -52,7 +52,7 @@ public class BaseUpdateProvider extends MapperTemplate {
      * @param ms
      */
     public SqlNode updateByPrimaryKey(MappedStatement ms) {
-        Class<?> entityClass = getSelectReturnType(ms);
+        Class<?> entityClass = getEntityClass(ms);
         List<SqlNode> sqlNodes = new ArrayList<SqlNode>();
         //update table
         sqlNodes.add(new StaticTextSqlNode("UPDATE "));
@@ -87,7 +87,7 @@ public class BaseUpdateProvider extends MapperTemplate {
      * @return
      */
     public SqlNode updateByPrimaryKeySelective(MappedStatement ms) {
-        Class<?> entityClass = getSelectReturnType(ms);
+        Class<?> entityClass = getEntityClass(ms);
         List<SqlNode> sqlNodes = new ArrayList<SqlNode>();
         //update table
         sqlNodes.add(new StaticTextSqlNode("UPDATE "));

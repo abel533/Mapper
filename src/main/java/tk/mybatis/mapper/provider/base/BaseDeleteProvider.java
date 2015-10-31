@@ -54,7 +54,7 @@ public class BaseDeleteProvider extends MapperTemplate {
      * @return
      */
     public SqlNode delete(MappedStatement ms) {
-        Class<?> entityClass = getSelectReturnType(ms);
+        Class<?> entityClass = getEntityClass(ms);
         List<SqlNode> sqlNodes = new ArrayList<SqlNode>();
         //delete from table
         sqlNodes.add(new StaticTextSqlNode("DELETE FROM "));
@@ -70,7 +70,7 @@ public class BaseDeleteProvider extends MapperTemplate {
      * @param ms
      */
     public String deleteByPrimaryKey(MappedStatement ms) {
-        final Class<?> entityClass = getSelectReturnType(ms);
+        final Class<?> entityClass = getEntityClass(ms);
         StringBuilder sql = new StringBuilder();
         sql.append("delete from ");
         sql.append(getDynamicTableName(entityClass));

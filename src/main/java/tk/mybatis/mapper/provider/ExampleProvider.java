@@ -53,7 +53,7 @@ public class ExampleProvider extends MapperTemplate {
      * @return
      */
     public SqlNode selectCountByExample(MappedStatement ms) {
-        Class<?> entityClass = getSelectReturnType(ms);
+        Class<?> entityClass = getEntityClass(ms);
 
         List<SqlNode> sqlNodes = new ArrayList<SqlNode>();
         //静态的sql部分:select column ... from table
@@ -72,7 +72,7 @@ public class ExampleProvider extends MapperTemplate {
      * @return
      */
     public SqlNode deleteByExample(MappedStatement ms) {
-        Class<?> entityClass = getSelectReturnType(ms);
+        Class<?> entityClass = getEntityClass(ms);
 
         List<SqlNode> sqlNodes = new ArrayList<SqlNode>();
         //静态的sql部分:select column ... from table
@@ -92,7 +92,7 @@ public class ExampleProvider extends MapperTemplate {
      * @return
      */
     public SqlNode selectByExample(MappedStatement ms) {
-        Class<?> entityClass = getSelectReturnType(ms);
+        Class<?> entityClass = getEntityClass(ms);
         //将返回值修改为实体类型
         setResultType(ms, entityClass);
         List<SqlNode> sqlNodes = new ArrayList<SqlNode>();
@@ -140,7 +140,7 @@ public class ExampleProvider extends MapperTemplate {
      * @return
      */
     public SqlNode updateByExampleSelective(MappedStatement ms) {
-        Class<?> entityClass = getSelectReturnType(ms);
+        Class<?> entityClass = getEntityClass(ms);
         List<SqlNode> sqlNodes = new ArrayList<SqlNode>();
         //update table
         sqlNodes.add(new StaticTextSqlNode("UPDATE "));
@@ -170,7 +170,7 @@ public class ExampleProvider extends MapperTemplate {
      * @return
      */
     public SqlNode updateByExample(MappedStatement ms) {
-        Class<?> entityClass = getSelectReturnType(ms);
+        Class<?> entityClass = getEntityClass(ms);
         List<SqlNode> sqlNodes = new ArrayList<SqlNode>();
         //update table
         sqlNodes.add(new StaticTextSqlNode("UPDATE "));

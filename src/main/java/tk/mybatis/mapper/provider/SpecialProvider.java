@@ -48,7 +48,7 @@ public class SpecialProvider extends MapperTemplate {
      * @param ms
      */
     public String insertList(MappedStatement ms) {
-        final Class<?> entityClass = getSelectReturnType(ms);
+        final Class<?> entityClass = getEntityClass(ms);
         EntityTable table = EntityHelper.getEntityTable(entityClass);
         //开始拼sql
         StringBuilder sql = new StringBuilder();
@@ -91,7 +91,7 @@ public class SpecialProvider extends MapperTemplate {
      * @param ms
      */
     public String insertUseGeneratedKeys(MappedStatement ms) {
-        final Class<?> entityClass = getSelectReturnType(ms);
+        final Class<?> entityClass = getEntityClass(ms);
         EntityTable table = EntityHelper.getEntityTable(entityClass);
         //开始拼sql
         StringBuilder sql = new StringBuilder();

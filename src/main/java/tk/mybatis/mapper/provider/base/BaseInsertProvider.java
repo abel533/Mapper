@@ -54,7 +54,7 @@ public class BaseInsertProvider extends MapperTemplate {
      * @return
      */
     public SqlNode insert(MappedStatement ms) {
-        Class<?> entityClass = getSelectReturnType(ms);
+        Class<?> entityClass = getEntityClass(ms);
         List<SqlNode> sqlNodes = new ArrayList<SqlNode>();
         //insert into table
         sqlNodes.add(new StaticTextSqlNode("INSERT INTO "));
@@ -127,7 +127,7 @@ public class BaseInsertProvider extends MapperTemplate {
      * @return
      */
     public SqlNode insertSelective(MappedStatement ms) {
-        Class<?> entityClass = getSelectReturnType(ms);
+        Class<?> entityClass = getEntityClass(ms);
         List<SqlNode> sqlNodes = new ArrayList<SqlNode>();
         //insert into table
         sqlNodes.add(new StaticTextSqlNode("INSERT INTO "));

@@ -53,7 +53,7 @@ public class SqlServerProvider extends MapperTemplate {
      * @param ms
      */
     public String insert(MappedStatement ms) {
-        final Class<?> entityClass = getSelectReturnType(ms);
+        final Class<?> entityClass = getEntityClass(ms);
         EntityTable table = EntityHelper.getEntityTable(entityClass);
         //开始拼sql
         StringBuilder sql = new StringBuilder();
@@ -94,7 +94,7 @@ public class SqlServerProvider extends MapperTemplate {
      * @return
      */
     public SqlNode insertSelective(MappedStatement ms) {
-        Class<?> entityClass = getSelectReturnType(ms);
+        Class<?> entityClass = getEntityClass(ms);
         List<SqlNode> sqlNodes = new ArrayList<SqlNode>();
         //insert into table
         sqlNodes.add(new StaticTextSqlNode("INSERT INTO "));
