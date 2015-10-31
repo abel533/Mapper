@@ -155,15 +155,17 @@ public abstract class MapperTemplate {
     }
 
     /**
-     * 设置返回值类型
+     * 设置返回值类型 - 为了让typeHandler在select时有效，改为设置resultMap
      *
      * @param ms
      * @param entityClass
      */
     protected void setResultType(MappedStatement ms, Class<?> entityClass) {
-        ResultMap resultMap = ms.getResultMaps().get(0);
-        MetaObject metaObject = SystemMetaObject.forObject(resultMap);
-        metaObject.setValue("type", entityClass);
+        EntityTable entityTable = EntityHelper.getEntityTable(entityClass);
+        List<ResultMap> resultMaps = new ArrayList<ResultMap>();
+        resultMaps.add(entityTable.getResultMap(ms.getConfiguration()));
+        MetaObject metaObject = SystemMetaObject.forObject(ms);
+        metaObject.setValue("resultMaps", Collections.unmodifiableList(resultMaps));
     }
 
     /**

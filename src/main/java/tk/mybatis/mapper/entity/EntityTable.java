@@ -1,5 +1,9 @@
 package tk.mybatis.mapper.entity;
 
+import org.apache.ibatis.mapping.ResultFlag;
+import org.apache.ibatis.mapping.ResultMap;
+import org.apache.ibatis.mapping.ResultMapping;
+import org.apache.ibatis.session.Configuration;
 import tk.mybatis.mapper.util.StringUtil;
 
 import javax.persistence.Table;
@@ -25,6 +29,14 @@ public class EntityTable {
     //useGenerator包含多列的时候需要用到
     private List<String> keyProperties;
     private List<String> keyColumns;
+    //resultMap对象
+    private ResultMap resultMap;
+    //类
+    private Class<?> entityClass;
+
+    public EntityTable(Class<?> entityClass) {
+        this.entityClass = entityClass;
+    }
 
     public void setTable(Table table) {
         this.name = table.name();
@@ -136,5 +148,44 @@ public class EntityTable {
         } else {
             this.keyColumns.add(keyColumn);
         }
+    }
+
+    /**
+     * 生成当前实体的resultMap对象
+     *
+     * @param configuration
+     * @return
+     */
+    public ResultMap getResultMap(Configuration configuration) {
+        if (this.resultMap != null) {
+            return this.resultMap;
+        }
+        if (entityClassColumns == null || entityClassColumns.size() == 0) {
+            return null;
+        }
+        List<ResultMapping> resultMappings = new ArrayList<ResultMapping>();
+        for (EntityColumn entityColumn : entityClassColumns) {
+            ResultMapping.Builder builder = new ResultMapping.Builder(configuration, entityColumn.getProperty(), entityColumn.getColumn(), entityColumn.getJavaType());
+            if (entityColumn.getJdbcType() != null) {
+                builder.jdbcType(entityColumn.getJdbcType());
+            }
+            if (entityColumn.getTypeHandler() != null) {
+                try {
+                    builder.typeHandler(entityColumn.getTypeHandler().newInstance());
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+            }
+            List<ResultFlag> flags = new ArrayList<ResultFlag>();
+            if (entityColumn.isId()) {
+                flags.add(ResultFlag.ID);
+            }
+            builder.flags(flags);
+            builder.lazy(false);
+            resultMappings.add(builder.build());
+        }
+        ResultMap.Builder builder = new ResultMap.Builder(configuration, "BaseMapperResultMap", this.entityClass, resultMappings, true);
+        this.resultMap = builder.build();
+        return this.resultMap;
     }
 }

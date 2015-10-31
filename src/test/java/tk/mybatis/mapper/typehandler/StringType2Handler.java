@@ -17,24 +17,26 @@ public class StringType2Handler extends BaseTypeHandler<String> {
     @Override
     public void setNonNullParameter(PreparedStatement ps, int i, String parameter, JdbcType jdbcType)
             throws SQLException {
-        ps.setString(i, parameter + "_hehe");
+        //insert起作用
+        ps.setString(i, parameter);
     }
 
     @Override
     public String getNullableResult(ResultSet rs, String columnName)
             throws SQLException {
-        return rs.getString(columnName) + "_hehe";
+        //查询起作用
+        return rs.getString(columnName);
     }
 
     @Override
     public String getNullableResult(ResultSet rs, int columnIndex)
             throws SQLException {
-        return rs.getString(columnIndex) + "_hehe";
+        return rs.getString(columnIndex);
     }
 
     @Override
     public String getNullableResult(CallableStatement cs, int columnIndex)
             throws SQLException {
-        return cs.getString(columnIndex) + "_hehe";
+        return cs.getString(columnIndex);
     }
 }

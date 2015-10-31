@@ -194,12 +194,12 @@ public class EntityHelper {
         if (entityClass.isAnnotationPresent(Table.class)) {
             Table table = entityClass.getAnnotation(Table.class);
             if (!table.name().equals("")) {
-                entityTable = new EntityTable();
+                entityTable = new EntityTable(entityClass);
                 entityTable.setTable(table);
             }
         }
         if (entityTable == null) {
-            entityTable = new EntityTable();
+            entityTable = new EntityTable(entityClass);
             //可以通过stye控制
             entityTable.setName(StringUtil.convertByStyle(entityClass.getSimpleName(), style));
         }
