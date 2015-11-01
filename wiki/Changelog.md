@@ -1,5 +1,27 @@
 #更新日志
 
+##3.3.0 - 2015-11-01
+
+- 增加对动态表名的支持，需要实体类继承`IDynamicTableName`接口，用法见[详细说明](http://git.oschina.net/free/Mapper/blob/master/wiki/mapper3/3.2.Use330.md)
+
+- `Example`增加自定义查询条件，提供了4个方法，具体方法和用法见[详细说明](http://git.oschina.net/free/Mapper/blob/master/wiki/mapper3/3.2.Use330.md)
+
+- 新增`@ColumnType`注解，可以单独设置列的`jdbcType`和`typeHandler`
+
+- `Example`的`in`和`not in`中的`List<Object>`参数改为`List<?>`，允许任意类型
+
+- select查询方法返回类型不在使用`resultType`，改为`resultMap`，因此可以支持`typeHandler`的读取
+
+- `Style`自动转方式新增`camelhumpAndUppercase`驼峰转下划线大写形式,`camelhumpAndLowercase`驼峰转下划线小写形式
+
+- MapperTemplate中的`getSelectReturnType`方法改为`getEntityClass`，`getBEFORE`改为`isBEFORE`
+
+- 文档中增加`@GeneratedValue(strategy = GenerationType.IDENTITY)`的一种重要[用法说明](http://git.oschina.net/free/Mapper/blob/master/wiki/mapper3/3.2.Use330.md)
+
+- 修复selectAll不支持`@OrderBy`注解的bug
+
+- 解决一个驼峰转换bug，例如`helloWorld`会转换为`hello_world`（原先是`hello_World`）
+
 ##3.2.2 - 2015-09-19
 
 * 和Spring集成时，允许通过`markerInterface`属性配置通用接口（注意该属性的原有作用不变），想要让该接口自动注册，该接口就需要继承`tk.mybatis.mapper.common.Marker`接口，`Mapper<T>`默认继承该接口，所以如果自己的接口是继承`Mapper<T>`的，不需要再继承。
