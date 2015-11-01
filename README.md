@@ -20,7 +20,7 @@
 
 2. [如何使用通用Mapper](http://git.oschina.net/free/Mapper/blob/master/wiki/mapper3/3.Use.md)
 
-2.1 [3.3.0版本新增功能用法文档](http://git.oschina.net/free/Mapper/blob/master/wiki/mapper3/3.2.Use330.md)
+2. [3.3.0版本新增功能用法文档](http://git.oschina.net/free/Mapper/blob/master/wiki/mapper3/3.2.Use330.md)
 
 3. [根据需要自定义接口](http://git.oschina.net/free/Mapper/blob/master/wiki/mapper3/4.Professional.md)
 
