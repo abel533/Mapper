@@ -31,6 +31,7 @@ import tk.mybatis.mapper.entity.EntityTable;
 import tk.mybatis.mapper.mapperhelper.EntityHelper;
 import tk.mybatis.mapper.mapperhelper.MapperHelper;
 import tk.mybatis.mapper.mapperhelper.MapperTemplate;
+import tk.mybatis.mapper.mapperhelper.SqlHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,14 +59,14 @@ public class SqlServerProvider extends MapperTemplate {
         //开始拼sql
         StringBuilder sql = new StringBuilder();
         sql.append("insert into ");
-        sql.append(getDynamicTableName(entityClass));
+        sql.append(SqlHelper.getDynamicTableName(entityClass, tableName(entityClass)));
         sql.append("(");
         boolean first = true;
         for (EntityColumn column : table.getEntityClassColumns()) {
             if (column.isId()) {
                 continue;
             }
-            if(!first) {
+            if (!first) {
                 sql.append(",");
             }
             sql.append(column.getColumn());
@@ -77,7 +78,7 @@ public class SqlServerProvider extends MapperTemplate {
             if (column.isId()) {
                 continue;
             }
-            if(!first) {
+            if (!first) {
                 sql.append(",");
             }
             sql.append(column.getColumnHolder());
@@ -120,7 +121,7 @@ public class SqlServerProvider extends MapperTemplate {
         for (EntityColumn column : columnList) {
             //当参数中的属性值不为空的时候,使用传入的值
             if (!column.isId()) {
-                ifNodes.add(new IfSqlNode(new StaticTextSqlNode(column.getColumnHolder() +","), column.getProperty() + " != null "));
+                ifNodes.add(new IfSqlNode(new StaticTextSqlNode(column.getColumnHolder() + ","), column.getProperty() + " != null "));
             }
         }
         //values(#{property},#{property}...)

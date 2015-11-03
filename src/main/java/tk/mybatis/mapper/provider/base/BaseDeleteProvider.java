@@ -25,16 +25,10 @@
 package tk.mybatis.mapper.provider.base;
 
 import org.apache.ibatis.mapping.MappedStatement;
-import org.apache.ibatis.scripting.xmltags.MixedSqlNode;
-import org.apache.ibatis.scripting.xmltags.SqlNode;
-import org.apache.ibatis.scripting.xmltags.StaticTextSqlNode;
-import org.apache.ibatis.scripting.xmltags.WhereSqlNode;
 import tk.mybatis.mapper.mapperhelper.EntityHelper;
 import tk.mybatis.mapper.mapperhelper.MapperHelper;
 import tk.mybatis.mapper.mapperhelper.MapperTemplate;
-
-import java.util.ArrayList;
-import java.util.List;
+import tk.mybatis.mapper.mapperhelper.SqlHelper;
 
 /**
  * BaseDeleteMapper实现类，基础方法实现类
@@ -53,15 +47,13 @@ public class BaseDeleteProvider extends MapperTemplate {
      * @param ms
      * @return
      */
-    public SqlNode delete(MappedStatement ms) {
+    public String delete(MappedStatement ms) {
         Class<?> entityClass = getEntityClass(ms);
-        List<SqlNode> sqlNodes = new ArrayList<SqlNode>();
-        //delete from table
-        sqlNodes.add(new StaticTextSqlNode("DELETE FROM "));
-        sqlNodes.add(getDynamicTableNameNode(entityClass));
-        //where/if判断条件
-        sqlNodes.add(new WhereSqlNode(ms.getConfiguration(), getAllIfColumnNode(entityClass)));
-        return new MixedSqlNode(sqlNodes);
+        StringBuilder sql = new StringBuilder();
+        sql.append("DELETE FROM ");
+        sql.append(SqlHelper.getDynamicTableName(entityClass, tableName(entityClass)));
+        sql.append(SqlHelper.getAllIfColumnNode(EntityHelper.getEntityTable(entityClass), isNotEmpty()));
+        return sql.toString();
     }
 
     /**
@@ -73,7 +65,7 @@ public class BaseDeleteProvider extends MapperTemplate {
         final Class<?> entityClass = getEntityClass(ms);
         StringBuilder sql = new StringBuilder();
         sql.append("delete from ");
-        sql.append(getDynamicTableName(entityClass));
+        sql.append(SqlHelper.getDynamicTableName(entityClass, tableName(entityClass)));
         sql.append(" where ");
         sql.append(EntityHelper.getPrimaryKeyWhere(entityClass));
         return sql.toString();

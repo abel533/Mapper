@@ -25,14 +25,12 @@
 package tk.mybatis.mapper.provider.base;
 
 import org.apache.ibatis.mapping.MappedStatement;
-import org.apache.ibatis.scripting.xmltags.*;
 import tk.mybatis.mapper.entity.EntityColumn;
 import tk.mybatis.mapper.mapperhelper.EntityHelper;
 import tk.mybatis.mapper.mapperhelper.MapperHelper;
 import tk.mybatis.mapper.mapperhelper.MapperTemplate;
+import tk.mybatis.mapper.mapperhelper.SqlHelper;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -51,33 +49,32 @@ public class BaseUpdateProvider extends MapperTemplate {
      *
      * @param ms
      */
-    public SqlNode updateByPrimaryKey(MappedStatement ms) {
+    public String updateByPrimaryKey(MappedStatement ms) {
         Class<?> entityClass = getEntityClass(ms);
-        List<SqlNode> sqlNodes = new ArrayList<SqlNode>();
-        //update table
-        sqlNodes.add(new StaticTextSqlNode("UPDATE "));
-        sqlNodes.add(getDynamicTableNameNode(entityClass));
-
+        StringBuilder sql = new StringBuilder();
+        sql.append("UPDATE ");
+        sql.append(SqlHelper.getDynamicTableName(entityClass, tableName(entityClass)));
+        sql.append(" SET ");
         //获取全部列
         Set<EntityColumn> columnList = EntityHelper.getColumns(entityClass);
-        List<SqlNode> ifNodes = new ArrayList<SqlNode>();
         for (EntityColumn column : columnList) {
             if (!column.isId()) {
-                ifNodes.add(new StaticTextSqlNode(column.getColumn() + " = #{" + column.getProperty() + "}, "));
+                sql.append(column.getColumnEqualsHolder()).append(",");
             }
         }
-        sqlNodes.add(new SetSqlNode(ms.getConfiguration(), new MixedSqlNode(ifNodes)));
+        if (sql.charAt(sql.length() - 1) == ',') {
+            sql.setCharAt(sql.length() - 1, ' ');
+        }
         //获取全部的主键的列
         columnList = EntityHelper.getPKColumns(entityClass);
-        List<SqlNode> whereNodes = new ArrayList<SqlNode>();
+        sql.append(" WHERE ");
         boolean first = true;
         //where 主键=#{property} 条件
         for (EntityColumn column : columnList) {
-            whereNodes.add(getColumnEqualsProperty(column, first));
+            sql.append(SqlHelper.getColumnEqualsProperty(column, first));
             first = false;
         }
-        sqlNodes.add(new WhereSqlNode(ms.getConfiguration(), new MixedSqlNode(whereNodes)));
-        return new MixedSqlNode(sqlNodes);
+        return sql.toString();
     }
 
     /**
@@ -86,34 +83,31 @@ public class BaseUpdateProvider extends MapperTemplate {
      * @param ms
      * @return
      */
-    public SqlNode updateByPrimaryKeySelective(MappedStatement ms) {
+    public String updateByPrimaryKeySelective(MappedStatement ms) {
         Class<?> entityClass = getEntityClass(ms);
-        List<SqlNode> sqlNodes = new ArrayList<SqlNode>();
-        //update table
-        sqlNodes.add(new StaticTextSqlNode("UPDATE "));
-        sqlNodes.add(getDynamicTableNameNode(entityClass));
+        StringBuilder sql = new StringBuilder();
+        sql.append("UPDATE ");
+        sql.append(SqlHelper.getDynamicTableName(entityClass, tableName(entityClass)));
+        sql.append(" <set> ");
 
         //获取全部列
         Set<EntityColumn> columnList = EntityHelper.getColumns(entityClass);
-        List<SqlNode> ifNodes = new ArrayList<SqlNode>();
         //全部的if property!=null and property!=''
         for (EntityColumn column : columnList) {
             if (!column.isId()) {
-                StaticTextSqlNode columnNode = new StaticTextSqlNode(column.getColumn() + " = #{" + column.getProperty() + "}, ");
-                ifNodes.add(getIfNotNull(column, columnNode));
+                sql.append(SqlHelper.getIfNotNull(column, column.getColumnEqualsHolder() + ",", isNotEmpty()));
             }
         }
-        sqlNodes.add(new SetSqlNode(ms.getConfiguration(), new MixedSqlNode(ifNodes)));
+        sql.append(" </set> ");
         //获取全部的主键的列
         columnList = EntityHelper.getPKColumns(entityClass);
-        List<SqlNode> whereNodes = new ArrayList<SqlNode>();
+        sql.append(" WHERE ");
         boolean first = true;
         //where 主键=#{property} 条件
         for (EntityColumn column : columnList) {
-            whereNodes.add(getColumnEqualsProperty(column, first));
+            sql.append(SqlHelper.getColumnEqualsProperty(column, first));
             first = false;
         }
-        sqlNodes.add(new WhereSqlNode(ms.getConfiguration(), new MixedSqlNode(whereNodes)));
-        return new MixedSqlNode(sqlNodes);
+        return sql.toString();
     }
 }

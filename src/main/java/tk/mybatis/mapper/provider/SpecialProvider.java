@@ -30,6 +30,7 @@ import tk.mybatis.mapper.entity.EntityTable;
 import tk.mybatis.mapper.mapperhelper.EntityHelper;
 import tk.mybatis.mapper.mapperhelper.MapperHelper;
 import tk.mybatis.mapper.mapperhelper.MapperTemplate;
+import tk.mybatis.mapper.mapperhelper.SqlHelper;
 
 /**
  * SpecialProvider实现类，特殊方法实现类
@@ -53,7 +54,7 @@ public class SpecialProvider extends MapperTemplate {
         //开始拼sql
         StringBuilder sql = new StringBuilder();
         sql.append("insert into ");
-        sql.append(getDynamicTableName(entityClass));
+        sql.append(SqlHelper.getDynamicTableName(entityClass, tableName(entityClass)));
         sql.append("(");
         boolean first = true;
         for (EntityColumn column : table.getEntityClassColumns()) {
@@ -74,7 +75,7 @@ public class SpecialProvider extends MapperTemplate {
             if (column.isId()) {
                 continue;
             }
-            if(!first) {
+            if (!first) {
                 sql.append(",");
             }
             sql.append(column.getColumnHolder("record"));
@@ -96,14 +97,14 @@ public class SpecialProvider extends MapperTemplate {
         //开始拼sql
         StringBuilder sql = new StringBuilder();
         sql.append("insert into ");
-        sql.append(getDynamicTableName(entityClass));
+        sql.append(SqlHelper.getDynamicTableName(entityClass, tableName(entityClass)));
         sql.append("(");
         boolean first = true;
         for (EntityColumn column : table.getEntityClassColumns()) {
             if (column.isId()) {
                 continue;
             }
-            if(!first) {
+            if (!first) {
                 sql.append(",");
             }
             sql.append(column.getColumn());
@@ -115,7 +116,7 @@ public class SpecialProvider extends MapperTemplate {
             if (column.isId()) {
                 continue;
             }
-            if(!first) {
+            if (!first) {
                 sql.append(",");
             }
             sql.append(column.getColumnHolder());
