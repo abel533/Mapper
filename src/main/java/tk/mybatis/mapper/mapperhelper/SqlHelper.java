@@ -56,6 +56,49 @@ public class SqlHelper {
     }
 
     /**
+     * <bind name="pattern" value="'%' + _parameter.getTitle() + '%'" />
+     *
+     * @param column
+     * @return
+     */
+    public static String getBindCache(EntityColumn column) {
+        StringBuilder sql = new StringBuilder();
+        sql.append("<bind name=\"");
+        sql.append(column.getProperty()).append("_cache\" ");
+        sql.append("value=\"").append(column.getProperty()).append("\"/>");
+        return sql.toString();
+    }
+
+    /**
+     * <bind name="pattern" value="'%' + _parameter.getTitle() + '%'" />
+     *
+     * @param column
+     * @return
+     */
+    public static String getBindValue(EntityColumn column, String value) {
+        StringBuilder sql = new StringBuilder();
+        sql.append("<bind name=\"");
+        sql.append(column.getProperty()).append("_bind\" ");
+        sql.append("value=\"").append(value).append("\"/>");
+        return sql.toString();
+    }
+
+    /**
+     * <bind name="pattern" value="'%' + _parameter.getTitle() + '%'" />
+     *
+     * @param column
+     * @return
+     */
+    public static String getIfCacheNotNull(EntityColumn column, String contents) {
+        StringBuilder sql = new StringBuilder();
+        sql.append("<if test=\"").append(column.getProperty()).append("_cache != null\">");
+        sql.append(contents);
+        sql.append("</if>");
+        return sql.toString();
+    }
+
+
+    /**
      * 判断自动!=null的条件结构
      *
      * @param column
