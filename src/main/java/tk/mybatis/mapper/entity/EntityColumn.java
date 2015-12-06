@@ -151,12 +151,49 @@ public class EntityColumn {
      * @return
      */
     public String getColumnHolder(String entityName) {
+        return getColumnHolder(entityName, null);
+    }
+
+    /**
+     * 返回格式如:#{entityName.age+suffix,jdbcType=NUMERIC,typeHandler=MyTypeHandler}
+     *
+     * @param entityName
+     * @param suffix
+     * @return
+     */
+    public String getColumnHolder(String entityName, String suffix) {
+        return getColumnHolder(entityName, null, null);
+    }
+
+    /**
+     * 返回格式如:#{entityName.age+suffix,jdbcType=NUMERIC,typeHandler=MyTypeHandler},
+     *
+     * @param entityName
+     * @param suffix
+     * @return
+     */
+    public String getColumnHolderWithComma(String entityName, String suffix) {
+        return getColumnHolder(entityName, suffix, ",");
+    }
+
+    /**
+     * 返回格式如:#{entityName.age+suffix,jdbcType=NUMERIC,typeHandler=MyTypeHandler}+separator
+     *
+     * @param entityName
+     * @param suffix
+     * @param separator
+     * @return
+     */
+    public String getColumnHolder(String entityName, String suffix, String separator) {
         StringBuffer sb = new StringBuffer("#{");
         if (StringUtil.isNotEmpty(entityName)) {
             sb.append(entityName);
             sb.append(".");
         }
         sb.append(this.property);
+        if (StringUtil.isNotEmpty(suffix)) {
+            sb.append(suffix);
+        }
         if (this.jdbcType != null) {
             sb.append(",jdbcType=");
             sb.append(this.jdbcType.toString());
@@ -165,7 +202,14 @@ public class EntityColumn {
             sb.append(",typeHandler=");
             sb.append(this.typeHandler.getCanonicalName());
         }
+        if (this.jdbcType == null && this.typeHandler == null) {
+            sb.append(",javaType=");
+            sb.append(javaType.getCanonicalName());
+        }
         sb.append("}");
+        if (StringUtil.isNotEmpty(separator)) {
+            sb.append(separator);
+        }
         return sb.toString();
     }
 

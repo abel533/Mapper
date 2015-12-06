@@ -38,6 +38,10 @@ public class EntityTable {
         this.entityClass = entityClass;
     }
 
+    public Class<?> getEntityClass() {
+        return entityClass;
+    }
+
     public void setTable(Table table) {
         this.name = table.name();
         this.catalog = table.catalog();
