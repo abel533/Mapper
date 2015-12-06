@@ -11,17 +11,17 @@ import java.io.Serializable;
  */
 public class Entity<ID extends Serializable, NAME extends Serializable> {
 
-    @Id
-    @OrderBy("desc")
     private ID id;
 
     @Transient
     private NAME name;
 
+    @Id
     public ID getId() {
         return id;
     }
 
+    @OrderBy("desc")
     public void setId(ID id) {
         this.id = id;
     }

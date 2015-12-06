@@ -32,11 +32,11 @@ import tk.mybatis.mapper.code.IdentityDialect;
 import tk.mybatis.mapper.code.Style;
 import tk.mybatis.mapper.entity.Config;
 import tk.mybatis.mapper.entity.EntityColumn;
+import tk.mybatis.mapper.entity.EntityField;
 import tk.mybatis.mapper.entity.EntityTable;
 import tk.mybatis.mapper.util.StringUtil;
 
 import javax.persistence.*;
-import java.lang.reflect.*;
 import java.util.*;
 
 /**
@@ -184,23 +184,12 @@ public class EntityHelper {
         }
         Style style = config.getStyle();
         //style，该注解优先于全局配置
-        if(entityClass.isAnnotationPresent(NameStyle.class)){
+        if (entityClass.isAnnotationPresent(NameStyle.class)) {
             NameStyle nameStyle = entityClass.getAnnotation(NameStyle.class);
             style = nameStyle.value();
         }
-        //创建并缓存EntityTable
-        entityTableMap.put(entityClass, newEntityTable(entityClass, style));
-    }
 
-    /**
-     * 新建EntityTable
-     *
-     * @param entityClass
-     * @param style
-     * @return
-     */
-    private static EntityTable newEntityTable(Class<?> entityClass, Style style) {
-        //表名
+        //创建并缓存EntityTable
         EntityTable entityTable = null;
         if (entityClass.isAnnotationPresent(Table.class)) {
             Table table = entityClass.getAnnotation(Table.class);
@@ -217,56 +206,20 @@ public class EntityHelper {
         entityTable.setEntityClassColumns(new LinkedHashSet<EntityColumn>());
         entityTable.setEntityClassPKColumns(new LinkedHashSet<EntityColumn>());
         //处理所有列
-        processAllColumns(entityTable, style, null, null);
+        List<EntityField> fields = null;
+        if (config.isEnableMethodAnnotation()) {
+            fields = FieldHelper.getAll(entityClass);
+        } else {
+            fields = FieldHelper.getFields(entityClass);
+        }
+        for (EntityField field : fields) {
+            processField(entityTable, style, field);
+        }
         //当pk.size=0的时候使用所有列作为主键
         if (entityTable.getEntityClassPKColumns().size() == 0) {
             entityTable.setEntityClassPKColumns(entityTable.getEntityClassColumns());
         }
-        return entityTable;
-    }
-
-    /**
-     * 处理所有列
-     *
-     * @param entityTable
-     * @param style
-     * @param entityClass
-     * @param genericMap 处理泛型字段
-     */
-    private static void processAllColumns(EntityTable entityTable, Style style, Class<?> entityClass, Map<String, Class<?>> genericMap) {
-        if (entityClass == null) {
-            entityClass = entityTable.getEntityClass();
-        }
-        if (entityClass.equals(Object.class)) {
-            return;
-        }
-        Field[] fields = entityClass.getDeclaredFields();
-        for (Field field : fields) {
-            //排除静态字段，解决bug#2
-            if (!Modifier.isStatic(field.getModifiers())) {
-                //处理field
-                processField(entityTable, style, field, genericMap);
-            }
-        }
-        Class<?> superClass = entityClass.getSuperclass();
-        if (superClass != null
-                && !superClass.equals(Object.class)
-                && (superClass.isAnnotationPresent(Entity.class)
-                || (!Map.class.isAssignableFrom(superClass)
-                && !Collection.class.isAssignableFrom(superClass)))) {
-            Map<String, Class<?>> _genericMap = null;
-            if (entityClass.getGenericSuperclass() instanceof ParameterizedType) {
-                Type[] types = ((ParameterizedType) entityClass.getGenericSuperclass()).getActualTypeArguments();
-                TypeVariable[] typeVariables = superClass.getTypeParameters();
-                if (typeVariables.length > 0) {
-                    _genericMap = new HashMap<String, Class<?>>();
-                    for (int i = 0; i < typeVariables.length; i++) {
-                        _genericMap.put(typeVariables[i].getName(), (Class<?>) types[i]);
-                    }
-                }
-            }
-            processAllColumns(entityTable, style, superClass, _genericMap);
-        }
+        entityTableMap.put(entityClass, entityTable);
     }
 
     /**
@@ -275,9 +228,8 @@ public class EntityHelper {
      * @param entityTable
      * @param style
      * @param field
-     * @param genericMap
      */
-    private static void processField(EntityTable entityTable, Style style, Field field, Map<String, Class<?>> genericMap) {
+    private static void processField(EntityTable entityTable, Style style, EntityField field) {
         //排除字段
         if (field.isAnnotationPresent(Transient.class)) {
             return;
@@ -313,15 +265,7 @@ public class EntityHelper {
         }
         entityColumn.setProperty(field.getName());
         entityColumn.setColumn(columnName);
-        if (field.getGenericType() != null && field.getGenericType() instanceof TypeVariable) {
-            if (genericMap == null || !genericMap.containsKey(((TypeVariable) field.getGenericType()).getName())) {
-                throw new RuntimeException(entityTable.getEntityClass() + "字段" + field.getName() + "的泛型类型无法获取!");
-            } else {
-                entityColumn.setJavaType(genericMap.get(((TypeVariable) field.getGenericType()).getName()));
-            }
-        } else {
-            entityColumn.setJavaType(field.getType());
-        }
+        entityColumn.setJavaType(field.getJavaType());
         //OrderBy
         if (field.isAnnotationPresent(OrderBy.class)) {
             OrderBy orderBy = field.getAnnotation(OrderBy.class);

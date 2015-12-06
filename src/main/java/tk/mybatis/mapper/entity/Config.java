@@ -19,6 +19,10 @@ public class Config {
     private String catalog;
     private String schema;
     /**
+     * 是否支持方法上的注解，默认false
+     */
+    private boolean enableMethodAnnotation;
+    /**
      * 对于一般的getAllIfColumnNode，是否判断!=''，默认不判断
      */
     private boolean notEmpty = false;
@@ -165,6 +169,14 @@ public class Config {
         this.style = style;
     }
 
+    public boolean isEnableMethodAnnotation() {
+        return enableMethodAnnotation;
+    }
+
+    public void setEnableMethodAnnotation(boolean enableMethodAnnotation) {
+        this.enableMethodAnnotation = enableMethodAnnotation;
+    }
+
     /**
      * 获取表前缀，带catalog或schema
      *
@@ -218,6 +230,10 @@ public class Config {
         String notEmpty = properties.getProperty("notEmpty");
         if (StringUtil.isNotEmpty(notEmpty)) {
             this.notEmpty = notEmpty.equalsIgnoreCase("TRUE");
+        }
+        String enableMethodAnnotation = properties.getProperty("enableMethodAnnotation");
+        if (StringUtil.isNotEmpty(enableMethodAnnotation)) {
+            this.enableMethodAnnotation = enableMethodAnnotation.equalsIgnoreCase("TRUE");
         }
         String styleStr = properties.getProperty("style");
         if (StringUtil.isNotEmpty(styleStr)) {

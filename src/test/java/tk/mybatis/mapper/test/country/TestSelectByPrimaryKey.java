@@ -122,7 +122,7 @@ public class TestSelectByPrimaryKey {
         SqlSession sqlSession = MybatisHelper.getSqlSession();
         try {
             CountryMapper mapper = sqlSession.getMapper(CountryMapper.class);
-            mapper.selectByPrimaryKey("100");
+            mapper.selectByPrimaryKey(100);
         } finally {
             sqlSession.close();
         }

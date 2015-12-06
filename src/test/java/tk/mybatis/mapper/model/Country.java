@@ -42,6 +42,7 @@ public class Country extends Entity<Integer, String> implements Serializable, ID
     }
 
     @Override
+    @Transient
     public String getDynamicTableName() {
         return dynamicTableName123;
     }
