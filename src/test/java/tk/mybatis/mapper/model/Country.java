@@ -6,8 +6,6 @@ import tk.mybatis.mapper.entity.IDynamicTableName;
 import tk.mybatis.mapper.typehandler.StringType2Handler;
 
 import javax.persistence.Column;
-import javax.persistence.Id;
-import javax.persistence.OrderBy;
 import javax.persistence.Transient;
 import java.io.Serializable;
 
@@ -16,12 +14,8 @@ import java.io.Serializable;
  * Author: liuzh
  * Update: liuzh(2014-06-06 13:38)
  */
-public class Country implements Serializable, IDynamicTableName {
+public class Country extends Entity<Integer, String> implements Serializable, IDynamicTableName {
     private static final long serialVersionUID = -1626761012846137805L;
-
-    @Id
-    @OrderBy("desc")
-    private Integer id;
 
     @Column
     @ColumnType(jdbcType = JdbcType.VARCHAR, typeHandler = StringType2Handler.class)
@@ -30,14 +24,6 @@ public class Country implements Serializable, IDynamicTableName {
 
     @Transient
     private String dynamicTableName123;
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
 
     public String getCountryname() {
         return countryname;
@@ -53,15 +39,6 @@ public class Country implements Serializable, IDynamicTableName {
 
     public void setCountrycode(String countrycode) {
         this.countrycode = countrycode;
-    }
-
-    @Override
-    public String toString() {
-        return "Country{" +
-                "id=" + id +
-                ", countryname='" + countryname + '\'' +
-                ", countrycode='" + countrycode + '\'' +
-                '}';
     }
 
     @Override

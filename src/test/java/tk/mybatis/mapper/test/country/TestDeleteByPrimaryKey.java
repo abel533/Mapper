@@ -120,7 +120,7 @@ public class TestDeleteByPrimaryKey {
         try {
             CountryMapper mapper = sqlSession.getMapper(CountryMapper.class);
             //根据主键删除
-            Assert.assertEquals(1, mapper.deleteByPrimaryKey("100"));
+            Assert.assertEquals(1, mapper.deleteByPrimaryKey(100));
         } finally {
             sqlSession.rollback();
             sqlSession.close();
