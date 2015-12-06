@@ -3,6 +3,7 @@ package tk.mybatis.mapper.mapperhelper;
 import tk.mybatis.mapper.entity.EntityColumn;
 import tk.mybatis.mapper.entity.EntityTable;
 import tk.mybatis.mapper.entity.IDynamicTableName;
+import tk.mybatis.mapper.util.StringUtil;
 
 import java.util.Set;
 
@@ -79,7 +80,7 @@ public class SqlHelper {
         StringBuilder sql = new StringBuilder();
         sql.append("<bind name=\"");
         sql.append(column.getProperty()).append("_bind\" ");
-        sql.append("value=\"").append(value).append("\"/>");
+        sql.append("value='").append(value).append("'/>");
         return sql.toString();
     }
 
@@ -97,6 +98,19 @@ public class SqlHelper {
         return sql.toString();
     }
 
+    /**
+     * 如果_cache == null
+     *
+     * @param column
+     * @return
+     */
+    public static String getIfCacheIsNull(EntityColumn column, String contents) {
+        StringBuilder sql = new StringBuilder();
+        sql.append("<if test=\"").append(column.getProperty()).append("_cache == null\">");
+        sql.append(contents);
+        sql.append("</if>");
+        return sql.toString();
+    }
 
     /**
      * 判断自动!=null的条件结构
@@ -107,8 +121,36 @@ public class SqlHelper {
      * @return
      */
     public static String getIfNotNull(EntityColumn column, String contents, boolean empty) {
+        return getIfNotNull(null, column, contents, empty);
+    }
+
+    /**
+     * 判断自动==null的条件结构
+     *
+     * @param column
+     * @param contents
+     * @param empty
+     * @return
+     */
+    public static String getIfIsNull(EntityColumn column, String contents, boolean empty) {
+        return getIfIsNull(null, column, contents, empty);
+    }
+
+    /**
+     * 判断自动!=null的条件结构
+     *
+     * @param entityName
+     * @param column
+     * @param contents
+     * @param empty
+     * @return
+     */
+    public static String getIfNotNull(String entityName, EntityColumn column, String contents, boolean empty) {
         StringBuilder sql = new StringBuilder();
         sql.append("<if test=\"");
+        if (StringUtil.isNotEmpty(entityName)) {
+            sql.append(entityName).append(".");
+        }
         sql.append(column.getProperty()).append(" != null");
         if (empty && column.getJavaType().equals(String.class)) {
             sql.append(" and ").append(column.getProperty()).append(" != '' ");
@@ -122,14 +164,18 @@ public class SqlHelper {
     /**
      * 判断自动==null的条件结构
      *
+     * @param entityName
      * @param column
      * @param contents
      * @param empty
      * @return
      */
-    public static String getIfIsNull(EntityColumn column, String contents, boolean empty) {
+    public static String getIfIsNull(String entityName, EntityColumn column, String contents, boolean empty) {
         StringBuilder sql = new StringBuilder();
         sql.append("<if test=\"");
+        if (StringUtil.isNotEmpty(entityName)) {
+            sql.append(entityName).append(".");
+        }
         sql.append(column.getProperty()).append(" == null");
         if (empty && column.getJavaType().equals(String.class)) {
             sql.append(" or ").append(column.getProperty()).append(" == '' ");
@@ -175,5 +221,129 @@ public class SqlHelper {
         return sql.toString();
     }
 
+    /**
+     * 获取所有查询列，如id,name,code...
+     *
+     * @param entityClass
+     * @return
+     */
+    public static String getAllColumns(Class<?> entityClass) {
+        Set<EntityColumn> columnList = EntityHelper.getColumns(entityClass);
+        StringBuilder sql = new StringBuilder();
+        for (EntityColumn entityColumn : columnList) {
+            sql.append(entityColumn.getColumn()).append(",");
+        }
+        return sql.substring(0, sql.length() - 1);
+    }
+
+    /**
+     * example支持查询指定列时
+     *
+     * @return
+     */
+    public static String exampleSelectColumns(Class<?> entityClass) {
+        StringBuilder sql = new StringBuilder();
+        sql.append("<if test=\"@tk.mybatis.mapper.util.OGNL@hasSelectColumns(_parameter)\">");
+        sql.append("<foreach collection=\"_parameter.selectColumns\" item=\"selectColumn\" separator=\",\">");
+        sql.append("${selectColumn}");
+        sql.append("</foreach>");
+        sql.append("</if>");
+        //不支持指定列的时候查询全部列
+        sql.append("<if test=\"@tk.mybatis.mapper.util.OGNL@hasNoSelectColumns(_parameter)\">");
+        sql.append(SqlHelper.getAllColumns(entityClass));
+        sql.append("</if>");
+        return sql.toString();
+    }
+
+    /**
+     * example查询中的orderBy条件，会判断默认orderBy
+     *
+     * @return
+     */
+    public static String exampleOrderBy(Class<?> entityClass) {
+        StringBuilder sql = new StringBuilder();
+        sql.append("<if test=\"orderByClause != null\">");
+        sql.append("order by ${orderByClause}\")");
+        sql.append("</if>");
+        String orderByClause = EntityHelper.getOrderByClause(entityClass);
+        if (orderByClause.length() > 0) {
+            sql.append("<if test=\"orderByClause == null\">");
+            sql.append("ORDER BY " + orderByClause);
+            sql.append("</if>");
+        }
+        return sql.toString();
+    }
+
+    /**
+     * Example查询中的where结构，用于只有一个Example参数时
+     *
+     * @return
+     */
+    public static String exampleWhereClause() {
+        return "<if test=\"_parameter != null\">" +
+                "<where>\n" +
+                "  <foreach collection=\"oredCriteria\" item=\"criteria\" separator=\"or\">\n" +
+                "    <if test=\"criteria.valid\">\n" +
+                "      <trim prefix=\"(\" prefixOverrides=\"and\" suffix=\")\">\n" +
+                "        <foreach collection=\"criteria.criteria\" item=\"criterion\">\n" +
+                "          <choose>\n" +
+                "            <when test=\"criterion.noValue\">\n" +
+                "              and ${criterion.condition}\n" +
+                "            </when>\n" +
+                "            <when test=\"criterion.singleValue\">\n" +
+                "              and ${criterion.condition} #{criterion.value}\n" +
+                "            </when>\n" +
+                "            <when test=\"criterion.betweenValue\">\n" +
+                "              and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}\n" +
+                "            </when>\n" +
+                "            <when test=\"criterion.listValue\">\n" +
+                "              and ${criterion.condition}\n" +
+                "              <foreach close=\")\" collection=\"criterion.value\" item=\"listItem\" open=\"(\" separator=\",\">\n" +
+                "                #{listItem}\n" +
+                "              </foreach>\n" +
+                "            </when>\n" +
+                "          </choose>\n" +
+                "        </foreach>\n" +
+                "      </trim>\n" +
+                "    </if>\n" +
+                "  </foreach>\n" +
+                "</where>" +
+                "</if>";
+    }
+
+    /**
+     * Example-Update中的where结构，用于多个参数时，Example带@Param("example")注解时
+     *
+     * @return
+     */
+    public static String updateByExampleWhereClause() {
+        return "<where>\n" +
+                "  <foreach collection=\"example.oredCriteria\" item=\"criteria\" separator=\"or\">\n" +
+                "    <if test=\"criteria.valid\">\n" +
+                "      <trim prefix=\"(\" prefixOverrides=\"and\" suffix=\")\">\n" +
+                "        <foreach collection=\"criteria.criteria\" item=\"criterion\">\n" +
+                "          <choose>\n" +
+                "            <when test=\"criterion.noValue\">\n" +
+                "              and ${criterion.condition}\n" +
+                "            </when>\n" +
+                "            <when test=\"criterion.singleValue\">\n" +
+                "              and ${criterion.condition} #{criterion.value}\n" +
+                "            </when>\n" +
+                "            <when test=\"criterion.betweenValue\">\n" +
+                "              and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}\n" +
+                "            </when>\n" +
+                "            <when test=\"criterion.listValue\">\n" +
+                "              and ${criterion.condition}\n" +
+                "              <foreach close=\")\" collection=\"criterion.value\" item=\"listItem\" open=\"(\" separator=\",\">\n" +
+                "                #{listItem}\n" +
+                "              </foreach>\n" +
+                "            </when>\n" +
+                "          </choose>\n" +
+                "        </foreach>\n" +
+                "      </trim>\n" +
+                "    </if>\n" +
+                "  </foreach>\n" +
+                "</where>";
+    }
 
 }

@@ -25,14 +25,12 @@
 package tk.mybatis.mapper.provider;
 
 import org.apache.ibatis.mapping.MappedStatement;
-import org.apache.ibatis.scripting.xmltags.*;
 import tk.mybatis.mapper.entity.EntityColumn;
 import tk.mybatis.mapper.mapperhelper.EntityHelper;
 import tk.mybatis.mapper.mapperhelper.MapperHelper;
 import tk.mybatis.mapper.mapperhelper.MapperTemplate;
+import tk.mybatis.mapper.mapperhelper.SqlHelper;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -52,17 +50,12 @@ public class ExampleProvider extends MapperTemplate {
      * @param ms
      * @return
      */
-    public SqlNode selectCountByExample(MappedStatement ms) {
+    public String selectCountByExample(MappedStatement ms) {
         Class<?> entityClass = getEntityClass(ms);
-
-        List<SqlNode> sqlNodes = new ArrayList<SqlNode>();
-        //静态的sql部分:select column ... from table
-        sqlNodes.add(new StaticTextSqlNode("SELECT COUNT(*) FROM "));
-        sqlNodes.add(getDynamicTableNameNode(entityClass));
-
-        IfSqlNode ifNullSqlNode = new IfSqlNode(exampleWhereClause(ms.getConfiguration()), "_parameter != null");
-        sqlNodes.add(ifNullSqlNode);
-        return new MixedSqlNode(sqlNodes);
+        StringBuilder sql = new StringBuilder("SELECT COUNT(*) FROM ");
+        sql.append(SqlHelper.getDynamicTableName(entityClass, tableName(entityClass)));
+        sql.append(SqlHelper.exampleWhereClause());
+        return sql.toString();
     }
 
     /**
@@ -71,17 +64,12 @@ public class ExampleProvider extends MapperTemplate {
      * @param ms
      * @return
      */
-    public SqlNode deleteByExample(MappedStatement ms) {
+    public String deleteByExample(MappedStatement ms) {
         Class<?> entityClass = getEntityClass(ms);
-
-        List<SqlNode> sqlNodes = new ArrayList<SqlNode>();
-        //静态的sql部分:select column ... from table
-        sqlNodes.add(new StaticTextSqlNode("DELETE FROM "));
-        sqlNodes.add(getDynamicTableNameNode(entityClass));
-
-        IfSqlNode ifNullSqlNode = new IfSqlNode(exampleWhereClause(ms.getConfiguration()), "_parameter != null");
-        sqlNodes.add(ifNullSqlNode);
-        return new MixedSqlNode(sqlNodes);
+        StringBuilder sql = new StringBuilder("DELETE FROM ");
+        sql.append(SqlHelper.getDynamicTableName(entityClass, tableName(entityClass)));
+        sql.append(SqlHelper.exampleWhereClause());
+        return sql.toString();
     }
 
 
@@ -91,36 +79,19 @@ public class ExampleProvider extends MapperTemplate {
      * @param ms
      * @return
      */
-    public SqlNode selectByExample(MappedStatement ms) {
+    public String selectByExample(MappedStatement ms) {
         Class<?> entityClass = getEntityClass(ms);
         //将返回值修改为实体类型
         setResultType(ms, entityClass);
-        List<SqlNode> sqlNodes = new ArrayList<SqlNode>();
-        //静态的sql部分:select column ... from table
-        sqlNodes.add(new StaticTextSqlNode("SELECT"));
-        IfSqlNode distinctSqlNode = new IfSqlNode(new StaticTextSqlNode("DISTINCT"), "distinct");
-        sqlNodes.add(distinctSqlNode);
-
-        ForEachSqlNode forEachSelectColumns = new ForEachSqlNode(ms.getConfiguration(), new TextSqlNode("${selectColumn}"), "_parameter.selectColumns", null, "selectColumn", null, null, ",");
-        IfSqlNode ifSelectColumns = new IfSqlNode(forEachSelectColumns, "@tk.mybatis.mapper.util.OGNL@hasSelectColumns(_parameter)");
-        sqlNodes.add(ifSelectColumns);
-
-        IfSqlNode ifNoSelectColumns = new IfSqlNode(new StaticTextSqlNode(EntityHelper.getSelectColumns(entityClass)), "@tk.mybatis.mapper.util.OGNL@hasNoSelectColumns(_parameter)");
-        sqlNodes.add(ifNoSelectColumns);
-
-        sqlNodes.add(new StaticTextSqlNode(" FROM "));
-        sqlNodes.add(getDynamicTableNameNode(entityClass));
-
-        IfSqlNode ifNullSqlNode = new IfSqlNode(exampleWhereClause(ms.getConfiguration()), "_parameter != null");
-        sqlNodes.add(ifNullSqlNode);
-        IfSqlNode orderByClauseSqlNode = new IfSqlNode(new TextSqlNode("order by ${orderByClause}"), "orderByClause != null");
-        sqlNodes.add(orderByClauseSqlNode);
-        String orderByClause = EntityHelper.getOrderByClause(entityClass);
-        if (orderByClause.length() > 0) {
-            IfSqlNode defaultOrderByClauseSqlNode = new IfSqlNode(new StaticTextSqlNode("ORDER BY " + orderByClause), "orderByClause == null");
-            sqlNodes.add(defaultOrderByClauseSqlNode);
-        }
-        return new MixedSqlNode(sqlNodes);
+        StringBuilder sql = new StringBuilder("SELECT ");
+        sql.append("<if test=\"distinct\">distinct</if>");
+        //支持查询指定列
+        sql.append(SqlHelper.exampleSelectColumns(entityClass));
+        sql.append("FROM");
+        sql.append(SqlHelper.getDynamicTableName(entityClass, tableName(entityClass)));
+        sql.append(SqlHelper.exampleWhereClause());
+        sql.append(SqlHelper.exampleOrderBy(entityClass));
+        return sql.toString();
     }
 
     /**
@@ -129,7 +100,7 @@ public class ExampleProvider extends MapperTemplate {
      * @param ms
      * @return
      */
-    public SqlNode selectByExampleAndRowBounds(MappedStatement ms) {
+    public String selectByExampleAndRowBounds(MappedStatement ms) {
         return selectByExample(ms);
     }
 
@@ -139,28 +110,21 @@ public class ExampleProvider extends MapperTemplate {
      * @param ms
      * @return
      */
-    public SqlNode updateByExampleSelective(MappedStatement ms) {
+    public String updateByExampleSelective(MappedStatement ms) {
         Class<?> entityClass = getEntityClass(ms);
-        List<SqlNode> sqlNodes = new ArrayList<SqlNode>();
-        //update table
-        sqlNodes.add(new StaticTextSqlNode("UPDATE "));
-        sqlNodes.add(getDynamicTableNameNode(entityClass, "record"));
-
+        StringBuilder sql = new StringBuilder("UPDATE ");
+        sql.append(SqlHelper.getDynamicTableName(entityClass, tableName(entityClass), "record"));
+        sql.append("<trim prefix=\"SET\" suffixOverrides=\",\">");
         //获取全部列
         Set<EntityColumn> columnList = EntityHelper.getColumns(entityClass);
-        List<SqlNode> ifNodes = new ArrayList<SqlNode>();
-
         for (EntityColumn column : columnList) {
             if (!column.isId()) {
-                StaticTextSqlNode columnNode = new StaticTextSqlNode(column.getColumn() + " = #{record." + column.getProperty() + "}, ");
-                ifNodes.add(new IfSqlNode(columnNode, "record." + column.getProperty() + " != null"));
+                sql.append(SqlHelper.getIfNotNull("record", column, column.getColumn() + " = " + column.getColumnHolderWithComma("record", null), isNotEmpty()));
             }
         }
-        sqlNodes.add(new SetSqlNode(ms.getConfiguration(), new MixedSqlNode(ifNodes)));
-        //Example的Where
-        IfSqlNode ifNullSqlNode = new IfSqlNode(updateByExampleWhereClause(ms.getConfiguration()), "_parameter != null");
-        sqlNodes.add(ifNullSqlNode);
-        return new MixedSqlNode(sqlNodes);
+        sql.append("</trim>");
+        sql.append(SqlHelper.updateByExampleWhereClause());
+        return sql.toString();
     }
 
     /**
@@ -169,26 +133,20 @@ public class ExampleProvider extends MapperTemplate {
      * @param ms
      * @return
      */
-    public SqlNode updateByExample(MappedStatement ms) {
+    public String updateByExample(MappedStatement ms) {
         Class<?> entityClass = getEntityClass(ms);
-        List<SqlNode> sqlNodes = new ArrayList<SqlNode>();
-        //update table
-        sqlNodes.add(new StaticTextSqlNode("UPDATE "));
-        sqlNodes.add(getDynamicTableNameNode(entityClass, "record"));
-
+        StringBuilder sql = new StringBuilder("UPDATE ");
+        sql.append(SqlHelper.getDynamicTableName(entityClass, tableName(entityClass), "record"));
+        sql.append("<trim prefix=\"SET\" suffixOverrides=\",\">");
         //获取全部列
         Set<EntityColumn> columnList = EntityHelper.getColumns(entityClass);
-        List<SqlNode> setSqlNodes = new ArrayList<SqlNode>();
-        //全部的if property!=null and property!=''
         for (EntityColumn column : columnList) {
             if (!column.isId()) {
-                setSqlNodes.add(new StaticTextSqlNode(column.getColumn() + " = #{record." + column.getProperty() + "}, "));
+                sql.append(column.getColumn() + " = " + column.getColumnHolderWithComma("record", null));
             }
         }
-        sqlNodes.add(new SetSqlNode(ms.getConfiguration(), new MixedSqlNode(setSqlNodes)));
-        //Example的Where
-        IfSqlNode ifNullSqlNode = new IfSqlNode(updateByExampleWhereClause(ms.getConfiguration()), "_parameter != null");
-        sqlNodes.add(ifNullSqlNode);
-        return new MixedSqlNode(sqlNodes);
+        sql.append("</trim>");
+        sql.append(SqlHelper.updateByExampleWhereClause());
+        return sql.toString();
     }
 }
