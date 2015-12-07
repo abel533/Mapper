@@ -92,7 +92,7 @@ Country代码：
 <dependency>
     <groupId>tk.mybatis</groupId>
     <artifactId>mapper</artifactId>
-    <version>3.3.0</version>
+    <version>3.3.1</version>
 </dependency>
 ```
 
@@ -110,7 +110,7 @@ http://repo1.maven.org/maven2/javax/persistence/persistence-api/1.0/
 
 ##Maven坐标以及下载地址
 
-###最新版本3.3.1 - 2015-12-06
+###最新版本3.3.1 - 2015-12-09
 
 - 增加`enableMethodAnnotation`参数，可以控制是否支持方法上的JPA注解，默认`false`。
   设置`enableMethodAnnotation = true`的时候注意，如`getRealName`或`setYourName`都会产生`realName`属性或`yourName`属性，如果该方法对应的属性不是表中的字段，就需要给方法增加`@Transient`注解。
