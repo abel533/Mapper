@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2014 abel533@gmail.com
+ * Copyright (c) 2014-2016 abel533@gmail.com
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,12 +24,11 @@
 
 package tk.mybatis.mapper.test.country;
 
+import org.apache.ibatis.session.SqlSession;
+import org.junit.Test;
 import tk.mybatis.mapper.mapper.CachedCountryMapper;
 import tk.mybatis.mapper.mapper.MybatisHelper;
 import tk.mybatis.mapper.model.Country;
-import org.apache.ibatis.session.SqlSession;
-import org.junit.Assert;
-import org.junit.Test;
 
 /**
  * 通过实体类属性进行查询

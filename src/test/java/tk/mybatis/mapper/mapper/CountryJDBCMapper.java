@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2014 abel533@gmail.com
+ * Copyright (c) 2014-2016 abel533@gmail.com
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,8 +24,8 @@
 
 package tk.mybatis.mapper.mapper;
 
-import tk.mybatis.mapper.model.CountryJDBC;
 import tk.mybatis.mapper.common.SqlServerMapper;
+import tk.mybatis.mapper.model.CountryJDBC;
 
 /**
  * Created by liuzh on 2014/11/19.

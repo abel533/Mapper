@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2014 abel533@gmail.com
+ * Copyright (c) 2014-2016 abel533@gmail.com
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,11 +24,11 @@
 
 package tk.mybatis.mapper.test.jdbc;
 
+import org.apache.ibatis.session.SqlSession;
+import org.junit.Assert;
 import tk.mybatis.mapper.mapper.CountryJDBCMapper;
 import tk.mybatis.mapper.mapper.MybatisHelper;
 import tk.mybatis.mapper.model.CountryJDBC;
-import org.apache.ibatis.session.SqlSession;
-import org.junit.Assert;
 
 /**
  * sqlserver测试 - 该类注释所有测试方法是因为该测试是针对sqlserver的，而项目测试用的hsqldb，所以这些测试不能运行，需要换为sqlserver才可以
