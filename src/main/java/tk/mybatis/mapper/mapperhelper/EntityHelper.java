@@ -147,7 +147,9 @@ public class EntityHelper {
      *
      * @param entityClass
      * @return
+     * @deprecated 4.x版本移除该方法
      */
+    @Deprecated
     public static String getAllColumns(Class<?> entityClass) {
         Set<EntityColumn> columnList = getColumns(entityClass);
         StringBuilder selectBuilder = new StringBuilder();
@@ -162,7 +164,9 @@ public class EntityHelper {
      *
      * @param entityClass
      * @return
+     * @deprecated 4.x版本移除该方法
      */
+    @Deprecated
     public static String getPrimaryKeyWhere(Class<?> entityClass) {
         Set<EntityColumn> entityColumns = getPKColumns(entityClass);
         StringBuilder whereBuilder = new StringBuilder();

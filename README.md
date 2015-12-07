@@ -143,7 +143,7 @@ http://repo1.maven.org/maven2/javax/persistence/persistence-api/1.0/
   }
   ```
   自己扩展单表操作的方法是非常容易的事情，建议有一定通用Mapper使用基础的自行扩展，扩展可以参考[如何扩展通用接口](http://git.oschina.net/free/Mapper/blob/master/wiki/mapper3/6.MyMapper.md)
-
+- 新增`SqlHelper`工具类，其中包含了大量可用的现成的SQL方法
 
 ###3.3.0 - 2015-11-01
 
