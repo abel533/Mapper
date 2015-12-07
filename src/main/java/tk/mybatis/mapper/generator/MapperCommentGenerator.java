@@ -63,7 +63,8 @@ public class MapperCommentGenerator implements CommentGenerator {
         return;
     }
 
-    public void addConfigurationProperties(Properties properties) {}
+    public void addConfigurationProperties(Properties properties) {
+    }
 
     /**
      * 删除标记
@@ -87,9 +88,11 @@ public class MapperCommentGenerator implements CommentGenerator {
      * @param innerClass
      * @param introspectedTable
      */
-    public void addClassComment(InnerClass innerClass, IntrospectedTable introspectedTable) {}
+    public void addClassComment(InnerClass innerClass, IntrospectedTable introspectedTable) {
+    }
 
-    public void addEnumComment(InnerEnum innerEnum, IntrospectedTable introspectedTable) {}
+    public void addEnumComment(InnerEnum innerEnum, IntrospectedTable introspectedTable) {
+    }
 
     /**
      * 给字段添加数据库备注
@@ -121,8 +124,8 @@ public class MapperCommentGenerator implements CommentGenerator {
         String column = introspectedColumn.getActualColumnName();
         if (StringUtility.stringContainsSpace(column) || introspectedTable.getTableConfiguration().isAllColumnDelimitingEnabled()) {
             column = introspectedColumn.getContext().getBeginningDelimiter()
-                        + column
-                        + introspectedColumn.getContext().getEndingDelimiter();
+                    + column
+                    + introspectedColumn.getContext().getEndingDelimiter();
         }
         if (!column.equals(introspectedColumn.getJavaProperty())) {
             //@Column
@@ -145,13 +148,15 @@ public class MapperCommentGenerator implements CommentGenerator {
      * @param field
      * @param introspectedTable
      */
-    public void addFieldComment(Field field, IntrospectedTable introspectedTable) {}
+    public void addFieldComment(Field field, IntrospectedTable introspectedTable) {
+    }
 
     /**
      * @param method
      * @param introspectedTable
      */
-    public void addGeneralMethodComment(Method method, IntrospectedTable introspectedTable) {}
+    public void addGeneralMethodComment(Method method, IntrospectedTable introspectedTable) {
+    }
 
     /**
      * getter方法注释
@@ -215,5 +220,6 @@ public class MapperCommentGenerator implements CommentGenerator {
      * @param introspectedTable
      * @param markAsDoNotDelete
      */
-    public void addClassComment(InnerClass innerClass, IntrospectedTable introspectedTable, boolean markAsDoNotDelete) {}
+    public void addClassComment(InnerClass innerClass, IntrospectedTable introspectedTable, boolean markAsDoNotDelete) {
+    }
 }

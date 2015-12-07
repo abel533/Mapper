@@ -29,7 +29,7 @@ import tk.mybatis.mapper.provider.base.BaseInsertProvider;
 
 /**
  * 通用Mapper接口,插入
- * 
+ *
  * @param <T> 不能为空
  * @author liuzh
  */

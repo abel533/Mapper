@@ -290,9 +290,9 @@ public abstract class MapperTemplate {
     /**
      * 根据对象生成主键映射
      *
-     * @deprecated 4.x版本会移除该方法
      * @param ms
      * @return
+     * @deprecated 4.x版本会移除该方法
      */
     @Deprecated
     protected List<ParameterMapping> getPrimaryKeyParameterMappings(MappedStatement ms) {
@@ -339,9 +339,9 @@ public abstract class MapperTemplate {
     /**
      * 获取表名 - 支持动态表名
      *
-     * @deprecated 4.x版本会移除该方法
      * @param entityClass
      * @return
+     * @deprecated 4.x版本会移除该方法
      */
     @Deprecated
     protected SqlNode getDynamicTableNameNode(Class<?> entityClass) {
@@ -358,10 +358,10 @@ public abstract class MapperTemplate {
     /**
      * 获取表名 - 支持动态表名，该方法用于多个入参时，通过parameterName指定入参中实体类的@Param的注解值
      *
-     * @deprecated 4.x版本会移除该方法
      * @param entityClass
      * @param parameterName
      * @return
+     * @deprecated 4.x版本会移除该方法
      */
     @Deprecated
     protected SqlNode getDynamicTableNameNode(Class<?> entityClass, String parameterName) {
@@ -379,10 +379,10 @@ public abstract class MapperTemplate {
      * 返回if条件的sqlNode
      * <p>一般类型：<code>&lt;if test="property!=null"&gt;columnNode&lt;/if&gt;</code></p>
      *
-     * @deprecated 4.x版本会移除该方法
      * @param column
      * @param columnNode
      * @return
+     * @deprecated 4.x版本会移除该方法
      */
     @Deprecated
     protected SqlNode getIfNotNull(EntityColumn column, SqlNode columnNode) {
@@ -393,11 +393,11 @@ public abstract class MapperTemplate {
      * 返回if条件的sqlNode
      * <p>一般类型：<code>&lt;if test="property!=null"&gt;columnNode&lt;/if&gt;</code></p>
      *
-     * @deprecated 4.x版本会移除该方法
      * @param column
      * @param columnNode
      * @param empty      是否包含!=''条件
      * @return
+     * @deprecated 4.x版本会移除该方法
      */
     @Deprecated
     protected SqlNode getIfNotNull(EntityColumn column, SqlNode columnNode, boolean empty) {
@@ -412,9 +412,9 @@ public abstract class MapperTemplate {
      * 返回if条件的sqlNode
      * <p>一般类型：<code>&lt;if test="property==null"&gt;columnNode&lt;/if&gt;</code></p>
      *
-     * @deprecated 4.x版本会移除该方法
      * @param column
      * @return
+     * @deprecated 4.x版本会移除该方法
      */
     @Deprecated
     protected SqlNode getIfIsNull(EntityColumn column, SqlNode columnNode) {
@@ -425,9 +425,9 @@ public abstract class MapperTemplate {
      * 返回if条件的sqlNode
      * <p>一般类型：<code>&lt;if test="property!=null"&gt;columnNode&lt;/if&gt;</code></p>
      *
-     * @deprecated 4.x版本会移除该方法
      * @param column
      * @return
+     * @deprecated 4.x版本会移除该方法
      */
     @Deprecated
     protected SqlNode getIfCacheNotNull(EntityColumn column, SqlNode columnNode) {
@@ -438,9 +438,9 @@ public abstract class MapperTemplate {
      * 返回if条件的sqlNode
      * <p>一般类型：<code>&lt;if test="property_cache!=null"&gt;columnNode&lt;/if&gt;</code></p>
      *
-     * @deprecated 4.x版本会移除该方法
      * @param column
      * @return
+     * @deprecated 4.x版本会移除该方法
      */
     @Deprecated
     protected SqlNode getIfCacheIsNull(EntityColumn column, SqlNode columnNode) {
@@ -450,10 +450,10 @@ public abstract class MapperTemplate {
     /**
      * 获取 <code>[AND] column = #{property}</code>
      *
-     * @deprecated 4.x版本会移除该方法
      * @param column
      * @param first
      * @return
+     * @deprecated 4.x版本会移除该方法
      */
     @Deprecated
     protected SqlNode getColumnEqualsProperty(EntityColumn column, boolean first) {
@@ -463,9 +463,9 @@ public abstract class MapperTemplate {
     /**
      * 获取所有列的where节点中的if判断列
      *
-     * @deprecated 4.x版本会移除该方法
      * @param entityClass
      * @return
+     * @deprecated 4.x版本会移除该方法
      */
     @Deprecated
     protected SqlNode getAllIfColumnNode(Class<?> entityClass) {
@@ -484,9 +484,9 @@ public abstract class MapperTemplate {
     /**
      * 根据对象生成所有列的映射
      *
-     * @deprecated 4.x版本会移除该方法
      * @param ms
      * @return
+     * @deprecated 4.x版本会移除该方法
      */
     @Deprecated
     protected List<ParameterMapping> getColumnParameterMappings(MappedStatement ms) {
@@ -613,9 +613,9 @@ public abstract class MapperTemplate {
     /**
      * Example查询中的where结构
      *
-     * @deprecated 4.x版本会移除该方法
      * @param configuration
      * @return
+     * @deprecated 4.x版本会移除该方法
      */
     @Deprecated
     public WhereSqlNode exampleWhereClause(Configuration configuration) {
@@ -627,9 +627,9 @@ public abstract class MapperTemplate {
     /**
      * Example-Update中的where结构
      *
-     * @deprecated 4.x版本会移除该方法
      * @param configuration
      * @return
+     * @deprecated 4.x版本会移除该方法
      */
     @Deprecated
     public WhereSqlNode updateByExampleWhereClause(Configuration configuration) {

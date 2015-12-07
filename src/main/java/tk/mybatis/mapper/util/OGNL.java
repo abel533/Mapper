@@ -16,10 +16,10 @@ public abstract class OGNL {
      * @param parameter
      * @return
      */
-    public static boolean hasSelectColumns(Object parameter){
-        if(parameter != null && parameter instanceof Example){
-            Example example = (Example)parameter;
-            if(example.getSelectColumns() != null && example.getSelectColumns().size() > 0){
+    public static boolean hasSelectColumns(Object parameter) {
+        if (parameter != null && parameter instanceof Example) {
+            Example example = (Example) parameter;
+            if (example.getSelectColumns() != null && example.getSelectColumns().size() > 0) {
                 return true;
             }
         }
@@ -32,7 +32,7 @@ public abstract class OGNL {
      * @param parameter
      * @return
      */
-    public static boolean hasNoSelectColumns(Object parameter){
+    public static boolean hasNoSelectColumns(Object parameter) {
         return !hasSelectColumns(parameter);
     }
 

@@ -16,7 +16,7 @@ public class StringUtil {
      * @param str
      * @return
      */
-    public static boolean isEmpty(String str){
+    public static boolean isEmpty(String str) {
         return str == null || str.length() == 0;
     }
 
@@ -26,7 +26,7 @@ public class StringUtil {
      * @param str
      * @return
      */
-    public static boolean isNotEmpty(String str){
+    public static boolean isNotEmpty(String str) {
         return !isEmpty(str);
     }
 
@@ -38,8 +38,8 @@ public class StringUtil {
      * @param style
      * @return
      */
-    public static String convertByStyle(String str, Style style){
-        switch (style){
+    public static String convertByStyle(String str, Style style) {
+        switch (style) {
             case camelhump:
                 return camelhumpToUnderline(str);
             case uppercase:
