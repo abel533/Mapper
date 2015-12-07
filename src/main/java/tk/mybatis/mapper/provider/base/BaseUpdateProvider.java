@@ -25,13 +25,9 @@
 package tk.mybatis.mapper.provider.base;
 
 import org.apache.ibatis.mapping.MappedStatement;
-import tk.mybatis.mapper.entity.EntityColumn;
-import tk.mybatis.mapper.mapperhelper.EntityHelper;
 import tk.mybatis.mapper.mapperhelper.MapperHelper;
 import tk.mybatis.mapper.mapperhelper.MapperTemplate;
 import tk.mybatis.mapper.mapperhelper.SqlHelper;
-
-import java.util.Set;
 
 /**
  * BaseUpdateProvider实现类，基础方法实现类
@@ -52,28 +48,9 @@ public class BaseUpdateProvider extends MapperTemplate {
     public String updateByPrimaryKey(MappedStatement ms) {
         Class<?> entityClass = getEntityClass(ms);
         StringBuilder sql = new StringBuilder();
-        sql.append("UPDATE ");
-        sql.append(SqlHelper.getDynamicTableName(entityClass, tableName(entityClass)));
-        sql.append(" SET ");
-        //获取全部列
-        Set<EntityColumn> columnList = EntityHelper.getColumns(entityClass);
-        for (EntityColumn column : columnList) {
-            if (!column.isId()) {
-                sql.append(column.getColumnEqualsHolder()).append(",");
-            }
-        }
-        if (sql.charAt(sql.length() - 1) == ',') {
-            sql.setCharAt(sql.length() - 1, ' ');
-        }
-        //获取全部的主键的列
-        columnList = EntityHelper.getPKColumns(entityClass);
-        sql.append(" WHERE ");
-        boolean first = true;
-        //where 主键=#{property} 条件
-        for (EntityColumn column : columnList) {
-            sql.append(SqlHelper.getColumnEqualsProperty(column, first));
-            first = false;
-        }
+        sql.append(SqlHelper.updateTable(entityClass, tableName(entityClass)));
+        sql.append(SqlHelper.updateSetColumns(entityClass, null, false, false));
+        sql.append(SqlHelper.wherePKColumns(entityClass));
         return sql.toString();
     }
 
@@ -86,28 +63,9 @@ public class BaseUpdateProvider extends MapperTemplate {
     public String updateByPrimaryKeySelective(MappedStatement ms) {
         Class<?> entityClass = getEntityClass(ms);
         StringBuilder sql = new StringBuilder();
-        sql.append("UPDATE ");
-        sql.append(SqlHelper.getDynamicTableName(entityClass, tableName(entityClass)));
-        sql.append(" <set> ");
-
-        //获取全部列
-        Set<EntityColumn> columnList = EntityHelper.getColumns(entityClass);
-        //全部的if property!=null and property!=''
-        for (EntityColumn column : columnList) {
-            if (!column.isId()) {
-                sql.append(SqlHelper.getIfNotNull(column, column.getColumnEqualsHolder() + ",", isNotEmpty()));
-            }
-        }
-        sql.append(" </set> ");
-        //获取全部的主键的列
-        columnList = EntityHelper.getPKColumns(entityClass);
-        sql.append(" WHERE ");
-        boolean first = true;
-        //where 主键=#{property} 条件
-        for (EntityColumn column : columnList) {
-            sql.append(SqlHelper.getColumnEqualsProperty(column, first));
-            first = false;
-        }
+        sql.append(SqlHelper.updateTable(entityClass, tableName(entityClass)));
+        sql.append(SqlHelper.updateSetColumns(entityClass, null, true, isNotEmpty()));
+        sql.append(SqlHelper.wherePKColumns(entityClass));
         return sql.toString();
     }
 }

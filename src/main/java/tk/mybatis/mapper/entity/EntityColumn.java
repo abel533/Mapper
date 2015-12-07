@@ -156,7 +156,17 @@ public class EntityColumn {
      * @return
      */
     public String getColumnEqualsHolder() {
-        return this.column + " = " + getColumnHolder();
+        return getColumnEqualsHolder(null);
+    }
+
+    /**
+     * 返回格式如:colum = #{age,jdbcType=NUMERIC,typeHandler=MyTypeHandler}
+     *
+     * @param entityName
+     * @return
+     */
+    public String getColumnEqualsHolder(String entityName) {
+        return this.column + " = " + getColumnHolder(entityName);
     }
 
     /**

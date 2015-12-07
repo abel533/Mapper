@@ -25,7 +25,6 @@
 package tk.mybatis.mapper.provider.base;
 
 import org.apache.ibatis.mapping.MappedStatement;
-import tk.mybatis.mapper.mapperhelper.EntityHelper;
 import tk.mybatis.mapper.mapperhelper.MapperHelper;
 import tk.mybatis.mapper.mapperhelper.MapperTemplate;
 import tk.mybatis.mapper.mapperhelper.SqlHelper;
@@ -52,11 +51,9 @@ public class BaseSelectProvider extends MapperTemplate {
         //修改返回值类型为实体类型
         setResultType(ms, entityClass);
         StringBuilder sql = new StringBuilder();
-        sql.append("SELECT ");
-        sql.append(EntityHelper.getSelectColumns(entityClass));
-        sql.append(" FROM ");
-        sql.append(SqlHelper.getDynamicTableName(entityClass, tableName(entityClass)));
-        sql.append(SqlHelper.getAllIfColumnNode(EntityHelper.getEntityTable(entityClass), isNotEmpty()));
+        sql.append(SqlHelper.selectAllColumns(entityClass));
+        sql.append(SqlHelper.fromTable(entityClass, tableName(entityClass)));
+        sql.append(SqlHelper.whereAllIfColumns(entityClass, isNotEmpty()));
         return sql.toString();
     }
 
@@ -71,16 +68,10 @@ public class BaseSelectProvider extends MapperTemplate {
         //修改返回值类型为实体类型
         setResultType(ms, entityClass);
         StringBuilder sql = new StringBuilder();
-        sql.append("SELECT ");
-        sql.append(EntityHelper.getSelectColumns(entityClass));
-        sql.append(" FROM ");
-        sql.append(SqlHelper.getDynamicTableName(entityClass, tableName(entityClass)));
-        sql.append(SqlHelper.getAllIfColumnNode(EntityHelper.getEntityTable(entityClass), isNotEmpty()));
-        String orderByClause = EntityHelper.getOrderByClause(entityClass);
-        if (orderByClause.length() > 0) {
-            sql.append(" ORDER BY ");
-            sql.append(orderByClause);
-        }
+        sql.append(SqlHelper.selectAllColumns(entityClass));
+        sql.append(SqlHelper.fromTable(entityClass, tableName(entityClass)));
+        sql.append(SqlHelper.whereAllIfColumns(entityClass, isNotEmpty()));
+        sql.append(SqlHelper.orderByDefault(entityClass));
         return sql.toString();
     }
 
@@ -104,12 +95,9 @@ public class BaseSelectProvider extends MapperTemplate {
         //将返回值修改为实体类型
         setResultType(ms, entityClass);
         StringBuilder sql = new StringBuilder();
-        sql.append("select ");
-        sql.append(EntityHelper.getSelectColumns(entityClass));
-        sql.append(" from ");
-        sql.append(SqlHelper.getDynamicTableName(entityClass, tableName(entityClass)));
-        sql.append(" where ");
-        sql.append(EntityHelper.getPrimaryKeyWhere(entityClass));
+        sql.append(SqlHelper.selectAllColumns(entityClass));
+        sql.append(SqlHelper.fromTable(entityClass, tableName(entityClass)));
+        sql.append(SqlHelper.wherePKColumns(entityClass));
         return sql.toString();
     }
 
@@ -122,9 +110,9 @@ public class BaseSelectProvider extends MapperTemplate {
     public String selectCount(MappedStatement ms) {
         Class<?> entityClass = getEntityClass(ms);
         StringBuilder sql = new StringBuilder();
-        sql.append("SELECT COUNT(*) FROM ");
-        sql.append(SqlHelper.getDynamicTableName(entityClass, tableName(entityClass)));
-        sql.append(SqlHelper.getAllIfColumnNode(EntityHelper.getEntityTable(entityClass), isNotEmpty()));
+        sql.append("SELECT COUNT(*) ");
+        sql.append(SqlHelper.fromTable(entityClass, tableName(entityClass)));
+        sql.append(SqlHelper.whereAllIfColumns(entityClass, isNotEmpty()));
         return sql.toString();
     }
 
@@ -138,16 +126,10 @@ public class BaseSelectProvider extends MapperTemplate {
         final Class<?> entityClass = getEntityClass(ms);
         //修改返回值类型为实体类型
         setResultType(ms, entityClass);
-        //开始拼sql
         StringBuilder sql = new StringBuilder();
-        sql.append("select ").append(EntityHelper.getSelectColumns(entityClass)).append(" from ");
-        //不支持动态表名，因为没参数...
-        sql.append(tableName(entityClass));
-
-        String orderByClause = EntityHelper.getOrderByClause(entityClass);
-        if (orderByClause.length() > 0) {
-            sql.append(" ORDER BY ").append(orderByClause);
-        }
+        sql.append(SqlHelper.selectAllColumns(entityClass));
+        sql.append(SqlHelper.fromTable(entityClass, tableName(entityClass)));
+        sql.append(SqlHelper.orderByDefault(entityClass));
         return sql.toString();
     }
 }

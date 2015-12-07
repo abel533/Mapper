@@ -53,24 +53,12 @@ public class SpecialProvider extends MapperTemplate {
         EntityTable table = EntityHelper.getEntityTable(entityClass);
         //开始拼sql
         StringBuilder sql = new StringBuilder();
-        sql.append("insert into ");
-        sql.append(SqlHelper.getDynamicTableName(entityClass, tableName(entityClass)));
-        sql.append("(");
-        boolean first = true;
-        for (EntityColumn column : table.getEntityClassColumns()) {
-            if (column.isId()) {
-                continue;
-            }
-            if (!first) {
-                sql.append(",");
-            }
-            sql.append(column.getColumn());
-            first = false;
-        }
-        sql.append(") values ");
+        sql.append(SqlHelper.insertIntoTable(entityClass, tableName(entityClass)));
+        sql.append(SqlHelper.insertColumns(entityClass, true, false, false));
+        sql.append(" VALUES ");
         sql.append("<foreach collection=\"list\" item=\"record\" separator=\",\" >");
         sql.append("(");
-        first = true;
+        boolean first = true;
         for (EntityColumn column : table.getEntityClassColumns()) {
             if (column.isId()) {
                 continue;
@@ -93,36 +81,11 @@ public class SpecialProvider extends MapperTemplate {
      */
     public String insertUseGeneratedKeys(MappedStatement ms) {
         final Class<?> entityClass = getEntityClass(ms);
-        EntityTable table = EntityHelper.getEntityTable(entityClass);
         //开始拼sql
         StringBuilder sql = new StringBuilder();
-        sql.append("insert into ");
-        sql.append(SqlHelper.getDynamicTableName(entityClass, tableName(entityClass)));
-        sql.append("(");
-        boolean first = true;
-        for (EntityColumn column : table.getEntityClassColumns()) {
-            if (column.isId()) {
-                continue;
-            }
-            if (!first) {
-                sql.append(",");
-            }
-            sql.append(column.getColumn());
-            first = false;
-        }
-        sql.append(") values(");
-        first = true;
-        for (EntityColumn column : table.getEntityClassColumns()) {
-            if (column.isId()) {
-                continue;
-            }
-            if (!first) {
-                sql.append(",");
-            }
-            sql.append(column.getColumnHolder());
-            first = false;
-        }
-        sql.append(")");
+        sql.append(SqlHelper.insertIntoTable(entityClass, tableName(entityClass)));
+        sql.append(SqlHelper.insertColumns(entityClass, true, false, false));
+        sql.append(SqlHelper.insertValuesColumns(entityClass, true, false, false));
         return sql.toString();
     }
 }

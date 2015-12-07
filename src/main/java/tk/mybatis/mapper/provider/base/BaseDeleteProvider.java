@@ -25,7 +25,6 @@
 package tk.mybatis.mapper.provider.base;
 
 import org.apache.ibatis.mapping.MappedStatement;
-import tk.mybatis.mapper.mapperhelper.EntityHelper;
 import tk.mybatis.mapper.mapperhelper.MapperHelper;
 import tk.mybatis.mapper.mapperhelper.MapperTemplate;
 import tk.mybatis.mapper.mapperhelper.SqlHelper;
@@ -50,9 +49,8 @@ public class BaseDeleteProvider extends MapperTemplate {
     public String delete(MappedStatement ms) {
         Class<?> entityClass = getEntityClass(ms);
         StringBuilder sql = new StringBuilder();
-        sql.append("DELETE FROM ");
-        sql.append(SqlHelper.getDynamicTableName(entityClass, tableName(entityClass)));
-        sql.append(SqlHelper.getAllIfColumnNode(EntityHelper.getEntityTable(entityClass), isNotEmpty()));
+        sql.append(SqlHelper.deleteFromTable(entityClass, tableName(entityClass)));
+        sql.append(SqlHelper.whereAllIfColumns(entityClass, isNotEmpty()));
         return sql.toString();
     }
 
@@ -64,10 +62,8 @@ public class BaseDeleteProvider extends MapperTemplate {
     public String deleteByPrimaryKey(MappedStatement ms) {
         final Class<?> entityClass = getEntityClass(ms);
         StringBuilder sql = new StringBuilder();
-        sql.append("delete from ");
-        sql.append(SqlHelper.getDynamicTableName(entityClass, tableName(entityClass)));
-        sql.append(" where ");
-        sql.append(EntityHelper.getPrimaryKeyWhere(entityClass));
+        sql.append(SqlHelper.deleteFromTable(entityClass, tableName(entityClass)));
+        sql.append(SqlHelper.wherePKColumns(entityClass));
         return sql.toString();
     }
 }

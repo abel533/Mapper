@@ -25,13 +25,9 @@
 package tk.mybatis.mapper.provider;
 
 import org.apache.ibatis.mapping.MappedStatement;
-import tk.mybatis.mapper.entity.EntityColumn;
-import tk.mybatis.mapper.mapperhelper.EntityHelper;
 import tk.mybatis.mapper.mapperhelper.MapperHelper;
 import tk.mybatis.mapper.mapperhelper.MapperTemplate;
 import tk.mybatis.mapper.mapperhelper.SqlHelper;
-
-import java.util.Set;
 
 /**
  * ExampleProvider实现类，基础方法实现类
@@ -66,8 +62,8 @@ public class ExampleProvider extends MapperTemplate {
      */
     public String deleteByExample(MappedStatement ms) {
         Class<?> entityClass = getEntityClass(ms);
-        StringBuilder sql = new StringBuilder("DELETE FROM ");
-        sql.append(SqlHelper.getDynamicTableName(entityClass, tableName(entityClass)));
+        StringBuilder sql = new StringBuilder();
+        sql.append(SqlHelper.deleteFromTable(entityClass, tableName(entityClass)));
         sql.append(SqlHelper.exampleWhereClause());
         return sql.toString();
     }
@@ -87,8 +83,7 @@ public class ExampleProvider extends MapperTemplate {
         sql.append("<if test=\"distinct\">distinct</if>");
         //支持查询指定列
         sql.append(SqlHelper.exampleSelectColumns(entityClass));
-        sql.append("FROM");
-        sql.append(SqlHelper.getDynamicTableName(entityClass, tableName(entityClass)));
+        sql.append(SqlHelper.fromTable(entityClass, tableName(entityClass)));
         sql.append(SqlHelper.exampleWhereClause());
         sql.append(SqlHelper.exampleOrderBy(entityClass));
         return sql.toString();
@@ -112,17 +107,9 @@ public class ExampleProvider extends MapperTemplate {
      */
     public String updateByExampleSelective(MappedStatement ms) {
         Class<?> entityClass = getEntityClass(ms);
-        StringBuilder sql = new StringBuilder("UPDATE ");
-        sql.append(SqlHelper.getDynamicTableName(entityClass, tableName(entityClass), "record"));
-        sql.append("<trim prefix=\"SET\" suffixOverrides=\",\">");
-        //获取全部列
-        Set<EntityColumn> columnList = EntityHelper.getColumns(entityClass);
-        for (EntityColumn column : columnList) {
-            if (!column.isId()) {
-                sql.append(SqlHelper.getIfNotNull("record", column, column.getColumn() + " = " + column.getColumnHolderWithComma("record", null), isNotEmpty()));
-            }
-        }
-        sql.append("</trim>");
+        StringBuilder sql = new StringBuilder();
+        sql.append(SqlHelper.updateTable(entityClass, tableName(entityClass), "record"));
+        sql.append(SqlHelper.updateSetColumns(entityClass, "record", true, isNotEmpty()));
         sql.append(SqlHelper.updateByExampleWhereClause());
         return sql.toString();
     }
@@ -135,17 +122,9 @@ public class ExampleProvider extends MapperTemplate {
      */
     public String updateByExample(MappedStatement ms) {
         Class<?> entityClass = getEntityClass(ms);
-        StringBuilder sql = new StringBuilder("UPDATE ");
-        sql.append(SqlHelper.getDynamicTableName(entityClass, tableName(entityClass), "record"));
-        sql.append("<trim prefix=\"SET\" suffixOverrides=\",\">");
-        //获取全部列
-        Set<EntityColumn> columnList = EntityHelper.getColumns(entityClass);
-        for (EntityColumn column : columnList) {
-            if (!column.isId()) {
-                sql.append(column.getColumn() + " = " + column.getColumnHolderWithComma("record", null));
-            }
-        }
-        sql.append("</trim>");
+        StringBuilder sql = new StringBuilder();
+        sql.append(SqlHelper.updateTable(entityClass, tableName(entityClass), "record"));
+        sql.append(SqlHelper.updateSetColumns(entityClass, "record", false, false));
         sql.append(SqlHelper.updateByExampleWhereClause());
         return sql.toString();
     }

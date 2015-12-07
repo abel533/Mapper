@@ -100,8 +100,7 @@ public class BaseInsertProvider extends MapperTemplate {
         sql.append("(");
         sql.append(SqlHelper.getAllColumns(entityClass));
         sql.append(") ");
-        sql.append("VALUES");
-        sql.append("<trim prefix=\"(\" suffix=\")\" suffixOverrides=\",\">");
+        sql.append("<trim prefix=\"VALUES(\" suffix=\")\" suffixOverrides=\",\">");
         for (EntityColumn column : columnList) {
             //优先使用传入的属性值,当原属性property!=null时，用原属性
             //自增的情况下,如果默认有值,就会备份到property_cache中,所以这里需要先判断备份的值是否存在
@@ -195,8 +194,7 @@ public class BaseInsertProvider extends MapperTemplate {
             }
         }
         sql.append("</trim>");
-        sql.append("VALUES");
-        sql.append("<trim prefix=\"(\" suffix=\")\" suffixOverrides=\",\">");
+        sql.append("<trim prefix=\"VALUES(\" suffix=\")\" suffixOverrides=\",\">");
         for (EntityColumn column : columnList) {
             //优先使用传入的属性值,当原属性property!=null时，用原属性
             //自增的情况下,如果默认有值,就会备份到property_cache中,所以这里需要先判断备份的值是否存在

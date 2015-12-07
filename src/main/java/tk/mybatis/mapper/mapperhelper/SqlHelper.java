@@ -25,7 +25,6 @@
 package tk.mybatis.mapper.mapperhelper;
 
 import tk.mybatis.mapper.entity.EntityColumn;
-import tk.mybatis.mapper.entity.EntityTable;
 import tk.mybatis.mapper.entity.IDynamicTableName;
 import tk.mybatis.mapper.util.StringUtil;
 
@@ -69,12 +68,17 @@ public class SqlHelper {
      */
     public static String getDynamicTableName(Class<?> entityClass, String tableName, String parameterName) {
         if (IDynamicTableName.class.isAssignableFrom(entityClass)) {
-            return "<if test=\"@tk.mybatis.mapper.util.OGNL@isDynamicParameter(" + parameterName + ") and " + parameterName + ".dynamicTableName != null and " + parameterName + ".dynamicTableName != ''\">\n" +
-                    "${" + parameterName + ".dynamicTableName}\n" +
-                    "</if>\n" +
-                    "<if test=\"@tk.mybatis.mapper.util.OGNL@isNotDynamicParameter(" + parameterName + ") or " + parameterName + ".dynamicTableName == null or " + parameterName + ".dynamicTableName == ''\">\n" +
-                    tableName + "\n" +
-                    "</if>";
+            if (StringUtil.isNotEmpty(parameterName)) {
+                return "<if test=\"@tk.mybatis.mapper.util.OGNL@isDynamicParameter(" + parameterName + ") and " + parameterName + ".dynamicTableName != null and " + parameterName + ".dynamicTableName != ''\">\n" +
+                        "${" + parameterName + ".dynamicTableName}\n" +
+                        "</if>\n" +
+                        "<if test=\"@tk.mybatis.mapper.util.OGNL@isNotDynamicParameter(" + parameterName + ") or " + parameterName + ".dynamicTableName == null or " + parameterName + ".dynamicTableName == ''\">\n" +
+                        tableName + "\n" +
+                        "</if>";
+            } else {
+                return getDynamicTableName(entityClass, tableName);
+            }
+
         } else {
             return tableName;
         }
@@ -177,7 +181,11 @@ public class SqlHelper {
         }
         sql.append(column.getProperty()).append(" != null");
         if (empty && column.getJavaType().equals(String.class)) {
-            sql.append(" and ").append(column.getProperty()).append(" != '' ");
+            sql.append(" and ");
+            if (StringUtil.isNotEmpty(entityName)) {
+                sql.append(entityName).append(".");
+            }
+            sql.append(column.getProperty()).append(" != '' ");
         }
         sql.append("\">");
         sql.append(contents);
@@ -202,46 +210,15 @@ public class SqlHelper {
         }
         sql.append(column.getProperty()).append(" == null");
         if (empty && column.getJavaType().equals(String.class)) {
-            sql.append(" or ").append(column.getProperty()).append(" == '' ");
+            sql.append(" or ");
+            if (StringUtil.isNotEmpty(entityName)) {
+                sql.append(entityName).append(".");
+            }
+            sql.append(column.getProperty()).append(" == '' ");
         }
         sql.append("\">");
         sql.append(contents);
         sql.append("</if>");
-        return sql.toString();
-    }
-
-    /**
-     * 获取 <code>[AND] column = #{property}</code>
-     *
-     * @param column
-     * @param first
-     * @return
-     */
-    public static String getColumnEqualsProperty(EntityColumn column, boolean first) {
-        StringBuilder sql = new StringBuilder();
-        if (!first) {
-            sql.append(" AND ");
-        }
-        sql.append(column.getColumnEqualsHolder());
-        return sql.toString();
-    }
-
-    /**
-     * 获取所有列的where节点中的if判断列
-     *
-     * @param entityTable
-     * @param empty
-     * @return
-     */
-    public static String getAllIfColumnNode(EntityTable entityTable, boolean empty) {
-        Set<EntityColumn> columnList = entityTable.getEntityClassColumns();
-        boolean first = true;
-        StringBuilder sql = new StringBuilder(" <where> ");
-        for (EntityColumn column : columnList) {
-            sql.append(getIfNotNull(column, getColumnEqualsProperty(column, first), empty));
-            first = false;
-        }
-        sql.append("</where>");
         return sql.toString();
     }
 
@@ -258,6 +235,230 @@ public class SqlHelper {
             sql.append(entityColumn.getColumn()).append(",");
         }
         return sql.substring(0, sql.length() - 1);
+    }
+
+    /**
+     * select xxx,xxx...
+     *
+     * @param entityClass
+     * @return
+     */
+    public static String selectAllColumns(Class<?> entityClass) {
+        StringBuilder sql = new StringBuilder();
+        sql.append("SELECT ");
+        sql.append(getAllColumns(entityClass));
+        sql.append(" ");
+        return sql.toString();
+    }
+
+    /**
+     * from tableName - 动态表名
+     *
+     * @param entityClass
+     * @param defaultTableName
+     * @return
+     */
+    public static String fromTable(Class<?> entityClass, String defaultTableName) {
+        StringBuilder sql = new StringBuilder();
+        sql.append(" FROM ");
+        sql.append(getDynamicTableName(entityClass, defaultTableName));
+        sql.append(" ");
+        return sql.toString();
+    }
+
+    /**
+     * update tableName - 动态表名
+     *
+     * @param entityClass
+     * @param defaultTableName
+     * @return
+     */
+    public static String updateTable(Class<?> entityClass, String defaultTableName) {
+        return updateTable(entityClass, defaultTableName, null);
+    }
+
+    /**
+     * update tableName - 动态表名
+     *
+     * @param entityClass
+     * @param defaultTableName 默认表名
+     * @param entityName       别名
+     * @return
+     */
+    public static String updateTable(Class<?> entityClass, String defaultTableName, String entityName) {
+        StringBuilder sql = new StringBuilder();
+        sql.append("UPDATE ");
+        sql.append(getDynamicTableName(entityClass, defaultTableName, entityName));
+        sql.append(" ");
+        return sql.toString();
+    }
+
+    /**
+     * delete tableName - 动态表名
+     *
+     * @param entityClass
+     * @param defaultTableName
+     * @return
+     */
+    public static String deleteFromTable(Class<?> entityClass, String defaultTableName) {
+        StringBuilder sql = new StringBuilder();
+        sql.append("DELETE FROM ");
+        sql.append(getDynamicTableName(entityClass, defaultTableName));
+        sql.append(" ");
+        return sql.toString();
+    }
+
+    /**
+     * insert into tableName - 动态表名
+     *
+     * @param entityClass
+     * @param defaultTableName
+     * @return
+     */
+    public static String insertIntoTable(Class<?> entityClass, String defaultTableName) {
+        StringBuilder sql = new StringBuilder();
+        sql.append("INSERT INTO ");
+        sql.append(getDynamicTableName(entityClass, defaultTableName));
+        sql.append(" ");
+        return sql.toString();
+    }
+
+    /**
+     * insert table()列
+     *
+     * @param entityClass
+     * @param skipId      是否从列中忽略id类型
+     * @param notNull     是否判断!=null
+     * @param notEmpty    是否判断String类型!=''
+     * @return
+     */
+    public static String insertColumns(Class<?> entityClass, boolean skipId, boolean notNull, boolean notEmpty) {
+        StringBuilder sql = new StringBuilder();
+        sql.append("<trim prefix=\"(\" suffix=\")\" suffixOverrides=\",\">");
+        //获取全部列
+        Set<EntityColumn> columnList = EntityHelper.getColumns(entityClass);
+        //当某个列有主键策略时，不需要考虑他的属性是否为空，因为如果为空，一定会根据主键策略给他生成一个值
+        for (EntityColumn column : columnList) {
+            if (skipId && !column.isId()) {
+                if (notNull) {
+                    sql.append(SqlHelper.getIfNotNull(column, column.getColumn() + ",", notEmpty));
+                } else {
+                    sql.append(column.getColumn() + ",");
+                }
+            }
+        }
+        sql.append("</trim>");
+        return sql.toString();
+    }
+
+    /**
+     * insert-values()列
+     *
+     * @param entityClass
+     * @param skipId      是否从列中忽略id类型
+     * @param notNull     是否判断!=null
+     * @param notEmpty    是否判断String类型!=''
+     * @return
+     */
+    public static String insertValuesColumns(Class<?> entityClass, boolean skipId, boolean notNull, boolean notEmpty) {
+        StringBuilder sql = new StringBuilder();
+        sql.append("<trim prefix=\"VALUES (\" suffix=\")\" suffixOverrides=\",\">");
+        //获取全部列
+        Set<EntityColumn> columnList = EntityHelper.getColumns(entityClass);
+        //当某个列有主键策略时，不需要考虑他的属性是否为空，因为如果为空，一定会根据主键策略给他生成一个值
+        for (EntityColumn column : columnList) {
+            if (skipId && !column.isId()) {
+                if (notNull) {
+                    sql.append(SqlHelper.getIfNotNull(column, column.getColumnHolder() + ",", notEmpty));
+                } else {
+                    sql.append(column.getColumnHolder() + ",");
+                }
+            }
+        }
+        sql.append("</trim>");
+        return sql.toString();
+    }
+
+    /**
+     * update set列
+     *
+     * @param entityClass
+     * @param entityName  实体映射名
+     * @param notNull     是否判断!=null
+     * @param notEmpty    是否判断String类型!=''
+     * @return
+     */
+    public static String updateSetColumns(Class<?> entityClass, String entityName, boolean notNull, boolean notEmpty) {
+        StringBuilder sql = new StringBuilder();
+        sql.append("<set>");
+        //获取全部列
+        Set<EntityColumn> columnList = EntityHelper.getColumns(entityClass);
+        //当某个列有主键策略时，不需要考虑他的属性是否为空，因为如果为空，一定会根据主键策略给他生成一个值
+        for (EntityColumn column : columnList) {
+            if (!column.isId()) {
+                if (notNull) {
+                    sql.append(SqlHelper.getIfNotNull(entityName, column, column.getColumnEqualsHolder(entityName) + ",", notEmpty));
+                } else {
+                    sql.append(column.getColumnEqualsHolder(entityName) + ",");
+                }
+            }
+        }
+        sql.append("</set>");
+        return sql.toString();
+    }
+
+    /**
+     * where主键条件
+     *
+     * @param entityClass
+     * @return
+     */
+    public static String wherePKColumns(Class<?> entityClass) {
+        StringBuilder sql = new StringBuilder();
+        sql.append("<where>");
+        //获取全部列
+        Set<EntityColumn> columnList = EntityHelper.getPKColumns(entityClass);
+        //当某个列有主键策略时，不需要考虑他的属性是否为空，因为如果为空，一定会根据主键策略给他生成一个值
+        for (EntityColumn column : columnList) {
+            sql.append("AND " + column.getColumnEqualsHolder());
+        }
+        sql.append("</where>");
+        return sql.toString();
+    }
+
+    /**
+     * where所有列的条件，会判断是否!=null
+     *
+     * @param entityClass
+     * @return
+     */
+    public static String whereAllIfColumns(Class<?> entityClass, boolean empty) {
+        StringBuilder sql = new StringBuilder();
+        sql.append("<where>");
+        //获取全部列
+        Set<EntityColumn> columnList = EntityHelper.getColumns(entityClass);
+        //当某个列有主键策略时，不需要考虑他的属性是否为空，因为如果为空，一定会根据主键策略给他生成一个值
+        for (EntityColumn column : columnList) {
+            sql.append(getIfNotNull(column, "AND " + column.getColumnEqualsHolder(), empty));
+        }
+        sql.append("</where>");
+        return sql.toString();
+    }
+
+    /**
+     * 获取默认的orderBy，通过注解设置的
+     *
+     * @param entityClass
+     * @return
+     */
+    public static String orderByDefault(Class<?> entityClass) {
+        StringBuilder sql = new StringBuilder();
+        String orderByClause = EntityHelper.getOrderByClause(entityClass);
+        if (orderByClause.length() > 0) {
+            sql.append(" ORDER BY ");
+            sql.append(orderByClause);
+        }
+        return sql.toString();
     }
 
     /**
