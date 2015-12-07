@@ -339,12 +339,13 @@ public class SqlHelper {
         Set<EntityColumn> columnList = EntityHelper.getColumns(entityClass);
         //当某个列有主键策略时，不需要考虑他的属性是否为空，因为如果为空，一定会根据主键策略给他生成一个值
         for (EntityColumn column : columnList) {
-            if (skipId && !column.isId()) {
-                if (notNull) {
-                    sql.append(SqlHelper.getIfNotNull(column, column.getColumn() + ",", notEmpty));
-                } else {
-                    sql.append(column.getColumn() + ",");
-                }
+            if (skipId && column.isId()) {
+                continue;
+            }
+            if (notNull) {
+                sql.append(SqlHelper.getIfNotNull(column, column.getColumn() + ",", notEmpty));
+            } else {
+                sql.append(column.getColumn() + ",");
             }
         }
         sql.append("</trim>");
@@ -367,12 +368,13 @@ public class SqlHelper {
         Set<EntityColumn> columnList = EntityHelper.getColumns(entityClass);
         //当某个列有主键策略时，不需要考虑他的属性是否为空，因为如果为空，一定会根据主键策略给他生成一个值
         for (EntityColumn column : columnList) {
-            if (skipId && !column.isId()) {
-                if (notNull) {
-                    sql.append(SqlHelper.getIfNotNull(column, column.getColumnHolder() + ",", notEmpty));
-                } else {
-                    sql.append(column.getColumnHolder() + ",");
-                }
+            if (skipId && column.isId()) {
+                continue;
+            }
+            if (notNull) {
+                sql.append(SqlHelper.getIfNotNull(column, column.getColumnHolder() + ",", notEmpty));
+            } else {
+                sql.append(column.getColumnHolder() + ",");
             }
         }
         sql.append("</trim>");
@@ -475,7 +477,7 @@ public class SqlHelper {
         sql.append("</if>");
         //不支持指定列的时候查询全部列
         sql.append("<if test=\"@tk.mybatis.mapper.util.OGNL@hasNoSelectColumns(_parameter)\">");
-        sql.append(SqlHelper.getAllColumns(entityClass));
+        sql.append(getAllColumns(entityClass));
         sql.append("</if>");
         return sql.toString();
     }

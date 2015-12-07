@@ -95,11 +95,8 @@ public class BaseInsertProvider extends MapperTemplate {
                 sql.append(SqlHelper.getBindValue(column, getUUID()));
             }
         }
-        sql.append("INSERT INTO ");
-        sql.append(SqlHelper.getDynamicTableName(entityClass, tableName(entityClass)));
-        sql.append("(");
-        sql.append(SqlHelper.getAllColumns(entityClass));
-        sql.append(") ");
+        sql.append(SqlHelper.insertIntoTable(entityClass, tableName(entityClass)));
+        sql.append(SqlHelper.insertColumns(entityClass, false, false, false));
         sql.append("<trim prefix=\"VALUES(\" suffix=\")\" suffixOverrides=\",\">");
         for (EntityColumn column : columnList) {
             //优先使用传入的属性值,当原属性property!=null时，用原属性
@@ -183,8 +180,7 @@ public class BaseInsertProvider extends MapperTemplate {
                 sql.append(SqlHelper.getBindValue(column, getUUID()));
             }
         }
-        sql.append("INSERT INTO ");
-        sql.append(SqlHelper.getDynamicTableName(entityClass, tableName(entityClass)));
+        sql.append(SqlHelper.insertIntoTable(entityClass, tableName(entityClass)));
         sql.append("<trim prefix=\"(\" suffix=\")\" suffixOverrides=\",\">");
         for (EntityColumn column : columnList) {
             if (StringUtil.isNotEmpty(column.getSequenceName()) || column.isIdentity() || column.isUuid()) {
