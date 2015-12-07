@@ -25,7 +25,6 @@
 package tk.mybatis.mapper.provider;
 
 import org.apache.ibatis.mapping.MappedStatement;
-import org.apache.ibatis.scripting.xmltags.*;
 import tk.mybatis.mapper.entity.EntityColumn;
 import tk.mybatis.mapper.entity.EntityTable;
 import tk.mybatis.mapper.mapperhelper.EntityHelper;
@@ -33,8 +32,6 @@ import tk.mybatis.mapper.mapperhelper.MapperHelper;
 import tk.mybatis.mapper.mapperhelper.MapperTemplate;
 import tk.mybatis.mapper.mapperhelper.SqlHelper;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -94,38 +91,32 @@ public class SqlServerProvider extends MapperTemplate {
      * @param ms
      * @return
      */
-    public SqlNode insertSelective(MappedStatement ms) {
+    public String insertSelective(MappedStatement ms) {
         Class<?> entityClass = getEntityClass(ms);
-        List<SqlNode> sqlNodes = new ArrayList<SqlNode>();
-        //insert into table
-        sqlNodes.add(new StaticTextSqlNode("INSERT INTO "));
-        sqlNodes.add(getDynamicTableNameNode(entityClass));
-
+        StringBuilder sql = new StringBuilder();
+        sql.append("insert into ");
+        sql.append(SqlHelper.getDynamicTableName(entityClass, tableName(entityClass)));
+        sql.append("<trim prefix=\"(\" suffix=\")\" suffixOverrides=\",\">");
         //获取全部列
         Set<EntityColumn> columnList = EntityHelper.getColumns(entityClass);
-        List<SqlNode> ifNodes = new ArrayList<SqlNode>();
-        //Identity列只能有一个
-        Boolean hasIdentityKey = false;
         //当某个列有主键策略时，不需要考虑他的属性是否为空，因为如果为空，一定会根据主键策略给他生成一个值
         for (EntityColumn column : columnList) {
             //当使用序列时
             if (!column.isId()) {
-                ifNodes.add(getIfNotNull(column, new StaticTextSqlNode(column.getColumn() + ",")));
+                sql.append(column.getColumn() + ",");
             }
         }
-        //将动态的列加入sqlNodes
-        sqlNodes.add(new TrimSqlNode(ms.getConfiguration(), new MixedSqlNode(ifNodes), "(", null, ")", ","));
-
-        ifNodes = new ArrayList<SqlNode>();
+        sql.append("</trim>");
+        sql.append("VALUES");
+        sql.append("<trim prefix=\"(\" suffix=\")\" suffixOverrides=\",\">");
         //处理values(#{property},#{property}...)
         for (EntityColumn column : columnList) {
             //当参数中的属性值不为空的时候,使用传入的值
             if (!column.isId()) {
-                ifNodes.add(new IfSqlNode(new StaticTextSqlNode(column.getColumnHolder() + ","), column.getProperty() + " != null "));
+                sql.append(SqlHelper.getIfNotNull(column, column.getColumnHolder() + ",", isNotEmpty()));
             }
         }
-        //values(#{property},#{property}...)
-        sqlNodes.add(new TrimSqlNode(ms.getConfiguration(), new MixedSqlNode(ifNodes), "VALUES (", null, ")", ","));
-        return new MixedSqlNode(sqlNodes);
+        sql.append("</trim>");
+        return sql.toString();
     }
 }
