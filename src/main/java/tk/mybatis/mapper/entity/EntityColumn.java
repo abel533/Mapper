@@ -45,7 +45,12 @@ public class EntityColumn {
     private boolean uuid = false;
     private boolean identity = false;
     private String generator;
+    //排序
     private String orderBy;
+    //可插入
+    private boolean insertable = true;
+    //可更新
+    private boolean updatable = true;
 
     public EntityColumn() {
     }
@@ -148,6 +153,22 @@ public class EntityColumn {
 
     public void setOrderBy(String orderBy) {
         this.orderBy = orderBy;
+    }
+
+    public boolean isInsertable() {
+        return insertable;
+    }
+
+    public void setInsertable(boolean insertable) {
+        this.insertable = insertable;
+    }
+
+    public boolean isUpdatable() {
+        return updatable;
+    }
+
+    public void setUpdatable(boolean updatable) {
+        this.updatable = updatable;
     }
 
     /**

@@ -73,6 +73,9 @@ public class BaseInsertProvider extends MapperTemplate {
         Boolean hasIdentityKey = false;
         //先处理cache或bind节点
         for (EntityColumn column : columnList) {
+            if (!column.isInsertable()) {
+                continue;
+            }
             if (StringUtil.isNotEmpty(column.getSequenceName())) {
             } else if (column.isIdentity()) {
                 //这种情况下,如果原先的字段有值,需要先缓存起来,否则就一定会使用自动增长
@@ -99,6 +102,9 @@ public class BaseInsertProvider extends MapperTemplate {
         sql.append(SqlHelper.insertColumns(entityClass, false, false, false));
         sql.append("<trim prefix=\"VALUES(\" suffix=\")\" suffixOverrides=\",\">");
         for (EntityColumn column : columnList) {
+            if (!column.isInsertable()) {
+                continue;
+            }
             //优先使用传入的属性值,当原属性property!=null时，用原属性
             //自增的情况下,如果默认有值,就会备份到property_cache中,所以这里需要先判断备份的值是否存在
             if (column.isIdentity()) {
@@ -157,6 +163,9 @@ public class BaseInsertProvider extends MapperTemplate {
         Boolean hasIdentityKey = false;
         //先处理cache或bind节点
         for (EntityColumn column : columnList) {
+            if (!column.isInsertable()) {
+                continue;
+            }
             if (StringUtil.isNotEmpty(column.getSequenceName())) {
                 //sql.append(column.getColumn() + ",");
             } else if (column.isIdentity()) {
@@ -183,6 +192,9 @@ public class BaseInsertProvider extends MapperTemplate {
         sql.append(SqlHelper.insertIntoTable(entityClass, tableName(entityClass)));
         sql.append("<trim prefix=\"(\" suffix=\")\" suffixOverrides=\",\">");
         for (EntityColumn column : columnList) {
+            if (!column.isInsertable()) {
+                continue;
+            }
             if (StringUtil.isNotEmpty(column.getSequenceName()) || column.isIdentity() || column.isUuid()) {
                 sql.append(column.getColumn() + ",");
             } else {
@@ -192,6 +204,9 @@ public class BaseInsertProvider extends MapperTemplate {
         sql.append("</trim>");
         sql.append("<trim prefix=\"VALUES(\" suffix=\")\" suffixOverrides=\",\">");
         for (EntityColumn column : columnList) {
+            if (!column.isInsertable()) {
+                continue;
+            }
             //优先使用传入的属性值,当原属性property!=null时，用原属性
             //自增的情况下,如果默认有值,就会备份到property_cache中,所以这里需要先判断备份的值是否存在
             if (column.isIdentity()) {

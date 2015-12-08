@@ -69,6 +69,7 @@
         <mapper class="tk.mybatis.mapper.mapper.CountryJDBCMapper"/>
         <mapper class="tk.mybatis.mapper.mapper.CountryIMapper"/>
         <mapper class="tk.mybatis.mapper.mapper.UserInfoMapper"/>
+        <mapper class="tk.mybatis.mapper.mapper.UserInfoAbleMapper"/>
         <mapper class="tk.mybatis.mapper.mapper.UserInfoMapMapper"/>
         <mapper class="tk.mybatis.mapper.mapper.UserLoginMapper"/>
         <mapper class="tk.mybatis.mapper.mapper.UserLogin2Mapper"/>

@@ -248,6 +248,8 @@ public class EntityHelper {
         if (field.isAnnotationPresent(Column.class)) {
             Column column = field.getAnnotation(Column.class);
             columnName = column.name();
+            entityColumn.setUpdatable(column.updatable());
+            entityColumn.setInsertable(column.insertable());
         }
         //ColumnType
         if (field.isAnnotationPresent(ColumnType.class)) {
