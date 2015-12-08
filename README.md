@@ -121,27 +121,6 @@ http://repo1.maven.org/maven2/javax/persistence/persistence-api/1.0/
   也就是假设主键是`Integer id`，调用`selectByPrimaryKey(Object id)`的时候，参数`id`必须使用`100`这样的数字，不能使用`"100"`字符串（以前版本可以）。
   如果不带`javaType`，那么如果`id`是个泛型，MyBatis查找的时候就会因为找不到正确的类型而抛出异常。
 - 为了让扩展更方便，将`tk.mybatis.mapper.provider`包下所有的通用接口的实现方法改为了`String`形式。
-  例如`selectByPrimaryKey`方法：
-  ```java
-  /**
-   * 根据主键进行查询
-   *
-   * @param ms
-   */
-  public String selectByPrimaryKey(MappedStatement ms) {
-      final Class<?> entityClass = getEntityClass(ms);
-      //将返回值修改为实体类型，只有select返回实体类型的需要修改返回值，其他如insert,update,delete都是返回int，不需要修改
-      setResultType(ms, entityClass);
-      StringBuilder sql = new StringBuilder();
-      sql.append("select ");
-      sql.append(EntityHelper.getSelectColumns(entityClass));
-      sql.append(" from ");
-      sql.append(SqlHelper.getDynamicTableName(entityClass, tableName(entityClass)));
-      sql.append(" where ");
-      sql.append(EntityHelper.getPrimaryKeyWhere(entityClass));
-      return sql.toString();
-  }
-  ```
   自己扩展单表操作的方法是非常容易的事情，建议有一定通用Mapper使用基础的自行扩展，扩展可以参考[如何扩展通用接口](http://git.oschina.net/free/Mapper/blob/master/wiki/mapper3/6.MyMapper.md)
 - 新增`SqlHelper`工具类，其中包含了大量可用的现成的SQL方法
 

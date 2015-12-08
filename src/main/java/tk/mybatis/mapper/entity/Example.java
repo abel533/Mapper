@@ -336,7 +336,9 @@ public class Example {
          * @param value       例如 5
          * @param typeHandler 类型处理
          * @return
+         * @deprecated 由于typeHandler起不到作用，该方法会在4.x版本去掉
          */
+        @Deprecated
         public Criteria andCondition(String condition, Object value, String typeHandler) {
             criteria.add(new Criterion(condition, value, typeHandler));
             return (Criteria) this;
@@ -349,7 +351,9 @@ public class Example {
          * @param value       例如 5
          * @param typeHandler 类型处理
          * @return
+         * @deprecated 由于typeHandler起不到作用，该方法会在4.x版本去掉
          */
+        @Deprecated
         public Criteria andCondition(String condition, Object value, Class<? extends TypeHandler> typeHandler) {
             criteria.add(new Criterion(condition, value, typeHandler.getCanonicalName()));
             return (Criteria) this;
