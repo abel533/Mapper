@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2014 abel533@gmail.com
+ * Copyright (c) 2014-2016 abel533@gmail.com
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -336,7 +336,9 @@ public class Example {
          * @param value       例如 5
          * @param typeHandler 类型处理
          * @return
+         * @deprecated 由于typeHandler起不到作用，该方法会在4.x版本去掉
          */
+        @Deprecated
         public Criteria andCondition(String condition, Object value, String typeHandler) {
             criteria.add(new Criterion(condition, value, typeHandler));
             return (Criteria) this;
@@ -349,7 +351,9 @@ public class Example {
          * @param value       例如 5
          * @param typeHandler 类型处理
          * @return
+         * @deprecated 由于typeHandler起不到作用，该方法会在4.x版本去掉
          */
+        @Deprecated
         public Criteria andCondition(String condition, Object value, Class<? extends TypeHandler> typeHandler) {
             criteria.add(new Criterion(condition, value, typeHandler.getCanonicalName()));
             return (Criteria) this;

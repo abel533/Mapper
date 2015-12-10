@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2014 abel533@gmail.com
+ * Copyright (c) 2014-2016 abel533@gmail.com
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -29,9 +29,9 @@ import tk.mybatis.mapper.common.rowbounds.SelectRowBoundsMapper;
 
 /**
  * 通用Mapper接口,带RowBounds参数的查询
- *
+ * <p/>
  * 配合分页插件PageHelper可以实现物理分页
- *
+ * <p/>
  * PageHelper - http://git.oschina.net/free/Mybatis_PageHelper
  *
  * @param <T> 不能为空

@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2014 abel533@gmail.com
+ * Copyright (c) 2014-2016 abel533@gmail.com
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,7 +25,6 @@
 package tk.mybatis.mapper.provider;
 
 import org.apache.ibatis.mapping.MappedStatement;
-import org.apache.ibatis.scripting.xmltags.SqlNode;
 import tk.mybatis.mapper.mapperhelper.MapperHelper;
 import tk.mybatis.mapper.mapperhelper.MapperTemplate;
 
@@ -49,7 +48,7 @@ public class ConditionProvider extends MapperTemplate {
      * @param ms
      * @return
      */
-    public SqlNode selectCountByCondition(MappedStatement ms) {
+    public String selectCountByCondition(MappedStatement ms) {
         return exampleProvider.selectCountByExample(ms);
     }
 
@@ -59,7 +58,7 @@ public class ConditionProvider extends MapperTemplate {
      * @param ms
      * @return
      */
-    public SqlNode deleteByCondition(MappedStatement ms) {
+    public String deleteByCondition(MappedStatement ms) {
         return exampleProvider.deleteByExample(ms);
     }
 
@@ -70,7 +69,7 @@ public class ConditionProvider extends MapperTemplate {
      * @param ms
      * @return
      */
-    public SqlNode selectByCondition(MappedStatement ms) {
+    public String selectByCondition(MappedStatement ms) {
         return exampleProvider.selectByExample(ms);
     }
 
@@ -80,7 +79,7 @@ public class ConditionProvider extends MapperTemplate {
      * @param ms
      * @return
      */
-    public SqlNode selectByConditionAndRowBounds(MappedStatement ms) {
+    public String selectByConditionAndRowBounds(MappedStatement ms) {
         return exampleProvider.selectByExample(ms);
     }
 
@@ -90,7 +89,7 @@ public class ConditionProvider extends MapperTemplate {
      * @param ms
      * @return
      */
-    public SqlNode updateByConditionSelective(MappedStatement ms) {
+    public String updateByConditionSelective(MappedStatement ms) {
         return exampleProvider.updateByExampleSelective(ms);
     }
 
@@ -100,7 +99,7 @@ public class ConditionProvider extends MapperTemplate {
      * @param ms
      * @return
      */
-    public SqlNode updateByCondition(MappedStatement ms) {
+    public String updateByCondition(MappedStatement ms) {
         return exampleProvider.updateByExample(ms);
     }
 }

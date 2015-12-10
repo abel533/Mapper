@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2014 abel533@gmail.com
+ * Copyright (c) 2014-2016 abel533@gmail.com
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -30,7 +30,7 @@ import tk.mybatis.mapper.provider.SqlServerProvider;
 
 /**
  * 通用Mapper接口,插入
- * 
+ *
  * @param <T> 不能为空
  * @author liuzh
  */

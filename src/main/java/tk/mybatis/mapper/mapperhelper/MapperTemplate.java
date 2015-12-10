@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2014 abel533@gmail.com
+ * Copyright (c) 2014-2016 abel533@gmail.com
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -292,7 +292,9 @@ public abstract class MapperTemplate {
      *
      * @param ms
      * @return
+     * @deprecated 4.x版本会移除该方法
      */
+    @Deprecated
     protected List<ParameterMapping> getPrimaryKeyParameterMappings(MappedStatement ms) {
         Class<?> entityClass = getEntityClass(ms);
         Set<EntityColumn> entityColumns = EntityHelper.getPKColumns(entityClass);
@@ -339,7 +341,9 @@ public abstract class MapperTemplate {
      *
      * @param entityClass
      * @return
+     * @deprecated 4.x版本会移除该方法
      */
+    @Deprecated
     protected SqlNode getDynamicTableNameNode(Class<?> entityClass) {
         if (IDynamicTableName.class.isAssignableFrom(entityClass)) {
             List<SqlNode> ifSqlNodes = new ArrayList<SqlNode>();
@@ -357,7 +361,9 @@ public abstract class MapperTemplate {
      * @param entityClass
      * @param parameterName
      * @return
+     * @deprecated 4.x版本会移除该方法
      */
+    @Deprecated
     protected SqlNode getDynamicTableNameNode(Class<?> entityClass, String parameterName) {
         if (IDynamicTableName.class.isAssignableFrom(entityClass)) {
             List<SqlNode> ifSqlNodes = new ArrayList<SqlNode>();
@@ -370,52 +376,15 @@ public abstract class MapperTemplate {
     }
 
     /**
-     * 获取表名 - 支持动态表名
-     *
-     * @param entityClass
-     * @return
-     */
-    protected String getDynamicTableName(Class<?> entityClass) {
-        if (IDynamicTableName.class.isAssignableFrom(entityClass)) {
-            return "<if test=\"@tk.mybatis.mapper.util.OGNL@isDynamicParameter(_parameter) and dynamicTableName != null and dynamicTableName != ''\">\n" +
-                    "${dynamicTableName}\n" +
-                    "</if>\n" +
-                    "<if test=\"@tk.mybatis.mapper.util.OGNL@isNotDynamicParameter(_parameter) or dynamicTableName == null or dynamicTableName == ''\">\n" +
-                    tableName(entityClass) + "\n" +
-                    "</if>";
-        } else {
-            return tableName(entityClass);
-        }
-    }
-
-    /**
-     * 获取表名 - 支持动态表名，该方法用于多个入参时，通过parameterName指定入参中实体类的@Param的注解值
-     *
-     * @param entityClass
-     * @param parameterName
-     * @return
-     */
-    protected String getDynamicTableName(Class<?> entityClass, String parameterName) {
-        if (IDynamicTableName.class.isAssignableFrom(entityClass)) {
-            return "<if test=\"@tk.mybatis.mapper.util.OGNL@isDynamicParameter(" + parameterName + ") and " + parameterName + ".dynamicTableName != null and " + parameterName + ".dynamicTableName != ''\">\n" +
-                    "${" + parameterName + ".dynamicTableName}\n" +
-                    "</if>\n" +
-                    "<if test=\"@tk.mybatis.mapper.util.OGNL@isNotDynamicParameter(" + parameterName + ") or " + parameterName + ".dynamicTableName == null or " + parameterName + ".dynamicTableName == ''\">\n" +
-                    tableName(entityClass) + "\n" +
-                    "</if>";
-        } else {
-            return tableName(entityClass);
-        }
-    }
-
-    /**
      * 返回if条件的sqlNode
      * <p>一般类型：<code>&lt;if test="property!=null"&gt;columnNode&lt;/if&gt;</code></p>
      *
      * @param column
      * @param columnNode
      * @return
+     * @deprecated 4.x版本会移除该方法
      */
+    @Deprecated
     protected SqlNode getIfNotNull(EntityColumn column, SqlNode columnNode) {
         return getIfNotNull(column, columnNode, false);
     }
@@ -428,7 +397,9 @@ public abstract class MapperTemplate {
      * @param columnNode
      * @param empty      是否包含!=''条件
      * @return
+     * @deprecated 4.x版本会移除该方法
      */
+    @Deprecated
     protected SqlNode getIfNotNull(EntityColumn column, SqlNode columnNode, boolean empty) {
         if (empty && column.getJavaType().equals(String.class)) {
             return new IfSqlNode(columnNode, column.getProperty() + " != null and " + column.getProperty() + " != ''");
@@ -443,7 +414,9 @@ public abstract class MapperTemplate {
      *
      * @param column
      * @return
+     * @deprecated 4.x版本会移除该方法
      */
+    @Deprecated
     protected SqlNode getIfIsNull(EntityColumn column, SqlNode columnNode) {
         return new IfSqlNode(columnNode, column.getProperty() + " == null ");
     }
@@ -454,7 +427,9 @@ public abstract class MapperTemplate {
      *
      * @param column
      * @return
+     * @deprecated 4.x版本会移除该方法
      */
+    @Deprecated
     protected SqlNode getIfCacheNotNull(EntityColumn column, SqlNode columnNode) {
         return new IfSqlNode(columnNode, column.getProperty() + "_cache != null ");
     }
@@ -465,7 +440,9 @@ public abstract class MapperTemplate {
      *
      * @param column
      * @return
+     * @deprecated 4.x版本会移除该方法
      */
+    @Deprecated
     protected SqlNode getIfCacheIsNull(EntityColumn column, SqlNode columnNode) {
         return new IfSqlNode(columnNode, column.getProperty() + "_cache == null ");
     }
@@ -476,7 +453,9 @@ public abstract class MapperTemplate {
      * @param column
      * @param first
      * @return
+     * @deprecated 4.x版本会移除该方法
      */
+    @Deprecated
     protected SqlNode getColumnEqualsProperty(EntityColumn column, boolean first) {
         return new StaticTextSqlNode((first ? "" : " AND ") + column.getColumnEqualsHolder());
     }
@@ -486,7 +465,9 @@ public abstract class MapperTemplate {
      *
      * @param entityClass
      * @return
+     * @deprecated 4.x版本会移除该方法
      */
+    @Deprecated
     protected SqlNode getAllIfColumnNode(Class<?> entityClass) {
         //获取全部列
         Set<EntityColumn> columnList = EntityHelper.getColumns(entityClass);
@@ -505,7 +486,9 @@ public abstract class MapperTemplate {
      *
      * @param ms
      * @return
+     * @deprecated 4.x版本会移除该方法
      */
+    @Deprecated
     protected List<ParameterMapping> getColumnParameterMappings(MappedStatement ms) {
         Class<?> entityClass = getEntityClass(ms);
         Set<EntityColumn> entityColumns = EntityHelper.getColumns(entityClass);
@@ -519,7 +502,7 @@ public abstract class MapperTemplate {
     }
 
     /**
-     * 新建SelectKey节点 - 只对mysql的自动增长有效，Oracle序列直接写到列中
+     * 新建SelectKey节点
      *
      * @param ms
      * @param column
@@ -601,6 +584,7 @@ public abstract class MapperTemplate {
         }
     }
 
+    @Deprecated
     public IfSqlNode ExampleValidSqlNode(Configuration configuration) {
         List<SqlNode> whenSqlNodes = new ArrayList<SqlNode>();
         IfSqlNode noValueSqlNode = new IfSqlNode(new TextSqlNode(" and ${criterion.condition}"), "criterion.noValue");
@@ -631,7 +615,9 @@ public abstract class MapperTemplate {
      *
      * @param configuration
      * @return
+     * @deprecated 4.x版本会移除该方法
      */
+    @Deprecated
     public WhereSqlNode exampleWhereClause(Configuration configuration) {
         ForEachSqlNode forEachSqlNode = new ForEachSqlNode(configuration, ExampleValidSqlNode(configuration), "oredCriteria", null, "criteria", null, null, " or ");
         WhereSqlNode whereSqlNode = new WhereSqlNode(configuration, forEachSqlNode);
@@ -643,7 +629,9 @@ public abstract class MapperTemplate {
      *
      * @param configuration
      * @return
+     * @deprecated 4.x版本会移除该方法
      */
+    @Deprecated
     public WhereSqlNode updateByExampleWhereClause(Configuration configuration) {
         //和上面方法的区别就在"example.oredCriteria"
         ForEachSqlNode forEachSqlNode = new ForEachSqlNode(configuration, ExampleValidSqlNode(configuration), "example.oredCriteria", null, "criteria", null, null, " or ");

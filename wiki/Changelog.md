@@ -1,5 +1,21 @@
 #更新日志
 
+###3.3.1 - 2015-12-09
+
+- 增加`enableMethodAnnotation`参数，可以控制是否支持方法上的JPA注解，默认`false`。
+  设置`enableMethodAnnotation = true`的时候注意，如`getRealName`或`setYourName`都会产生`realName`属性或`yourName`属性，如果该方法对应的属性不是表中的字段，就需要给方法增加`@Transient`注解。
+  同样如果你的实体是继承`Map`类型的，你不需要在实体中写`private String userName`这样的属性，你只需要写`setUserName`或`getUserName`这样的方法就可以。
+- 在处理的注解的时候，优先从`Field`获取，然后是`setter`方法，最后是`getter`方法，注解重复的情况下，只获取按顺序得到的第一个
+- 为了支持如`public class Country extends Entity<Integer, String>`这样的泛型类型,在生成`#{propertyName}`的时候都带上了`javaType`属性。
+  产生的结果就是`#{propertyName, javaType=java.lang.Integer}`这样子的，这会导致当你调用方法时，必须保证类型一致。
+  也就是假设主键是`Integer id`，调用`selectByPrimaryKey(Object id)`的时候，参数`id`必须使用`100`这样的数字，不能使用`"100"`字符串（以前版本可以）。
+  如果不带`javaType`，那么如果`id`是个泛型，MyBatis查找的时候就会因为找不到正确的类型而抛出异常。
+- 为了让扩展更方便，将`tk.mybatis.mapper.provider`包下所有的通用接口的实现方法改为了`String`形式。
+  自己扩展单表操作的方法是非常容易的事情，建议有一定通用Mapper使用基础的自行扩展，扩展可以参考[如何扩展通用接口](http://git.oschina.net/free/Mapper/blob/master/wiki/mapper3/6.MyMapper.md)
+- 新增`SqlHelper`工具类，其中包含了大量可用的现成的SQL方法
+- `@Column`注解增加对`insertable`和`updatable`属性的支持
+
+
 ##3.3.0 - 2015-11-01
 
 - 增加对动态表名的支持，需要实体类继承`IDynamicTableName`接口，用法见[详细说明](http://git.oschina.net/free/Mapper/blob/master/wiki/mapper3/3.2.Use330.md)

@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2014 abel533@gmail.com
+ * Copyright (c) 2014-2016 abel533@gmail.com
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -30,6 +30,7 @@ import tk.mybatis.mapper.entity.EntityTable;
 import tk.mybatis.mapper.mapperhelper.EntityHelper;
 import tk.mybatis.mapper.mapperhelper.MapperHelper;
 import tk.mybatis.mapper.mapperhelper.MapperTemplate;
+import tk.mybatis.mapper.mapperhelper.SqlHelper;
 
 /**
  * SpecialProvider实现类，特殊方法实现类
@@ -52,8 +53,10 @@ public class SpecialProvider extends MapperTemplate {
         EntityTable table = EntityHelper.getEntityTable(entityClass);
         //开始拼sql
         StringBuilder sql = new StringBuilder();
-        sql.append("insert into ");
-        sql.append(getDynamicTableName(entityClass));
+        sql.append(SqlHelper.insertIntoTable(entityClass, tableName(entityClass)));
+        sql.append(SqlHelper.insertColumns(entityClass, true, false, false));
+        sql.append(" VALUES ");
+        sql.append("<foreach collection=\"list\" item=\"record\" separator=\",\" >");
         sql.append("(");
         boolean first = true;
         for (EntityColumn column : table.getEntityClassColumns()) {
@@ -61,20 +64,6 @@ public class SpecialProvider extends MapperTemplate {
                 continue;
             }
             if (!first) {
-                sql.append(",");
-            }
-            sql.append(column.getColumn());
-            first = false;
-        }
-        sql.append(") values ");
-        sql.append("<foreach collection=\"list\" item=\"record\" separator=\",\" >");
-        sql.append("(");
-        first = true;
-        for (EntityColumn column : table.getEntityClassColumns()) {
-            if (column.isId()) {
-                continue;
-            }
-            if(!first) {
                 sql.append(",");
             }
             sql.append(column.getColumnHolder("record"));
@@ -92,36 +81,11 @@ public class SpecialProvider extends MapperTemplate {
      */
     public String insertUseGeneratedKeys(MappedStatement ms) {
         final Class<?> entityClass = getEntityClass(ms);
-        EntityTable table = EntityHelper.getEntityTable(entityClass);
         //开始拼sql
         StringBuilder sql = new StringBuilder();
-        sql.append("insert into ");
-        sql.append(getDynamicTableName(entityClass));
-        sql.append("(");
-        boolean first = true;
-        for (EntityColumn column : table.getEntityClassColumns()) {
-            if (column.isId()) {
-                continue;
-            }
-            if(!first) {
-                sql.append(",");
-            }
-            sql.append(column.getColumn());
-            first = false;
-        }
-        sql.append(") values(");
-        first = true;
-        for (EntityColumn column : table.getEntityClassColumns()) {
-            if (column.isId()) {
-                continue;
-            }
-            if(!first) {
-                sql.append(",");
-            }
-            sql.append(column.getColumnHolder());
-            first = false;
-        }
-        sql.append(")");
+        sql.append(SqlHelper.insertIntoTable(entityClass, tableName(entityClass)));
+        sql.append(SqlHelper.insertColumns(entityClass, true, false, false));
+        sql.append(SqlHelper.insertValuesColumns(entityClass, true, false, false));
         return sql.toString();
     }
 }

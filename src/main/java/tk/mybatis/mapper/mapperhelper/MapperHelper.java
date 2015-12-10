@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2014 abel533@gmail.com
+ * Copyright (c) 2014-2016 abel533@gmail.com
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -232,7 +232,7 @@ public class MapperHelper {
 
     /**
      * 重新设置SqlSource
-     *
+     * <p/>
      * 执行该方法前必须使用isMapperMethod判断，否则msIdCache会空
      *
      * @param ms

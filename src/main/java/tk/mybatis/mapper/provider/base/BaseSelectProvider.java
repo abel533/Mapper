@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2014 abel533@gmail.com
+ * Copyright (c) 2014-2016 abel533@gmail.com
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,16 +25,9 @@
 package tk.mybatis.mapper.provider.base;
 
 import org.apache.ibatis.mapping.MappedStatement;
-import org.apache.ibatis.scripting.xmltags.MixedSqlNode;
-import org.apache.ibatis.scripting.xmltags.SqlNode;
-import org.apache.ibatis.scripting.xmltags.StaticTextSqlNode;
-import org.apache.ibatis.scripting.xmltags.WhereSqlNode;
-import tk.mybatis.mapper.mapperhelper.EntityHelper;
 import tk.mybatis.mapper.mapperhelper.MapperHelper;
 import tk.mybatis.mapper.mapperhelper.MapperTemplate;
-
-import java.util.ArrayList;
-import java.util.List;
+import tk.mybatis.mapper.mapperhelper.SqlHelper;
 
 /**
  * BaseSelectProvider实现类，基础方法实现类
@@ -53,19 +46,15 @@ public class BaseSelectProvider extends MapperTemplate {
      * @param ms
      * @return
      */
-    public SqlNode selectOne(MappedStatement ms) {
+    public String selectOne(MappedStatement ms) {
         Class<?> entityClass = getEntityClass(ms);
         //修改返回值类型为实体类型
         setResultType(ms, entityClass);
-        List<SqlNode> sqlNodes = new ArrayList<SqlNode>();
-        //静态的sql部分:select column ... from table
-        sqlNodes.add(new StaticTextSqlNode("SELECT "
-                + EntityHelper.getSelectColumns(entityClass)
-                + " FROM "));
-        sqlNodes.add(getDynamicTableNameNode(entityClass));
-        //将if添加到<where>
-        sqlNodes.add(new WhereSqlNode(ms.getConfiguration(), getAllIfColumnNode(entityClass)));
-        return new MixedSqlNode(sqlNodes);
+        StringBuilder sql = new StringBuilder();
+        sql.append(SqlHelper.selectAllColumns(entityClass));
+        sql.append(SqlHelper.fromTable(entityClass, tableName(entityClass)));
+        sql.append(SqlHelper.whereAllIfColumns(entityClass, isNotEmpty()));
+        return sql.toString();
     }
 
     /**
@@ -74,23 +63,16 @@ public class BaseSelectProvider extends MapperTemplate {
      * @param ms
      * @return
      */
-    public SqlNode select(MappedStatement ms) {
+    public String select(MappedStatement ms) {
         Class<?> entityClass = getEntityClass(ms);
         //修改返回值类型为实体类型
         setResultType(ms, entityClass);
-        List<SqlNode> sqlNodes = new ArrayList<SqlNode>();
-        //静态的sql部分:select column ... from table
-        sqlNodes.add(new StaticTextSqlNode("SELECT "
-                + EntityHelper.getSelectColumns(entityClass)
-                + " FROM "));
-        sqlNodes.add(getDynamicTableNameNode(entityClass));
-        //将if添加到<where>
-        sqlNodes.add(new WhereSqlNode(ms.getConfiguration(), getAllIfColumnNode(entityClass)));
-        String orderByClause = EntityHelper.getOrderByClause(entityClass);
-        if (orderByClause.length() > 0) {
-            sqlNodes.add(new StaticTextSqlNode("ORDER BY " + orderByClause));
-        }
-        return new MixedSqlNode(sqlNodes);
+        StringBuilder sql = new StringBuilder();
+        sql.append(SqlHelper.selectAllColumns(entityClass));
+        sql.append(SqlHelper.fromTable(entityClass, tableName(entityClass)));
+        sql.append(SqlHelper.whereAllIfColumns(entityClass, isNotEmpty()));
+        sql.append(SqlHelper.orderByDefault(entityClass));
+        return sql.toString();
     }
 
     /**
@@ -99,7 +81,7 @@ public class BaseSelectProvider extends MapperTemplate {
      * @param ms
      * @return
      */
-    public SqlNode selectByRowBounds(MappedStatement ms) {
+    public String selectByRowBounds(MappedStatement ms) {
         return select(ms);
     }
 
@@ -113,12 +95,9 @@ public class BaseSelectProvider extends MapperTemplate {
         //将返回值修改为实体类型
         setResultType(ms, entityClass);
         StringBuilder sql = new StringBuilder();
-        sql.append("select ");
-        sql.append(EntityHelper.getSelectColumns(entityClass));
-        sql.append(" from ");
-        sql.append(getDynamicTableName(entityClass));
-        sql.append(" where ");
-        sql.append(EntityHelper.getPrimaryKeyWhere(entityClass));
+        sql.append(SqlHelper.selectAllColumns(entityClass));
+        sql.append(SqlHelper.fromTable(entityClass, tableName(entityClass)));
+        sql.append(SqlHelper.wherePKColumns(entityClass));
         return sql.toString();
     }
 
@@ -128,15 +107,13 @@ public class BaseSelectProvider extends MapperTemplate {
      * @param ms
      * @return
      */
-    public SqlNode selectCount(MappedStatement ms) {
+    public String selectCount(MappedStatement ms) {
         Class<?> entityClass = getEntityClass(ms);
-        List<SqlNode> sqlNodes = new ArrayList<SqlNode>();
-        //select count(*) from table
-        sqlNodes.add(new StaticTextSqlNode("SELECT COUNT(*) FROM "));
-        sqlNodes.add(getDynamicTableNameNode(entityClass));
-        //获取全部列的where,if条件
-        sqlNodes.add(new WhereSqlNode(ms.getConfiguration(), getAllIfColumnNode(entityClass)));
-        return new MixedSqlNode(sqlNodes);
+        StringBuilder sql = new StringBuilder();
+        sql.append("SELECT COUNT(*) ");
+        sql.append(SqlHelper.fromTable(entityClass, tableName(entityClass)));
+        sql.append(SqlHelper.whereAllIfColumns(entityClass, isNotEmpty()));
+        return sql.toString();
     }
 
     /**
@@ -149,16 +126,10 @@ public class BaseSelectProvider extends MapperTemplate {
         final Class<?> entityClass = getEntityClass(ms);
         //修改返回值类型为实体类型
         setResultType(ms, entityClass);
-        //开始拼sql
         StringBuilder sql = new StringBuilder();
-        sql.append("select ").append(EntityHelper.getSelectColumns(entityClass)).append(" from ");
-        //不支持动态表名，因为没参数...
-        sql.append(tableName(entityClass));
-
-        String orderByClause = EntityHelper.getOrderByClause(entityClass);
-        if (orderByClause.length() > 0) {
-            sql.append(" ORDER BY ").append(orderByClause);
-        }
+        sql.append(SqlHelper.selectAllColumns(entityClass));
+        sql.append(SqlHelper.fromTable(entityClass, tableName(entityClass)));
+        sql.append(SqlHelper.orderByDefault(entityClass));
         return sql.toString();
     }
 }
