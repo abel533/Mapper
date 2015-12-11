@@ -115,12 +115,15 @@ public class FieldHelper {
             return fieldList;
         }
         Field[] fields = entityClass.getDeclaredFields();
+        int index = 0;
         for (int i = 0; i < fields.length; i++) {
             Field field = fields[i];
             //排除静态字段，解决bug#2
             if (!Modifier.isStatic(field.getModifiers())) {
-                if (level != 0) {
-                    fieldList.add(i, new EntityField(field, null));
+                if (level.intValue() != 0) {
+                    //将父类的字段放在前面
+                    fieldList.add(index, new EntityField(field, null));
+                    index++;
                 } else {
                     fieldList.add(new EntityField(field, null));
                 }
