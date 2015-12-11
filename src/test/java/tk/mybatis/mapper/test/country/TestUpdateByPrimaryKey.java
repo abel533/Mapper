@@ -76,6 +76,7 @@ public class TestUpdateByPrimaryKey {
             CountryMapper mapper = sqlSession.getMapper(CountryMapper.class);
             Country country = new Country();
             country.setId(174);
+            country.setCountryname(null);
             country.setCountryname("美国");
             Assert.assertEquals(1, mapper.updateByPrimaryKey(country));
 

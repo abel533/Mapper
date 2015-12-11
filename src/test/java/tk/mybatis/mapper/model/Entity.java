@@ -34,6 +34,8 @@ import java.io.Serializable;
  * @since 2015-12-06 10:31
  */
 public class Entity<ID extends Serializable, NAME extends Serializable> {
+    //这里的a,b,c,d仅用来测试FieldHelper中的静态字段
+    private static Integer a, b, c, d;
 
     private ID id;
 

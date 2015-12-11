@@ -163,4 +163,19 @@ public class TestSelectByExample {
         }
     }
 
+    @Test
+    public void testOrderBy() {
+        SqlSession sqlSession = MybatisHelper.getSqlSession();
+        try {
+            CountryMapper mapper = sqlSession.getMapper(CountryMapper.class);
+            Example example = new Example(Country.class);
+            example.setOrderByClause("id desc");
+            List<Country> countries = mapper.selectByExample(example);
+            //查询总数
+            Assert.assertEquals(183, (int) countries.get(0).getId());
+        } finally {
+            sqlSession.close();
+        }
+    }
+
 }
