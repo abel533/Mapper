@@ -181,7 +181,7 @@ public class SqlHelper {
         }
         sql.append(column.getProperty()).append(" != null");
         if (empty && column.getJavaType().equals(String.class)) {
-            sql.append(" and ");
+            sql.append(" AND ");
             if (StringUtil.isNotEmpty(entityName)) {
                 sql.append(entityName).append(".");
             }
@@ -210,7 +210,7 @@ public class SqlHelper {
         }
         sql.append(column.getProperty()).append(" == null");
         if (empty && column.getJavaType().equals(String.class)) {
-            sql.append(" or ");
+            sql.append(" OR ");
             if (StringUtil.isNotEmpty(entityName)) {
                 sql.append(entityName).append(".");
             }
@@ -428,7 +428,7 @@ public class SqlHelper {
         Set<EntityColumn> columnList = EntityHelper.getPKColumns(entityClass);
         //当某个列有主键策略时，不需要考虑他的属性是否为空，因为如果为空，一定会根据主键策略给他生成一个值
         for (EntityColumn column : columnList) {
-            sql.append("AND " + column.getColumnEqualsHolder());
+            sql.append(" AND " + column.getColumnEqualsHolder());
         }
         sql.append("</where>");
         return sql.toString();
@@ -447,7 +447,7 @@ public class SqlHelper {
         Set<EntityColumn> columnList = EntityHelper.getColumns(entityClass);
         //当某个列有主键策略时，不需要考虑他的属性是否为空，因为如果为空，一定会根据主键策略给他生成一个值
         for (EntityColumn column : columnList) {
-            sql.append(getIfNotNull(column, "AND " + column.getColumnEqualsHolder(), empty));
+            sql.append(getIfNotNull(column, " AND " + column.getColumnEqualsHolder(), empty));
         }
         sql.append("</where>");
         return sql.toString();
@@ -496,7 +496,7 @@ public class SqlHelper {
     public static String exampleOrderBy(Class<?> entityClass) {
         StringBuilder sql = new StringBuilder();
         sql.append("<if test=\"orderByClause != null\">");
-        sql.append("order by ${orderByClause}\")");
+        sql.append("order by ${orderByClause}");
         sql.append("</if>");
         String orderByClause = EntityHelper.getOrderByClause(entityClass);
         if (orderByClause.length() > 0) {
