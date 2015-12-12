@@ -44,6 +44,14 @@ public class MapperScannerConfigurer extends org.mybatis.spring.mapper.MapperSca
         }
     }
 
+    public MapperHelper getMapperHelper() {
+        return mapperHelper;
+    }
+
+    public void setMapperHelper(MapperHelper mapperHelper) {
+        this.mapperHelper = mapperHelper;
+    }
+
     /**
      * 属性注入
      *
