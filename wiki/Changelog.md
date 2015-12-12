@@ -1,6 +1,13 @@
 #更新日志
 
-###3.3.1 - 2015-12-09
+##3.3.2 - 2015-12-12
+
+- 解决数据越界bug#73
+- 解决and少空格问题
+- 解决order by错误#74
+- `tk.mybatis.spring.mapper.MapperScannerConfigurer`中的属性`mapperHelper`增加setter和getter方法，方便通过代码进行配置
+
+##3.3.1 - 2015-12-09
 
 - 增加`enableMethodAnnotation`参数，可以控制是否支持方法上的JPA注解，默认`false`。
   设置`enableMethodAnnotation = true`的时候注意，如`getRealName`或`setYourName`都会产生`realName`属性或`yourName`属性，如果该方法对应的属性不是表中的字段，就需要给方法增加`@Transient`注解。

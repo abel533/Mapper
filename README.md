@@ -110,13 +110,12 @@ http://repo1.maven.org/maven2/javax/persistence/persistence-api/1.0/
 
 ##Maven坐标以及下载地址
 
-
 ###最新版本3.3.2 - 2015-12-12
 
 - 解决数据越界bug#73
 - 解决and少空格问题
 - 解决order by错误#74
-
+- `tk.mybatis.spring.mapper.MapperScannerConfigurer`中的属性`mapperHelper`增加setter和getter方法，方便通过代码进行配置
 
 ###3.3.1 - 2015-12-09
 
