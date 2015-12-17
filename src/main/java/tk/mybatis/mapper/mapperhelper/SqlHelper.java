@@ -181,7 +181,7 @@ public class SqlHelper {
         }
         sql.append(column.getProperty()).append(" != null");
         if (empty && column.getJavaType().equals(String.class)) {
-            sql.append(" AND ");
+            sql.append(" and ");
             if (StringUtil.isNotEmpty(entityName)) {
                 sql.append(entityName).append(".");
             }
@@ -210,7 +210,7 @@ public class SqlHelper {
         }
         sql.append(column.getProperty()).append(" == null");
         if (empty && column.getJavaType().equals(String.class)) {
-            sql.append(" OR ");
+            sql.append(" or ");
             if (StringUtil.isNotEmpty(entityName)) {
                 sql.append(entityName).append(".");
             }
