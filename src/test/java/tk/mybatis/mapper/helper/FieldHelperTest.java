@@ -53,4 +53,36 @@ public class FieldHelperTest {
         }
         System.out.println("======================================");
     }
+
+    @Test
+    public void test2() throws IntrospectionException {
+        Thread t1 = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                FieldHelper.getFields(Country.class);
+            }
+        });
+        Thread t2 = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                FieldHelper.getFields(Country.class);
+            }
+        });
+        Thread t3 = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                FieldHelper.getFields(Country.class);
+            }
+        });
+        Thread t4 = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                FieldHelper.getFields(Country.class);
+            }
+        });
+        t1.start();
+        t2.start();
+        t3.start();
+        t4.start();
+    }
 }
