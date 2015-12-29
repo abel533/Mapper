@@ -92,7 +92,7 @@ Country代码：
 <dependency>
     <groupId>tk.mybatis</groupId>
     <artifactId>mapper</artifactId>
-    <version>3.3.2</version>
+    <version>3.3.3</version>
 </dependency>
 ```
 
@@ -108,15 +108,19 @@ http://repo1.maven.org/maven2/javax/persistence/persistence-api/1.0/
 
 ##[更新日志](http://git.oschina.net/free/Mapper/blob/master/wiki/Changelog.md)
 
-##Maven坐标以及下载地址
+##最新版本3.3.3 - 2015-12-30
 
-###最新版本3.3.2 - 2015-12-29
+- 解决OGNL中的and,or大写导致的错误
+- 解决SpecialProvider不支持insertable的bug#77
+- 解决JDK6,7无法获取字段泛型类型的问题。
+- 提供一个Spring Boot集成的示例: https://github.com/abel533/MyBatis-Spring-Boot
+
+###3.3.2 - 2015-12-12
 
 - 解决数据越界bug#73
 - 解决and少空格问题
 - 解决order by错误#74
 - `tk.mybatis.spring.mapper.MapperScannerConfigurer`中的属性`mapperHelper`增加setter和getter方法，方便通过代码进行配置
-- 提供一个Spring Boot集成的示例: https://github.com/abel533/MyBatis-Spring-Boot
 
 ###3.3.1 - 2015-12-09
 
