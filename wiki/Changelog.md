@@ -1,5 +1,11 @@
 #更新日志
 
+##3.3.4 - 2016-01-05
+
+* 解决insertList的bug#86
+* `Example`构造方法增加`notNull`参数，默认`false`，允许值为`null`，值为`null`的时候不加入到条件中。
+* `seqFormat`格式化参数增加第四个可配置值`TableName`
+
 ##3.3.3 - 2015-12-30
 
 - 解决OGNL中的and,or大写导致的错误
