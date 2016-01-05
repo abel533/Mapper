@@ -244,7 +244,7 @@ public class MapperHelper {
                 mapperTemplate.setSqlSource(ms);
             }
         } catch (Exception e) {
-            throw new RuntimeException("调用方法异常:" + e.getMessage());
+            throw new RuntimeException(e);
         }
     }
 

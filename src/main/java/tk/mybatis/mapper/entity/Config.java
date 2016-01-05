@@ -146,7 +146,7 @@ public class Config {
 
     /**
      * 序列的获取规则,使用{num}格式化参数，默认值为{0}.nextval，针对Oracle
-     * <br>可选参数一共3个，对应0,1,2,分别为SequenceName，ColumnName, PropertyName
+     * <br>可选参数一共3个，对应0,1,2,3分别为SequenceName，ColumnName, PropertyName，TableName
      *
      * @param seqFormat
      */
