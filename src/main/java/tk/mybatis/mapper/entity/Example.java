@@ -43,6 +43,8 @@ public class Example {
 
     protected boolean exists;
 
+    protected boolean notNull;
+
     protected Set<String> selectColumns;
 
     protected List<Criteria> oredCriteria;
@@ -63,13 +65,25 @@ public class Example {
     }
 
     /**
-     * 带exists参数的构造方法
+     * 带exists参数的构造方法，默认notNull为false，允许为空
      *
      * @param entityClass
      * @param exists      - true时，如果字段不存在就抛出异常，false时，如果不存在就不使用该字段的条件
      */
     public Example(Class<?> entityClass, boolean exists) {
+        this(entityClass, exists, false);
+    }
+
+    /**
+     * 带exists参数的构造方法
+     *
+     * @param entityClass
+     * @param exists      - true时，如果字段不存在就抛出异常，false时，如果不存在就不使用该字段的条件
+     * @param notNull     - true时，如果值为空，就会抛出异常，false时，如果为空就不使用该字段的条件
+     */
+    public Example(Class<?> entityClass, boolean exists, boolean notNull) {
         this.exists = exists;
+        this.notNull = notNull;
         oredCriteria = new ArrayList<Criteria>();
         this.entityClass = entityClass;
         table = EntityHelper.getEntityTable(entityClass);
@@ -146,7 +160,7 @@ public class Example {
     }
 
     protected Criteria createCriteriaInternal() {
-        Criteria criteria = new Criteria(propertyMap, exists);
+        Criteria criteria = new Criteria(propertyMap, exists, notNull);
         return criteria;
     }
 
@@ -160,16 +174,15 @@ public class Example {
         protected List<Criterion> criteria;
         //字段是否必须存在
         protected boolean exists;
+        //值是否不能为空
+        protected boolean notNull;
         //属性和列对应
         protected Map<String, EntityColumn> propertyMap;
 
-        protected GeneratedCriteria(Map<String, EntityColumn> propertyMap) {
-            this(propertyMap, true);
-        }
-
-        protected GeneratedCriteria(Map<String, EntityColumn> propertyMap, boolean exists) {
+        protected GeneratedCriteria(Map<String, EntityColumn> propertyMap, boolean exists, boolean notNull) {
             super();
             this.exists = exists;
+            this.notNull = notNull;
             criteria = new ArrayList<Criterion>();
             this.propertyMap = propertyMap;
         }
@@ -218,7 +231,11 @@ public class Example {
 
         protected void addCriterion(String condition, Object value, String property) {
             if (value == null) {
-                throw new RuntimeException("Value for " + property + " cannot be null");
+                if (notNull) {
+                    throw new RuntimeException("Value for " + property + " cannot be null");
+                } else {
+                    return;
+                }
             }
             if (property == null) {
                 return;
@@ -228,7 +245,11 @@ public class Example {
 
         protected void addCriterion(String condition, Object value1, Object value2, String property) {
             if (value1 == null || value2 == null) {
-                throw new RuntimeException("Between values for " + property + " cannot be null");
+                if (notNull) {
+                    throw new RuntimeException("Between values for " + property + " cannot be null");
+                } else {
+                    return;
+                }
             }
             if (property == null) {
                 return;
@@ -384,12 +405,9 @@ public class Example {
     }
 
     public static class Criteria extends GeneratedCriteria {
-        protected Criteria(Map<String, EntityColumn> propertyMap) {
-            super(propertyMap);
-        }
 
-        protected Criteria(Map<String, EntityColumn> propertyMap, boolean exists) {
-            super(propertyMap, exists);
+        protected Criteria(Map<String, EntityColumn> propertyMap, boolean exists, boolean notNull) {
+            super(propertyMap, exists, notNull);
         }
     }
 
