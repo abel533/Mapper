@@ -58,7 +58,7 @@ public class SpecialProvider extends MapperTemplate {
         sql.append(SqlHelper.insertColumns(entityClass, true, false, false));
         sql.append(" VALUES ");
         sql.append("<foreach collection=\"list\" item=\"record\" separator=\",\" >");
-        sql.append("<trim prefix=\"VALUES (\" suffix=\")\" suffixOverrides=\",\">");
+        sql.append("<trim prefix=\"(\" suffix=\")\" suffixOverrides=\",\">");
         //获取全部列
         Set<EntityColumn> columnList = EntityHelper.getColumns(entityClass);
         //当某个列有主键策略时，不需要考虑他的属性是否为空，因为如果为空，一定会根据主键策略给他生成一个值
