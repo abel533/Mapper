@@ -108,7 +108,13 @@ http://repo1.maven.org/maven2/javax/persistence/persistence-api/1.0/
 
 ##[更新日志](http://git.oschina.net/free/Mapper/blob/master/wiki/Changelog.md)
 
-##最新版本3.3.4 - 2016-01-05
+##最新版本3.3.5 - 2016-01-06
+
+* `Example`增加对动态表名支持，通过`setTableName`设置表名
+* 在example相关的两个`update`方法中，参数为实体类和`Example`，这个方法只能通过`Example`来设置动态表名，不支持通过实体设置动态表名
+
+
+###3.3.4 - 2016-01-05
 
 * 解决insertList的bug#86
 * `Example`构造方法增加`notNull`参数，默认`false`，允许值为`null`，值为`null`的时候不加入到条件中。
