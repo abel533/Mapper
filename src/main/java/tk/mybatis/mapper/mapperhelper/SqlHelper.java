@@ -252,6 +252,24 @@ public class SqlHelper {
     }
 
     /**
+     * select count(x)
+     *
+     * @param entityClass
+     * @return
+     */
+    public static String selectCount(Class<?> entityClass) {
+        StringBuilder sql = new StringBuilder();
+        sql.append("SELECT ");
+        Set<EntityColumn> pkColumns = EntityHelper.getPKColumns(entityClass);
+        if (pkColumns.size() == 1) {
+            sql.append("COUNT(").append(pkColumns.iterator().next().getColumn()).append(") ");
+        } else {
+            sql.append("COUNT(*) ");
+        }
+        return sql.toString();
+    }
+
+    /**
      * from tableName - 动态表名
      *
      * @param entityClass
