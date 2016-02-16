@@ -110,7 +110,7 @@ public class BaseSelectProvider extends MapperTemplate {
     public String selectCount(MappedStatement ms) {
         Class<?> entityClass = getEntityClass(ms);
         StringBuilder sql = new StringBuilder();
-        sql.append("SELECT COUNT(*) ");
+        sql.append(SqlHelper.selectCount(entityClass));
         sql.append(SqlHelper.fromTable(entityClass, tableName(entityClass)));
         sql.append(SqlHelper.whereAllIfColumns(entityClass, isNotEmpty()));
         return sql.toString();

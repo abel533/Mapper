@@ -1,5 +1,11 @@
 #更新日志
 
+##3.3.5 - 2016-02-16
+
+* `Example`增加对动态表名支持，通过`setTableName`设置表名
+* 在example相关的两个`update`方法中，参数为实体类和`Example`，这个方法只能通过`Example`来设置动态表名，不支持通过实体设置动态表名
+* 优化两个`select count`查询，当表只有一个主键的时候，使用`select count(pk)`，其他时候使用`select count(*)`
+
 ##3.3.4 - 2016-01-05
 
 * 解决insertList的bug#86
