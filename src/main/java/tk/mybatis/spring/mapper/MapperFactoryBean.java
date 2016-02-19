@@ -36,6 +36,13 @@ public class MapperFactoryBean<T> extends org.mybatis.spring.mapper.MapperFactor
 
     private MapperHelper mapperHelper;
 
+    public MapperFactoryBean() {
+    }
+
+    public MapperFactoryBean(Class<T> mapperInterface) {
+        super(mapperInterface);
+    }
+
     /**
      * {@inheritDoc}
      */

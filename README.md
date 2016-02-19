@@ -92,7 +92,7 @@ Country代码：
 <dependency>
     <groupId>tk.mybatis</groupId>
     <artifactId>mapper</artifactId>
-    <version>3.3.5</version>
+    <version>3.3.6</version>
 </dependency>
 ```
 
@@ -108,7 +108,11 @@ http://repo1.maven.org/maven2/javax/persistence/persistence-api/1.0/
 
 ##[更新日志](http://git.oschina.net/free/Mapper/blob/master/wiki/Changelog.md)
 
-##最新版本3.3.5 - 2016-02-16
+##最新版本3.3.6 - 2016-02-20
+
+* 增加对mybatis-spring 1.2.4版本的支持，兼容之前的版本
+
+###3.3.5 - 2016-02-16
 
 * `Example`增加对动态表名支持，通过`setTableName`设置表名
 * 在example相关的两个`update`方法中，参数为实体类和`Example`，这个方法只能通过`Example`来设置动态表名，不支持通过实体设置动态表名
