@@ -122,7 +122,7 @@ public class MapperCommentGenerator implements CommentGenerator {
             }
         }
         String column = introspectedColumn.getActualColumnName();
-        if (StringUtility.stringContainsSpace(column) || introspectedTable.getTableConfiguration().isAllColumnDelimitingEnabled()) {
+        if (StringUtility.stringContainsSpace(column) || introspectedColumn.isColumnNameDelimited()) {
             column = introspectedColumn.getContext().getBeginningDelimiter()
                     + column
                     + introspectedColumn.getContext().getEndingDelimiter();
