@@ -1,6 +1,6 @@
 #更新日志
 
-##3.3.7 - 2016-03-21
+##3.3.7 - 2016-03-12
 
 * `Example`增加`orderBy`方法，使用属性进行排序，例如：`example.orderBy("id").desc().orderBy("countryname").orderBy("countrycode").asc();`
 * 当实体类包含数组类型的字段时，在`resultMap`中不使用`javaType`，这种情况如果出错，可以通过`@ColumnType`注解设置`jdbcType` #103
