@@ -252,12 +252,10 @@ public class EntityColumn {
         if (this.jdbcType != null) {
             sb.append(",jdbcType=");
             sb.append(this.jdbcType.toString());
-        }
-        if (this.typeHandler != null) {
+        } else if (this.typeHandler != null) {
             sb.append(",typeHandler=");
             sb.append(this.typeHandler.getCanonicalName());
-        }
-        if (this.jdbcType == null && this.typeHandler == null) {
+        } else if (!this.javaType.isArray()) {//当类型为数组时，不设置javaType#103
             sb.append(",javaType=");
             sb.append(javaType.getCanonicalName());
         }

@@ -285,7 +285,8 @@ public class FieldHelper {
             Field[] fields = entityClass.getDeclaredFields();
             int index = 0;
             for (Field field : fields) {
-                if (!Modifier.isStatic(field.getModifiers())) {
+                //忽略static和transient字段#106
+                if (!Modifier.isStatic(field.getModifiers()) && !Modifier.isTransient(field.getModifiers())) {
                     EntityField entityField = new EntityField(field, null);
                     if (field.getGenericType() != null && field.getGenericType() instanceof TypeVariable) {
                         if (genericMap == null || !genericMap.containsKey(((TypeVariable) field.getGenericType()).getName())) {

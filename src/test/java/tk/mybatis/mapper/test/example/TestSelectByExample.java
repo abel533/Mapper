@@ -34,6 +34,7 @@ import tk.mybatis.mapper.mapper.CountryMapper;
 import tk.mybatis.mapper.mapper.MybatisHelper;
 import tk.mybatis.mapper.model.Country;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -49,7 +50,7 @@ public class TestSelectByExample {
             CountryMapper mapper = sqlSession.getMapper(CountryMapper.class);
             Example example = new Example(Country.class);
             example.createCriteria().andGreaterThan("id", 100).andLessThan("id",151);
-            example.or().andLessThan("id",41);
+            example.or().andLessThan("id", 41);
             List<Country> countries = mapper.selectByExample(example);
             //查询总数
             Assert.assertEquals(90, countries.size());
