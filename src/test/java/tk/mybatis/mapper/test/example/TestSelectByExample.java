@@ -152,7 +152,7 @@ public class TestSelectByExample {
         try {
             CountryMapper mapper = sqlSession.getMapper(CountryMapper.class);
             Example example = new Example(Country.class);
-            example.createCriteria().andGreaterThan("id", 100).andLessThan("id",151);
+            example.createCriteria().andGreaterThan("id", 100).andLessThan("id", 151);
             example.or().andLessThan("id", 41);
             example.selectProperties("id", "countryname", "hehe");
             List<Country> countries = mapper.selectByExample(example);
@@ -169,7 +169,8 @@ public class TestSelectByExample {
         try {
             CountryMapper mapper = sqlSession.getMapper(CountryMapper.class);
             Example example = new Example(Country.class);
-            example.setOrderByClause("id desc");
+//            example.setOrderByClause("id desc");
+            example.orderBy("id").desc().orderBy("countryname").orderBy("countrycode").asc();
             List<Country> countries = mapper.selectByExample(example);
             //查询总数
             Assert.assertEquals(183, (int) countries.get(0).getId());

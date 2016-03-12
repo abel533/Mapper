@@ -28,6 +28,7 @@ import org.apache.ibatis.reflection.MetaObject;
 import org.apache.ibatis.reflection.SystemMetaObject;
 import org.apache.ibatis.type.TypeHandler;
 import tk.mybatis.mapper.mapperhelper.EntityHelper;
+import tk.mybatis.mapper.util.StringUtil;
 
 import java.util.*;
 
@@ -56,6 +57,8 @@ public class Example implements IDynamicTableName {
     protected Map<String, EntityColumn> propertyMap;
     //动态表名
     protected String tableName;
+
+    protected OrderBy orderBy;
     /**
      * 默认exists为true
      *
@@ -92,6 +95,7 @@ public class Example implements IDynamicTableName {
         for (EntityColumn column : table.getEntityClassColumns()) {
             propertyMap.put(column.getProperty(), column);
         }
+        this.orderBy = new OrderBy(this, propertyMap);
     }
 
     public Class<?> getEntityClass() {
@@ -104,6 +108,65 @@ public class Example implements IDynamicTableName {
 
     public void setOrderByClause(String orderByClause) {
         this.orderByClause = orderByClause;
+    }
+
+    public OrderBy orderBy(String property) {
+        this.orderBy.orderBy(property);
+        return this.orderBy;
+    }
+
+    public static class OrderBy {
+        private Example example;
+        private Boolean isProperty;
+        //属性和列对应
+        protected Map<String, EntityColumn> propertyMap;
+        protected boolean notNull;
+
+        public OrderBy(Example example, Map<String, EntityColumn> propertyMap) {
+            this.example = example;
+            this.propertyMap = propertyMap;
+        }
+
+        private String property(String property) {
+            if (propertyMap.containsKey(property)) {
+                return propertyMap.get(property).getColumn();
+            } else if (notNull) {
+                throw new RuntimeException("当前实体类不包含名为" + property + "的属性!");
+            } else {
+                return null;
+            }
+        }
+
+        public OrderBy orderBy(String property) {
+            String column = property(property);
+            if (column == null) {
+                isProperty = false;
+                return this;
+            }
+            if (StringUtil.isNotEmpty(example.getOrderByClause())) {
+                example.setOrderByClause(example.getOrderByClause() + "," + column);
+            } else {
+                example.setOrderByClause(column);
+            }
+            isProperty = true;
+            return this;
+        }
+
+        public OrderBy desc() {
+            if (isProperty) {
+                example.setOrderByClause(example.getOrderByClause() + " DESC");
+                isProperty = false;
+            }
+            return this;
+        }
+
+        public OrderBy asc() {
+            if (isProperty) {
+                example.setOrderByClause(example.getOrderByClause() + " ASC");
+                isProperty = false;
+            }
+            return this;
+        }
     }
 
     public Set<String> getSelectColumns() {
