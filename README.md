@@ -12,8 +12,6 @@
 
 ##项目文档
 
-初学者如果感觉下面的文档太多不方便入手，那么可以下载[通用Mapper简单实用文档.pdf](http://git.oschina.net/free/Mapper/attach_files/download?i=15246&u=http%3A%2F%2Ffiles.git.oschina.net%2Fgroup1%2FM00%2F00%2F99%2FfMqNk1XbGl2AQA8mAAKDipSqnlc703.pdf%3Ftoken%3D14d69a3d1526cb5b4dc3e1d2cc030b2c%26ts%3D1440516629)学习基本的配置和使用！
-
 ###在你打算使用通用Mapper前，一定要看看下面的文档，许多人在初次使用时遇到的问题，99%都在文档中有说明！！
 
 1. [如何集成通用Mapper](http://git.oschina.net/free/Mapper/blob/master/wiki/mapper3/2.Integration.md)
