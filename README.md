@@ -10,6 +10,8 @@
 
 ##MyBatis工具网站:[http://mybatis.tk](http://www.mybatis.tk)
 
+##特别强调：不是表中字段的属性必须加`@Transient`注解
+
 ##项目文档
 
 ###在你打算使用通用Mapper前，一定要看看下面的文档，许多人在初次使用时遇到的问题，99%都在文档中有说明！！
@@ -80,7 +82,7 @@ Country代码：
     
 [使用Mapper专用的MyBatis Generator插件](http://git.oschina.net/free/Mapper/blob/master/wiki/mapper3/7.UseMBG.md) 可以方便的生成这些（带注解的）实体类。
 
-##通用Mapper支持Mybatis-3.2.4及以上版本 
+##通用Mapper支持Mybatis-3.2.4及以上版本
 
 ##使用Maven
 
@@ -105,6 +107,10 @@ http://repo1.maven.org/maven2/tk/mybatis/mapper
 http://repo1.maven.org/maven2/javax/persistence/persistence-api/1.0/
 
 ##[更新日志](http://git.oschina.net/free/Mapper/blob/master/wiki/Changelog.md)
+
+##3.3.8-SNAPSHOT - 2016-03-19
+
+* 解决ResultMapping.Builder3.2.6版本新增`lazy`方法导致无法兼容3.2.4~3.2.5版本的问题，仍然兼容3.2.4+
 
 ##最新版本3.3.7 - 2016-03-12
 

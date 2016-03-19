@@ -209,7 +209,6 @@ public class EntityTable {
                 flags.add(ResultFlag.ID);
             }
             builder.flags(flags);
-            builder.lazy(false);
             resultMappings.add(builder.build());
         }
         ResultMap.Builder builder = new ResultMap.Builder(configuration, "BaseMapperResultMap", this.entityClass, resultMappings, true);
