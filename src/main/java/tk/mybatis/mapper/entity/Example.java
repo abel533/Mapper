@@ -36,7 +36,7 @@ import java.util.*;
  *
  * @author liuzh
  */
-public class Example {
+public class Example implements IDynamicTableName {
     protected String orderByClause;
 
     protected boolean distinct;
@@ -54,7 +54,8 @@ public class Example {
     protected EntityTable table;
     //属性和列对应
     protected Map<String, EntityColumn> propertyMap;
-
+    //动态表名
+    protected String tableName;
     /**
      * 默认exists为true
      *
@@ -168,6 +169,20 @@ public class Example {
         oredCriteria.clear();
         orderByClause = null;
         distinct = false;
+    }
+
+    /**
+     * 设置表名
+     *
+     * @param tableName
+     */
+    public void setTableName(String tableName) {
+        this.tableName = tableName;
+    }
+
+    @Override
+    public String getDynamicTableName() {
+        return tableName;
     }
 
     protected abstract static class GeneratedCriteria {

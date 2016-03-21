@@ -48,8 +48,9 @@ public class ExampleProvider extends MapperTemplate {
      */
     public String selectCountByExample(MappedStatement ms) {
         Class<?> entityClass = getEntityClass(ms);
-        StringBuilder sql = new StringBuilder("SELECT COUNT(*) FROM ");
-        sql.append(SqlHelper.getDynamicTableName(entityClass, tableName(entityClass)));
+        StringBuilder sql = new StringBuilder();
+        sql.append(SqlHelper.selectCount(entityClass));
+        sql.append(SqlHelper.fromTable(entityClass, tableName(entityClass)));
         sql.append(SqlHelper.exampleWhereClause());
         return sql.toString();
     }
@@ -108,7 +109,7 @@ public class ExampleProvider extends MapperTemplate {
     public String updateByExampleSelective(MappedStatement ms) {
         Class<?> entityClass = getEntityClass(ms);
         StringBuilder sql = new StringBuilder();
-        sql.append(SqlHelper.updateTable(entityClass, tableName(entityClass), "record"));
+        sql.append(SqlHelper.updateTable(entityClass, tableName(entityClass), "example"));
         sql.append(SqlHelper.updateSetColumns(entityClass, "record", true, isNotEmpty()));
         sql.append(SqlHelper.updateByExampleWhereClause());
         return sql.toString();
@@ -123,7 +124,7 @@ public class ExampleProvider extends MapperTemplate {
     public String updateByExample(MappedStatement ms) {
         Class<?> entityClass = getEntityClass(ms);
         StringBuilder sql = new StringBuilder();
-        sql.append(SqlHelper.updateTable(entityClass, tableName(entityClass), "record"));
+        sql.append(SqlHelper.updateTable(entityClass, tableName(entityClass), "example"));
         sql.append(SqlHelper.updateSetColumns(entityClass, "record", false, false));
         sql.append(SqlHelper.updateByExampleWhereClause());
         return sql.toString();
