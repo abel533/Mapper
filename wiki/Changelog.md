@@ -1,5 +1,13 @@
 #更新日志
 
+##3.3.8 - 2016-03-23
+
+* `Example`的`andIn`和`andNotIn`方法参数改为`Collection` #109
+* 解决ResultMapping.Builder3.2.6版本新增`lazy`方法导致无法兼容3.2.4~3.2.5版本的问题，仍然兼容3.2.4+
+* 解决github[#12](https://github.com/abel533/Mapper/issues/12) 问题
+* 解决#107
+* 解决和分页插件PageHelper中orderBy默认属性名相同导致排序的错误
+
 ##3.3.7 - 2016-03-12
 
 * `Example`增加`orderBy`方法，使用属性进行排序，例如：`example.orderBy("id").desc().orderBy("countryname").orderBy("countrycode").asc();`
