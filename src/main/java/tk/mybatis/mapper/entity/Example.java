@@ -58,7 +58,7 @@ public class Example implements IDynamicTableName {
     //动态表名
     protected String tableName;
 
-    protected OrderBy orderBy;
+    protected OrderBy ORDERBY;
     /**
      * 默认exists为true
      *
@@ -95,7 +95,7 @@ public class Example implements IDynamicTableName {
         for (EntityColumn column : table.getEntityClassColumns()) {
             propertyMap.put(column.getProperty(), column);
         }
-        this.orderBy = new OrderBy(this, propertyMap);
+        this.ORDERBY = new OrderBy(this, propertyMap);
     }
 
     public Class<?> getEntityClass() {
@@ -111,8 +111,8 @@ public class Example implements IDynamicTableName {
     }
 
     public OrderBy orderBy(String property) {
-        this.orderBy.orderBy(property);
-        return this.orderBy;
+        this.ORDERBY.orderBy(property);
+        return this.ORDERBY;
     }
 
     public static class OrderBy {
