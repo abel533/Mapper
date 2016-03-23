@@ -125,7 +125,7 @@ public class EntityTable {
             return catalog;
         }
         if (StringUtil.isNotEmpty(schema)) {
-            return catalog;
+            return schema;
         }
         return "";
     }
