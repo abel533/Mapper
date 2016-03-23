@@ -375,12 +375,12 @@ public class Example implements IDynamicTableName {
             return (Criteria) this;
         }
 
-        public Criteria andIn(String property, List<?> values) {
+        public Criteria andIn(String property, Collection<?> values) {
             addCriterion(column(property) + " in", values, property(property));
             return (Criteria) this;
         }
 
-        public Criteria andNotIn(String property, List<?> values) {
+        public Criteria andNotIn(String property, Collection<?> values) {
             addCriterion(column(property) + " not in", values, property(property));
             return (Criteria) this;
         }
@@ -518,7 +518,7 @@ public class Example implements IDynamicTableName {
             this.condition = condition;
             this.value = value;
             this.typeHandler = typeHandler;
-            if (value instanceof List<?>) {
+            if (value instanceof Collection<?>) {
                 this.listValue = true;
             } else {
                 this.singleValue = true;
