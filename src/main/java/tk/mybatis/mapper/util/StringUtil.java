@@ -124,7 +124,7 @@ public class StringUtil {
     }
 
     public static char toUpperAscii(char c) {
-        if (isUppercaseAlpha(c)) {
+        if (isLowercaseAlpha(c)) {
             c -= (char) 0x20;
         }
         return c;
