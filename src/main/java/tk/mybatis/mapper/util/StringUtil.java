@@ -92,7 +92,7 @@ public class StringUtil {
         for (int i = 0; i < size; i++) {
             c = chars[i];
             if (isUppercaseAlpha(c)) {
-                sb.append('_').append(toLowerAscii(c));
+                sb.append('_').append(c);
             } else {
                 sb.append(toUpperAscii(c));
             }
