@@ -94,7 +94,7 @@ public class StringUtil {
             if (isUppercaseAlpha(c)) {
                 sb.append('_').append(toLowerAscii(c));
             } else {
-                sb.append(toUpperAscii(c));
+                sb.append(c);
             }
         }
         return sb.charAt(0) == '_' ? sb.substring(1) : sb.toString();
