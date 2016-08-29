@@ -375,12 +375,12 @@ public class Example implements IDynamicTableName {
             return (Criteria) this;
         }
 
-        public Criteria andIn(String property, Collection<?> values) {
+        public Criteria andIn(String property, Iterable values) {
             addCriterion(column(property) + " in", values, property(property));
             return (Criteria) this;
         }
 
-        public Criteria andNotIn(String property, Collection<?> values) {
+        public Criteria andNotIn(String property, Iterable values) {
             addCriterion(column(property) + " not in", values, property(property));
             return (Criteria) this;
         }
