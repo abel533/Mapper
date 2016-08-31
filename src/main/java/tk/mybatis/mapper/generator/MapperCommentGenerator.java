@@ -222,4 +222,16 @@ public class MapperCommentGenerator implements CommentGenerator {
      */
     public void addClassComment(InnerClass innerClass, IntrospectedTable introspectedTable, boolean markAsDoNotDelete) {
     }
+
+    /**
+     * 升级到 mybatis-generator-core v1.3.4 接口变化
+     * TODO: 待增加可能值得增加的相关注释修改
+     *
+     * @param topLevelClass
+     * @param introspectedTable
+     */
+    @Override
+    public void addModelClassComment(TopLevelClass topLevelClass, IntrospectedTable introspectedTable) {
+
+    }
 }
