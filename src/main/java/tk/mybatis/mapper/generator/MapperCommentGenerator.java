@@ -151,6 +151,10 @@ public class MapperCommentGenerator implements CommentGenerator {
     public void addFieldComment(Field field, IntrospectedTable introspectedTable) {
     }
 
+    public void addModelClassComment(TopLevelClass topLevelClass, IntrospectedTable introspectedTable) {
+
+    }
+
     /**
      * @param method
      * @param introspectedTable
