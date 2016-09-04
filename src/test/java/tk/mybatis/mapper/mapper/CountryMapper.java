@@ -24,6 +24,7 @@
 
 package tk.mybatis.mapper.mapper;
 
+import tk.mybatis.mapper.common.IdsMapper;
 import tk.mybatis.mapper.common.Mapper;
 import tk.mybatis.mapper.common.MySqlMapper;
 import tk.mybatis.mapper.hsqldb.HsqldbMapper;
@@ -32,5 +33,5 @@ import tk.mybatis.mapper.model.Country;
 /**
  * Created by liuzh on 2014/11/19.
  */
-public interface CountryMapper extends Mapper<Country>, HsqldbMapper<Country>, MySqlMapper<Country> {
+public interface CountryMapper extends Mapper<Country>, HsqldbMapper<Country>, MySqlMapper<Country>, IdsMapper<Country> {
 }

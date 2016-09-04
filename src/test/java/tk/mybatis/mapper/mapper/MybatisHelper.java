@@ -29,6 +29,7 @@ import org.apache.ibatis.jdbc.ScriptRunner;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
+import tk.mybatis.mapper.common.IdsMapper;
 import tk.mybatis.mapper.common.Mapper;
 import tk.mybatis.mapper.common.MySqlMapper;
 import tk.mybatis.mapper.common.SqlServerMapper;
@@ -89,6 +90,7 @@ public class MybatisHelper {
                 mapperHelper.registerMapper(HsqldbMapper.class);
                 mapperHelper.registerMapper(MySqlMapper.class);
                 mapperHelper.registerMapper(SqlServerMapper.class);
+                mapperHelper.registerMapper(IdsMapper.class);
                 //配置完成后，执行下面的操作
                 mapperHelper.processConfiguration(session.getConfiguration());
                 //OK - mapperHelper的任务已经完成，可以不管了
