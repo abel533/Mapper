@@ -31,7 +31,7 @@ import java.io.Serializable;
  * Created by liuzh on 2014/11/21.
  */
 @Table(name = "user_info")
-public class UserInfoAble implements Serializable {
+public class UserInfoAble extends UserParent implements Serializable {
 
     private static final long serialVersionUID = -7703830119762722918L;
     @Id
@@ -43,7 +43,6 @@ public class UserInfoAble implements Serializable {
     private String realname;
     private String qq;
     private String email;
-    private String address;
     private String tel;
 
     public Integer getId() {
@@ -103,15 +102,6 @@ public class UserInfoAble implements Serializable {
         this.email = email;
     }
 
-    public String getAddress() {
-        return address;
-    }
-
-    @Column(updatable = false)
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
     public String getTel() {
         return tel;
     }
@@ -130,7 +120,6 @@ public class UserInfoAble implements Serializable {
                 ", realname='" + realname + '\'' +
                 ", qq='" + qq + '\'' +
                 ", email='" + email + '\'' +
-                ", address='" + address + '\'' +
                 ", tel='" + tel + '\'' +
                 '}';
     }
