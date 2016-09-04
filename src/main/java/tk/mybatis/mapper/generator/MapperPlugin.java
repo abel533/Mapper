@@ -64,6 +64,8 @@ public class MapperPlugin extends PluginAdapter {
         commentCfg = new CommentGeneratorConfiguration();
         commentCfg.setConfigurationType(MapperCommentGenerator.class.getCanonicalName());
         context.setCommentGeneratorConfiguration(commentCfg);
+        //支持oracle获取注释#114
+        context.getJdbcConnectionConfiguration().addProperty("remarksReporting", "true");
     }
 
     @Override
