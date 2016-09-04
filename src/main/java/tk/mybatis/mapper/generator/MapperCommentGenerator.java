@@ -36,6 +36,10 @@ import org.mybatis.generator.internal.util.StringUtility;
 import java.util.Properties;
 
 public class MapperCommentGenerator implements CommentGenerator {
+    //开始的分隔符，例如mysql为`，sqlserver为[
+    private String beginningDelimiter = "";
+    //结束的分隔符，例如mysql为`，sqlserver为]
+    private String endingDelimiter = "";
 
     public MapperCommentGenerator() {
         super();
@@ -64,6 +68,18 @@ public class MapperCommentGenerator implements CommentGenerator {
     }
 
     public void addConfigurationProperties(Properties properties) {
+        String beginningDelimiter = properties.getProperty("beginningDelimiter");
+        if (StringUtility.stringHasValue(beginningDelimiter)) {
+            this.beginningDelimiter = beginningDelimiter;
+        }
+        String endingDelimiter = properties.getProperty("endingDelimiter");
+        if (StringUtility.stringHasValue(endingDelimiter)) {
+            this.endingDelimiter = endingDelimiter;
+        }
+    }
+
+    public String getDelimiterName(String name) {
+        return beginningDelimiter + name + endingDelimiter;
     }
 
     /**
@@ -129,7 +145,7 @@ public class MapperCommentGenerator implements CommentGenerator {
         }
         if (!column.equals(introspectedColumn.getJavaProperty())) {
             //@Column
-            field.addAnnotation("@Column(name = \"" + column + "\")");
+            field.addAnnotation("@Column(name = \"" + getDelimiterName(column) + "\")");
         }
         if (introspectedColumn.isIdentity()) {
             if (introspectedTable.getTableConfiguration().getGeneratedKey().getRuntimeSqlStatement().equals("JDBC")) {

@@ -48,12 +48,18 @@ import java.util.Set;
 public class MapperPlugin extends PluginAdapter {
     private Set<String> mappers = new HashSet<String>();
     private boolean caseSensitive = false;
+    //开始的分隔符，例如mysql为`，sqlserver为[
+    private String beginningDelimiter = "";
+    //结束的分隔符，例如mysql为`，sqlserver为]
+    private String endingDelimiter = "";
+    //注释生成器
+    private CommentGeneratorConfiguration commentCfg;
 
     @Override
     public void setContext(Context context) {
         super.setContext(context);
         //设置默认的注释生成器
-        CommentGeneratorConfiguration commentCfg = new CommentGeneratorConfiguration();
+        commentCfg = new CommentGeneratorConfiguration();
         commentCfg.setConfigurationType(MapperCommentGenerator.class.getCanonicalName());
         context.setCommentGeneratorConfiguration(commentCfg);
     }
@@ -73,6 +79,20 @@ public class MapperPlugin extends PluginAdapter {
         if (StringUtility.stringHasValue(caseSensitive)) {
             this.caseSensitive = caseSensitive.equalsIgnoreCase("TRUE");
         }
+        String beginningDelimiter = this.properties.getProperty("beginningDelimiter");
+        if (StringUtility.stringHasValue(beginningDelimiter)) {
+            this.beginningDelimiter = beginningDelimiter;
+        }
+        commentCfg.addProperty("beginningDelimiter", this.beginningDelimiter);
+        String endingDelimiter = this.properties.getProperty("endingDelimiter");
+        if (StringUtility.stringHasValue(endingDelimiter)) {
+            this.endingDelimiter = endingDelimiter;
+        }
+        commentCfg.addProperty("endingDelimiter", this.endingDelimiter);
+    }
+
+    public String getDelimiterName(String name) {
+        return beginningDelimiter + name + endingDelimiter;
     }
 
     @Override
@@ -120,9 +140,9 @@ public class MapperPlugin extends PluginAdapter {
         }
         //是否忽略大小写，对于区分大小写的数据库，会有用
         if (caseSensitive && !topLevelClass.getType().getShortName().equals(tableName)) {
-            topLevelClass.addAnnotation("@Table(name = \"" + tableName + "\")");
+            topLevelClass.addAnnotation("@Table(name = \"" + getDelimiterName(tableName) + "\")");
         } else if (!topLevelClass.getType().getShortName().equalsIgnoreCase(tableName)) {
-            topLevelClass.addAnnotation("@Table(name = \"" + tableName + "\")");
+            topLevelClass.addAnnotation("@Table(name = \"" + getDelimiterName(tableName) + "\")");
         }
     }
 

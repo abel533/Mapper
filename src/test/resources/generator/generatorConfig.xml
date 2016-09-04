@@ -29,25 +29,26 @@
 
 <generatorConfiguration>
   <context id="Mysql" targetRuntime="MyBatis3Simple" defaultModelType="flat">
-    <property name="beginningDelimiter" value="`"/>
-    <property name="endingDelimiter" value="`"/>
+    <property name="javaFileEncoding" value="UTF-8"/>
     
     <plugin type="tk.mybatis.mapper.generator.MapperPlugin">
       <property name="mappers" value="tk.mybatis.mapper.common.Mapper,tk.mybatis.mapper.hsqldb.HsqldbMapper"/>
       <property name="caseSensitive" value="true"/>
+      <!--<property name="beginningDelimiter" value="`"/>-->
+      <!--<property name="endingDelimiter" value="`"/>-->
     </plugin>
 
     <jdbcConnection driverClass="com.mysql.jdbc.Driver"
                     connectionURL="jdbc:mysql://localhost:3306/test"
                     userId="root"
-                    password="jj">
+                    password="">
     </jdbcConnection>
 
-    <javaModelGenerator targetPackage="test.model" targetProject="E:\Git\Mybatis\Mapper\src\test\java"/>
+    <javaModelGenerator targetPackage="test.model" targetProject="./src/test/java"/>
 
-    <sqlMapGenerator targetPackage="mappers"  targetProject="E:\Git\Mybatis\Mapper\src\test\resources"/>
+    <sqlMapGenerator targetPackage="mappers" targetProject="./src/test/resources"/>
 
-    <javaClientGenerator targetPackage="test.mapper" targetProject="E:\Git\Mybatis\Mapper\src\test\java" type="XMLMAPPER" />
+    <javaClientGenerator targetPackage="test.mapper" targetProject="./src/test/java" type="XMLMAPPER"/>
 
     <table tableName="%" >
       <generatedKey column="id" sqlStatement="JDBC"/>
