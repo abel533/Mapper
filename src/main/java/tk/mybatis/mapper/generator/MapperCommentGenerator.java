@@ -79,7 +79,11 @@ public class MapperCommentGenerator implements CommentGenerator {
     }
 
     public String getDelimiterName(String name) {
-        return beginningDelimiter + name + endingDelimiter;
+        StringBuilder nameBuilder = new StringBuilder();
+        nameBuilder.append(beginningDelimiter);
+        nameBuilder.append(name);
+        nameBuilder.append(endingDelimiter);
+        return nameBuilder.toString();
     }
 
     /**

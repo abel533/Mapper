@@ -100,7 +100,15 @@ public class MapperPlugin extends PluginAdapter {
     }
 
     public String getDelimiterName(String name) {
-        return schema + "." + beginningDelimiter + name + endingDelimiter;
+        StringBuilder nameBuilder = new StringBuilder();
+        if (StringUtility.stringHasValue(schema)) {
+            nameBuilder.append(schema);
+            nameBuilder.append(".");
+        }
+        nameBuilder.append(beginningDelimiter);
+        nameBuilder.append(name);
+        nameBuilder.append(endingDelimiter);
+        return nameBuilder.toString();
     }
 
     @Override
