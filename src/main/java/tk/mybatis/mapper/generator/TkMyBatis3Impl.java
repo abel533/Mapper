@@ -1,5 +1,6 @@
 package tk.mybatis.mapper.generator;
 
+import org.mybatis.generator.codegen.mybatis3.IntrospectedTableMyBatis3Impl;
 import org.mybatis.generator.codegen.mybatis3.IntrospectedTableMyBatis3SimpleImpl;
 
 import java.text.MessageFormat;
@@ -19,7 +20,7 @@ import static org.mybatis.generator.internal.util.StringUtility.stringHasValue;
  * @author liuzh
  * @since 2016-09-04 09:57
  */
-public class TkMyBatis3Impl extends IntrospectedTableMyBatis3SimpleImpl {
+public class TkMyBatis3Impl extends IntrospectedTableMyBatis3Impl {
 
     @Override
     protected String calculateMyBatis3XmlMapperFileName() {
