@@ -1,5 +1,17 @@
 #更新日志
 
+##3.3.9 - 2016-09-04
+
+* 增加`selectByIds`和`deleteByIds`，用法见通用Mapper接口大全
+* 根据**李领北**建议修改`Example`中的`propertyMap`#159
+* `Example`中的`andIn`和`andNotIn`中的参数`Collection`改为`Iterable`
+* 解决驼峰转下划线的错误，感谢 ptma, piggsoft 和 liufor 的PR
+* 增加对MBG1.3.4的支持
+* MBG插件支持`beginningDelimiter`和`endingDelimiter`
+* MBG插件增加schema配置（catalog也可以用这个），会自动在表的注解名字前面加上`schema.tablename`
+* MBG插件支持oracle获取注释，其他数据库可以尝试#114
+* MBG扩展，详情看[MyBatis Generator 1.3.4 扩展，可以设置 Mapper（Dao）后缀](http://blog.csdn.net/isea533/article/details/52430691)
+
 ##3.3.8 - 2016-03-23
 
 * `Example`的`andIn`和`andNotIn`方法参数改为`Collection` #109

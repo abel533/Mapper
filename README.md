@@ -92,7 +92,7 @@ Country代码：
 <dependency>
     <groupId>tk.mybatis</groupId>
     <artifactId>mapper</artifactId>
-    <version>3.3.7</version>
+    <version>3.3.9</version>
 </dependency>
 ```
 
@@ -108,7 +108,19 @@ http://repo1.maven.org/maven2/javax/persistence/persistence-api/1.0/
 
 ##[更新日志](http://git.oschina.net/free/Mapper/blob/master/wiki/Changelog.md)
 
-##最新版本3.3.8 - 2016-03-23
+##最新版本3.3.9 - 2016-09-04
+
+* 增加`selectByIds`和`deleteByIds`，用法见通用Mapper接口大全
+* MBG插件支持`beginningDelimiter`和`endingDelimiter`
+* MBG插件增加schema配置（catalog也可以用这个），会自动在表的注解名字前面加上`schema.tablename`
+* MBG插件支持oracle获取注释，其他数据库可以尝试#114
+* 根据**李领北**建议修改`Example`中的`propertyMap`#159
+* [MyBatis Generator 1.3.4 扩展，可以设置 Mapper（Dao）后缀](http://blog.csdn.net/isea533/article/details/52430691)
+* 增加对MBG1.3.4的支持
+* `Example`中的`andIn`和`andNotIn`中的参数`Collection`改为`Iterable`
+* 解决驼峰转下划线的错误，感谢 ptma, piggsoft 和 liufor 的PR
+
+###3.3.8 - 2016-03-23
 
 * `Example`的`andIn`和`andNotIn`方法参数改为`Collection` #109
 * 解决ResultMapping.Builder3.2.6版本新增`lazy`方法导致无法兼容3.2.4~3.2.5版本的问题，仍然兼容3.2.4+
