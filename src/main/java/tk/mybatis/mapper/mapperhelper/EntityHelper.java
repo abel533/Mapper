@@ -223,6 +223,7 @@ public class EntityHelper {
         if (entityTable.getEntityClassPKColumns().size() == 0) {
             entityTable.setEntityClassPKColumns(entityTable.getEntityClassColumns());
         }
+        entityTable.initPropertyMap();
         entityTableMap.put(entityClass, entityTable);
     }
 

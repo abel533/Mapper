@@ -91,10 +91,8 @@ public class Example implements IDynamicTableName {
         oredCriteria = new ArrayList<Criteria>();
         this.entityClass = entityClass;
         table = EntityHelper.getEntityTable(entityClass);
-        propertyMap = new HashMap<String, EntityColumn>(table.getEntityClassColumns().size());
-        for (EntityColumn column : table.getEntityClassColumns()) {
-            propertyMap.put(column.getProperty(), column);
-        }
+        //根据李领北建议修改#159
+        propertyMap = table.getPropertyMap();
         this.ORDERBY = new OrderBy(this, propertyMap);
     }
 
