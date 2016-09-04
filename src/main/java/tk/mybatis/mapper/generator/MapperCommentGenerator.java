@@ -146,6 +146,8 @@ public class MapperCommentGenerator implements CommentGenerator {
         if (!column.equals(introspectedColumn.getJavaProperty())) {
             //@Column
             field.addAnnotation("@Column(name = \"" + getDelimiterName(column) + "\")");
+        } else if (StringUtility.stringHasValue(beginningDelimiter) || StringUtility.stringHasValue(endingDelimiter)) {
+            field.addAnnotation("@Column(name = \"" + getDelimiterName(column) + "\")");
         }
         if (introspectedColumn.isIdentity()) {
             if (introspectedTable.getTableConfiguration().getGeneratedKey().getRuntimeSqlStatement().equals("JDBC")) {

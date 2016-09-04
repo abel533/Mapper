@@ -52,6 +52,8 @@ public class MapperPlugin extends PluginAdapter {
     private String beginningDelimiter = "";
     //结束的分隔符，例如mysql为`，sqlserver为]
     private String endingDelimiter = "";
+    //数据库模式
+    private String schema;
     //注释生成器
     private CommentGeneratorConfiguration commentCfg;
 
@@ -89,10 +91,14 @@ public class MapperPlugin extends PluginAdapter {
             this.endingDelimiter = endingDelimiter;
         }
         commentCfg.addProperty("endingDelimiter", this.endingDelimiter);
+        String schema = this.properties.getProperty("schema");
+        if (StringUtility.stringHasValue(schema)) {
+            this.schema = schema;
+        }
     }
 
     public String getDelimiterName(String name) {
-        return beginningDelimiter + name + endingDelimiter;
+        return schema + "." + beginningDelimiter + name + endingDelimiter;
     }
 
     @Override
@@ -142,6 +148,10 @@ public class MapperPlugin extends PluginAdapter {
         if (caseSensitive && !topLevelClass.getType().getShortName().equals(tableName)) {
             topLevelClass.addAnnotation("@Table(name = \"" + getDelimiterName(tableName) + "\")");
         } else if (!topLevelClass.getType().getShortName().equalsIgnoreCase(tableName)) {
+            topLevelClass.addAnnotation("@Table(name = \"" + getDelimiterName(tableName) + "\")");
+        } else if (StringUtility.stringHasValue(schema)
+                || StringUtility.stringHasValue(beginningDelimiter)
+                || StringUtility.stringHasValue(endingDelimiter)) {
             topLevelClass.addAnnotation("@Table(name = \"" + getDelimiterName(tableName) + "\")");
         }
     }
