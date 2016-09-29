@@ -62,18 +62,18 @@
 
     <mappers>
         <mapper resource="CachedCountryMapper.xml"/>
-        <mapper class="tk.mybatis.mapper.mapper.CountryMapper"/>
-        <mapper class="tk.mybatis.mapper.mapper.Country2Mapper"/>
-        <mapper class="tk.mybatis.mapper.mapper.CountryTMapper"/>
-        <mapper class="tk.mybatis.mapper.mapper.CountryUMapper"/>
-        <mapper class="tk.mybatis.mapper.mapper.CountryJDBCMapper"/>
-        <mapper class="tk.mybatis.mapper.mapper.CountryIMapper"/>
-        <mapper class="tk.mybatis.mapper.mapper.UserInfoMapper"/>
-        <mapper class="tk.mybatis.mapper.mapper.UserInfoAbleMapper"/>
-        <mapper class="tk.mybatis.mapper.mapper.UserInfoMapMapper"/>
-        <mapper class="tk.mybatis.mapper.mapper.UserLoginMapper"/>
-        <mapper class="tk.mybatis.mapper.mapper.UserLogin2Mapper"/>
-        <mapper class="tk.mybatis.mapper.mapper.JDBCMapper"/>
+        <mapper class="com.quancheng.mybatis.mapper.mapper.CountryMapper"/>
+        <mapper class="com.quancheng.mybatis.mapper.mapper.Country2Mapper"/>
+        <mapper class="com.quancheng.mybatis.mapper.mapper.CountryTMapper"/>
+        <mapper class="com.quancheng.mybatis.mapper.mapper.CountryUMapper"/>
+        <mapper class="com.quancheng.mybatis.mapper.mapper.CountryJDBCMapper"/>
+        <mapper class="com.quancheng.mybatis.mapper.mapper.CountryIMapper"/>
+        <mapper class="com.quancheng.mybatis.mapper.mapper.UserInfoMapper"/>
+        <mapper class="com.quancheng.mybatis.mapper.mapper.UserInfoAbleMapper"/>
+        <mapper class="com.quancheng.mybatis.mapper.mapper.UserInfoMapMapper"/>
+        <mapper class="com.quancheng.mybatis.mapper.mapper.UserLoginMapper"/>
+        <mapper class="com.quancheng.mybatis.mapper.mapper.UserLogin2Mapper"/>
+        <mapper class="com.quancheng.mybatis.mapper.mapper.JDBCMapper"/>
 
     </mappers>
 

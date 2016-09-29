@@ -54,7 +54,7 @@
 - 解决数据越界bug#73
 - 解决and少空格问题
 - 解决order by错误#74
-- `tk.mybatis.spring.mapper.MapperScannerConfigurer`中的属性`mapperHelper`增加setter和getter方法，方便通过代码进行配置
+- `MapperScannerConfigurer`中的属性`mapperHelper`增加setter和getter方法，方便通过代码进行配置
 
 ##3.3.1 - 2015-12-09
 
@@ -96,7 +96,7 @@
 
 ##3.2.2 - 2015-09-19
 
-* 和Spring集成时，允许通过`markerInterface`属性配置通用接口（注意该属性的原有作用不变），想要让该接口自动注册，该接口就需要继承`tk.mybatis.mapper.common.Marker`接口，`Mapper<T>`默认继承该接口，所以如果自己的接口是继承`Mapper<T>`的，不需要再继承。
+* 和Spring集成时，允许通过`markerInterface`属性配置通用接口（注意该属性的原有作用不变），想要让该接口自动注册，该接口就需要继承`Marker`接口，`Mapper<T>`默认继承该接口，所以如果自己的接口是继承`Mapper<T>`的，不需要再继承。
 * 解决注册默认接口时存在的bug
 
 ##3.2.1 - 2015-09-02
@@ -108,8 +108,8 @@
 
 * 移除`MapperInterceptor`拦截器，以后不能在通过拦截器配置
 * 增加mybatis-spring特殊支持，主要是根据mybatis-spring项目增加了下面两个类：
-   - `tk.mybatis.spring.mapper.MapperScannerConfigurer`
-   - `tk.mybatis.spring.mapper.MapperFactoryBean`
+   - `MapperScannerConfigurer`
+   - `MapperFactoryBean`
 * 这两个类和MyBatis提供的区别是增加了MapperHelper属性，通过在`MapperScannerConfigurer`中使用`properties`属性注入配置
 * 这两个类，在全名上和MyBatis的区别是`org.mybatis.xxx`改为了`tk.mybatis.xxx`，名字相近，更方便修改配置
 * 和Spring集成方法：

@@ -27,7 +27,7 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="tk.mybatis.mapper.mapper.CachedCountryMapper">
+<mapper namespace="com.quancheng.mybatis.mapper.mapper.CachedCountryMapper">
     <cache/>
     <select id="selectCache" resultType="int">
         select * from country where id = #{id}

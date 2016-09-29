@@ -26,14 +26,14 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>tk.mybatis</groupId>
+    <groupId>com.quancheng.mybatis</groupId>
     <artifactId>mapper</artifactId>
     <version>3.3.9</version>
     <packaging>jar</packaging>
 
     <name>mapper</name>
-    <description>Mybatis通用Mapper</description>
-    <url>http://www.mybatis.tk</url>
+    <description>QC Mybatis通用DAO generator</description>
+    <url>http://mybatis.tk</url>
 
     <licenses>
         <license>
@@ -44,15 +44,15 @@
 
     <developers>
         <developer>
-            <name>abel533</name>
-            <email>abel533@gmail.com</email>
+            <name>lizhuliang</name>
+            <email>lizhuliang@quancheng-ec.com</email>
         </developer>
     </developers>
 
     <scm>
-        <connection>scm:git@github.com:abel533/Mapper.git</connection>
-        <developerConnection>scm:git@github.com:abel533/Mapper.git</developerConnection>
-        <url>git@github.com:abel533/Mapper.git</url>
+        <connection>scm:git@github.com:quancheng-ec/Mapper.git</connection>
+        <developerConnection>scm:git@github.com:quancheng-ec/Mapper.git</developerConnection>
+        <url>git@github.com:quancheng-ec/Mapper.git</url>
     </scm>
 
     <properties>
