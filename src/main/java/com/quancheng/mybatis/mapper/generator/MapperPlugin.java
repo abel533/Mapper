@@ -126,15 +126,12 @@ public class MapperPlugin extends PluginAdapter {
      */
     @Override
     public boolean clientGenerated(Interface interfaze, TopLevelClass topLevelClass, IntrospectedTable introspectedTable) {
-        //获取实体类
-        FullyQualifiedJavaType entityType = new FullyQualifiedJavaType(introspectedTable.getBaseRecordType());
-        //import接口
-        for (String mapper : mappers) {
-            interfaze.addImportedType(new FullyQualifiedJavaType(mapper));
-            interfaze.addSuperInterface(new FullyQualifiedJavaType(mapper + "<" + entityType.getShortName() + ">"));
-        }
-        //import实体类
-        interfaze.addImportedType(entityType);
+        // import Mapper
+        interfaze.addImportedType(new FullyQualifiedJavaType("org.apache.ibatis.annotations.Mapper"));
+
+        // annotation Mapper
+        interfaze.addAnnotation("@Mapper");
+
         return true;
     }
 
