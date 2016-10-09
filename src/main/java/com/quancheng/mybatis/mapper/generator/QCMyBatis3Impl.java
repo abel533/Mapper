@@ -12,7 +12,7 @@ import static org.mybatis.generator.internal.util.StringUtility.stringHasValue;
  * <p>
  * 用法：
  * <pre>
- * &lt;context id="Mysql" targetRuntime="TkMyBatis3Impl" defaultModelType="flat"&gt;
+ * &lt;context id="Mysql" targetRuntime="QCMyBatis3Impl" defaultModelType="flat"&gt;
  * &lt;/context&gt;
  * </pre>
  * </p>
@@ -20,7 +20,7 @@ import static org.mybatis.generator.internal.util.StringUtility.stringHasValue;
  * @author liuzh
  * @since 2016-09-04 09:57
  */
-public class TkMyBatis3Impl extends IntrospectedTableMyBatis3Impl {
+public class QCMyBatis3Impl extends IntrospectedTableMyBatis3Impl {
 
     @Override
     protected String calculateMyBatis3XmlMapperFileName() {
@@ -85,4 +85,45 @@ public class TkMyBatis3Impl extends IntrospectedTableMyBatis3Impl {
         }
         setMyBatis3SqlProviderType(sb.toString());
     }
+
+    final static String DOMAIN_OBJECT_NAME_POSTFIX = "DO";
+
+    /**
+     * Calculate model attributes.
+     */
+    protected void calculateModelAttributes() {
+        super.calculateModelAttributes();
+
+        String domainObjectName = fullyQualifiedTable.getDomainObjectName() + DOMAIN_OBJECT_NAME_POSTFIX;
+
+        String pakkage = calculateJavaModelPackage();
+
+        StringBuilder sb = new StringBuilder();
+        sb.append(pakkage);
+        sb.append('.');
+        sb.append(domainObjectName);
+        sb.append("Key"); //$NON-NLS-1$
+        setPrimaryKeyType(sb.toString());
+
+        sb.setLength(0);
+        sb.append(pakkage);
+        sb.append('.');
+        sb.append(domainObjectName);
+        setBaseRecordType(sb.toString());
+
+        sb.setLength(0);
+        sb.append(pakkage);
+        sb.append('.');
+        sb.append(domainObjectName);
+        sb.append("WithBLOBs"); //$NON-NLS-1$
+        setRecordWithBLOBsType(sb.toString());
+
+        sb.setLength(0);
+        sb.append(pakkage);
+        sb.append('.');
+        sb.append(domainObjectName);
+        sb.append("Example"); //$NON-NLS-1$
+        setExampleType(sb.toString());
+    }
+
 }
