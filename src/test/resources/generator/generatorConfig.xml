@@ -31,8 +31,8 @@
   <context id="Mysql" targetRuntime="MyBatis3Simple" defaultModelType="flat">
     <property name="javaFileEncoding" value="UTF-8"/>
     
-    <plugin type="tk.mybatis.mapper.generator.MapperPlugin">
-      <property name="mappers" value="tk.mybatis.mapper.common.Mapper,tk.mybatis.mapper.hsqldb.HsqldbMapper"/>
+    <plugin type="com.quancheng.mybatis.mapper.generator.MapperPlugin">
+      <property name="mappers" value="com.quancheng.mybatis.mapper.common.Mapper,com.quancheng.mybatis.mapper.hsqldb.HsqldbMapper"/>
       <property name="caseSensitive" value="true"/>
       <!--<property name="beginningDelimiter" value="`"/>-->
       <!--<property name="endingDelimiter" value="`"/>-->

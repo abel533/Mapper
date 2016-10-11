@@ -1,3 +1,75 @@
+# 使用了下面写的Mybatis3 Mapper生成插件做为基础，按全程业务需要进行了扩展
+
+1. 大致的使用方法见下方说明
+2. 更改：
+  1. 调整生成DO，DAO生成规则，生成类似UserDO.java, UserDAO.java, UserDAO.xml的文件
+  2. 自动加入基本的CRUD方法，并且支持conditioned query
+  3. 去掉了原来对Mapper项目的依赖，生成后的代码增加依赖: javax.persistence:persistenct-api
+3. 使用方法：
+  1. gradle加入依赖，及相关task：
+  
+```
+dependencies {
+    genDAO 'org.mybatis.generator:mybatis-generator-core:1.3.4'
+    genDAO 'mysql:mysql-connector-java:5.1.36'
+    genDAO group: "com.quancheng.shared", name: "mapper", version: "1.0.0-SNAPSHOT", changing: true
+}
+
+task genDAO << {
+    ant.properties['targetProject'] = projectDir.path
+    ant.taskdef(
+            name: 'mbgenerator',
+            classname: 'org.mybatis.generator.ant.GeneratorAntTask',
+            classpath: configurations.mybatisGenerator.asPath
+    )
+    ant.mbgenerator(overwrite: true, configfile: projectDir.path + '/mybatisGeneratorConfig.xml', verbose: true) {
+        propertyset {
+            propertyref(name: 'targetProject')
+        }
+    }
+}
+```
+  2. 生成配置.xml
+  
+```
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+<generatorConfiguration>
+    <context id="Mysql" targetRuntime="com.quancheng.mybatis.mapper.generator.QCMyBatis3SimpleImpl" defaultModelType="flat">
+        <plugin type="com.quancheng.mybatis.mapper.generator.MapperPlugin">
+            <property name="mappers" value="com.quancheng.mybatis.mapper.common.Mapper"/>
+            <!-- caseSensitive默认false，当数据库表名区分大小写时，可以将该属性设置为true -->
+            <property name="caseSensitive" value="true"/>
+        </plugin>
+
+        <commentGenerator>
+            <property name="suppressAllComments" value="true"/>
+        </commentGenerator>
+
+        <!-- 使用了本地数据库，需要自己配置 -->
+        <jdbcConnection driverClass="com.mysql.jdbc.Driver"
+                        connectionURL="jdbc:mysql://mysql.vagrant:3306/apollo"
+                        userId="root"
+                        password="1qaz2wsx">
+        </jdbcConnection>
+
+        <javaModelGenerator targetPackage="com.quancheng.zeus.dao.dataobject" targetProject="${targetProject}/src/main/java"/>
+        <sqlMapGenerator targetPackage="mybatis" targetProject="${targetProject}/src/main/resources"/>
+        <javaClientGenerator targetPackage="com.quancheng.zeus.dao" targetProject="${targetProject}/src/main/java" type="XMLMAPPER"/>
+
+        <!-- sql占位符，表示所有的表 -->
+        <!-- mapperName项确定生成的DAO及xml文件名，DO文件名已经写死 -->
+        <table tableName="zeus%" mapperName="{0}DAO">
+            <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
+        </table>
+    </context>
+</generatorConfiguration>
+```
+
+
+
 #MyBatis通用Mapper3
 
 ##极其方便的使用MyBatis单表的增删改查
@@ -162,7 +234,7 @@ http://repo1.maven.org/maven2/javax/persistence/persistence-api/1.0/
 - 解决数据越界bug#73
 - 解决and少空格问题
 - 解决order by错误#74
-- `tk.mybatis.spring.mapper.MapperScannerConfigurer`中的属性`mapperHelper`增加setter和getter方法，方便通过代码进行配置
+- `MapperScannerConfigurer`中的属性`mapperHelper`增加setter和getter方法，方便通过代码进行配置
 
 ###3.3.1 - 2015-12-09
 
@@ -204,7 +276,7 @@ http://repo1.maven.org/maven2/javax/persistence/persistence-api/1.0/
 
 ###3.2.2 - 2015-09-19
 
-* 和Spring集成时，允许通过`markerInterface`属性配置通用接口（注意该属性的原有作用不变），想要让该接口自动注册，该接口就需要继承`tk.mybatis.mapper.common.Marker`接口，`Mapper<T>`默认继承该接口，所以如果自己的接口是继承`Mapper<T>`的，不需要再继承。
+* 和Spring集成时，允许通过`markerInterface`属性配置通用接口（注意该属性的原有作用不变），想要让该接口自动注册，该接口就需要继承`Marker`接口，`Mapper<T>`默认继承该接口，所以如果自己的接口是继承`Mapper<T>`的，不需要再继承。
 * 解决注册默认接口时存在的bug
 
 ###3.2.1 - 2015-09-02
@@ -216,8 +288,8 @@ http://repo1.maven.org/maven2/javax/persistence/persistence-api/1.0/
 
 * 移除`MapperInterceptor`拦截器，以后不能在通过拦截器配置
 * 增加mybatis-spring特殊支持，主要是根据mybatis-spring项目增加了下面两个类：
-   - `tk.mybatis.spring.mapper.MapperScannerConfigurer`
-   - `tk.mybatis.spring.mapper.MapperFactoryBean`
+   - `MapperScannerConfigurer`
+   - `MapperFactoryBean`
 * 这两个类和MyBatis提供的区别是增加了MapperHelper属性，通过在`MapperScannerConfigurer`中使用`properties`属性注入配置
 * 这两个类，在全名上和MyBatis的区别是`org.mybatis.xxx`改为了`tk.mybatis.xxx`，名字相近，更方便修改配置
 * 和Spring集成方法：
