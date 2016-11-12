@@ -34,6 +34,14 @@
 
 8. [Mapper3常见问题和用法](http://git.oschina.net/free/Mapper/blob/master/wiki/mapper3/9.QA.md)
 
+###如何让作者为你开发通用方法？
+
+实际上，只要你看看上面的第 5 个文档，你完全可以自己开发出来。
+
+或者你可以通过赞助作者 10~50 元来让作者根据你的需求开发**一个**通用方法。
+
+你还可以通过开源中国众包购买服务[开发 MyBatis 通用 Mapper 通用方法](https://zb.oschina.net/market/opus/92cda9e3bc85365f)
+
 ##通用Mapper - 简单用法示例
 
 全部针对单表操作，每个实体类都需要继承通用Mapper接口来获得通用方法。
