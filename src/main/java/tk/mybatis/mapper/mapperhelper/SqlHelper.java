@@ -270,6 +270,25 @@ public class SqlHelper {
     }
 
     /**
+     * select case when count(x) > 0 then 1 else 0 end
+     *
+     * @param entityClass
+     * @return
+     */
+    public static String selectCountExists(Class<?> entityClass) {
+        StringBuilder sql = new StringBuilder();
+        sql.append("SELECT CASE WHEN ");
+        Set<EntityColumn> pkColumns = EntityHelper.getPKColumns(entityClass);
+        if (pkColumns.size() == 1) {
+            sql.append("COUNT(").append(pkColumns.iterator().next().getColumn()).append(") ");
+        } else {
+            sql.append("COUNT(*) ");
+        }
+        sql.append(" > 0 THEN 1 ELSE 0 END AS result ");
+        return sql.toString();
+    }
+
+    /**
      * from tableName - 动态表名
      *
      * @param entityClass

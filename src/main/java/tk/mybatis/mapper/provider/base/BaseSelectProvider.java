@@ -117,6 +117,21 @@ public class BaseSelectProvider extends MapperTemplate {
     }
 
     /**
+     * 根据主键查询总数
+     *
+     * @param ms
+     * @return
+     */
+    public String existsWithPrimaryKey(MappedStatement ms) {
+        Class<?> entityClass = getEntityClass(ms);
+        StringBuilder sql = new StringBuilder();
+        sql.append(SqlHelper.selectCountExists(entityClass));
+        sql.append(SqlHelper.fromTable(entityClass, tableName(entityClass)));
+        sql.append(SqlHelper.wherePKColumns(entityClass));
+        return sql.toString();
+    }
+
+    /**
      * 查询全部结果
      *
      * @param ms
