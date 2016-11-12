@@ -40,6 +40,8 @@
 
 或者你可以通过赞助作者 10~50 元来让作者根据你的需求开发**一个**通用方法。
 
+赞助后保留截图，将截图和需求内容发邮件到 abel533@gmail.com 和作者联系。
+
 你还可以通过开源中国众包购买服务[开发 MyBatis 通用 Mapper 通用方法](https://zb.oschina.net/market/opus/92cda9e3bc85365f)
 
 ##通用Mapper - 简单用法示例
