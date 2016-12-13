@@ -22,22 +22,41 @@
  * THE SOFTWARE.
  */
 
-package tk.mybatis.mapper.common.base;
+package tk.mybatis.mapper.test.country;
 
-import tk.mybatis.mapper.common.base.select.*;
+import org.apache.ibatis.session.SqlSession;
+import org.junit.Assert;
+import org.junit.Test;
+import tk.mybatis.mapper.mapper.CountryMapper;
+import tk.mybatis.mapper.mapper.MybatisHelper;
+import tk.mybatis.mapper.model.Country;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
- * 通用Mapper接口,基础查询
+ * 通过主键查询
  *
- * @param <T> 不能为空
  * @author liuzh
  */
-public interface BaseSelectMapper<T> extends
-        SelectOneMapper<T>,
-        SelectMapper<T>,
-        SelectAllMapper<T>,
-        SelectCountMapper<T>,
-        SelectByPrimaryKeyMapper<T>,
-        ExistsWithPrimaryKeyMapper<T> {
+public class TestExistsWithPrimaryKey {
 
+    /**
+     * 根据PK进行查询
+     */
+    @Test
+    public void testDynamicExistsWithPrimaryKey() {
+        SqlSession sqlSession = MybatisHelper.getSqlSession();
+        try {
+            CountryMapper mapper = sqlSession.getMapper(CountryMapper.class);
+            Country country = new Country();
+            country.setId(35);
+            Assert.assertEquals(true, mapper.existsWithPrimaryKey(country));
+
+            country.setId(0);
+            Assert.assertEquals(false, mapper.existsWithPrimaryKey(country));
+        } finally {
+            sqlSession.close();
+        }
+    }
 }
