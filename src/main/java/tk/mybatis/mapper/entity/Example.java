@@ -488,6 +488,29 @@ public class Example implements IDynamicTableName {
             }
             return (Criteria) this;
         }
+
+        /**
+         * 将此对象的所有字段参数作为相等查询条件，如果字段为 null，则为 is null
+         *
+         * @param param 参数对象
+         */
+        public Criteria andAllEqualTo(Object param) {
+            MetaObject metaObject = SystemMetaObject.forObject(param);
+            String[] properties = metaObject.getGetterNames();
+            for (String property : properties) {
+                //属性和列对应Map中有此属性
+                if (propertyMap.get(property) != null) {
+                    Object value = metaObject.getValue(property);
+                    //属性值不为空
+                    if (value != null) {
+                        andEqualTo(property, value);
+                    } else {
+                        andIsNull(property);
+                    }
+                }
+            }
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

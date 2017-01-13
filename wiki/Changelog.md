@@ -4,6 +4,7 @@
 
 * `Example` 增加 for update 支持，仅能用于 selectByExample 和 selectCountByExample 方法 #210
 * 增加参数`checkExampleEntityClass`，用于校验通用 Example 构造参数 entityClass 是否和当前调用的 Mapper<EntityClass> 类型一致 #201
+* `Example.Criteria` 增加 `andAllEqualTo` 方法，将此对象的所有字段参数作为相等查询条件，如果字段为 null，则为 is null #206
 
 ##3.3.9 - 2016-09-04
 
