@@ -24,6 +24,7 @@
 
 package tk.mybatis.mapper.mapperhelper;
 
+import tk.mybatis.mapper.MapperException;
 import tk.mybatis.mapper.entity.EntityField;
 
 import javax.persistence.Entity;
@@ -207,7 +208,7 @@ public class FieldHelper {
             try {
                 beanInfo = Introspector.getBeanInfo(entityClass);
             } catch (IntrospectionException e) {
-                throw new RuntimeException(e);
+                throw new MapperException(e);
             }
             PropertyDescriptor[] descriptors = beanInfo.getPropertyDescriptors();
             for (PropertyDescriptor desc : descriptors) {
@@ -244,7 +245,7 @@ public class FieldHelper {
             try {
                 beanInfo = Introspector.getBeanInfo(entityClass);
             } catch (IntrospectionException e) {
-                throw new RuntimeException(e);
+                throw new MapperException(e);
             }
             PropertyDescriptor[] descriptors = beanInfo.getPropertyDescriptors();
             for (PropertyDescriptor desc : descriptors) {
@@ -290,7 +291,7 @@ public class FieldHelper {
                     EntityField entityField = new EntityField(field, null);
                     if (field.getGenericType() != null && field.getGenericType() instanceof TypeVariable) {
                         if (genericMap == null || !genericMap.containsKey(((TypeVariable) field.getGenericType()).getName())) {
-                            throw new RuntimeException(entityClass + "字段" + field.getName() + "的泛型类型无法获取!");
+                            throw new MapperException(entityClass + "字段" + field.getName() + "的泛型类型无法获取!");
                         } else {
                             entityField.setJavaType(genericMap.get(((TypeVariable) field.getGenericType()).getName()));
                         }

@@ -34,6 +34,7 @@ import org.mybatis.generator.api.dom.xml.XmlElement;
 import org.mybatis.generator.config.CommentGeneratorConfiguration;
 import org.mybatis.generator.config.Context;
 import org.mybatis.generator.internal.util.StringUtility;
+import tk.mybatis.mapper.MapperException;
 
 import java.util.HashSet;
 import java.util.List;
@@ -77,7 +78,7 @@ public class MapperPlugin extends PluginAdapter {
                 this.mappers.add(mapper);
             }
         } else {
-            throw new RuntimeException("Mapper插件缺少必要的mappers属性!");
+            throw new MapperException("Mapper插件缺少必要的mappers属性!");
         }
         String caseSensitive = this.properties.getProperty("caseSensitive");
         if (StringUtility.stringHasValue(caseSensitive)) {

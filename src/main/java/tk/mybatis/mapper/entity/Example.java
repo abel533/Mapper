@@ -27,6 +27,7 @@ package tk.mybatis.mapper.entity;
 import org.apache.ibatis.reflection.MetaObject;
 import org.apache.ibatis.reflection.SystemMetaObject;
 import org.apache.ibatis.type.TypeHandler;
+import tk.mybatis.mapper.MapperException;
 import tk.mybatis.mapper.mapperhelper.EntityHelper;
 import tk.mybatis.mapper.util.StringUtil;
 
@@ -131,7 +132,7 @@ public class Example implements IDynamicTableName {
             if (propertyMap.containsKey(property)) {
                 return propertyMap.get(property).getColumn();
             } else if (notNull) {
-                throw new RuntimeException("当前实体类不包含名为" + property + "的属性!");
+                throw new MapperException("当前实体类不包含名为" + property + "的属性!");
             } else {
                 return null;
             }
@@ -277,7 +278,7 @@ public class Example implements IDynamicTableName {
             if (propertyMap.containsKey(property)) {
                 return propertyMap.get(property).getColumn();
             } else if (exists) {
-                throw new RuntimeException("当前实体类不包含名为" + property + "的属性!");
+                throw new MapperException("当前实体类不包含名为" + property + "的属性!");
             } else {
                 return null;
             }
@@ -287,7 +288,7 @@ public class Example implements IDynamicTableName {
             if (propertyMap.containsKey(property)) {
                 return property;
             } else if (exists) {
-                throw new RuntimeException("当前实体类不包含名为" + property + "的属性!");
+                throw new MapperException("当前实体类不包含名为" + property + "的属性!");
             } else {
                 return null;
             }
@@ -307,7 +308,7 @@ public class Example implements IDynamicTableName {
 
         protected void addCriterion(String condition) {
             if (condition == null) {
-                throw new RuntimeException("Value for condition cannot be null");
+                throw new MapperException("Value for condition cannot be null");
             }
             if (condition.startsWith("null")) {
                 return;
@@ -318,7 +319,7 @@ public class Example implements IDynamicTableName {
         protected void addCriterion(String condition, Object value, String property) {
             if (value == null) {
                 if (notNull) {
-                    throw new RuntimeException("Value for " + property + " cannot be null");
+                    throw new MapperException("Value for " + property + " cannot be null");
                 } else {
                     return;
                 }
@@ -332,7 +333,7 @@ public class Example implements IDynamicTableName {
         protected void addCriterion(String condition, Object value1, Object value2, String property) {
             if (value1 == null || value2 == null) {
                 if (notNull) {
-                    throw new RuntimeException("Between values for " + property + " cannot be null");
+                    throw new MapperException("Between values for " + property + " cannot be null");
                 } else {
                     return;
                 }

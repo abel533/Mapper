@@ -26,6 +26,7 @@ package tk.mybatis.mapper.mapperhelper;
 
 import org.apache.ibatis.type.JdbcType;
 import org.apache.ibatis.type.UnknownTypeHandler;
+import tk.mybatis.mapper.MapperException;
 import tk.mybatis.mapper.annotation.ColumnType;
 import tk.mybatis.mapper.annotation.NameStyle;
 import tk.mybatis.mapper.code.IdentityDialect;
@@ -63,7 +64,7 @@ public class EntityHelper {
     public static EntityTable getEntityTable(Class<?> entityClass) {
         EntityTable entityTable = entityTableMap.get(entityClass);
         if (entityTable == null) {
-            throw new RuntimeException("无法获取实体类" + entityClass.getCanonicalName() + "对应的表名!");
+            throw new MapperException("无法获取实体类" + entityClass.getCanonicalName() + "对应的表名!");
         }
         return entityTable;
     }
@@ -291,7 +292,7 @@ public class EntityHelper {
         if (field.isAnnotationPresent(SequenceGenerator.class)) {
             SequenceGenerator sequenceGenerator = field.getAnnotation(SequenceGenerator.class);
             if (sequenceGenerator.sequenceName().equals("")) {
-                throw new RuntimeException(entityTable.getEntityClass() + "字段" + field.getName() + "的注解@SequenceGenerator未指定sequenceName!");
+                throw new MapperException(entityTable.getEntityClass() + "字段" + field.getName() + "的注解@SequenceGenerator未指定sequenceName!");
             }
             entityColumn.setSequenceName(sequenceGenerator.sequenceName());
         } else if (field.isAnnotationPresent(GeneratedValue.class)) {
@@ -320,7 +321,7 @@ public class EntityHelper {
                         entityColumn.setGenerator(generator);
                     }
                 } else {
-                    throw new RuntimeException(field.getName()
+                    throw new MapperException(field.getName()
                             + " - 该字段@GeneratedValue配置只允许以下几种形式:" +
                             "\n1.全部数据库通用的@GeneratedValue(generator=\"UUID\")" +
                             "\n2.useGeneratedKeys的@GeneratedValue(generator=\\\"JDBC\\\")  " +

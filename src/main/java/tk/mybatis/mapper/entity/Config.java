@@ -24,6 +24,7 @@
 
 package tk.mybatis.mapper.entity;
 
+import tk.mybatis.mapper.MapperException;
 import tk.mybatis.mapper.code.IdentityDialect;
 import tk.mybatis.mapper.code.Style;
 import tk.mybatis.mapper.util.SimpleTypeUtil;
@@ -298,7 +299,7 @@ public class Config {
             try {
                 this.style = Style.valueOf(styleStr);
             } catch (IllegalArgumentException e) {
-                throw new RuntimeException(styleStr + "不是合法的Style值!");
+                throw new MapperException(styleStr + "不是合法的Style值!");
             }
         } else {
             //默认驼峰

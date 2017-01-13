@@ -31,6 +31,7 @@ import org.apache.ibatis.annotations.UpdateProvider;
 import org.apache.ibatis.builder.annotation.ProviderSqlSource;
 import org.apache.ibatis.mapping.MappedStatement;
 import org.apache.ibatis.session.Configuration;
+import tk.mybatis.mapper.MapperException;
 import tk.mybatis.mapper.entity.Config;
 import tk.mybatis.mapper.provider.EmptyProvider;
 import tk.mybatis.mapper.util.StringUtil;
@@ -139,7 +140,7 @@ public class MapperHelper {
             if (templateClass == null) {
                 templateClass = tempClass;
             } else if (templateClass != tempClass) {
-                throw new RuntimeException("一个通用Mapper中只允许存在一个MapperTemplate子类!");
+                throw new MapperException("一个通用Mapper中只允许存在一个MapperTemplate子类!");
             }
         }
         if (templateClass == null || !MapperTemplate.class.isAssignableFrom(templateClass)) {
@@ -149,14 +150,14 @@ public class MapperHelper {
         try {
             mapperTemplate = (MapperTemplate) templateClass.getConstructor(Class.class, MapperHelper.class).newInstance(mapperClass, this);
         } catch (Exception e) {
-            throw new RuntimeException("实例化MapperTemplate对象失败:" + e.getMessage());
+            throw new MapperException("实例化MapperTemplate对象失败:" + e.getMessage());
         }
         //注册方法
         for (String methodName : methodSet) {
             try {
                 mapperTemplate.addMethodMap(methodName, templateClass.getMethod(methodName, MappedStatement.class));
             } catch (NoSuchMethodException e) {
-                throw new RuntimeException(templateClass.getCanonicalName() + "中缺少" + methodName + "方法!");
+                throw new MapperException(templateClass.getCanonicalName() + "中缺少" + methodName + "方法!");
             }
         }
         return mapperTemplate;
@@ -190,7 +191,7 @@ public class MapperHelper {
         try {
             registerMapper(Class.forName(mapperClass));
         } catch (ClassNotFoundException e) {
-            throw new RuntimeException("注册通用Mapper[" + mapperClass + "]失败，找不到该通用Mapper!");
+            throw new MapperException("注册通用Mapper[" + mapperClass + "]失败，找不到该通用Mapper!");
         }
     }
 
@@ -244,7 +245,7 @@ public class MapperHelper {
                 mapperTemplate.setSqlSource(ms);
             }
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new MapperException(e);
         }
     }
 

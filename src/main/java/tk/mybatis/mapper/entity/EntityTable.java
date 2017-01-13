@@ -28,6 +28,7 @@ import org.apache.ibatis.mapping.ResultFlag;
 import org.apache.ibatis.mapping.ResultMap;
 import org.apache.ibatis.mapping.ResultMapping;
 import org.apache.ibatis.session.Configuration;
+import tk.mybatis.mapper.MapperException;
 import tk.mybatis.mapper.util.StringUtil;
 
 import javax.persistence.Table;
@@ -201,7 +202,7 @@ public class EntityTable {
                 try {
                     builder.typeHandler(entityColumn.getTypeHandler().newInstance());
                 } catch (Exception e) {
-                    throw new RuntimeException(e);
+                    throw new MapperException(e);
                 }
             }
             List<ResultFlag> flags = new ArrayList<ResultFlag>();

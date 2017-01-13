@@ -1,6 +1,7 @@
 package tk.mybatis.mapper.provider;
 
 import org.apache.ibatis.mapping.MappedStatement;
+import tk.mybatis.mapper.MapperException;
 import tk.mybatis.mapper.entity.EntityColumn;
 import tk.mybatis.mapper.mapperhelper.EntityHelper;
 import tk.mybatis.mapper.mapperhelper.MapperHelper;
@@ -39,7 +40,7 @@ public class IdsProvider extends MapperTemplate {
             sql.append(column.getColumn());
             sql.append(" in (${_parameter})");
         } else {
-            throw new RuntimeException("继承 deleteByIds 方法的实体类[" + entityClass.getCanonicalName() + "]中必须只有一个带有 @Id 注解的字段");
+            throw new MapperException("继承 deleteByIds 方法的实体类[" + entityClass.getCanonicalName() + "]中必须只有一个带有 @Id 注解的字段");
         }
         return sql.toString();
     }
@@ -64,7 +65,7 @@ public class IdsProvider extends MapperTemplate {
             sql.append(column.getColumn());
             sql.append(" in (${_parameter})");
         } else {
-            throw new RuntimeException("继承 selectByIds 方法的实体类[" + entityClass.getCanonicalName() + "]中必须只有一个带有 @Id 注解的字段");
+            throw new MapperException("继承 selectByIds 方法的实体类[" + entityClass.getCanonicalName() + "]中必须只有一个带有 @Id 注解的字段");
         }
         return sql.toString();
     }

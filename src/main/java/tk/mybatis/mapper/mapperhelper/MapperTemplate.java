@@ -35,6 +35,7 @@ import org.apache.ibatis.reflection.SystemMetaObject;
 import org.apache.ibatis.scripting.defaults.RawSqlSource;
 import org.apache.ibatis.scripting.xmltags.*;
 import org.apache.ibatis.session.Configuration;
+import tk.mybatis.mapper.MapperException;
 import tk.mybatis.mapper.entity.EntityColumn;
 import tk.mybatis.mapper.entity.EntityTable;
 import tk.mybatis.mapper.entity.IDynamicTableName;
@@ -72,7 +73,7 @@ public abstract class MapperTemplate {
      */
     public static Class<?> getMapperClass(String msId) {
         if (msId.indexOf(".") == -1) {
-            throw new RuntimeException("当前MappedStatement的id=" + msId + ",不符合MappedStatement的规则!");
+            throw new MapperException("当前MappedStatement的id=" + msId + ",不符合MappedStatement的规则!");
         }
         String mapperClassStr = msId.substring(0, msId.lastIndexOf("."));
         try {
@@ -218,7 +219,7 @@ public abstract class MapperTemplate {
      */
     public void setSqlSource(MappedStatement ms) throws Exception {
         if (this.mapperClass == getMapperClass(ms.getId())) {
-            throw new RuntimeException("请不要配置或扫描通用Mapper接口类：" + this.mapperClass);
+            throw new MapperException("请不要配置或扫描通用Mapper接口类：" + this.mapperClass);
         }
         Method method = methodMap.get(getMethodName(ms));
         try {
@@ -239,14 +240,14 @@ public abstract class MapperTemplate {
                 //替换原有的SqlSource
                 setSqlSource(ms, sqlSource);
             } else {
-                throw new RuntimeException("自定义Mapper方法返回类型错误,可选的返回类型为void,SqlNode,String三种!");
+                throw new MapperException("自定义Mapper方法返回类型错误,可选的返回类型为void,SqlNode,String三种!");
             }
             //cache
             checkCache(ms);
         } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
+            throw new MapperException(e);
         } catch (InvocationTargetException e) {
-            throw new RuntimeException(e.getTargetException() != null ? e.getTargetException() : e);
+            throw new MapperException(e.getTargetException() != null ? e.getTargetException() : e);
         }
     }
 
@@ -287,7 +288,7 @@ public abstract class MapperTemplate {
                 }
             }
         }
-        throw new RuntimeException("无法获取Mapper<T>泛型类型:" + msId);
+        throw new MapperException("无法获取Mapper<T>泛型类型:" + msId);
     }
 
     /**
