@@ -1,7 +1,9 @@
 #更新日志
 
 ##3.4.0-SNAPSHOT - 2017-01-xx
-* `Example` 增加 for update 支持，仅能用于 selectByExample 和 selectCountByExample 方法
+
+* `Example` 增加 for update 支持，仅能用于 selectByExample 和 selectCountByExample 方法 #210
+* 增加参数`checkExampleEntityClass`，用于校验通用 Example 构造参数 entityClass 是否和当前调用的 Mapper<EntityClass> 类型一致 #201
 
 ##3.3.9 - 2016-09-04
 

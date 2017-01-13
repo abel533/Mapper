@@ -558,6 +558,19 @@ public class SqlHelper {
     }
 
     /**
+     * example 支持 for update
+     *
+     * @return
+     */
+    public static String exampleCheck(Class<?> entityClass) {
+        StringBuilder sql = new StringBuilder();
+        sql.append("<bind name=\"checkExampleEntityClass\" value=\"@tk.mybatis.mapper.util.OGNL@checkExampleEntityClass(_parameter, '");
+        sql.append(entityClass.getCanonicalName());
+        sql.append("')\"/>");
+        return sql.toString();
+    }
+
+    /**
      * Example查询中的where结构，用于只有一个Example参数时
      *
      * @return

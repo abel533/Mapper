@@ -36,12 +36,13 @@ import java.util.Properties;
  * @author liuzh
  */
 public class Config {
-    private String UUID;
-    private String IDENTITY;
-    private boolean BEFORE = false;
-    private String seqFormat;
-    private String catalog;
-    private String schema;
+    private String  UUID;
+    private String  IDENTITY;
+    private boolean BEFORE;
+    private String  seqFormat;
+    private String  catalog;
+    private String  schema;
+    private boolean checkExampleEntityClass;
     /**
      * 是否支持方法上的注解，默认false
      */
@@ -201,6 +202,14 @@ public class Config {
         this.enableMethodAnnotation = enableMethodAnnotation;
     }
 
+    public boolean isCheckExampleEntityClass() {
+        return checkExampleEntityClass;
+    }
+
+    public void setCheckExampleEntityClass(boolean checkExampleEntityClass) {
+        this.checkExampleEntityClass = checkExampleEntityClass;
+    }
+
     /**
      * 获取表前缀，带catalog或schema
      *
@@ -258,6 +267,10 @@ public class Config {
         String enableMethodAnnotation = properties.getProperty("enableMethodAnnotation");
         if (StringUtil.isNotEmpty(enableMethodAnnotation)) {
             this.enableMethodAnnotation = enableMethodAnnotation.equalsIgnoreCase("TRUE");
+        }
+        String checkExampleStr = properties.getProperty("checkExampleEntityClass");
+        if (StringUtil.isNotEmpty(checkExampleStr)) {
+            this.checkExampleEntityClass = checkExampleStr.equalsIgnoreCase("TRUE");
         }
         String styleStr = properties.getProperty("style");
         if (StringUtil.isNotEmpty(styleStr)) {

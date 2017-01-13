@@ -28,11 +28,13 @@ import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.type.StringTypeHandler;
 import org.junit.Assert;
 import org.junit.Test;
+import tk.mybatis.mapper.MapperException;
 import tk.mybatis.mapper.entity.Example;
 import tk.mybatis.mapper.entity.model.CountryExample;
 import tk.mybatis.mapper.mapper.CountryMapper;
 import tk.mybatis.mapper.mapper.MybatisHelper;
 import tk.mybatis.mapper.model.Country;
+import tk.mybatis.mapper.model.Country2;
 
 import java.util.*;
 
@@ -52,6 +54,19 @@ public class TestSelectByExample {
             List<Country> countries = mapper.selectByExample(example);
             //查询总数
             Assert.assertEquals(90, countries.size());
+        } finally {
+            sqlSession.close();
+        }
+    }
+
+    @Test(expected = Exception.class)
+    public void testSelectByExampleException() {
+        SqlSession sqlSession = MybatisHelper.getSqlSession();
+        try {
+            CountryMapper mapper = sqlSession.getMapper(CountryMapper.class);
+            Example example = new Example(Country2.class);
+            example.createCriteria().andGreaterThan("id", 100);
+            mapper.selectByExample(example);
         } finally {
             sqlSession.close();
         }

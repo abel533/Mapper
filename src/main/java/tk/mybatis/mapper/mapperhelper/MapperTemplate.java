@@ -57,7 +57,7 @@ public abstract class MapperTemplate {
     private Map<String, Method> methodMap = new HashMap<String, Method>();
     private Map<String, Class<?>> entityClassMap = new HashMap<String, Class<?>>();
     private Class<?> mapperClass;
-    private MapperHelper mapperHelper;
+    protected MapperHelper mapperHelper;
 
     public MapperTemplate(Class<?> mapperClass, MapperHelper mapperHelper) {
         this.mapperClass = mapperClass;
@@ -138,6 +138,9 @@ public abstract class MapperTemplate {
         return mapperHelper.getConfig().isNotEmpty();
     }
 
+    public boolean isCheckExampleEntityClass() {
+        return mapperHelper.getConfig().isCheckExampleEntityClass();
+    }
     /**
      * 是否支持该通用方法
      *
