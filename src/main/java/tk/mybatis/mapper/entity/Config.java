@@ -26,6 +26,7 @@ package tk.mybatis.mapper.entity;
 
 import tk.mybatis.mapper.code.IdentityDialect;
 import tk.mybatis.mapper.code.Style;
+import tk.mybatis.mapper.util.SimpleTypeUtil;
 import tk.mybatis.mapper.util.StringUtil;
 
 import java.util.Properties;
@@ -42,7 +43,10 @@ public class Config {
     private String  seqFormat;
     private String  catalog;
     private String  schema;
+    //校验调用Example方法时，Example(entityClass)和Mapper<EntityClass>是否一致
     private boolean checkExampleEntityClass;
+    //使用简单类型
+    private boolean useSimpleType;
     /**
      * 是否支持方法上的注解，默认false
      */
@@ -210,6 +214,14 @@ public class Config {
         this.checkExampleEntityClass = checkExampleEntityClass;
     }
 
+    public boolean isUseSimpleType() {
+        return useSimpleType;
+    }
+
+    public void setUseSimpleType(boolean useSimpleType) {
+        this.useSimpleType = useSimpleType;
+    }
+
     /**
      * 获取表前缀，带catalog或schema
      *
@@ -271,6 +283,15 @@ public class Config {
         String checkExampleStr = properties.getProperty("checkExampleEntityClass");
         if (StringUtil.isNotEmpty(checkExampleStr)) {
             this.checkExampleEntityClass = checkExampleStr.equalsIgnoreCase("TRUE");
+        }
+        String useSimpleTypeStr = properties.getProperty("useSimpleType");
+        if (StringUtil.isNotEmpty(useSimpleTypeStr)) {
+            this.useSimpleType = useSimpleTypeStr.equalsIgnoreCase("TRUE");
+        }
+        //注册新的基本类型，以逗号隔开，使用全限定类名
+        String simpleTypes = properties.getProperty("simpleTypes");
+        if (StringUtil.isNotEmpty(simpleTypes)) {
+            SimpleTypeUtil.registerSimpleType(simpleTypes);
         }
         String styleStr = properties.getProperty("style");
         if (StringUtil.isNotEmpty(styleStr)) {

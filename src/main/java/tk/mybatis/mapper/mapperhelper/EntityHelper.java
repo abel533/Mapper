@@ -34,6 +34,7 @@ import tk.mybatis.mapper.entity.Config;
 import tk.mybatis.mapper.entity.EntityColumn;
 import tk.mybatis.mapper.entity.EntityField;
 import tk.mybatis.mapper.entity.EntityTable;
+import tk.mybatis.mapper.util.SimpleTypeUtil;
 import tk.mybatis.mapper.util.StringUtil;
 
 import javax.persistence.*;
@@ -217,6 +218,10 @@ public class EntityHelper {
             fields = FieldHelper.getFields(entityClass);
         }
         for (EntityField field : fields) {
+            //如果启用了简单类型，就做简单类型校验，如果不是简单类型，直接跳过
+            if(config.isUseSimpleType() && !SimpleTypeUtil.isSimpleType(field.getJavaType())){
+                continue;
+            }
             processField(entityTable, style, field);
         }
         //当pk.size=0的时候使用所有列作为主键
