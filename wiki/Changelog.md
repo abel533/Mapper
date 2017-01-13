@@ -1,5 +1,8 @@
 #更新日志
 
+##3.4.0-SNAPSHOT - 2017-01-xx
+* `Example` 增加 for update 支持，仅能用于 selectByExample 和 selectCountByExample 方法
+
 ##3.3.9 - 2016-09-04
 
 * 增加`selectByIds`和`deleteByIds`，用法见通用Mapper接口大全

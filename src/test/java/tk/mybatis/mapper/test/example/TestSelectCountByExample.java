@@ -54,6 +54,22 @@ public class TestSelectCountByExample {
     }
 
     @Test
+    public void testSelectCountByExampleForUpdate() {
+        SqlSession sqlSession = MybatisHelper.getSqlSession();
+        try {
+            CountryMapper mapper = sqlSession.getMapper(CountryMapper.class);
+            Example example = new Example(Country.class);
+            example.setForUpdate(true);
+            example.createCriteria().andGreaterThan("id", 100);
+            int count = mapper.selectCountByExample(example);
+            //查询总数
+            Assert.assertEquals(83, count);
+        } finally {
+            sqlSession.close();
+        }
+    }
+
+    @Test
     public void testSelectCountByExample2() {
         SqlSession sqlSession = MybatisHelper.getSqlSession();
         try {

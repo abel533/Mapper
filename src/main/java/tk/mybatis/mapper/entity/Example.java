@@ -46,6 +46,8 @@ public class Example implements IDynamicTableName {
 
     protected boolean notNull;
 
+    protected boolean forUpdate;
+
     protected Set<String> selectColumns;
 
     protected List<Criteria> oredCriteria;
@@ -197,6 +199,14 @@ public class Example implements IDynamicTableName {
 
     public void setDistinct(boolean distinct) {
         this.distinct = distinct;
+    }
+
+    public boolean isForUpdate() {
+        return forUpdate;
+    }
+
+    public void setForUpdate(boolean forUpdate) {
+        this.forUpdate = forUpdate;
     }
 
     public List<Criteria> getOredCriteria() {

@@ -545,6 +545,19 @@ public class SqlHelper {
     }
 
     /**
+     * example 支持 for update
+     *
+     * @return
+     */
+    public static String exampleForUpdate() {
+        StringBuilder sql = new StringBuilder();
+        sql.append("<if test=\"@tk.mybatis.mapper.util.OGNL@hasForUpdate(_parameter)\">");
+        sql.append("FOR UPDATE");
+        sql.append("</if>");
+        return sql.toString();
+    }
+
+    /**
      * Example查询中的where结构，用于只有一个Example参数时
      *
      * @return

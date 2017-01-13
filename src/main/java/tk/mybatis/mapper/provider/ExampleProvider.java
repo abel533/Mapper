@@ -52,6 +52,7 @@ public class ExampleProvider extends MapperTemplate {
         sql.append(SqlHelper.selectCount(entityClass));
         sql.append(SqlHelper.fromTable(entityClass, tableName(entityClass)));
         sql.append(SqlHelper.exampleWhereClause());
+        sql.append(SqlHelper.exampleForUpdate());
         return sql.toString();
     }
 
@@ -87,6 +88,7 @@ public class ExampleProvider extends MapperTemplate {
         sql.append(SqlHelper.fromTable(entityClass, tableName(entityClass)));
         sql.append(SqlHelper.exampleWhereClause());
         sql.append(SqlHelper.exampleOrderBy(entityClass));
+        sql.append(SqlHelper.exampleForUpdate());
         return sql.toString();
     }
 

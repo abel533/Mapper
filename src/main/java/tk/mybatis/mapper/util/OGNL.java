@@ -51,6 +51,20 @@ public abstract class OGNL {
     }
 
     /**
+     * 是否包含 forUpdate
+     *
+     * @param parameter
+     * @return
+     */
+    public static boolean hasForUpdate(Object parameter) {
+        if (parameter != null && parameter instanceof Example) {
+            Example example = (Example) parameter;
+            return example.isForUpdate();
+        }
+        return false;
+    }
+
+    /**
      * 不包含自定义查询列
      *
      * @param parameter

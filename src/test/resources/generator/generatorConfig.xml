@@ -34,12 +34,12 @@
     <plugin type="tk.mybatis.mapper.generator.MapperPlugin">
       <property name="mappers" value="tk.mybatis.mapper.common.Mapper,tk.mybatis.mapper.hsqldb.HsqldbMapper"/>
       <property name="caseSensitive" value="true"/>
-      <!--<property name="beginningDelimiter" value="`"/>-->
-      <!--<property name="endingDelimiter" value="`"/>-->
+      <property name="beginningDelimiter" value="`"/>
+      <property name="endingDelimiter" value="`"/>
     </plugin>
 
     <jdbcConnection driverClass="com.mysql.jdbc.Driver"
-                    connectionURL="jdbc:mysql://localhost:3306/test"
+                    connectionURL="jdbc:mysql://192.168.16.137:3306/test"
                     userId="root"
                     password="">
     </jdbcConnection>
@@ -50,7 +50,7 @@
 
     <javaClientGenerator targetPackage="test.mapper" targetProject="./src/test/java" type="XMLMAPPER"/>
 
-    <table tableName="%" >
+    <table tableName="user%" mapperName="{0}Dao">
       <generatedKey column="id" sqlStatement="JDBC"/>
     </table>
   </context>
