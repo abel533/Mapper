@@ -9,6 +9,8 @@
 * 增加参数 `simpleTypes`，默认的简单类型在 `SimpleTypeUtil` 中，使用该参数可以增加额外的简单类型，通过逗号隔开的全限定类名添加
 * 所有 `RuntimeException` 异常改为 `tk.mybatis.mapper.MapperException` 异常
 
+* 增加配置查询时的分隔符
+
 ##3.3.9 - 2016-09-04
 
 * 增加`selectByIds`和`deleteByIds`，用法见通用Mapper接口大全

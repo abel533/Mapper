@@ -71,6 +71,20 @@ public abstract class OGNL {
     }
 
     /**
+     * 是否包含自定义 Count 列
+     *
+     * @param parameter
+     * @return
+     */
+    public static boolean hasCountColumn(Object parameter) {
+        if (parameter != null && parameter instanceof Example) {
+            Example example = (Example) parameter;
+            return StringUtil.isNotEmpty(example.getCountColumn());
+        }
+        return false;
+    }
+
+    /**
      * 是否包含 forUpdate
      *
      * @param parameter

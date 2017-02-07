@@ -51,6 +51,8 @@ public class Example implements IDynamicTableName {
 
     protected Set<String> selectColumns;
 
+    protected String countColumn;
+
     protected List<Criteria> oredCriteria;
 
     protected Class<?> entityClass;
@@ -192,6 +194,21 @@ public class Example implements IDynamicTableName {
             }
         }
         return this;
+    }
+
+    public String getCountColumn() {
+        return countColumn;
+    }
+
+    /**
+     * 指定 count(property) 查询属性
+     *
+     * @param property
+     */
+    public void setCountProperty(String property) {
+        if (propertyMap.containsKey(property)) {
+            this.countColumn = propertyMap.get(property).getColumn();
+        }
     }
 
     public boolean isDistinct() {

@@ -526,6 +526,28 @@ public class SqlHelper {
     }
 
     /**
+     * example支持查询指定列时
+     *
+     * @return
+     */
+    public static String exampleCountColumn(Class<?> entityClass) {
+        StringBuilder sql = new StringBuilder();
+        sql.append("<choose>");
+        sql.append("<when test=\"@tk.mybatis.mapper.util.OGNL@hasCountColumn(_parameter)\">");
+        sql.append("COUNT(${countColumn})");
+        sql.append("</when>");
+        sql.append("<otherwise>");
+        sql.append("COUNT(0)");
+        sql.append("</otherwise>");
+        sql.append("</choose>");
+        //不支持指定列的时候查询全部列
+        sql.append("<if test=\"@tk.mybatis.mapper.util.OGNL@hasNoSelectColumns(_parameter)\">");
+        sql.append(getAllColumns(entityClass));
+        sql.append("</if>");
+        return sql.toString();
+    }
+
+    /**
      * example查询中的orderBy条件，会判断默认orderBy
      *
      * @return
