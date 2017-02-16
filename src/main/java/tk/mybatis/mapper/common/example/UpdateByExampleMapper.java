@@ -45,7 +45,7 @@ public interface UpdateByExampleMapper<T> {
      * @return
      */
     @UpdateProvider(type = ExampleProvider.class, method = "dynamicSQL")
-    @Options(flushCache = true, useCache = false, useGeneratedKeys = false)
+    @Options(useCache = false, useGeneratedKeys = false)
     int updateByExample(@Param("record") T record, @Param("example") Object example);
 
 }

@@ -43,7 +43,7 @@ public interface UpdateByPrimaryKeyMapper<T> {
      * @return
      */
     @UpdateProvider(type = BaseUpdateProvider.class, method = "dynamicSQL")
-    @Options(flushCache = true, useCache = false, useGeneratedKeys = false)
+    @Options(useCache = false, useGeneratedKeys = false)
     int updateByPrimaryKey(T record);
 
 }

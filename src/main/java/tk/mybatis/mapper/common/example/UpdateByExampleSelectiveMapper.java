@@ -45,7 +45,7 @@ public interface UpdateByExampleSelectiveMapper<T> {
      * @return
      */
     @UpdateProvider(type = ExampleProvider.class, method = "dynamicSQL")
-    @Options(flushCache = true, useCache = false, useGeneratedKeys = false)
+    @Options(useCache = false, useGeneratedKeys = false)
     int updateByExampleSelective(@Param("record") T record, @Param("example") Object example);
 
 }

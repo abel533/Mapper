@@ -45,7 +45,7 @@ public interface UpdateByConditionSelectiveMapper<T> {
      * @return
      */
     @UpdateProvider(type = ConditionProvider.class, method = "dynamicSQL")
-    @Options(flushCache = true, useCache = false, useGeneratedKeys = false)
+    @Options(useCache = false, useGeneratedKeys = false)
     int updateByConditionSelective(@Param("record") T record, @Param("example") Object condition);
 
 }
