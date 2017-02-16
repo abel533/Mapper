@@ -24,6 +24,7 @@
 
 package tk.mybatis.mapper.common.example;
 
+import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.UpdateProvider;
 import tk.mybatis.mapper.provider.ExampleProvider;
@@ -44,6 +45,7 @@ public interface UpdateByExampleMapper<T> {
      * @return
      */
     @UpdateProvider(type = ExampleProvider.class, method = "dynamicSQL")
+    @Options(flushCache = true, useCache = false, useGeneratedKeys = false)
     int updateByExample(@Param("record") T record, @Param("example") Object example);
 
 }

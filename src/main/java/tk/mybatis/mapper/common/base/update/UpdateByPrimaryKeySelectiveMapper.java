@@ -24,6 +24,7 @@
 
 package tk.mybatis.mapper.common.base.update;
 
+import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.UpdateProvider;
 import tk.mybatis.mapper.provider.base.BaseUpdateProvider;
 
@@ -42,6 +43,7 @@ public interface UpdateByPrimaryKeySelectiveMapper<T> {
      * @return
      */
     @UpdateProvider(type = BaseUpdateProvider.class, method = "dynamicSQL")
+    @Options(flushCache = true, useCache = false, useGeneratedKeys = false)
     int updateByPrimaryKeySelective(T record);
 
 }
