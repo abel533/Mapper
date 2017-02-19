@@ -12,6 +12,23 @@
 * 使用自定义的 `SelectKeyGenerator`，防止有默认值时被替换掉 fix #213
 * 将 MapperTemplate 属性改为 protected
 * MBG 插件中 generatedKey 元素的 sqlStatement 属性可以配置为形如 select SEQ_{1} from dual 的 SQL，其中 {0} 代表小写的表名，{1} 是大写的表名
+   MBG 配置示例如下,类似 Oracle 序列的配置方式：
+   ```xml
+   <generatedKey column="id" 
+        sqlStatement="select SEQ_{1}.nextval from dual" 
+        identity="false" 
+        type="pre"/>
+   ```
+   这个配置生成的代码会像下面这样：
+   ```java
+   public class Author {
+       @Id
+       @GeneratedValue(strategy = GenerationType.IDENTITY,
+               generator = "select SEQ_AUTHOR.nextval from dual")
+       private Integer id;
+       // 省略其他
+   }
+   ```
 
 ##3.3.9 - 2016-09-04
 
