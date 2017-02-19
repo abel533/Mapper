@@ -54,9 +54,9 @@ import java.util.*;
  */
 public abstract class MapperTemplate {
     private static final XMLLanguageDriver languageDriver = new XMLLanguageDriver();
-    private Map<String, Method> methodMap = new HashMap<String, Method>();
-    private Map<String, Class<?>> entityClassMap = new HashMap<String, Class<?>>();
-    private Class<?> mapperClass;
+    protected Map<String, Method> methodMap = new HashMap<String, Method>();
+    protected Map<String, Class<?>> entityClassMap = new HashMap<String, Class<?>>();
+    protected Class<?> mapperClass;
     protected MapperHelper mapperHelper;
 
     public MapperTemplate(Class<?> mapperClass, MapperHelper mapperHelper) {
