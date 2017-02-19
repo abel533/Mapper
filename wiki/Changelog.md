@@ -1,6 +1,6 @@
 #更新日志
 
-##3.4.0-SNAPSHOT - 2017-01-xx
+##3.4.0 - 2017-02-19
 
 * `Example` 增加 for update 支持，仅能用于 selectByExample 和 selectCountByExample 方法 #210
 * `Example.Criteria` 增加 `andAllEqualTo` 方法，将此对象的所有字段参数作为相等查询条件，如果字段为 null，则为 is null #206
@@ -8,8 +8,10 @@
 * 增加参数 `useSimpleType`，默认 `false`，启用后判断实体类属性是否为表字段时校验字段是否为简单类型，如果不是就忽略该属性，这个配置优先级高于所有注解
 * 增加参数 `simpleTypes`，默认的简单类型在 `SimpleTypeUtil` 中，使用该参数可以增加额外的简单类型，通过逗号隔开的全限定类名添加
 * 所有 `RuntimeException` 异常改为 `tk.mybatis.mapper.MapperException` 异常
-
-* 增加配置查询时的分隔符
+* 所有 Update 方法添加 `@Options(useCache = false, useGeneratedKeys = false)`，fix #216
+* 使用自定义的 `SelectKeyGenerator`，防止有默认值时被替换掉 fix #213
+* 将 MapperTemplate 属性改为 protected
+* MBG 插件中 generatedKey 元素的 sqlStatement 属性可以配置为形如 select SEQ_{1} from dual 的 SQL，其中 {0} 代表小写的表名，{1} 是大写的表名
 
 ##3.3.9 - 2016-09-04
 

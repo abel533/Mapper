@@ -24,6 +24,8 @@
 
 package tk.mybatis.mapper.model;
 
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 /**
@@ -33,6 +35,7 @@ import javax.persistence.Id;
  */
 public class Country2 {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String countryname;
     private String countrycode;

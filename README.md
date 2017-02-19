@@ -88,7 +88,7 @@ Country代码：
 <dependency>
     <groupId>tk.mybatis</groupId>
     <artifactId>mapper</artifactId>
-    <version>3.3.9</version>
+    <version>3.4.0</version>
 </dependency>
 ```
 如果你使用 Spring Boot 可以直接引入：

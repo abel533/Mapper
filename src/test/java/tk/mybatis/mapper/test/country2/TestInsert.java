@@ -50,6 +50,7 @@ public class TestInsert {
             Country2Mapper mapper = sqlSession.getMapper(Country2Mapper.class);
             Country2 country2 = new Country2();
             country2.setCountrycode("CN");
+            country2.setId(100);
             Assert.assertEquals(1, mapper.insert(country2));
 
             country2 = mapper.select(country2).get(0);
