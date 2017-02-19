@@ -97,7 +97,7 @@ Country代码：
 <dependency>
     <groupId>tk.mybatis</groupId>
     <artifactId>mapper-spring-boot-starter</artifactId>
-    <version>1.0.0</version>
+    <version>1.1.0</version>
 </dependency>
 ```
 具体用法可以参考：[MyBatis-Spring-Boot](https://github.com/abel533/MyBatis-Spring-Boot) 
