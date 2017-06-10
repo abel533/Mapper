@@ -9,12 +9,15 @@
 
 支持单表操作，不支持通用的多表联合查询。
 
+
 ## 通用 Mapper 支持 Mybatis-3.2.4 及以上版本
 ## <span style="color:red">特别强调</span>
 - **不是表中字段的属性必须加 `@Transient` 注解**
 - **通用 Mapper 不支持 devtools 热加载**，devtools 排除实体类包即可，配置方式参考：[using-boot-devtools-customizing-classload](http://docs.spring.io/spring-boot/docs/current/reference/html/using-boot-devtools.html#using-boot-devtools-customizing-classload)
 
 ## 项目文档
+
+### https://mapperhelper.github.io
 
 在你打算使用通用 Mapper 前，一定要看看下面的文档，许多人在初次使用时遇到的问题，99% 都在文档中有说明！！
 
