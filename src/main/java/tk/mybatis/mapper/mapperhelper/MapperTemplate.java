@@ -129,7 +129,15 @@ public abstract class MapperTemplate {
     public String getIDENTITY() {
         return mapperHelper.getConfig().getIDENTITY();
     }
-
+	/**
+     * 获取IDENTITY值的表达式
+     *
+     * @param column
+     * @return
+     */
+    public String getIDENTITY(EntityColumn column) {
+        return MessageFormat.format(mapperHelper.getConfig().getIDENTITY(), column.getSequenceName(), column.getColumn(), column.getProperty(), column.getTable().getName());
+    }
     public boolean isBEFORE() {
         return mapperHelper.getConfig().isBEFORE();
     }
@@ -520,7 +528,7 @@ public abstract class MapperTemplate {
         Configuration configuration = ms.getConfiguration();
         KeyGenerator keyGenerator;
         Boolean executeBefore = isBEFORE();
-        String IDENTITY = (column.getGenerator() == null || column.getGenerator().equals("")) ? getIDENTITY() : column.getGenerator();
+        String IDENTITY = (column.getGenerator() == null || column.getGenerator().equals("")) ? getIDENTITY(column) : column.getGenerator();
         if (IDENTITY.equalsIgnoreCase("JDBC")) {
             keyGenerator = new Jdbc3KeyGenerator();
         } else {
