@@ -16,6 +16,10 @@
 
 预售地址：[京东](https://item.jd.com/12103309.html)，[当当](http://product.dangdang.com/25098208.html)，[亚马逊](https://www.amazon.cn/MyBatis从入门到精通-刘增辉/dp/B072RC11DM/ref=sr_1_18?ie=UTF8&qid=1498007125&sr=8-18&keywords=mybatis)
 
+CSDN博客：http://blog.csdn.net/isea533/article/details/73555400
+
+GitHub项目：https://github.com/mybatis-book/book
+
 ## 通用 Mapper 支持 Mybatis-3.2.4 及以上版本
 ## <span style="color:red">特别强调</span>
 - **不是表中字段的属性必须加 `@Transient` 注解**
