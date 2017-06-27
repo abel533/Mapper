@@ -148,7 +148,7 @@ http://repo1.maven.org/maven2/javax/persistence/persistence-api/1.0/
 
 ## [更新日志](http://git.oschina.net/free/Mapper/blob/master/wiki/Changelog.md)
 
-##作者信息
+## 作者信息
 
 MyBatis 工具网站:[http://mybatis.tk](http://www.mybatis.tk)
 
