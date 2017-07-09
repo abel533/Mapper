@@ -21,9 +21,24 @@ CSDN博客：http://blog.csdn.net/isea533/article/details/73555400
 GitHub项目：https://github.com/mybatis-book/book
 
 ## 通用 Mapper 支持 Mybatis-3.2.4 及以上版本
-## <span style="color:red">特别强调</span>
-- **不是表中字段的属性必须加 `@Transient` 注解**
-- **通用 Mapper 不支持 devtools 热加载**，devtools 排除实体类包即可，配置方式参考：[using-boot-devtools-customizing-classload](http://docs.spring.io/spring-boot/docs/current/reference/html/using-boot-devtools.html#using-boot-devtools-customizing-classload)
+## 不是表中字段的属性必须加 `@Transient` 注解
+
+## Spring DevTools 配置
+感谢[emf1002](https://github.com/emf1002)提供的解决方案。
+
+在使用 DevTools 时，通用Mapper经常会出现 `class x.x.A cannot be cast to x.x.A`。
+
+同一个类如果使用了不同的类加载器，就会产生这样的错误，所以解决方案就是让通用Mapper和实体类使用相同的类加载器即可。
+
+DevTools 默认会对 IDE 中引入的所有项目使用 restart 类加载器，对于引入的 jar 包使用 base 类加载器，因此只要保证通用Mapper的jar包使用 restart
+类加载器即可。
+
+在 `src/main/resources` 中创建 META-INF 目录，在此目录下添加 spring-devtools.properties 配置，内容如下：
+```properties
+restart.include.mapper=/mapper-[\\w-\\.]+jar
+restart.include.pagehelper=/pagehelper-[\\w-\\.]+jar
+```
+使用这个配置后，就会使用 restart 类加载加载 include 进去的 jar 包。
 
 ## 项目文档
 
@@ -50,24 +65,6 @@ GitHub项目：https://github.com/mybatis-book/book
 赞助后保留截图，将截图和需求内容发邮件到 abel533@gmail.com 和作者联系。
 
 你还可以通过开源中国众包购买服务[开发 MyBatis 通用 Mapper 通用方法](https://zb.oschina.net/market/opus/92cda9e3bc85365f)
-
-## Spring DevTools 配置
-感谢[emf1002](https://github.com/emf1002)提供的解决方案。
-
-在使用 DevTools 时，通用Mapper经常会出现 class x.x.A cannot be cast to x.x.A。
-
-同一个类如果使用了不同的类加载器，就会产生这样的错误，所以解决方案就是让通用Mapper和实体类使用相同的类加载器即可。
-
-DevTools 默认会对 IDE 中引入的所有项目使用 restart 类加载器，对于引入的 jar 包使用 base 类加载器，因此只要保证通用Mapper的jar包使用 restart
-类加载器即可。
-
-在 `src/main/resources` 中创建 META-INF 目录，在此目录下添加 spring-devtools.properties 配置，内容如下：
-```properties
-restart.include.mapper=/mapper-[\\w-\\.]+jar
-restart.include.pagehelper=/pagehelper-[\\w-\\.]+jar
-```
-使用这个配置后，就会使用 restart 类加载加载 include 进去的 jar 包。
-
 
 ## 通用 Mapper - 简单用法示例
 
@@ -122,7 +119,7 @@ Country代码：
 <dependency>
     <groupId>tk.mybatis</groupId>
     <artifactId>mapper</artifactId>
-    <version>3.4.0</version>
+    <version>最新版本</version>
 </dependency>
 ```
 如果你使用 Spring Boot 可以直接引入：
@@ -131,7 +128,7 @@ Country代码：
 <dependency>
     <groupId>tk.mybatis</groupId>
     <artifactId>mapper-spring-boot-starter</artifactId>
-    <version>1.1.0</version>
+    <version>最新版本</version>
 </dependency>
 ```
 具体用法可以参考：[MyBatis-Spring-Boot](https://github.com/abel533/MyBatis-Spring-Boot) 
