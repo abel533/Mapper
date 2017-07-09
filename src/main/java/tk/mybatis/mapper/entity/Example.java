@@ -49,7 +49,11 @@ public class Example implements IDynamicTableName {
 
     protected boolean forUpdate;
 
+    //查询字段
     protected Set<String> selectColumns;
+
+    //排除的查询字段
+    protected Set<String> excludeColumns;
 
     protected String countColumn;
 
@@ -173,7 +177,32 @@ public class Example implements IDynamicTableName {
     }
 
     public Set<String> getSelectColumns() {
+        if(selectColumns != null && selectColumns.size() > 0){
+            //不需要处理
+        } else if(excludeColumns != null && excludeColumns.size() > 0){
+            Collection<EntityColumn> entityColumns = propertyMap.values();
+            selectColumns = new LinkedHashSet<String>(entityColumns.size() - excludeColumns.size());
+            for (EntityColumn column : entityColumns) {
+                if(!excludeColumns.contains(column.getColumn())){
+                    selectColumns.add(column.getColumn());
+                }
+            }
+        }
         return selectColumns;
+    }
+
+    public Example excludeProperties(String... properties) {
+        if (properties != null && properties.length > 0) {
+            if (this.excludeColumns == null) {
+                this.excludeColumns = new LinkedHashSet<String>();
+            }
+            for (String property : properties) {
+                if (propertyMap.containsKey(property)) {
+                    this.excludeColumns.add(propertyMap.get(property).getColumn());
+                }
+            }
+        }
+        return this;
     }
 
     /**
