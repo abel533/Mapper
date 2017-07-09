@@ -191,6 +191,12 @@ public class Example implements IDynamicTableName {
         return selectColumns;
     }
 
+    /**
+     * 排除查询字段，优先级低于 selectProperties
+     *
+     * @param properties 属性名的可变参数
+     * @return
+     */
     public Example excludeProperties(String... properties) {
         if (properties != null && properties.length > 0) {
             if (this.excludeColumns == null) {
