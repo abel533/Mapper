@@ -33,6 +33,8 @@ import tk.mybatis.mapper.util.StringUtil;
 
 import javax.persistence.Table;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * 数据库表
@@ -40,6 +42,8 @@ import java.util.*;
  * @author liuzh
  */
 public class EntityTable {
+    public static final Pattern DELIMITER = Pattern.compile("^[`\\[\"]?(.*?)[`\\]\"]?$");
+
     private String name;
     private String catalog;
     private String schema;
@@ -194,7 +198,13 @@ public class EntityTable {
         }
         List<ResultMapping> resultMappings = new ArrayList<ResultMapping>();
         for (EntityColumn entityColumn : entityClassColumns) {
-            ResultMapping.Builder builder = new ResultMapping.Builder(configuration, entityColumn.getProperty(), entityColumn.getColumn(), entityColumn.getJavaType());
+            String column = entityColumn.getColumn();
+            //去掉可能存在的分隔符
+            Matcher matcher = DELIMITER.matcher(column);
+            if(matcher.find()){
+                column = matcher.group(1);
+            }
+            ResultMapping.Builder builder = new ResultMapping.Builder(configuration, entityColumn.getProperty(), column, entityColumn.getJavaType());
             if (entityColumn.getJdbcType() != null) {
                 builder.jdbcType(entityColumn.getJdbcType());
             }
