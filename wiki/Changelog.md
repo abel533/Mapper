@@ -1,6 +1,6 @@
 #更新日志
 
-## 3.4.1-beta2 - 2017-07-09
+## 3.4.1 - 2017-07-17
 
 * `Example` 增加复杂的 `and` 和 `or` 功能。
 * `Example` 增加排除查询字段的方法 `excludeProperties`(`selectProperties`优先级更高) [#261](http://git.oschina.net/free/Mapper/issues/261).
