@@ -135,14 +135,18 @@ public class Example implements IDynamicTableName {
         }
 
         private String property(String property) {
+            if (StringUtil.isEmpty(property) || StringUtil.isEmpty(property.trim())) {
+                throw new MapperException("接收的property为空！");
+            }
+
+            property = property.trim();
             if (propertyMap.containsKey(property)) {
                 return propertyMap.get(property).getColumn();
-            } else if (notNull) {
-                throw new MapperException("当前实体类不包含名为" + property + "的属性!");
             } else {
-                return null;
+                throw new MapperException("当前实体类不包含名为" + property + "的属性!");
             }
         }
+
 
         public OrderBy orderBy(String property) {
             String column = property(property);
@@ -177,13 +181,13 @@ public class Example implements IDynamicTableName {
     }
 
     public Set<String> getSelectColumns() {
-        if(selectColumns != null && selectColumns.size() > 0){
+        if (selectColumns != null && selectColumns.size() > 0) {
             //不需要处理
-        } else if(excludeColumns != null && excludeColumns.size() > 0){
+        } else if (excludeColumns != null && excludeColumns.size() > 0) {
             Collection<EntityColumn> entityColumns = propertyMap.values();
             selectColumns = new LinkedHashSet<String>(entityColumns.size() - excludeColumns.size());
             for (EntityColumn column : entityColumns) {
-                if(!excludeColumns.contains(column.getColumn())){
+                if (!excludeColumns.contains(column.getColumn())) {
                     selectColumns.add(column.getColumn());
                 }
             }
