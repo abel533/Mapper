@@ -68,6 +68,7 @@ public class Example implements IDynamicTableName {
     protected String tableName;
 
     protected OrderBy ORDERBY;
+
     /**
      * 默认exists为true
      *
@@ -142,6 +143,8 @@ public class Example implements IDynamicTableName {
             property = property.trim();
             if (propertyMap.containsKey(property)) {
                 return propertyMap.get(property).getColumn();
+            } else if (notNull) {
+                throw new MapperException("当前实体类不包含名为" + property + "的属性!");
             } else {
                 throw new MapperException("当前实体类不包含名为" + property + "的属性!");
             }
