@@ -138,6 +138,7 @@ public class Example implements IDynamicTableName {
             if (StringUtil.isEmpty(property) || StringUtil.isEmpty(property.trim())) {
                 throw new MapperException("接收的property为空！");
             }
+            property = property.trim();
             if (!propertyMap.containsKey(property)) {
                 throw new MapperException("当前实体类不包含名为" + property + "的属性!");
             }
