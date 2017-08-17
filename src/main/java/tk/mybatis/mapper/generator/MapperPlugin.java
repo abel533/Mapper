@@ -57,6 +57,8 @@ public class MapperPlugin extends PluginAdapter {
     private String schema;
     //注释生成器
     private CommentGeneratorConfiguration commentCfg;
+    //强制生成注解
+    private boolean forceAnnotation;
 
     @Override
     public void setContext(Context context) {
@@ -83,6 +85,11 @@ public class MapperPlugin extends PluginAdapter {
         String caseSensitive = this.properties.getProperty("caseSensitive");
         if (StringUtility.stringHasValue(caseSensitive)) {
             this.caseSensitive = caseSensitive.equalsIgnoreCase("TRUE");
+        }
+        String forceAnnotation = this.properties.getProperty("forceAnnotation");
+        if (StringUtility.stringHasValue(forceAnnotation)) {
+            commentCfg.addProperty("forceAnnotation", forceAnnotation);
+            this.forceAnnotation = forceAnnotation.equalsIgnoreCase("TRUE");
         }
         String beginningDelimiter = this.properties.getProperty("beginningDelimiter");
         if (StringUtility.stringHasValue(beginningDelimiter)) {
@@ -163,6 +170,8 @@ public class MapperPlugin extends PluginAdapter {
         } else if (StringUtility.stringHasValue(schema)
                 || StringUtility.stringHasValue(beginningDelimiter)
                 || StringUtility.stringHasValue(endingDelimiter)) {
+            topLevelClass.addAnnotation("@Table(name = \"" + getDelimiterName(tableName) + "\")");
+        } else if(forceAnnotation){
             topLevelClass.addAnnotation("@Table(name = \"" + getDelimiterName(tableName) + "\")");
         }
     }

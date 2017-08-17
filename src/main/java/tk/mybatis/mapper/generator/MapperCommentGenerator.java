@@ -41,6 +41,8 @@ public class MapperCommentGenerator implements CommentGenerator {
     private String beginningDelimiter = "";
     //结束的分隔符，例如mysql为`，sqlserver为]
     private String endingDelimiter = "";
+    //强制生成注解
+    private boolean forceAnnotation;
 
     public MapperCommentGenerator() {
         super();
@@ -80,6 +82,10 @@ public class MapperCommentGenerator implements CommentGenerator {
         String endingDelimiter = properties.getProperty("endingDelimiter");
         if (StringUtility.stringHasValue(endingDelimiter)) {
             this.endingDelimiter = endingDelimiter;
+        }
+        String forceAnnotation = properties.getProperty("forceAnnotation");
+        if (StringUtility.stringHasValue(forceAnnotation)) {
+            this.forceAnnotation = forceAnnotation.equalsIgnoreCase("TRUE");
         }
     }
 
@@ -159,6 +165,8 @@ public class MapperCommentGenerator implements CommentGenerator {
             //@Column
             field.addAnnotation("@Column(name = \"" + getDelimiterName(column) + "\")");
         } else if (StringUtility.stringHasValue(beginningDelimiter) || StringUtility.stringHasValue(endingDelimiter)) {
+            field.addAnnotation("@Column(name = \"" + getDelimiterName(column) + "\")");
+        } else if(forceAnnotation){
             field.addAnnotation("@Column(name = \"" + getDelimiterName(column) + "\")");
         }
         if (introspectedColumn.isIdentity()) {
