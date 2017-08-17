@@ -1,4 +1,12 @@
-#更新日志
+# 更新日志
+
+## 3.4.3 - 2017-08-17
+
+* `MapperPlugin` 增加 `forceAnnotation` 参数，默认 `false`，设置为 `true` 后一定会生成`@Table`和`@Column`注解。
+* 为实例化 `TypeHandler` 增加 `javaTypeClass` by **junchao**。
+* 更新 `Example` 类，在获取 `property` 时，判断有没有该 `property` 并抛出异常 by **chengcheng.feng**。
+* 所有类的属性从 `HashMap` 改为 `ConcurrentHashMap`。
+
 
 ## 3.4.2 - 2017-07-19
 
