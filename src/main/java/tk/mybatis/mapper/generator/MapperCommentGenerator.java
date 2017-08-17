@@ -46,6 +46,7 @@ public class MapperCommentGenerator implements CommentGenerator {
         super();
     }
 
+    @Override
     public void addJavaFileComment(CompilationUnit compilationUnit) {
         return;
     }
@@ -55,6 +56,7 @@ public class MapperCommentGenerator implements CommentGenerator {
      *
      * @param xmlElement
      */
+    @Override
     public void addComment(XmlElement xmlElement) {
         xmlElement.addElement(new TextElement("<!--"));
         StringBuilder sb = new StringBuilder();
@@ -64,10 +66,12 @@ public class MapperCommentGenerator implements CommentGenerator {
         xmlElement.addElement(new TextElement("-->"));
     }
 
+    @Override
     public void addRootComment(XmlElement rootElement) {
         return;
     }
 
+    @Override
     public void addConfigurationProperties(Properties properties) {
         String beginningDelimiter = properties.getProperty("beginningDelimiter");
         if (StringUtility.stringHasValue(beginningDelimiter)) {
@@ -109,9 +113,11 @@ public class MapperCommentGenerator implements CommentGenerator {
      * @param innerClass
      * @param introspectedTable
      */
+    @Override
     public void addClassComment(InnerClass innerClass, IntrospectedTable introspectedTable) {
     }
 
+    @Override
     public void addEnumComment(InnerEnum innerEnum, IntrospectedTable introspectedTable) {
     }
 
@@ -122,6 +128,7 @@ public class MapperCommentGenerator implements CommentGenerator {
      * @param introspectedTable
      * @param introspectedColumn
      */
+    @Override
     public void addFieldComment(Field field, IntrospectedTable introspectedTable, IntrospectedColumn introspectedColumn) {
         if (StringUtility.stringHasValue(introspectedColumn.getRemarks())) {
             field.addJavaDocLine("/**");
@@ -174,9 +181,11 @@ public class MapperCommentGenerator implements CommentGenerator {
      * @param field
      * @param introspectedTable
      */
+    @Override
     public void addFieldComment(Field field, IntrospectedTable introspectedTable) {
     }
 
+    @Override
     public void addModelClassComment(TopLevelClass topLevelClass, IntrospectedTable introspectedTable) {
 
     }
@@ -185,6 +194,7 @@ public class MapperCommentGenerator implements CommentGenerator {
      * @param method
      * @param introspectedTable
      */
+    @Override
     public void addGeneralMethodComment(Method method, IntrospectedTable introspectedTable) {
     }
 
@@ -195,6 +205,7 @@ public class MapperCommentGenerator implements CommentGenerator {
      * @param introspectedTable
      * @param introspectedColumn
      */
+    @Override
     public void addGetterComment(Method method, IntrospectedTable introspectedTable, IntrospectedColumn introspectedColumn) {
         StringBuilder sb = new StringBuilder();
         method.addJavaDocLine("/**");
@@ -222,6 +233,7 @@ public class MapperCommentGenerator implements CommentGenerator {
      * @param introspectedTable
      * @param introspectedColumn
      */
+    @Override
     public void addSetterComment(Method method, IntrospectedTable introspectedTable, IntrospectedColumn introspectedColumn) {
         StringBuilder sb = new StringBuilder();
         method.addJavaDocLine("/**");
@@ -250,6 +262,7 @@ public class MapperCommentGenerator implements CommentGenerator {
      * @param introspectedTable
      * @param markAsDoNotDelete
      */
+    @Override
     public void addClassComment(InnerClass innerClass, IntrospectedTable introspectedTable, boolean markAsDoNotDelete) {
     }
 }
