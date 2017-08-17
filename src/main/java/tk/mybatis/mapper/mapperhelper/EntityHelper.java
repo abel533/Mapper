@@ -39,7 +39,11 @@ import tk.mybatis.mapper.util.SimpleTypeUtil;
 import tk.mybatis.mapper.util.StringUtil;
 
 import javax.persistence.*;
-import java.util.*;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 实体类工具类 - 处理实体和数据库表以及字段关键的一个类
@@ -53,7 +57,7 @@ public class EntityHelper {
     /**
      * 实体类 => 表对象
      */
-    private static final Map<Class<?>, EntityTable> entityTableMap = new HashMap<Class<?>, EntityTable>();
+    private static final Map<Class<?>, EntityTable> entityTableMap = new ConcurrentHashMap<Class<?>, EntityTable>();
 
     /**
      * 获取表对象

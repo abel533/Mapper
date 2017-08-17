@@ -46,6 +46,7 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.text.MessageFormat;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 通用Mapper模板类，扩展通用Mapper时需要继承该类
@@ -54,8 +55,8 @@ import java.util.*;
  */
 public abstract class MapperTemplate {
     private static final XMLLanguageDriver languageDriver = new XMLLanguageDriver();
-    protected Map<String, Method> methodMap = new HashMap<String, Method>();
-    protected Map<String, Class<?>> entityClassMap = new HashMap<String, Class<?>>();
+    protected Map<String, Method> methodMap = new ConcurrentHashMap<String, Method>();
+    protected Map<String, Class<?>> entityClassMap = new ConcurrentHashMap<String, Class<?>>();
     protected Class<?> mapperClass;
     protected MapperHelper mapperHelper;
 

@@ -51,7 +51,7 @@ public class MapperHelper {
     /**
      * 缓存skip结果
      */
-    private final Map<String, Boolean> msIdSkip = new HashMap<String, Boolean>();
+    private final Map<String, Boolean> msIdSkip = new ConcurrentHashMap<String, Boolean>();
 
     /**
      * 注册的接口
@@ -66,7 +66,7 @@ public class MapperHelper {
     /**
      * 缓存msid和MapperTemplate
      */
-    private Map<String, MapperTemplate> msIdCache = new HashMap<String, MapperTemplate>();
+    private Map<String, MapperTemplate> msIdCache = new ConcurrentHashMap<String, MapperTemplate>();
 
     /**
      * 通用Mapper配置
