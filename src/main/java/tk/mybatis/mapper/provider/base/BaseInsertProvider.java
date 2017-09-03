@@ -27,10 +27,7 @@ package tk.mybatis.mapper.provider.base;
 import org.apache.ibatis.mapping.MappedStatement;
 import tk.mybatis.mapper.MapperException;
 import tk.mybatis.mapper.entity.EntityColumn;
-import tk.mybatis.mapper.mapperhelper.EntityHelper;
-import tk.mybatis.mapper.mapperhelper.MapperHelper;
-import tk.mybatis.mapper.mapperhelper.MapperTemplate;
-import tk.mybatis.mapper.mapperhelper.SqlHelper;
+import tk.mybatis.mapper.mapperhelper.*;
 import tk.mybatis.mapper.util.StringUtil;
 
 import java.util.Set;
@@ -92,7 +89,7 @@ public class BaseInsertProvider extends MapperTemplate {
                     throw new MapperException(ms.getId() + "对应的实体类" + entityClass.getCanonicalName() + "中包含多个MySql的自动增长列,最多只能有一个!");
                 }
                 //插入selectKey
-                newSelectKeyMappedStatement(ms, column);
+                SelectKeyHelper.newSelectKeyMappedStatement(ms, column, entityClass, isBEFORE(), getIDENTITY(column));
                 hasIdentityKey = true;
             } else if (column.isUuid()) {
                 //uuid的情况，直接插入bind节点
@@ -183,7 +180,7 @@ public class BaseInsertProvider extends MapperTemplate {
                     throw new MapperException(ms.getId() + "对应的实体类" + entityClass.getCanonicalName() + "中包含多个MySql的自动增长列,最多只能有一个!");
                 }
                 //插入selectKey
-                newSelectKeyMappedStatement(ms, column);
+                SelectKeyHelper.newSelectKeyMappedStatement(ms, column, entityClass, isBEFORE(), getIDENTITY(column));
                 hasIdentityKey = true;
             } else if (column.isUuid()) {
                 //uuid的情况，直接插入bind节点
