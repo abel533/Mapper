@@ -180,7 +180,7 @@ public abstract class MapperTemplate {
     }
 
     /**
-     * 重新设置SqlSource，同时判断如果是Jdbc3KeyGenerator，就设置为MultipleJdbc3KeyGenerator
+     * 重新设置SqlSource
      *
      * @param ms
      * @param sqlSource
@@ -188,11 +188,6 @@ public abstract class MapperTemplate {
     protected void setSqlSource(MappedStatement ms, SqlSource sqlSource) {
         MetaObject msObject = SystemMetaObject.forObject(ms);
         msObject.setValue("sqlSource", sqlSource);
-        //如果是Jdbc3KeyGenerator，就设置为MultipleJdbc3KeyGenerator
-        KeyGenerator keyGenerator = ms.getKeyGenerator();
-        if (keyGenerator instanceof Jdbc3KeyGenerator) {
-            msObject.setValue("keyGenerator", new MultipleJdbc3KeyGenerator());
-        }
     }
 
     /**
