@@ -24,7 +24,6 @@
 
 package tk.mybatis.mapper.mapperhelper;
 
-import org.apache.ibatis.cache.Cache;
 import org.apache.ibatis.executor.keygen.Jdbc3KeyGenerator;
 import org.apache.ibatis.executor.keygen.KeyGenerator;
 import org.apache.ibatis.executor.keygen.NoKeyGenerator;
@@ -191,29 +190,6 @@ public abstract class MapperTemplate {
     }
 
     /**
-     * 检查是否配置过缓存
-     *
-     * @param ms
-     * @throws Exception
-     */
-    private void checkCache(MappedStatement ms) throws Exception {
-        if (ms.getCache() == null) {
-            String nameSpace = ms.getId().substring(0, ms.getId().lastIndexOf("."));
-            Cache cache;
-            try {
-                //不存在的时候会抛出异常
-                cache = ms.getConfiguration().getCache(nameSpace);
-            } catch (IllegalArgumentException e) {
-                return;
-            }
-            if (cache != null) {
-                MetaObject metaObject = SystemMetaObject.forObject(ms);
-                metaObject.setValue("cache", cache);
-            }
-        }
-    }
-
-    /**
      * 重新设置SqlSource
      *
      * @param ms
@@ -245,8 +221,6 @@ public abstract class MapperTemplate {
             } else {
                 throw new MapperException("自定义Mapper方法返回类型错误,可选的返回类型为void,SqlNode,String三种!");
             }
-            //cache
-            checkCache(ms);
         } catch (IllegalAccessException e) {
             throw new MapperException(e);
         } catch (InvocationTargetException e) {
