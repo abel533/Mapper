@@ -28,7 +28,7 @@
 
     <groupId>tk.mybatis</groupId>
     <artifactId>mapper</artifactId>
-    <version>3.4.3</version>
+    <version>3.4.4-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>mapper</name>
@@ -97,6 +97,13 @@
             <scope>compile</scope>
             <optional>true</optional>
         </dependency>
+        <dependency>
+            <groupId>tk.mybatis</groupId>
+            <artifactId>mapper-weekend</artifactId>
+            <version>1.0.0</version>
+            <scope>compile</scope>
+            <optional>true</optional>
+        </dependency>
         <!-- Mybatis Generator -->
         <dependency>
             <groupId>org.mybatis.generator</groupId>
@@ -105,7 +112,6 @@
             <scope>compile</scope>
             <optional>true</optional>
         </dependency>
-
         <!--测试-->
         <dependency>
             <groupId>junit</groupId>
@@ -148,22 +154,41 @@
                 <directory>src/test/java</directory>
             </testResource>
         </testResources>
+        <plugins>
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.6</source>
+                    <target>1.6</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <createDependencyReducedPom>false</createDependencyReducedPom>
+                            <artifactSet>
+                                <includes>
+                                    <include>tk.mybatis:mapper</include>
+                                    <include>tk.mybatis:mapper-weekend</include>
+                                </includes>
+                            </artifactSet>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
     </build>
 
     <profiles>
         <profile>
             <id>dev</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <artifactId>maven-compiler-plugin</artifactId>
-                        <configuration>
-                            <source>1.6</source>
-                            <target>1.6</target>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
             <activation>
                 <activeByDefault>true</activeByDefault>
             </activation>
@@ -172,14 +197,6 @@
             <id>release</id>
             <build>
                 <plugins>
-                    <!--Compiler-->
-                    <plugin>
-                        <artifactId>maven-compiler-plugin</artifactId>
-                        <configuration>
-                            <source>1.6</source>
-                            <target>1.6</target>
-                        </configuration>
-                    </plugin>
                     <!-- Source -->
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
