@@ -1,5 +1,24 @@
 # 更新日志
 
+## 3.4.4 - 2017-10-19
+
+* 增加 mapper-weekend（作者 [liuyuyu](https://github.com/liuyuyu)），支持jdk8函数式引用方法，用法如下：
+
+```java
+  UserMapper    userMapper = sqlSession.getMapper(UserMapper.class);
+  Weekend<User> weekend    = Weekend.of(User.class);
+  weekend.weekendCriteria()
+          .andIsNull(User::getId)
+          .andBetween(User::getId,0,10)
+          .andIn(User::getUserName, Arrays.asList("a","b","c"));
+```
+
+>可以在 `Example.Criteria` 的条件方法里传 lambada(再也不用担心改数据库了......)。
+
+后续会继续在 3.x 版本更新和维护。
+
+原来计划的 4.0 版本打算用 mybatis 更原生的方式实现，所以需要尽快配合官方合并一个新功能，只有等合并后才会开始 4.0 的开发。
+
 ## 3.4.3 - 2017-08-17
 
 * `MapperPlugin` 增加 `forceAnnotation` 参数，默认 `false`，设置为 `true` 后一定会生成`@Table`和`@Column`注解。
