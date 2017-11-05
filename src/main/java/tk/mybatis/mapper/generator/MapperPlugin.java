@@ -60,53 +60,6 @@ public class MapperPlugin extends PluginAdapter {
     //强制生成注解
     private boolean forceAnnotation;
 
-    @Override
-    public void setContext(Context context) {
-        super.setContext(context);
-        //设置默认的注释生成器
-        commentCfg = new CommentGeneratorConfiguration();
-        commentCfg.setConfigurationType(MapperCommentGenerator.class.getCanonicalName());
-        context.setCommentGeneratorConfiguration(commentCfg);
-        //支持oracle获取注释#114
-        context.getJdbcConnectionConfiguration().addProperty("remarksReporting", "true");
-    }
-
-    @Override
-    public void setProperties(Properties properties) {
-        super.setProperties(properties);
-        String mappers = this.properties.getProperty("mappers");
-        if (StringUtility.stringHasValue(mappers)) {
-            for (String mapper : mappers.split(",")) {
-                this.mappers.add(mapper);
-            }
-        } else {
-            throw new MapperException("Mapper插件缺少必要的mappers属性!");
-        }
-        String caseSensitive = this.properties.getProperty("caseSensitive");
-        if (StringUtility.stringHasValue(caseSensitive)) {
-            this.caseSensitive = caseSensitive.equalsIgnoreCase("TRUE");
-        }
-        String forceAnnotation = this.properties.getProperty("forceAnnotation");
-        if (StringUtility.stringHasValue(forceAnnotation)) {
-            commentCfg.addProperty("forceAnnotation", forceAnnotation);
-            this.forceAnnotation = forceAnnotation.equalsIgnoreCase("TRUE");
-        }
-        String beginningDelimiter = this.properties.getProperty("beginningDelimiter");
-        if (StringUtility.stringHasValue(beginningDelimiter)) {
-            this.beginningDelimiter = beginningDelimiter;
-        }
-        commentCfg.addProperty("beginningDelimiter", this.beginningDelimiter);
-        String endingDelimiter = this.properties.getProperty("endingDelimiter");
-        if (StringUtility.stringHasValue(endingDelimiter)) {
-            this.endingDelimiter = endingDelimiter;
-        }
-        commentCfg.addProperty("endingDelimiter", this.endingDelimiter);
-        String schema = this.properties.getProperty("schema");
-        if (StringUtility.stringHasValue(schema)) {
-            this.schema = schema;
-        }
-    }
-
     public String getDelimiterName(String name) {
         StringBuilder nameBuilder = new StringBuilder();
         if (StringUtility.stringHasValue(schema)) {
@@ -354,5 +307,54 @@ public class MapperPlugin extends PluginAdapter {
     @Override
     public boolean providerUpdateByPrimaryKeySelectiveMethodGenerated(Method method, TopLevelClass topLevelClass, IntrospectedTable introspectedTable) {
         return false;
+    }
+
+    @Override
+    public void setContext(Context context) {
+        super.setContext(context);
+        //设置默认的注释生成器
+        if (!"FALSE".equalsIgnoreCase(context.getProperty("useMapperCommentGenerator"))) {
+            commentCfg = new CommentGeneratorConfiguration();
+            commentCfg.setConfigurationType(MapperCommentGenerator.class.getCanonicalName());
+            context.setCommentGeneratorConfiguration(commentCfg);
+        }
+        //支持oracle获取注释#114
+        context.getJdbcConnectionConfiguration().addProperty("remarksReporting", "true");
+    }
+
+    @Override
+    public void setProperties(Properties properties) {
+        super.setProperties(properties);
+        String mappers = this.properties.getProperty("mappers");
+        if (StringUtility.stringHasValue(mappers)) {
+            for (String mapper : mappers.split(",")) {
+                this.mappers.add(mapper);
+            }
+        } else {
+            throw new MapperException("Mapper插件缺少必要的mappers属性!");
+        }
+        String caseSensitive = this.properties.getProperty("caseSensitive");
+        if (StringUtility.stringHasValue(caseSensitive)) {
+            this.caseSensitive = caseSensitive.equalsIgnoreCase("TRUE");
+        }
+        String forceAnnotation = this.properties.getProperty("forceAnnotation");
+        if (StringUtility.stringHasValue(forceAnnotation)) {
+            commentCfg.addProperty("forceAnnotation", forceAnnotation);
+            this.forceAnnotation = forceAnnotation.equalsIgnoreCase("TRUE");
+        }
+        String beginningDelimiter = this.properties.getProperty("beginningDelimiter");
+        if (StringUtility.stringHasValue(beginningDelimiter)) {
+            this.beginningDelimiter = beginningDelimiter;
+        }
+        commentCfg.addProperty("beginningDelimiter", this.beginningDelimiter);
+        String endingDelimiter = this.properties.getProperty("endingDelimiter");
+        if (StringUtility.stringHasValue(endingDelimiter)) {
+            this.endingDelimiter = endingDelimiter;
+        }
+        commentCfg.addProperty("endingDelimiter", this.endingDelimiter);
+        String schema = this.properties.getProperty("schema");
+        if (StringUtility.stringHasValue(schema)) {
+            this.schema = schema;
+        }
     }
 }

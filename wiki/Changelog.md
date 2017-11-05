@@ -1,5 +1,18 @@
 # 更新日志
 
+## 3.4.5 - 2017-11-05
+
+- 插件增加一个 `<context>` 属性配置，可以控制是否使用通用 Mapper 自带的 `MapperCommentGenerator`，用法如下：
+```xml
+<generatorConfiguration>
+  <context id="Mysql" targetRuntime="MyBatis3Simple" defaultModelType="flat">
+    <!--新增的参数，默认true 使用-->
+    <property name="useMapperCommentGenerator" value="false"/>
+    <!-- 其他 -->
+  </context>
+</generatorConfiguration>
+```
+
 ## 3.4.4 - 2017-10-19
 
 * 增加 mapper-weekend（作者 [liuyuyu](https://github.com/liuyuyu)），支持jdk8函数式引用方法，用法如下：
