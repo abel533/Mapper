@@ -27,33 +27,68 @@
         PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
         "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
 
+<!--suppress MybatisGenerateCustomPluginInspection -->
 <generatorConfiguration>
-  <context id="Mysql" targetRuntime="MyBatis3Simple" defaultModelType="flat">
-    <property name="javaFileEncoding" value="UTF-8"/>
-      <property name="useMapperCommentGenerator" value="false"/>
+    <context id="Mysql" targetRuntime="MyBatis3Simple" defaultModelType="flat">
+        <property name="javaFileEncoding" value="UTF-8"/>
+        <!--<property name="useMapperCommentGenerator" value="false"/>-->
 
-      <plugin type="tk.mybatis.mapper.generator.MapperPlugin">
-      <property name="mappers" value="tk.mybatis.mapper.common.Mapper,tk.mybatis.mapper.hsqldb.HsqldbMapper"/>
-      <property name="caseSensitive" value="true"/>
-      <property name="forceAnnotation" value="true"/>
-      <property name="beginningDelimiter" value="`"/>
-      <property name="endingDelimiter" value="`"/>
-    </plugin>
+        <plugin type="tk.mybatis.mapper.generator.MapperPlugin">
+            <property name="mappers" value="tk.mybatis.mapper.common.Mapper,tk.mybatis.mapper.hsqldb.HsqldbMapper"/>
+            <property name="caseSensitive" value="true"/>
+            <property name="forceAnnotation" value="true"/>
+            <property name="beginningDelimiter" value="`"/>
+            <property name="endingDelimiter" value="`"/>
+        </plugin>
 
-    <jdbcConnection driverClass="com.mysql.jdbc.Driver"
-                    connectionURL="jdbc:mysql://localhost:3306/test"
-                    userId="root"
-                    password="">
-    </jdbcConnection>
+        <!--通用代码生成器插件-->
+        <!--mapper接口-->
+        <plugin type="tk.mybatis.mapper.generator.TemplateFilePlugin">
+            <property name="targetProject" value="src/test/java"/>
+            <property name="targetPackage" value="test.mapper"/>
+            <property name="templatePath" value="generator/mapper.ftl"/>
+            <property name="mapperSuffix" value="Dao"/>
+            <property name="fileName" value="${tableClass.shortClassName}${mapperSuffix}.java"/>
+        </plugin>
+        <!--mapper.xml-->
+        <plugin type="tk.mybatis.mapper.generator.TemplateFilePlugin">
+            <property name="targetProject" value="src/test/resources"/>
+            <property name="targetPackage" value="mappers"/>
+            <property name="mapperPackage" value="test.mapper"/>
+            <property name="templatePath" value="generator/mapperXml.ftl"/>
+            <property name="mapperSuffix" value="Dao"/>
+            <property name="fileName" value="${tableClass.shortClassName}${mapperSuffix}.xml"/>
+        </plugin>
+        <!--测试输出单个文件，每个表都会生成一个对应的文件-->
+        <plugin type="tk.mybatis.mapper.generator.TemplateFilePlugin">
+            <property name="targetProject" value="src/test/resources"/>
+            <property name="targetPackage" value=""/>
+            <property name="templatePath" value="generator/test-one.ftl"/>
+            <property name="fileName" value="${tableClass.shortClassName}Test.txt"/>
+            <!--默认值是下面这个，可以不配置-->
+            <property name="templateFormatter"
+                      value="tk.mybatis.mapper.generator.formatter.FreemarkerTemplateFormatter"/>
+        </plugin>
+        <!--测试输出整个文件，所有表都可用，一次只生成一个文件，用于聚合所有表使用-->
+        <plugin type="tk.mybatis.mapper.generator.TemplateFilePlugin">
+            <property name="singleMode" value="false"/>
+            <property name="targetProject" value="src/test/resources"/>
+            <property name="targetPackage" value=""/>
+            <property name="templatePath" value="generator/test-all.ftl"/>
+            <property name="fileName" value="TestAll.txt"/>
+        </plugin>
 
-    <javaModelGenerator targetPackage="test.model" targetProject="./src/test/java"/>
+        <jdbcConnection driverClass="com.mysql.jdbc.Driver"
+                        connectionURL="jdbc:mysql://localhost:3306/test"
+                        userId="root"
+                        password="">
+        </jdbcConnection>
 
-    <sqlMapGenerator targetPackage="mappers" targetProject="./src/test/resources"/>
+        <!--MyBatis 生成器只需要生成 Model-->
+        <javaModelGenerator targetPackage="test.model" targetProject="./src/test/java"/>
 
-    <javaClientGenerator targetPackage="test.mapper" targetProject="./src/test/java" type="XMLMAPPER"/>
-
-    <table tableName="user%" mapperName="{0}Dao">
-      <generatedKey column="id" sqlStatement="JDBC"/>
-    </table>
-  </context>
+        <table tableName="user%">
+            <generatedKey column="id" sqlStatement="JDBC"/>
+        </table>
+    </context>
 </generatorConfiguration>
