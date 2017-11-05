@@ -25,19 +25,15 @@
 package tk.mybatis.mapper.generator;
 
 import org.mybatis.generator.api.IntrospectedTable;
-import org.mybatis.generator.api.PluginAdapter;
 import org.mybatis.generator.api.dom.java.FullyQualifiedJavaType;
 import org.mybatis.generator.api.dom.java.Interface;
-import org.mybatis.generator.api.dom.java.Method;
 import org.mybatis.generator.api.dom.java.TopLevelClass;
-import org.mybatis.generator.api.dom.xml.XmlElement;
 import org.mybatis.generator.config.CommentGeneratorConfiguration;
 import org.mybatis.generator.config.Context;
 import org.mybatis.generator.internal.util.StringUtility;
 import tk.mybatis.mapper.MapperException;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Properties;
 import java.util.Set;
 
@@ -46,13 +42,14 @@ import java.util.Set;
  *
  * @author liuzh
  */
-public class MapperPlugin extends PluginAdapter {
-    private Set<String> mappers            = new HashSet<String>();
-    private boolean     caseSensitive      = false;
+public class MapperPlugin extends FalseMethodPlugin {
+    private Set<String> mappers                   = new HashSet<String>();
+    private boolean     caseSensitive             = false;
+    private boolean     useMapperCommentGenerator = true;
     //开始的分隔符，例如mysql为`，sqlserver为[
-    private String      beginningDelimiter = "";
+    private String      beginningDelimiter        = "";
     //结束的分隔符，例如mysql为`，sqlserver为]
-    private String      endingDelimiter    = "";
+    private String      endingDelimiter           = "";
     //数据库模式
     private String                        schema;
     //注释生成器
@@ -70,11 +67,6 @@ public class MapperPlugin extends PluginAdapter {
         nameBuilder.append(name);
         nameBuilder.append(endingDelimiter);
         return nameBuilder.toString();
-    }
-
-    @Override
-    public boolean validate(List<String> warnings) {
-        return true;
     }
 
     /**
@@ -168,152 +160,13 @@ public class MapperPlugin extends PluginAdapter {
         return false;
     }
 
-    //下面所有return false的方法都不生成。这些都是基础的CRUD方法，使用通用Mapper实现
-    @Override
-    public boolean clientDeleteByPrimaryKeyMethodGenerated(Method method, TopLevelClass topLevelClass, IntrospectedTable introspectedTable) {
-        return false;
-    }
-
-    @Override
-    public boolean clientInsertMethodGenerated(Method method, TopLevelClass topLevelClass, IntrospectedTable introspectedTable) {
-        return false;
-    }
-
-    @Override
-    public boolean clientInsertSelectiveMethodGenerated(Method method, TopLevelClass topLevelClass, IntrospectedTable introspectedTable) {
-        return false;
-    }
-
-    @Override
-    public boolean clientSelectByPrimaryKeyMethodGenerated(Method method, TopLevelClass topLevelClass, IntrospectedTable introspectedTable) {
-        return false;
-    }
-
-    @Override
-    public boolean clientUpdateByPrimaryKeySelectiveMethodGenerated(Method method, TopLevelClass topLevelClass, IntrospectedTable introspectedTable) {
-        return false;
-    }
-
-    @Override
-    public boolean clientUpdateByPrimaryKeyWithBLOBsMethodGenerated(Method method, TopLevelClass topLevelClass, IntrospectedTable introspectedTable) {
-        return false;
-    }
-
-    @Override
-    public boolean clientUpdateByPrimaryKeyWithoutBLOBsMethodGenerated(Method method, TopLevelClass topLevelClass, IntrospectedTable introspectedTable) {
-        return false;
-    }
-
-    @Override
-    public boolean clientDeleteByPrimaryKeyMethodGenerated(Method method, Interface interfaze, IntrospectedTable introspectedTable) {
-        return false;
-    }
-
-    @Override
-    public boolean clientInsertMethodGenerated(Method method, Interface interfaze, IntrospectedTable introspectedTable) {
-        return false;
-    }
-
-    @Override
-    public boolean clientInsertSelectiveMethodGenerated(Method method, Interface interfaze, IntrospectedTable introspectedTable) {
-        return false;
-    }
-
-    @Override
-    public boolean clientSelectAllMethodGenerated(Method method, Interface interfaze, IntrospectedTable introspectedTable) {
-        return false;
-    }
-
-    @Override
-    public boolean clientSelectAllMethodGenerated(Method method, TopLevelClass topLevelClass, IntrospectedTable introspectedTable) {
-        return false;
-    }
-
-    @Override
-    public boolean clientSelectByPrimaryKeyMethodGenerated(Method method, Interface interfaze, IntrospectedTable introspectedTable) {
-        return false;
-    }
-
-    @Override
-    public boolean clientUpdateByPrimaryKeySelectiveMethodGenerated(Method method, Interface interfaze, IntrospectedTable introspectedTable) {
-        return false;
-    }
-
-    @Override
-    public boolean clientUpdateByPrimaryKeyWithBLOBsMethodGenerated(Method method, Interface interfaze, IntrospectedTable introspectedTable) {
-        return false;
-    }
-
-    @Override
-    public boolean clientUpdateByPrimaryKeyWithoutBLOBsMethodGenerated(Method method, Interface interfaze, IntrospectedTable introspectedTable) {
-        return false;
-    }
-
-    @Override
-    public boolean sqlMapDeleteByPrimaryKeyElementGenerated(XmlElement element, IntrospectedTable introspectedTable) {
-        return false;
-    }
-
-    @Override
-    public boolean sqlMapInsertElementGenerated(XmlElement element, IntrospectedTable introspectedTable) {
-        return false;
-    }
-
-    @Override
-    public boolean sqlMapInsertSelectiveElementGenerated(XmlElement element, IntrospectedTable introspectedTable) {
-        return false;
-    }
-
-    @Override
-    public boolean sqlMapSelectAllElementGenerated(XmlElement element, IntrospectedTable introspectedTable) {
-        return false;
-    }
-
-    @Override
-    public boolean sqlMapSelectByPrimaryKeyElementGenerated(XmlElement element, IntrospectedTable introspectedTable) {
-        return false;
-    }
-
-    @Override
-    public boolean sqlMapUpdateByPrimaryKeySelectiveElementGenerated(XmlElement element, IntrospectedTable introspectedTable) {
-        return false;
-    }
-
-    @Override
-    public boolean sqlMapUpdateByPrimaryKeyWithBLOBsElementGenerated(XmlElement element, IntrospectedTable introspectedTable) {
-        return false;
-    }
-
-    @Override
-    public boolean sqlMapUpdateByPrimaryKeyWithoutBLOBsElementGenerated(XmlElement element, IntrospectedTable introspectedTable) {
-        return false;
-    }
-
-    @Override
-    public boolean providerGenerated(TopLevelClass topLevelClass, IntrospectedTable introspectedTable) {
-        return false;
-    }
-
-    @Override
-    public boolean providerApplyWhereMethodGenerated(Method method, TopLevelClass topLevelClass, IntrospectedTable introspectedTable) {
-        return false;
-    }
-
-    @Override
-    public boolean providerInsertSelectiveMethodGenerated(Method method, TopLevelClass topLevelClass, IntrospectedTable introspectedTable) {
-        return false;
-    }
-
-    @Override
-    public boolean providerUpdateByPrimaryKeySelectiveMethodGenerated(Method method, TopLevelClass topLevelClass, IntrospectedTable introspectedTable) {
-        return false;
-    }
 
     @Override
     public void setContext(Context context) {
         super.setContext(context);
         //设置默认的注释生成器
-        if (!"FALSE".equalsIgnoreCase(context.getProperty("useMapperCommentGenerator"))) {
+        useMapperCommentGenerator = !"FALSE".equalsIgnoreCase(context.getProperty("useMapperCommentGenerator"));
+        if (useMapperCommentGenerator) {
             commentCfg = new CommentGeneratorConfiguration();
             commentCfg.setConfigurationType(MapperCommentGenerator.class.getCanonicalName());
             context.setCommentGeneratorConfiguration(commentCfg);
@@ -339,22 +192,26 @@ public class MapperPlugin extends PluginAdapter {
         }
         String forceAnnotation = this.properties.getProperty("forceAnnotation");
         if (StringUtility.stringHasValue(forceAnnotation)) {
-            commentCfg.addProperty("forceAnnotation", forceAnnotation);
+            if (useMapperCommentGenerator) {
+                commentCfg.addProperty("forceAnnotation", forceAnnotation);
+            }
             this.forceAnnotation = forceAnnotation.equalsIgnoreCase("TRUE");
         }
         String beginningDelimiter = this.properties.getProperty("beginningDelimiter");
         if (StringUtility.stringHasValue(beginningDelimiter)) {
             this.beginningDelimiter = beginningDelimiter;
         }
-        commentCfg.addProperty("beginningDelimiter", this.beginningDelimiter);
         String endingDelimiter = this.properties.getProperty("endingDelimiter");
         if (StringUtility.stringHasValue(endingDelimiter)) {
             this.endingDelimiter = endingDelimiter;
         }
-        commentCfg.addProperty("endingDelimiter", this.endingDelimiter);
         String schema = this.properties.getProperty("schema");
         if (StringUtility.stringHasValue(schema)) {
             this.schema = schema;
+        }
+        if (useMapperCommentGenerator) {
+            commentCfg.addProperty("beginningDelimiter", this.beginningDelimiter);
+            commentCfg.addProperty("endingDelimiter", this.endingDelimiter);
         }
     }
 }
