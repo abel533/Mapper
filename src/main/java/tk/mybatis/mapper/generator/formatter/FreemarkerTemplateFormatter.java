@@ -33,7 +33,6 @@ import tk.mybatis.mapper.generator.model.TableClass;
 
 import java.io.StringWriter;
 import java.io.Writer;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -45,7 +44,6 @@ import java.util.*;
 public class FreemarkerTemplateFormatter implements TemplateFormatter, ListTemplateFormatter {
     private final Configuration        configuration  = new Configuration(Configuration.VERSION_2_3_23);
     private final StringTemplateLoader templateLoader = new StringTemplateLoader();
-    private final SimpleDateFormat     dateFormat     = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     public FreemarkerTemplateFormatter() {
         configuration.setLocale(Locale.CHINA);
@@ -82,8 +80,6 @@ public class FreemarkerTemplateFormatter implements TemplateFormatter, ListTempl
         params.put("props", properties);
         params.put("package", targetPackage);
         params.put("tableClass", tableClass);
-        params.put("date", new Date());
-        params.put("datetime", dateFormat.format(new Date()));
         return process(properties.getProperty("templatePath"), templateContent, params);
     }
 
@@ -96,8 +92,6 @@ public class FreemarkerTemplateFormatter implements TemplateFormatter, ListTempl
         params.put("props", properties);
         params.put("package", targetPackage);
         params.put("tableClassSet", tableClassSet);
-        params.put("date", new Date());
-        params.put("datetime", dateFormat.format(new Date()));
         return process(properties.getProperty("templatePath"), templateContent, params);
     }
 }

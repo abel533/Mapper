@@ -65,6 +65,10 @@ import java.util.*;
  */
 public class TemplateFilePlugin extends PluginAdapter {
     /**
+     * 默认的模板格式化类
+     */
+    public static final String DEFAULT_TEMPLATEFORMATTER = "tk.mybatis.mapper.generator.formatter.FreemarkerTemplateFormatter";
+    /**
      * 单个文件模式
      */
     private String          singleMode;
@@ -160,15 +164,14 @@ public class TemplateFilePlugin extends PluginAdapter {
             }
         }
         if (!StringUtility.stringHasValue(templateFormatterClass)) {
-            warnings.add("没有配置 \"templateFormatterClass\" 模板处理器，因此不会生成任何额外代码!");
+            templateFormatterClass = DEFAULT_TEMPLATEFORMATTER;
+            warnings.add("没有配置 \"templateFormatterClass\" 模板处理器，使用默认的处理器!");
+        }
+        try {
+            templateFormatter = Class.forName(templateFormatterClass).newInstance();
+        } catch (Exception e) {
+            warnings.add("初始化 templateFormatter 出错:" + e.getMessage());
             right = false;
-        } else {
-            try {
-                templateFormatter = Class.forName(templateFormatterClass).newInstance();
-            } catch (Exception e) {
-                warnings.add("初始化 templateFormatter 出错:" + e.getMessage());
-                right = false;
-            }
         }
         if (!right) {
             return false;
