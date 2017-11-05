@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2014-2016 abel533@gmail.com
+ * Copyright (c) 2014-2017 abel533@gmail.com
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -35,19 +35,19 @@ public class UserLogin2 extends UserLogin2Key {
     private Date logindate;
     private String loginip;
 
-    public String getLoginip() {
-        return loginip;
-    }
-
-    public void setLoginip(String loginip) {
-        this.loginip = loginip;
-    }
-
     public Date getLogindate() {
         return logindate;
     }
 
     public void setLogindate(Date logindate) {
         this.logindate = logindate;
+    }
+
+    public String getLoginip() {
+        return loginip;
+    }
+
+    public void setLoginip(String loginip) {
+        this.loginip = loginip;
     }
 }

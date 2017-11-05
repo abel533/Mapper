@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2014-2016 abel533@gmail.com
+ * Copyright (c) 2014-2017 abel533@gmail.com
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -42,20 +42,22 @@ public class UserLogin {
     private Date logindate;
     private String loginip;
 
+    @Override
+    public String toString() {
+        return "UserLogin{" +
+                "logid=" + logid +
+                ", username='" + username + '\'' +
+                ", logindate=" + logindate +
+                ", loginip='" + loginip + '\'' +
+                '}';
+    }
+
     public Integer getLogid() {
         return logid;
     }
 
     public void setLogid(Integer logid) {
         this.logid = logid;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
     }
 
     public Date getLogindate() {
@@ -74,13 +76,11 @@ public class UserLogin {
         this.loginip = loginip;
     }
 
-    @Override
-    public String toString() {
-        return "UserLogin{" +
-                "logid=" + logid +
-                ", username='" + username + '\'' +
-                ", logindate=" + logindate +
-                ", loginip='" + loginip + '\'' +
-                '}';
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 }

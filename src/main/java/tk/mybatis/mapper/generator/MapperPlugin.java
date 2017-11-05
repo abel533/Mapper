@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2014-2016 abel533@gmail.com
+ * Copyright (c) 2014-2017 abel533@gmail.com
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -47,18 +47,18 @@ import java.util.Set;
  * @author liuzh
  */
 public class MapperPlugin extends PluginAdapter {
-    private Set<String> mappers = new HashSet<String>();
-    private boolean caseSensitive = false;
+    private Set<String> mappers            = new HashSet<String>();
+    private boolean     caseSensitive      = false;
     //开始的分隔符，例如mysql为`，sqlserver为[
-    private String beginningDelimiter = "";
+    private String      beginningDelimiter = "";
     //结束的分隔符，例如mysql为`，sqlserver为]
-    private String endingDelimiter = "";
+    private String      endingDelimiter    = "";
     //数据库模式
-    private String schema;
+    private String                        schema;
     //注释生成器
     private CommentGeneratorConfiguration commentCfg;
     //强制生成注解
-    private boolean forceAnnotation;
+    private boolean                       forceAnnotation;
 
     public String getDelimiterName(String name) {
         StringBuilder nameBuilder = new StringBuilder();
@@ -124,7 +124,7 @@ public class MapperPlugin extends PluginAdapter {
                 || StringUtility.stringHasValue(beginningDelimiter)
                 || StringUtility.stringHasValue(endingDelimiter)) {
             topLevelClass.addAnnotation("@Table(name = \"" + getDelimiterName(tableName) + "\")");
-        } else if(forceAnnotation){
+        } else if (forceAnnotation) {
             topLevelClass.addAnnotation("@Table(name = \"" + getDelimiterName(tableName) + "\")");
         }
     }

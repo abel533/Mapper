@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2014-2016 abel533@gmail.com
+ * Copyright (c) 2014-2017 abel533@gmail.com
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -36,26 +36,6 @@ public class CountryExample {
 
     public CountryExample() {
         oredCriteria = new ArrayList<Criteria>();
-    }
-
-    public String getOrderByClause() {
-        return orderByClause;
-    }
-
-    public void setOrderByClause(String orderByClause) {
-        this.orderByClause = orderByClause;
-    }
-
-    public boolean isDistinct() {
-        return distinct;
-    }
-
-    public void setDistinct(boolean distinct) {
-        this.distinct = distinct;
-    }
-
-    public List<Criteria> getOredCriteria() {
-        return oredCriteria;
     }
 
     public void or(Criteria criteria) {
@@ -93,18 +73,6 @@ public class CountryExample {
         protected GeneratedCriteria() {
             super();
             criteria = new ArrayList<Criterion>();
-        }
-
-        public boolean isValid() {
-            return criteria.size() > 0;
-        }
-
-        public List<Criterion> getAllCriteria() {
-            return criteria;
-        }
-
-        public List<Criterion> getCriteria() {
-            return criteria;
         }
 
         protected void addCriterion(String condition) {
@@ -327,6 +295,18 @@ public class CountryExample {
             addCriterion("countrycode not between", value1, value2, "countrycode");
             return (Criteria) this;
         }
+
+        public List<Criterion> getAllCriteria() {
+            return criteria;
+        }
+
+        public List<Criterion> getCriteria() {
+            return criteria;
+        }
+
+        public boolean isValid() {
+            return criteria.size() > 0;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {
@@ -393,20 +373,16 @@ public class CountryExample {
             return condition;
         }
 
-        public Object getValue() {
-            return value;
-        }
-
         public Object getSecondValue() {
             return secondValue;
         }
 
-        public boolean isNoValue() {
-            return noValue;
+        public String getTypeHandler() {
+            return typeHandler;
         }
 
-        public boolean isSingleValue() {
-            return singleValue;
+        public Object getValue() {
+            return value;
         }
 
         public boolean isBetweenValue() {
@@ -417,8 +393,32 @@ public class CountryExample {
             return listValue;
         }
 
-        public String getTypeHandler() {
-            return typeHandler;
+        public boolean isNoValue() {
+            return noValue;
         }
+
+        public boolean isSingleValue() {
+            return singleValue;
+        }
+    }
+
+    public String getOrderByClause() {
+        return orderByClause;
+    }
+
+    public void setOrderByClause(String orderByClause) {
+        this.orderByClause = orderByClause;
+    }
+
+    public List<Criteria> getOredCriteria() {
+        return oredCriteria;
+    }
+
+    public boolean isDistinct() {
+        return distinct;
+    }
+
+    public void setDistinct(boolean distinct) {
+        this.distinct = distinct;
     }
 }

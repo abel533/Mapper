@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2014-2016 abel533@gmail.com
+ * Copyright (c) 2014-2017 abel533@gmail.com
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -37,30 +37,6 @@ import java.util.Properties;
 public class MapperScannerConfigurer extends org.mybatis.spring.mapper.MapperScannerConfigurer {
     private MapperHelper mapperHelper = new MapperHelper();
 
-    public void setMarkerInterface(Class<?> superClass) {
-        super.setMarkerInterface(superClass);
-        if (Marker.class.isAssignableFrom(superClass)) {
-            mapperHelper.registerMapper(superClass);
-        }
-    }
-
-    public MapperHelper getMapperHelper() {
-        return mapperHelper;
-    }
-
-    public void setMapperHelper(MapperHelper mapperHelper) {
-        this.mapperHelper = mapperHelper;
-    }
-
-    /**
-     * 属性注入
-     *
-     * @param properties
-     */
-    public void setProperties(Properties properties) {
-        mapperHelper.setProperties(properties);
-    }
-
     /**
      * 注册完成后，对MapperFactoryBean的类进行特殊处理
      *
@@ -84,5 +60,29 @@ public class MapperScannerConfigurer extends org.mybatis.spring.mapper.MapperSca
                 }
             }
         }
+    }
+
+    public MapperHelper getMapperHelper() {
+        return mapperHelper;
+    }
+
+    public void setMapperHelper(MapperHelper mapperHelper) {
+        this.mapperHelper = mapperHelper;
+    }
+
+    public void setMarkerInterface(Class<?> superClass) {
+        super.setMarkerInterface(superClass);
+        if (Marker.class.isAssignableFrom(superClass)) {
+            mapperHelper.registerMapper(superClass);
+        }
+    }
+
+    /**
+     * 属性注入
+     *
+     * @param properties
+     */
+    public void setProperties(Properties properties) {
+        mapperHelper.setProperties(properties);
     }
 }

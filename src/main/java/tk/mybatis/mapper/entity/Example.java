@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2014-2016 abel533@gmail.com
+ * Copyright (c) 2014-2017 abel533@gmail.com
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -106,28 +106,100 @@ public class Example implements IDynamicTableName {
         this.ORDERBY = new OrderBy(this, propertyMap);
     }
 
-    public Class<?> getEntityClass() {
-        return entityClass;
-    }
-
-    public String getOrderByClause() {
-        return orderByClause;
-    }
-
-    public void setOrderByClause(String orderByClause) {
-        this.orderByClause = orderByClause;
-    }
-
     public OrderBy orderBy(String property) {
         this.ORDERBY.orderBy(property);
         return this.ORDERBY;
     }
 
+    /**
+     * 排除查询字段，优先级低于 selectProperties
+     *
+     * @param properties 属性名的可变参数
+     * @return
+     */
+    public Example excludeProperties(String... properties) {
+        if (properties != null && properties.length > 0) {
+            if (this.excludeColumns == null) {
+                this.excludeColumns = new LinkedHashSet<String>();
+            }
+            for (String property : properties) {
+                if (propertyMap.containsKey(property)) {
+                    this.excludeColumns.add(propertyMap.get(property).getColumn());
+                }
+            }
+        }
+        return this;
+    }
+
+    /**
+     * 指定要查询的属性列 - 这里会自动映射到表字段
+     *
+     * @param properties
+     * @return
+     */
+    public Example selectProperties(String... properties) {
+        if (properties != null && properties.length > 0) {
+            if (this.selectColumns == null) {
+                this.selectColumns = new LinkedHashSet<String>();
+            }
+            for (String property : properties) {
+                if (propertyMap.containsKey(property)) {
+                    this.selectColumns.add(propertyMap.get(property).getColumn());
+                }
+            }
+        }
+        return this;
+    }
+
+    public void or(Criteria criteria) {
+        criteria.setAndOr("or");
+        oredCriteria.add(criteria);
+    }
+
+    public Criteria or() {
+        Criteria criteria = createCriteriaInternal();
+        criteria.setAndOr("or");
+        oredCriteria.add(criteria);
+        return criteria;
+    }
+
+    public void and(Criteria criteria) {
+        criteria.setAndOr("and");
+        oredCriteria.add(criteria);
+    }
+
+    public Criteria and() {
+        Criteria criteria = createCriteriaInternal();
+        criteria.setAndOr("and");
+        oredCriteria.add(criteria);
+        return criteria;
+    }
+
+    public Criteria createCriteria() {
+        Criteria criteria = createCriteriaInternal();
+        if (oredCriteria.size() == 0) {
+            criteria.setAndOr("and");
+            oredCriteria.add(criteria);
+        }
+        return criteria;
+    }
+
+    protected Criteria createCriteriaInternal() {
+        Criteria criteria = new Criteria(propertyMap, exists, notNull);
+        return criteria;
+    }
+
+    public void clear() {
+        oredCriteria.clear();
+        orderByClause = null;
+        distinct = false;
+    }
+
     public static class OrderBy {
-        private Example example;
-        private Boolean isProperty;
         //属性和列对应
         protected Map<String, EntityColumn> propertyMap;
+        private   Example                   example;
+        private   Boolean                   isProperty;
 
         public OrderBy(Example example, Map<String, EntityColumn> propertyMap) {
             this.example = example;
@@ -177,154 +249,6 @@ public class Example implements IDynamicTableName {
         }
     }
 
-    public Set<String> getSelectColumns() {
-        if (selectColumns != null && selectColumns.size() > 0) {
-            //不需要处理
-        } else if (excludeColumns != null && excludeColumns.size() > 0) {
-            Collection<EntityColumn> entityColumns = propertyMap.values();
-            selectColumns = new LinkedHashSet<String>(entityColumns.size() - excludeColumns.size());
-            for (EntityColumn column : entityColumns) {
-                if (!excludeColumns.contains(column.getColumn())) {
-                    selectColumns.add(column.getColumn());
-                }
-            }
-        }
-        return selectColumns;
-    }
-
-    /**
-     * 排除查询字段，优先级低于 selectProperties
-     *
-     * @param properties 属性名的可变参数
-     * @return
-     */
-    public Example excludeProperties(String... properties) {
-        if (properties != null && properties.length > 0) {
-            if (this.excludeColumns == null) {
-                this.excludeColumns = new LinkedHashSet<String>();
-            }
-            for (String property : properties) {
-                if (propertyMap.containsKey(property)) {
-                    this.excludeColumns.add(propertyMap.get(property).getColumn());
-                }
-            }
-        }
-        return this;
-    }
-
-    /**
-     * 指定要查询的属性列 - 这里会自动映射到表字段
-     *
-     * @param properties
-     * @return
-     */
-    public Example selectProperties(String... properties) {
-        if (properties != null && properties.length > 0) {
-            if (this.selectColumns == null) {
-                this.selectColumns = new LinkedHashSet<String>();
-            }
-            for (String property : properties) {
-                if (propertyMap.containsKey(property)) {
-                    this.selectColumns.add(propertyMap.get(property).getColumn());
-                }
-            }
-        }
-        return this;
-    }
-
-    public String getCountColumn() {
-        return countColumn;
-    }
-
-    /**
-     * 指定 count(property) 查询属性
-     *
-     * @param property
-     */
-    public void setCountProperty(String property) {
-        if (propertyMap.containsKey(property)) {
-            this.countColumn = propertyMap.get(property).getColumn();
-        }
-    }
-
-    public boolean isDistinct() {
-        return distinct;
-    }
-
-    public void setDistinct(boolean distinct) {
-        this.distinct = distinct;
-    }
-
-    public boolean isForUpdate() {
-        return forUpdate;
-    }
-
-    public void setForUpdate(boolean forUpdate) {
-        this.forUpdate = forUpdate;
-    }
-
-    public List<Criteria> getOredCriteria() {
-        return oredCriteria;
-    }
-
-    public void or(Criteria criteria) {
-        criteria.setAndOr("or");
-        oredCriteria.add(criteria);
-    }
-
-    public Criteria or() {
-        Criteria criteria = createCriteriaInternal();
-        criteria.setAndOr("or");
-        oredCriteria.add(criteria);
-        return criteria;
-    }
-
-    public void and(Criteria criteria) {
-        criteria.setAndOr("and");
-        oredCriteria.add(criteria);
-    }
-
-    public Criteria and() {
-        Criteria criteria = createCriteriaInternal();
-        criteria.setAndOr("and");
-        oredCriteria.add(criteria);
-        return criteria;
-    }
-
-    public Criteria createCriteria() {
-        Criteria criteria = createCriteriaInternal();
-        if (oredCriteria.size() == 0) {
-            criteria.setAndOr("and");
-            oredCriteria.add(criteria);
-        }
-        return criteria;
-    }
-
-    protected Criteria createCriteriaInternal() {
-        Criteria criteria = new Criteria(propertyMap, exists, notNull);
-        return criteria;
-    }
-
-    public void clear() {
-        oredCriteria.clear();
-        orderByClause = null;
-        distinct = false;
-    }
-
-    /**
-     * 设置表名
-     *
-     * @param tableName
-     */
-    public void setTableName(String tableName) {
-        this.tableName = tableName;
-    }
-
-    @Override
-    public String getDynamicTableName() {
-        return tableName;
-    }
-
     protected abstract static class GeneratedCriteria {
         protected List<Criterion> criteria;
         //字段是否必须存在
@@ -362,26 +286,6 @@ public class Example implements IDynamicTableName {
             } else {
                 return null;
             }
-        }
-
-        public String getAndOr() {
-            return andOr;
-        }
-
-        public void setAndOr(String andOr) {
-            this.andOr = andOr;
-        }
-
-        public boolean isValid() {
-            return criteria.size() > 0;
-        }
-
-        public List<Criterion> getAllCriteria() {
-            return criteria;
-        }
-
-        public List<Criterion> getCriteria() {
-            return criteria;
         }
 
         protected void addCriterion(String condition) {
@@ -767,6 +671,26 @@ public class Example implements IDynamicTableName {
             }
             return (Criteria) this;
         }
+
+        public List<Criterion> getAllCriteria() {
+            return criteria;
+        }
+
+        public String getAndOr() {
+            return andOr;
+        }
+
+        public void setAndOr(String andOr) {
+            this.andOr = andOr;
+        }
+
+        public List<Criterion> getCriteria() {
+            return criteria;
+        }
+
+        public boolean isValid() {
+            return criteria.size() > 0;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {
@@ -854,18 +778,6 @@ public class Example implements IDynamicTableName {
             this(condition, value, secondValue, null, isOr);
         }
 
-        public String getCondition() {
-            return condition;
-        }
-
-        public Object getValue() {
-            return value;
-        }
-
-        public Object getSecondValue() {
-            return secondValue;
-        }
-
         public String getAndOr() {
             return andOr;
         }
@@ -874,12 +786,20 @@ public class Example implements IDynamicTableName {
             this.andOr = andOr;
         }
 
-        public boolean isNoValue() {
-            return noValue;
+        public String getCondition() {
+            return condition;
         }
 
-        public boolean isSingleValue() {
-            return singleValue;
+        public Object getSecondValue() {
+            return secondValue;
+        }
+
+        public String getTypeHandler() {
+            return typeHandler;
+        }
+
+        public Object getValue() {
+            return value;
         }
 
         public boolean isBetweenValue() {
@@ -890,8 +810,88 @@ public class Example implements IDynamicTableName {
             return listValue;
         }
 
-        public String getTypeHandler() {
-            return typeHandler;
+        public boolean isNoValue() {
+            return noValue;
         }
+
+        public boolean isSingleValue() {
+            return singleValue;
+        }
+    }
+
+    public String getCountColumn() {
+        return countColumn;
+    }
+
+    @Override
+    public String getDynamicTableName() {
+        return tableName;
+    }
+
+    public Class<?> getEntityClass() {
+        return entityClass;
+    }
+
+    public String getOrderByClause() {
+        return orderByClause;
+    }
+
+    public void setOrderByClause(String orderByClause) {
+        this.orderByClause = orderByClause;
+    }
+
+    public List<Criteria> getOredCriteria() {
+        return oredCriteria;
+    }
+
+    public Set<String> getSelectColumns() {
+        if (selectColumns != null && selectColumns.size() > 0) {
+            //不需要处理
+        } else if (excludeColumns != null && excludeColumns.size() > 0) {
+            Collection<EntityColumn> entityColumns = propertyMap.values();
+            selectColumns = new LinkedHashSet<String>(entityColumns.size() - excludeColumns.size());
+            for (EntityColumn column : entityColumns) {
+                if (!excludeColumns.contains(column.getColumn())) {
+                    selectColumns.add(column.getColumn());
+                }
+            }
+        }
+        return selectColumns;
+    }
+
+    public boolean isDistinct() {
+        return distinct;
+    }
+
+    public void setDistinct(boolean distinct) {
+        this.distinct = distinct;
+    }
+
+    public boolean isForUpdate() {
+        return forUpdate;
+    }
+
+    public void setForUpdate(boolean forUpdate) {
+        this.forUpdate = forUpdate;
+    }
+
+    /**
+     * 指定 count(property) 查询属性
+     *
+     * @param property
+     */
+    public void setCountProperty(String property) {
+        if (propertyMap.containsKey(property)) {
+            this.countColumn = propertyMap.get(property).getColumn();
+        }
+    }
+
+    /**
+     * 设置表名
+     *
+     * @param tableName
+     */
+    public void setTableName(String tableName) {
+        this.tableName = tableName;
     }
 }

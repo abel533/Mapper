@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2014-2016 abel533@gmail.com
+ * Copyright (c) 2014-2017 abel533@gmail.com
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -41,24 +41,13 @@ import java.util.List;
  */
 public class Country extends Entity<Integer, String> implements Serializable, IDynamicTableName {
     private static final long serialVersionUID = -1626761012846137805L;
-
+    List<Country> list;
     @Column
     @ColumnType(jdbcType = JdbcType.VARCHAR, typeHandler = StringType2Handler.class)
     private String countryname;
     private String countrycode;
-
-    List<Country> list;
-
     @Transient
     private String dynamicTableName123;
-
-    public String getCountryname() {
-        return countryname;
-    }
-
-    public void setCountryname(String countryname) {
-        this.countryname = countryname;
-    }
 
     public String getCountrycode() {
         return countrycode;
@@ -68,18 +57,26 @@ public class Country extends Entity<Integer, String> implements Serializable, ID
         this.countrycode = countrycode;
     }
 
-    public List<Country> getList() {
-        return list;
+    public String getCountryname() {
+        return countryname;
     }
 
-    public void setList(List<Country> list) {
-        this.list = list;
+    public void setCountryname(String countryname) {
+        this.countryname = countryname;
     }
 
     @Override
     @Transient
     public String getDynamicTableName() {
         return dynamicTableName123;
+    }
+
+    public List<Country> getList() {
+        return list;
+    }
+
+    public void setList(List<Country> list) {
+        this.list = list;
     }
 
     public void setDynamicTableName123(String dynamicTableName) {

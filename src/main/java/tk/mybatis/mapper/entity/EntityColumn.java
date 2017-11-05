@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2014-2016 abel533@gmail.com
+ * Copyright (c) 2014-2017 abel533@gmail.com
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -59,127 +59,6 @@ public class EntityColumn {
         this.table = table;
     }
 
-    public EntityTable getTable() {
-        return table;
-    }
-
-    public void setTable(EntityTable table) {
-        this.table = table;
-    }
-
-    public String getProperty() {
-        return property;
-    }
-
-    public void setProperty(String property) {
-        this.property = property;
-    }
-
-    public String getColumn() {
-        return column;
-    }
-
-    public void setColumn(String column) {
-        this.column = column;
-    }
-
-    public Class<?> getJavaType() {
-        return javaType;
-    }
-
-    public void setJavaType(Class<?> javaType) {
-        this.javaType = javaType;
-    }
-
-    public JdbcType getJdbcType() {
-        return jdbcType;
-    }
-
-    public void setJdbcType(JdbcType jdbcType) {
-        this.jdbcType = jdbcType;
-    }
-
-    public Class<? extends TypeHandler<?>> getTypeHandler() {
-        return typeHandler;
-    }
-
-    public void setTypeHandler(Class<? extends TypeHandler<?>> typeHandler) {
-        this.typeHandler = typeHandler;
-    }
-
-    public String getSequenceName() {
-        return sequenceName;
-    }
-
-    public void setSequenceName(String sequenceName) {
-        this.sequenceName = sequenceName;
-    }
-
-    public boolean isId() {
-        return id;
-    }
-
-    public void setId(boolean id) {
-        this.id = id;
-    }
-
-    public boolean isUuid() {
-        return uuid;
-    }
-
-    public void setUuid(boolean uuid) {
-        this.uuid = uuid;
-    }
-
-    public boolean isIdentity() {
-        return identity;
-    }
-
-    public void setIdentity(boolean identity) {
-        this.identity = identity;
-    }
-
-    public String getGenerator() {
-        return generator;
-    }
-
-    public void setGenerator(String generator) {
-        this.generator = generator;
-    }
-
-    public String getOrderBy() {
-        return orderBy;
-    }
-
-    public void setOrderBy(String orderBy) {
-        this.orderBy = orderBy;
-    }
-
-    public boolean isInsertable() {
-        return insertable;
-    }
-
-    public void setInsertable(boolean insertable) {
-        this.insertable = insertable;
-    }
-
-    public boolean isUpdatable() {
-        return updatable;
-    }
-
-    public void setUpdatable(boolean updatable) {
-        this.updatable = updatable;
-    }
-
-    /**
-     * 返回格式如:colum = #{age,jdbcType=NUMERIC,typeHandler=MyTypeHandler}
-     *
-     * @return
-     */
-    public String getColumnEqualsHolder() {
-        return getColumnEqualsHolder(null);
-    }
-
     /**
      * 返回格式如:colum = #{age,jdbcType=NUMERIC,typeHandler=MyTypeHandler}
      *
@@ -188,15 +67,6 @@ public class EntityColumn {
      */
     public String getColumnEqualsHolder(String entityName) {
         return this.column + " = " + getColumnHolder(entityName);
-    }
-
-    /**
-     * 返回格式如:#{age,jdbcType=NUMERIC,typeHandler=MyTypeHandler}
-     *
-     * @return
-     */
-    public String getColumnHolder() {
-        return getColumnHolder(null);
     }
 
     /**
@@ -303,5 +173,135 @@ public class EntityColumn {
         result = 31 * result + (generator != null ? generator.hashCode() : 0);
         result = 31 * result + (orderBy != null ? orderBy.hashCode() : 0);
         return result;
+    }
+
+    public String getColumn() {
+        return column;
+    }
+
+    public void setColumn(String column) {
+        this.column = column;
+    }
+
+    /**
+     * 返回格式如:colum = #{age,jdbcType=NUMERIC,typeHandler=MyTypeHandler}
+     *
+     * @return
+     */
+    public String getColumnEqualsHolder() {
+        return getColumnEqualsHolder(null);
+    }
+
+    /**
+     * 返回格式如:#{age,jdbcType=NUMERIC,typeHandler=MyTypeHandler}
+     *
+     * @return
+     */
+    public String getColumnHolder() {
+        return getColumnHolder(null);
+    }
+
+    public String getGenerator() {
+        return generator;
+    }
+
+    public void setGenerator(String generator) {
+        this.generator = generator;
+    }
+
+    public Class<?> getJavaType() {
+        return javaType;
+    }
+
+    public void setJavaType(Class<?> javaType) {
+        this.javaType = javaType;
+    }
+
+    public JdbcType getJdbcType() {
+        return jdbcType;
+    }
+
+    public void setJdbcType(JdbcType jdbcType) {
+        this.jdbcType = jdbcType;
+    }
+
+    public String getOrderBy() {
+        return orderBy;
+    }
+
+    public void setOrderBy(String orderBy) {
+        this.orderBy = orderBy;
+    }
+
+    public String getProperty() {
+        return property;
+    }
+
+    public void setProperty(String property) {
+        this.property = property;
+    }
+
+    public String getSequenceName() {
+        return sequenceName;
+    }
+
+    public void setSequenceName(String sequenceName) {
+        this.sequenceName = sequenceName;
+    }
+
+    public EntityTable getTable() {
+        return table;
+    }
+
+    public void setTable(EntityTable table) {
+        this.table = table;
+    }
+
+    public Class<? extends TypeHandler<?>> getTypeHandler() {
+        return typeHandler;
+    }
+
+    public void setTypeHandler(Class<? extends TypeHandler<?>> typeHandler) {
+        this.typeHandler = typeHandler;
+    }
+
+    public boolean isId() {
+        return id;
+    }
+
+    public void setId(boolean id) {
+        this.id = id;
+    }
+
+    public boolean isIdentity() {
+        return identity;
+    }
+
+    public void setIdentity(boolean identity) {
+        this.identity = identity;
+    }
+
+    public boolean isInsertable() {
+        return insertable;
+    }
+
+    public void setInsertable(boolean insertable) {
+        this.insertable = insertable;
+    }
+
+    public boolean isUpdatable() {
+        return updatable;
+    }
+
+    public void setUpdatable(boolean updatable) {
+        this.updatable = updatable;
+    }
+
+    public boolean isUuid() {
+        return uuid;
+    }
+
+    public void setUuid(boolean uuid) {
+        this.uuid = uuid;
     }
 }

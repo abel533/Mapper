@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2014-2016 abel533@gmail.com
+ * Copyright (c) 2014-2017 abel533@gmail.com
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -30,12 +30,10 @@ import org.apache.ibatis.mapping.ResultMapping;
 import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.type.TypeException;
 import org.apache.ibatis.type.TypeHandler;
-
 import tk.mybatis.mapper.MapperException;
 import tk.mybatis.mapper.util.StringUtil;
 
 import javax.persistence.Table;
-
 import java.lang.reflect.Constructor;
 import java.util.*;
 import java.util.regex.Matcher;
@@ -48,7 +46,8 @@ import java.util.regex.Pattern;
  */
 public class EntityTable {
     public static final Pattern DELIMITER = Pattern.compile("^[`\\[\"]?(.*?)[`\\]\"]?$");
-
+    //属性和列对应
+    protected Map<String, EntityColumn> propertyMap;
     private String name;
     private String catalog;
     private String schema;
@@ -63,129 +62,11 @@ public class EntityTable {
     private List<String> keyColumns;
     //resultMap对象
     private ResultMap resultMap;
-    //属性和列对应
-    protected Map<String, EntityColumn> propertyMap;
     //类
     private Class<?> entityClass;
 
     public EntityTable(Class<?> entityClass) {
         this.entityClass = entityClass;
-    }
-
-    public Class<?> getEntityClass() {
-        return entityClass;
-    }
-
-    public void setTable(Table table) {
-        this.name = table.name();
-        this.catalog = table.catalog();
-        this.schema = table.schema();
-    }
-
-    public void setKeyColumns(List<String> keyColumns) {
-        this.keyColumns = keyColumns;
-    }
-
-    public void setKeyProperties(List<String> keyProperties) {
-        this.keyProperties = keyProperties;
-    }
-
-    public String getOrderByClause() {
-        return orderByClause;
-    }
-
-    public void setOrderByClause(String orderByClause) {
-        this.orderByClause = orderByClause;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getCatalog() {
-        return catalog;
-    }
-
-    public void setCatalog(String catalog) {
-        this.catalog = catalog;
-    }
-
-    public String getSchema() {
-        return schema;
-    }
-
-    public void setSchema(String schema) {
-        this.schema = schema;
-    }
-
-    public String getBaseSelect() {
-        return baseSelect;
-    }
-
-    public void setBaseSelect(String baseSelect) {
-        this.baseSelect = baseSelect;
-    }
-
-    public String getPrefix() {
-        if (StringUtil.isNotEmpty(catalog)) {
-            return catalog;
-        }
-        if (StringUtil.isNotEmpty(schema)) {
-            return schema;
-        }
-        return "";
-    }
-
-    public Set<EntityColumn> getEntityClassColumns() {
-        return entityClassColumns;
-    }
-
-    public void setEntityClassColumns(Set<EntityColumn> entityClassColumns) {
-        this.entityClassColumns = entityClassColumns;
-    }
-
-    public Set<EntityColumn> getEntityClassPKColumns() {
-        return entityClassPKColumns;
-    }
-
-    public void setEntityClassPKColumns(Set<EntityColumn> entityClassPKColumns) {
-        this.entityClassPKColumns = entityClassPKColumns;
-    }
-
-    public String[] getKeyProperties() {
-        if (keyProperties != null && keyProperties.size() > 0) {
-            return keyProperties.toArray(new String[]{});
-        }
-        return new String[]{};
-    }
-
-    public void setKeyProperties(String keyProperty) {
-        if (this.keyProperties == null) {
-            this.keyProperties = new ArrayList<String>();
-            this.keyProperties.add(keyProperty);
-        } else {
-            this.keyProperties.add(keyProperty);
-        }
-    }
-
-    public String[] getKeyColumns() {
-        if (keyColumns != null && keyColumns.size() > 0) {
-            return keyColumns.toArray(new String[]{});
-        }
-        return new String[]{};
-    }
-
-    public void setKeyColumns(String keyColumn) {
-        if (this.keyColumns == null) {
-            this.keyColumns = new ArrayList<String>();
-            this.keyColumns.add(keyColumn);
-        } else {
-            this.keyColumns.add(keyColumn);
-        }
     }
 
     /**
@@ -242,10 +123,6 @@ public class EntityTable {
         }
     }
 
-    public Map<String, EntityColumn> getPropertyMap() {
-        return propertyMap;
-    }
-    
     /**
      * 实例化TypeHandler
      * @param javaTypeClass
@@ -271,4 +148,124 @@ public class EntityTable {
           throw new TypeException("Unable to find a usable constructor for " + typeHandlerClass, e);
         }
       }
+
+    public String getBaseSelect() {
+        return baseSelect;
+    }
+
+    public void setBaseSelect(String baseSelect) {
+        this.baseSelect = baseSelect;
+    }
+
+    public String getCatalog() {
+        return catalog;
+    }
+
+    public void setCatalog(String catalog) {
+        this.catalog = catalog;
+    }
+
+    public Class<?> getEntityClass() {
+        return entityClass;
+    }
+
+    public Set<EntityColumn> getEntityClassColumns() {
+        return entityClassColumns;
+    }
+
+    public void setEntityClassColumns(Set<EntityColumn> entityClassColumns) {
+        this.entityClassColumns = entityClassColumns;
+    }
+
+    public Set<EntityColumn> getEntityClassPKColumns() {
+        return entityClassPKColumns;
+    }
+
+    public void setEntityClassPKColumns(Set<EntityColumn> entityClassPKColumns) {
+        this.entityClassPKColumns = entityClassPKColumns;
+    }
+
+    public String[] getKeyColumns() {
+        if (keyColumns != null && keyColumns.size() > 0) {
+            return keyColumns.toArray(new String[]{});
+        }
+        return new String[]{};
+    }
+
+    public void setKeyColumns(String keyColumn) {
+        if (this.keyColumns == null) {
+            this.keyColumns = new ArrayList<String>();
+            this.keyColumns.add(keyColumn);
+        } else {
+            this.keyColumns.add(keyColumn);
+        }
+    }
+
+    public String[] getKeyProperties() {
+        if (keyProperties != null && keyProperties.size() > 0) {
+            return keyProperties.toArray(new String[]{});
+        }
+        return new String[]{};
+    }
+
+    public void setKeyProperties(String keyProperty) {
+        if (this.keyProperties == null) {
+            this.keyProperties = new ArrayList<String>();
+            this.keyProperties.add(keyProperty);
+        } else {
+            this.keyProperties.add(keyProperty);
+        }
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getOrderByClause() {
+        return orderByClause;
+    }
+
+    public void setOrderByClause(String orderByClause) {
+        this.orderByClause = orderByClause;
+    }
+
+    public String getPrefix() {
+        if (StringUtil.isNotEmpty(catalog)) {
+            return catalog;
+        }
+        if (StringUtil.isNotEmpty(schema)) {
+            return schema;
+        }
+        return "";
+    }
+
+    public Map<String, EntityColumn> getPropertyMap() {
+        return propertyMap;
+    }
+
+    public String getSchema() {
+        return schema;
+    }
+
+    public void setSchema(String schema) {
+        this.schema = schema;
+    }
+
+    public void setKeyColumns(List<String> keyColumns) {
+        this.keyColumns = keyColumns;
+    }
+
+    public void setKeyProperties(List<String> keyProperties) {
+        this.keyProperties = keyProperties;
+    }
+
+    public void setTable(Table table) {
+        this.name = table.name();
+        this.catalog = table.catalog();
+        this.schema = table.schema();
+    }
 }

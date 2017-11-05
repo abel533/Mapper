@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2014-2016 abel533@gmail.com
+ * Copyright (c) 2014-2017 abel533@gmail.com
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -87,24 +87,6 @@ public class MapperHelper {
     public MapperHelper(Properties properties) {
         this();
         setProperties(properties);
-    }
-
-    /**
-     * 获取通用Mapper配置
-     *
-     * @return
-     */
-    public Config getConfig() {
-        return config;
-    }
-
-    /**
-     * 设置通用Mapper配置
-     *
-     * @param config
-     */
-    public void setConfig(Config config) {
-        this.config = config;
     }
 
     /**
@@ -232,46 +214,6 @@ public class MapperHelper {
     }
 
     /**
-     * 重新设置SqlSource
-     * <p/>
-     * 执行该方法前必须使用isMapperMethod判断，否则msIdCache会空
-     *
-     * @param ms
-     */
-    public void setSqlSource(MappedStatement ms) {
-        MapperTemplate mapperTemplate = msIdCache.get(ms.getId());
-        try {
-            if (mapperTemplate != null) {
-                mapperTemplate.setSqlSource(ms);
-            }
-        } catch (Exception e) {
-            throw new MapperException(e);
-        }
-    }
-
-    /**
-     * 配置属性
-     *
-     * @param properties
-     */
-    public void setProperties(Properties properties) {
-        config.setProperties(properties);
-        //注册通用接口
-        String mapper = null;
-        if (properties != null) {
-            mapper = properties.getProperty("mappers");
-        }
-        if (StringUtil.isNotEmpty(mapper)) {
-            String[] mappers = mapper.split(",");
-            for (String mapperClass : mappers) {
-                if (mapperClass.length() > 0) {
-                    registerMapper(mapperClass);
-                }
-            }
-        }
-    }
-
-    /**
      * 如果当前注册的接口为空，自动注册默认接口
      */
     public void ifEmptyRegisterDefaultInterface() {
@@ -312,6 +254,64 @@ public class MapperHelper {
                     }
                 }
             }
+        }
+    }
+
+    /**
+     * 获取通用Mapper配置
+     *
+     * @return
+     */
+    public Config getConfig() {
+        return config;
+    }
+
+    /**
+     * 设置通用Mapper配置
+     *
+     * @param config
+     */
+    public void setConfig(Config config) {
+        this.config = config;
+    }
+
+    /**
+     * 配置属性
+     *
+     * @param properties
+     */
+    public void setProperties(Properties properties) {
+        config.setProperties(properties);
+        //注册通用接口
+        String mapper = null;
+        if (properties != null) {
+            mapper = properties.getProperty("mappers");
+        }
+        if (StringUtil.isNotEmpty(mapper)) {
+            String[] mappers = mapper.split(",");
+            for (String mapperClass : mappers) {
+                if (mapperClass.length() > 0) {
+                    registerMapper(mapperClass);
+                }
+            }
+        }
+    }
+
+    /**
+     * 重新设置SqlSource
+     * <p/>
+     * 执行该方法前必须使用isMapperMethod判断，否则msIdCache会空
+     *
+     * @param ms
+     */
+    public void setSqlSource(MappedStatement ms) {
+        MapperTemplate mapperTemplate = msIdCache.get(ms.getId());
+        try {
+            if (mapperTemplate != null) {
+                mapperTemplate.setSqlSource(ms);
+            }
+        } catch (Exception e) {
+            throw new MapperException(e);
         }
     }
 

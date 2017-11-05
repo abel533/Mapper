@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2014-2016 abel533@gmail.com
+ * Copyright (c) 2014-2017 abel533@gmail.com
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -62,28 +62,6 @@ public class Config {
      */
     private Style style;
 
-    /**
-     * 获取SelectKey的Order
-     *
-     * @return
-     */
-    public boolean isBEFORE() {
-        return BEFORE;
-    }
-
-    public void setBEFORE(boolean BEFORE) {
-        this.BEFORE = BEFORE;
-    }
-
-    /**
-     * 主键自增回写方法执行顺序,默认AFTER,可选值为(BEFORE|AFTER)
-     *
-     * @param order
-     */
-    public void setOrder(String order) {
-        this.BEFORE = "BEFORE".equalsIgnoreCase(order);
-    }
-
     public String getCatalog() {
         return catalog;
     }
@@ -124,6 +102,21 @@ public class Config {
         }
     }
 
+    /**
+     * 获取表前缀，带catalog或schema
+     *
+     * @return
+     */
+    public String getPrefix() {
+        if (StringUtil.isNotEmpty(this.catalog)) {
+            return this.catalog;
+        }
+        if (StringUtil.isNotEmpty(this.schema)) {
+            return this.schema;
+        }
+        return "";
+    }
+
     public String getSchema() {
         return schema;
     }
@@ -160,6 +153,14 @@ public class Config {
         this.seqFormat = seqFormat;
     }
 
+    public Style getStyle() {
+        return this.style == null ? Style.camelhump : this.style;
+    }
+
+    public void setStyle(Style style) {
+        this.style = style;
+    }
+
     /**
      * 获取UUID生成规则
      *
@@ -183,20 +184,25 @@ public class Config {
         this.UUID = UUID;
     }
 
-    public boolean isNotEmpty() {
-        return notEmpty;
+    /**
+     * 获取SelectKey的Order
+     *
+     * @return
+     */
+    public boolean isBEFORE() {
+        return BEFORE;
     }
 
-    public void setNotEmpty(boolean notEmpty) {
-        this.notEmpty = notEmpty;
+    public void setBEFORE(boolean BEFORE) {
+        this.BEFORE = BEFORE;
     }
 
-    public Style getStyle() {
-        return this.style == null ? Style.camelhump : this.style;
+    public boolean isCheckExampleEntityClass() {
+        return checkExampleEntityClass;
     }
 
-    public void setStyle(Style style) {
-        this.style = style;
+    public void setCheckExampleEntityClass(boolean checkExampleEntityClass) {
+        this.checkExampleEntityClass = checkExampleEntityClass;
     }
 
     public boolean isEnableMethodAnnotation() {
@@ -207,12 +213,12 @@ public class Config {
         this.enableMethodAnnotation = enableMethodAnnotation;
     }
 
-    public boolean isCheckExampleEntityClass() {
-        return checkExampleEntityClass;
+    public boolean isNotEmpty() {
+        return notEmpty;
     }
 
-    public void setCheckExampleEntityClass(boolean checkExampleEntityClass) {
-        this.checkExampleEntityClass = checkExampleEntityClass;
+    public void setNotEmpty(boolean notEmpty) {
+        this.notEmpty = notEmpty;
     }
 
     public boolean isUseSimpleType() {
@@ -224,18 +230,12 @@ public class Config {
     }
 
     /**
-     * 获取表前缀，带catalog或schema
+     * 主键自增回写方法执行顺序,默认AFTER,可选值为(BEFORE|AFTER)
      *
-     * @return
+     * @param order
      */
-    public String getPrefix() {
-        if (StringUtil.isNotEmpty(this.catalog)) {
-            return this.catalog;
-        }
-        if (StringUtil.isNotEmpty(this.schema)) {
-            return this.schema;
-        }
-        return "";
+    public void setOrder(String order) {
+        this.BEFORE = "BEFORE".equalsIgnoreCase(order);
     }
 
     /**

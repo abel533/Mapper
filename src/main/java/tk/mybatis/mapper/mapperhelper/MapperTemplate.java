@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2014-2016 abel533@gmail.com
+ * Copyright (c) 2014-2017 abel533@gmail.com
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -83,13 +83,6 @@ public abstract class MapperTemplate {
         methodMap.put(methodName, method);
     }
 
-    public String getUUID() {
-        return mapperHelper.getConfig().getUUID();
-    }
-
-    public String getIDENTITY() {
-        return mapperHelper.getConfig().getIDENTITY();
-    }
 	/**
      * 获取IDENTITY值的表达式
      *
@@ -99,17 +92,7 @@ public abstract class MapperTemplate {
     public String getIDENTITY(EntityColumn column) {
         return MessageFormat.format(mapperHelper.getConfig().getIDENTITY(), column.getSequenceName(), column.getColumn(), column.getProperty(), column.getTable().getName());
     }
-    public boolean isBEFORE() {
-        return mapperHelper.getConfig().isBEFORE();
-    }
 
-    public boolean isNotEmpty() {
-        return mapperHelper.getConfig().isNotEmpty();
-    }
-
-    public boolean isCheckExampleEntityClass() {
-        return mapperHelper.getConfig().isCheckExampleEntityClass();
-    }
     /**
      * 是否支持该通用方法
      *
@@ -148,45 +131,6 @@ public abstract class MapperTemplate {
     protected void setSqlSource(MappedStatement ms, SqlSource sqlSource) {
         MetaObject msObject = SystemMetaObject.forObject(ms);
         msObject.setValue("sqlSource", sqlSource);
-    }
-
-    /**
-     * 重新设置SqlSource
-     *
-     * @param ms
-     * @throws java.lang.reflect.InvocationTargetException
-     * @throws IllegalAccessException
-     */
-    public void setSqlSource(MappedStatement ms) throws Exception {
-        if (this.mapperClass == getMapperClass(ms.getId())) {
-            throw new MapperException("请不要配置或扫描通用Mapper接口类：" + this.mapperClass);
-        }
-        Method method = methodMap.get(getMethodName(ms));
-        try {
-            //第一种，直接操作ms，不需要返回值
-            if (method.getReturnType() == Void.TYPE) {
-                method.invoke(this, ms);
-            }
-            //第二种，返回SqlNode
-            else if (SqlNode.class.isAssignableFrom(method.getReturnType())) {
-                SqlNode sqlNode = (SqlNode) method.invoke(this, ms);
-                DynamicSqlSource dynamicSqlSource = new DynamicSqlSource(ms.getConfiguration(), sqlNode);
-                setSqlSource(ms, dynamicSqlSource);
-            }
-            //第三种，返回xml形式的sql字符串
-            else if (String.class.equals(method.getReturnType())) {
-                String xmlSql = (String) method.invoke(this, ms);
-                SqlSource sqlSource = createSqlSource(ms, xmlSql);
-                //替换原有的SqlSource
-                setSqlSource(ms, sqlSource);
-            } else {
-                throw new MapperException("自定义Mapper方法返回类型错误,可选的返回类型为void,SqlNode,String三种!");
-            }
-        } catch (IllegalAccessException e) {
-            throw new MapperException(e);
-        } catch (InvocationTargetException e) {
-            throw new MapperException(e.getTargetException() != null ? e.getTargetException() : e);
-        }
     }
 
     /**
@@ -276,6 +220,65 @@ public abstract class MapperTemplate {
             return prefix + "." + entityTable.getName();
         }
         return entityTable.getName();
+    }
+
+    public String getIDENTITY() {
+        return mapperHelper.getConfig().getIDENTITY();
+    }
+
+    public String getUUID() {
+        return mapperHelper.getConfig().getUUID();
+    }
+
+    public boolean isBEFORE() {
+        return mapperHelper.getConfig().isBEFORE();
+    }
+
+    public boolean isCheckExampleEntityClass() {
+        return mapperHelper.getConfig().isCheckExampleEntityClass();
+    }
+
+    public boolean isNotEmpty() {
+        return mapperHelper.getConfig().isNotEmpty();
+    }
+
+    /**
+     * 重新设置SqlSource
+     *
+     * @param ms
+     * @throws java.lang.reflect.InvocationTargetException
+     * @throws IllegalAccessException
+     */
+    public void setSqlSource(MappedStatement ms) throws Exception {
+        if (this.mapperClass == getMapperClass(ms.getId())) {
+            throw new MapperException("请不要配置或扫描通用Mapper接口类：" + this.mapperClass);
+        }
+        Method method = methodMap.get(getMethodName(ms));
+        try {
+            //第一种，直接操作ms，不需要返回值
+            if (method.getReturnType() == Void.TYPE) {
+                method.invoke(this, ms);
+            }
+            //第二种，返回SqlNode
+            else if (SqlNode.class.isAssignableFrom(method.getReturnType())) {
+                SqlNode sqlNode = (SqlNode) method.invoke(this, ms);
+                DynamicSqlSource dynamicSqlSource = new DynamicSqlSource(ms.getConfiguration(), sqlNode);
+                setSqlSource(ms, dynamicSqlSource);
+            }
+            //第三种，返回xml形式的sql字符串
+            else if (String.class.equals(method.getReturnType())) {
+                String xmlSql = (String) method.invoke(this, ms);
+                SqlSource sqlSource = createSqlSource(ms, xmlSql);
+                //替换原有的SqlSource
+                setSqlSource(ms, sqlSource);
+            } else {
+                throw new MapperException("自定义Mapper方法返回类型错误,可选的返回类型为void,SqlNode,String三种!");
+            }
+        } catch (IllegalAccessException e) {
+            throw new MapperException(e);
+        } catch (InvocationTargetException e) {
+            throw new MapperException(e.getTargetException() != null ? e.getTargetException() : e);
+        }
     }
 
 }
