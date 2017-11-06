@@ -33,6 +33,7 @@ import java.util.regex.Pattern;
  * Created by liuzh_3nofxnp on 2015/8/26.
  */
 public class StringUtil {
+    private static Pattern UNDERLINE_TO_CAMELHUMP_PATTERN = Pattern.compile("_[a-z]");
 
     /**
      * 空
@@ -104,7 +105,7 @@ public class StringUtil {
      * 将下划线风格替换为驼峰风格
      */
     public static String underlineToCamelhump(String str) {
-        Matcher matcher = Pattern.compile("_[a-z]").matcher(str);
+        Matcher matcher = UNDERLINE_TO_CAMELHUMP_PATTERN.matcher(str);
         StringBuilder builder = new StringBuilder(str);
         for (int i = 0; matcher.find(); i++) {
             builder.replace(matcher.start() - i, matcher.end() - i, matcher.group().substring(1).toUpperCase());
