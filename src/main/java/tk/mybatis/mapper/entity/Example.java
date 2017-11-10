@@ -116,7 +116,9 @@ public class Example implements IDynamicTableName {
      *
      * @param properties 属性名的可变参数
      * @return
+     * @Deprecated 在与selectProperties一起使用时，起不到任何作用
      */
+    @Deprecated
     public Example excludeProperties(String... properties) {
         if (properties != null && properties.length > 0) {
             if (this.excludeColumns == null) {
