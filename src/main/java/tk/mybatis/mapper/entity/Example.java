@@ -29,8 +29,10 @@ import org.apache.ibatis.reflection.SystemMetaObject;
 import org.apache.ibatis.type.TypeHandler;
 import tk.mybatis.mapper.MapperException;
 import tk.mybatis.mapper.mapperhelper.EntityHelper;
+import tk.mybatis.mapper.mapperhelper.FieldHelper;
 import tk.mybatis.mapper.util.StringUtil;
 
+import javax.persistence.Transient;
 import java.util.*;
 
 /**
@@ -145,6 +147,14 @@ public class Example implements IDynamicTableName {
             for (String property : properties) {
                 if (propertyMap.containsKey(property)) {
                     this.selectColumns.add(propertyMap.get(property).getColumn());
+                } else {
+                    List<EntityField> fields = FieldHelper.getFields(entityClass);
+                    for (EntityField field : fields) {
+                        if (field.isAnnotationPresent(Transient.class) && property.equals(field.getName())) {
+                            throw new MapperException("类 " + entityClass.getSimpleName() + " 的属性 \'" + property + "\' 被 @Transient 注释所修饰，不能指定为查询字段");
+                        }
+                    }
+                    throw new MapperException("类 " + entityClass.getSimpleName() + " 不包含属性 \'" + property + "\'");
                 }
             }
         }

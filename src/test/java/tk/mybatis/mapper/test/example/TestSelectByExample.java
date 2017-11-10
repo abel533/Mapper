@@ -27,7 +27,10 @@ package tk.mybatis.mapper.test.example;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.type.StringTypeHandler;
 import org.junit.Assert;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
+import tk.mybatis.mapper.MapperException;
 import tk.mybatis.mapper.entity.Example;
 import tk.mybatis.mapper.entity.model.CountryExample;
 import tk.mybatis.mapper.mapper.CountryMapper;
@@ -44,7 +47,8 @@ import java.util.Set;
  * @author liuzh
  */
 public class TestSelectByExample {
-
+    @Rule
+    public ExpectedException exception = ExpectedException.none();
     @Test
     public void testSelectByExample() {
         SqlSession sqlSession = MybatisHelper.getSqlSession();
@@ -272,4 +276,83 @@ public class TestSelectByExample {
         }
     }
 
+    /**
+     * 指定查询字段正确
+     */
+    @Test
+    public void testSelectPropertisCheckCorrect() {
+        SqlSession sqlSession = MybatisHelper.getSqlSession();
+        try {
+            CountryMapper mapper = sqlSession.getMapper(CountryMapper.class);
+            Example example = new Example(Country.class);
+            example.selectProperties(new String[]{"countryname"});
+            example.createCriteria().andEqualTo("id", 35);
+            List<Country> country1= mapper.selectByExample(example);
+            Assert.assertEquals(null, country1.get(0).getId());
+            Assert.assertEquals("China", country1.get(0).getCountryname());
+            Assert.assertEquals(null, country1.get(0).getCountrycode());
+        } finally {
+            sqlSession.close();
+        }
+    }
+
+    /**
+     * 指定查询字段拼写错误或不存在
+     */
+    @Test
+    public void testSelectPropertisCheckSpellWrong() {
+        exception.expect(MapperException.class);
+        exception.expectMessage("类 Country 不包含属性 'countrymame'");
+        SqlSession sqlSession = MybatisHelper.getSqlSession();
+        try {
+            CountryMapper mapper = sqlSession.getMapper(CountryMapper.class);
+            Example example = new Example(Country.class);
+            example.selectProperties(new String[]{"countrymame"});
+            example.createCriteria().andEqualTo("id", 35);
+            List<Country> country2 = mapper.selectByExample(example);
+            Assert.assertEquals(null, country2.get(0).getId());
+            Assert.assertEquals("China", country2.get(0).getCountryname());
+            Assert.assertEquals(null, country2.get(0).getCountrycode());
+        } finally {
+            sqlSession.close();
+        }
+    }
+
+    /**
+     * 指定查询字段为@Transient注释字段
+     */
+    @Test
+    public void testSelectPropertisCheckTransient1() {
+        exception.expect(MapperException.class);
+        exception.expectMessage("类 Country 的属性 'name' 被 @Transient 注释所修饰，不能指定为查询字段");
+        SqlSession sqlSession = MybatisHelper.getSqlSession();
+        try {
+            CountryMapper mapper = sqlSession.getMapper(CountryMapper.class);
+            Example example = new Example(Country.class);
+            example.selectProperties(new String[]{"name"});
+            example.createCriteria().andEqualTo("id", 35);
+            List<Country> country = mapper.selectByExample(example);
+        } finally {
+            sqlSession.close();
+        }
+    }
+
+    /**
+     * 指定查询字段为@Transient注释字段
+     */
+    @Test
+    public void testSelectPropertisCheckTransient2() {
+        exception.expect(MapperException.class);
+        exception.expectMessage("类 Country 的属性 'dynamicTableName123' 被 @Transient 注释所修饰，不能指定为查询字段");
+        SqlSession sqlSession = MybatisHelper.getSqlSession();
+        try {
+            CountryMapper mapper = sqlSession.getMapper(CountryMapper.class);
+            Example example = new Example(Country.class);
+            example.selectProperties(new String[]{"dynamicTableName123"});
+            example.createCriteria().andEqualTo("id", 35);
+            List<Country> country = mapper.selectByExample(example);
+        } finally {
+            sqlSession.close();
+        }
+    }
 }
