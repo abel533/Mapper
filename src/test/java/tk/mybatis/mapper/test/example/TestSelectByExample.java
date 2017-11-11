@@ -203,6 +203,8 @@ public class TestSelectByExample {
 
     @Test
     public void testSelectColumnsByExample() {
+        exception.expect(MapperException.class);
+        exception.expectMessage("类 Country 不包含属性 'hehe'，或该属性被@Transient注释！");
         SqlSession sqlSession = MybatisHelper.getSqlSession();
         try {
             CountryMapper mapper = sqlSession.getMapper(CountryMapper.class);
@@ -302,7 +304,7 @@ public class TestSelectByExample {
     @Test
     public void testSelectPropertisCheckSpellWrong() {
         exception.expect(MapperException.class);
-        exception.expectMessage("类 Country 不包含属性 'countrymame'");
+        exception.expectMessage("类 Country 不包含属性 'countrymame'，或该属性被@Transient注释！");
         SqlSession sqlSession = MybatisHelper.getSqlSession();
         try {
             CountryMapper mapper = sqlSession.getMapper(CountryMapper.class);
@@ -324,7 +326,7 @@ public class TestSelectByExample {
     @Test
     public void testSelectPropertisCheckTransient1() {
         exception.expect(MapperException.class);
-        exception.expectMessage("类 Country 的属性 'name' 被 @Transient 注释所修饰，不能指定为查询字段");
+        exception.expectMessage("类 Country 不包含属性 'name'，或该属性被@Transient注释！");
         SqlSession sqlSession = MybatisHelper.getSqlSession();
         try {
             CountryMapper mapper = sqlSession.getMapper(CountryMapper.class);
@@ -343,7 +345,7 @@ public class TestSelectByExample {
     @Test
     public void testSelectPropertisCheckTransient2() {
         exception.expect(MapperException.class);
-        exception.expectMessage("类 Country 的属性 'dynamicTableName123' 被 @Transient 注释所修饰，不能指定为查询字段");
+        exception.expectMessage("类 Country 不包含属性 'dynamicTableName123'，或该属性被@Transient注释！");
         SqlSession sqlSession = MybatisHelper.getSqlSession();
         try {
             CountryMapper mapper = sqlSession.getMapper(CountryMapper.class);
@@ -355,4 +357,43 @@ public class TestSelectByExample {
             sqlSession.close();
         }
     }
+
+    /**
+     * 指定排除的查询字段不存在或拼写错误
+     */
+    @Test
+    public void testExcludePropertisCheckWrongSpell() {
+        exception.expect(MapperException.class);
+        exception.expectMessage("类 Country 不包含属性 'countrymame'，或该属性被@Transient注释！");
+        SqlSession sqlSession = MybatisHelper.getSqlSession();
+        try {
+            CountryMapper mapper = sqlSession.getMapper(CountryMapper.class);
+            Example example = new Example(Country.class);
+            example.excludeProperties(new String[]{"countrymame"});
+            example.createCriteria().andEqualTo("id", 35);
+            List<Country> country = mapper.selectByExample(example);
+        } finally {
+            sqlSession.close();
+        }
+    }
+
+    /**
+     * 指定排除的查询字段为@Transient注释字段
+     */
+    @Test
+    public void testExcludePropertisCheckTransient() {
+        exception.expect(MapperException.class);
+        exception.expectMessage("类 Country 不包含属性 'dynamicTableName123'，或该属性被@Transient注释！");
+        SqlSession sqlSession = MybatisHelper.getSqlSession();
+        try {
+            CountryMapper mapper = sqlSession.getMapper(CountryMapper.class);
+            Example example = new Example(Country.class);
+            example.excludeProperties(new String[]{"dynamicTableName123"});
+            example.createCriteria().andEqualTo("id", 35);
+            List<Country> country = mapper.selectByExample(example);
+        } finally {
+            sqlSession.close();
+        }
+    }
+
 }

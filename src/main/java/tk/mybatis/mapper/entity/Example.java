@@ -127,6 +127,8 @@ public class Example implements IDynamicTableName {
             for (String property : properties) {
                 if (propertyMap.containsKey(property)) {
                     this.excludeColumns.add(propertyMap.get(property).getColumn());
+                } else {
+                    throw new MapperException("类 " + entityClass.getSimpleName() + " 不包含属性 \'" + property + "\'，或该属性被@Transient注释！");
                 }
             }
         }
@@ -148,13 +150,7 @@ public class Example implements IDynamicTableName {
                 if (propertyMap.containsKey(property)) {
                     this.selectColumns.add(propertyMap.get(property).getColumn());
                 } else {
-                    List<EntityField> fields = FieldHelper.getFields(entityClass);
-                    for (EntityField field : fields) {
-                        if (field.isAnnotationPresent(Transient.class) && property.equals(field.getName())) {
-                            throw new MapperException("类 " + entityClass.getSimpleName() + " 的属性 \'" + property + "\' 被 @Transient 注释所修饰，不能指定为查询字段");
-                        }
-                    }
-                    throw new MapperException("类 " + entityClass.getSimpleName() + " 不包含属性 \'" + property + "\'");
+                    throw new MapperException("类 " + entityClass.getSimpleName() + " 不包含属性 \'" + property + "\'，或该属性被@Transient注释！");
                 }
             }
         }
