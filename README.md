@@ -153,7 +153,6 @@ MyBatis 工具网站:[http://mybatis.tk](http://www.mybatis.tk)
 
 作者邮箱： abel533@gmail.com
 
-Mybatis工具群： <a target="_blank" href="http://shang.qq.com/wpa/qunwpa?idkey=7c2f018e4cddc7d4aad04fc312b2d69361a0a896a4f59219a7914953a57bffc2"><img border="0" src="http://pub.idqqimg.com/wpa/images/group.png" alt="Mybatis工具群" title="Mybatis工具群"></a>
-
+如需加群，请通过 http://mybatis.tk 首页按钮加群。
 
 推荐使用Mybatis分页插件:[PageHelper分页插件](https://github.com/pagehelper/Mybatis-PageHelper)
