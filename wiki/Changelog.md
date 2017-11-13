@@ -13,6 +13,7 @@
 </generatorConfiguration>
 ```
 - 增加基于 MBG 的代码生成器插件，参考[使用文档](https://github.com/abel533/Mapper/blob/master/wiki/mapper3/11.CodeGenerator.md)。
+- 设置下划线风格替换为驼峰风格的Pattern为StringUtil的静态变量（by [Ngone51](https://github.com/abel533/Mapper/commits?author=Ngone51)）。
 
 ## 3.4.4 - 2017-10-19
 
