@@ -29,6 +29,7 @@ import org.apache.ibatis.reflection.SystemMetaObject;
 import org.apache.ibatis.type.TypeHandler;
 import tk.mybatis.mapper.MapperException;
 import tk.mybatis.mapper.mapperhelper.EntityHelper;
+import tk.mybatis.mapper.util.Sqls;
 import tk.mybatis.mapper.util.StringUtil;
 
 import java.util.*;
@@ -104,6 +105,20 @@ public class Example implements IDynamicTableName {
         //根据李领北建议修改#159
         propertyMap = table.getPropertyMap();
         this.ORDERBY = new OrderBy(this, propertyMap);
+    }
+
+
+    private Example(Builder builder) {
+        this.exists = builder.exists;
+        this.notNull = builder.notNull;
+        this.entityClass = builder.entityClass;
+        this.propertyMap = builder.propertyMap;
+        this.oredCriteria = builder.exampleCriterias;
+        this.ORDERBY = new OrderBy(this, propertyMap);
+    }
+
+    public static Builder builder(Class<?> entityClass) {
+        return new Builder(entityClass);
     }
 
     public OrderBy orderBy(String property) {
@@ -893,5 +908,192 @@ public class Example implements IDynamicTableName {
      */
     public void setTableName(String tableName) {
         this.tableName = tableName;
+    }
+
+
+
+    public static class Builder {
+        private String orderByClause;
+
+        private boolean distinct;
+
+        private boolean exists;
+
+        private boolean notNull;
+
+        private boolean forUpdate;
+
+        //查询字段
+        private String[] selectColumns;
+
+        //排除的查询字段
+        private String[] excludeColumns;
+
+        private String countColumn;
+
+        private List<Sqls.Criteria> sqlsCriteria;
+
+        private List<Example.Criteria> exampleCriterias;
+        private final Class<?> entityClass;
+
+        protected EntityTable table;
+        //动态表名
+
+        //属性和列对应
+        protected Map<String, EntityColumn> propertyMap;
+
+        //动态表名
+        private String tableName;
+
+        public Builder(Class<?> entityClass) {
+            this(entityClass, true);
+        }
+
+        public Builder(Class<?> entityClass, boolean exists) {
+            this(entityClass, exists, false);
+        }
+
+        public Builder(Class<?> entityClass, boolean exists, boolean notNull) {
+            this.entityClass = entityClass;
+            this.exists = exists;
+            this.notNull = notNull;
+            this.table = EntityHelper.getEntityTable(entityClass);
+            this.propertyMap = table.getPropertyMap();
+            this.sqlsCriteria = new ArrayList<Sqls.Criteria>(2);
+        }
+
+        public Builder setOrderByClause(String orderByClause) {
+            this.orderByClause = orderByClause;
+            return this;
+        }
+
+        public Builder distinct() {
+            return setDistinct(true);
+        }
+
+        public Builder setDistinct(boolean distinct) {
+            this.distinct = distinct;
+            return this;
+        }
+
+        public Builder forUpdate() {
+            return setForUpdate(true);
+        }
+
+        public Builder setForUpdate(boolean forUpdate) {
+            this.forUpdate = forUpdate;
+            return this;
+        }
+
+        public Builder selectDistinct(String... properties) {
+            this.selectColumns = properties;
+            this.distinct = distinct;
+            return this;
+        }
+
+        public Builder select(String... properties) {
+            this.selectColumns = properties;
+            return this;
+        }
+
+        public Builder notSelect(String... properties) {
+            this.excludeColumns = properties;
+            return this;
+        }
+
+        public Builder fromTable(String tableName) {
+            return setTableName(tableName);
+        }
+
+        public Builder setTableName(String tableName) {
+            this.tableName = tableName;
+            return this;
+        }
+        public Builder where(Sqls sqls) {
+            Sqls.Criteria criteria = sqls.getCriteria();
+            criteria.setAndOr("and");
+            this.sqlsCriteria.add(criteria);
+            return  this;
+        }
+
+        public Builder andWhere(Sqls sqls) {
+            Sqls.Criteria criteria = sqls.getCriteria();
+            criteria.setAndOr("and");
+            this.sqlsCriteria.add(criteria);
+            return  this;
+        }
+
+
+        public Builder orWhere(Sqls sqls) {
+            Sqls.Criteria criteria = sqls.getCriteria();
+            criteria.setAndOr("or");
+            this.sqlsCriteria.add(criteria);
+            return  this;
+        }
+
+
+        public Example build() {
+            this.exampleCriterias = new ArrayList<Criteria>();
+            for (Sqls.Criteria criteria : sqlsCriteria) {
+                Example.Criteria exampleCriteria = new Example.Criteria(this.propertyMap, this.exists, this.notNull);
+                exampleCriteria.setAndOr(criteria.getAndOr());
+                for (Sqls.Criterion criterion : criteria.getCriterions()) {
+                    String condition = criterion.getCondition();
+                    String andOr = criterion.getAndOr();
+                    String property = criterion.getProperty();
+                    Object[] values = criterion.getValues();
+                    transformCriterion(exampleCriteria, condition, property, values, andOr);
+                }
+                exampleCriterias.add(exampleCriteria);
+            }
+
+            Example innerExample =  new Example(this);
+            innerExample.selectProperties(this.selectColumns);
+            innerExample.excludeProperties(this.excludeColumns);
+
+            return  innerExample;
+        }
+
+        private void transformCriterion(Example.Criteria exampleCriteria, String condition, String property, Object[] values, String andOr) {
+            if (values.length == 0) {
+                if ("and".equals(andOr)) {
+                    exampleCriteria.addCriterion(column(property) + " " + condition);
+                } else {
+                    exampleCriteria.addOrCriterion(column(property) + " " + condition);
+                }
+            } else if (values.length == 1) {
+                if ("and".equals(andOr)) {
+                    exampleCriteria.addCriterion(column(property) + " " + condition, values[0], property(property));
+                } else {
+                    exampleCriteria.addOrCriterion(column(property) + " " + condition, values[0], property(property));
+                }
+            } else if (values.length == 2) {
+                if ("and".equals(andOr)) {
+                    exampleCriteria.addCriterion(column(property) + " " + condition, values[0], values[1], property(property));
+                } else {
+                    exampleCriteria.addOrCriterion(column(property) + " " + condition, values[0], values[1], property(property));
+                }
+            }
+        }
+
+        private String column(String property) {
+            if (propertyMap.containsKey(property)) {
+                return propertyMap.get(property).getColumn();
+            } else if (exists) {
+                throw new MapperException("当前实体类不包含名为" + property + "的属性!");
+            } else {
+                return null;
+            }
+        }
+
+        private String property(String property) {
+            if (propertyMap.containsKey(property)) {
+                return property;
+            } else if (exists) {
+                throw new MapperException("当前实体类不包含名为" + property + "的属性!");
+            } else {
+                return null;
+            }
+        }
     }
 }
