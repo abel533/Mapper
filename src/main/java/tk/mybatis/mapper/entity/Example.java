@@ -111,8 +111,11 @@ public class Example implements IDynamicTableName {
     private Example(Builder builder) {
         this.exists = builder.exists;
         this.notNull = builder.notNull;
+        this.distinct = builder.distinct;
         this.entityClass = builder.entityClass;
         this.propertyMap = builder.propertyMap;
+        this.selectColumns = builder.selectColumns;
+        this.excludeColumns = builder.excludeColumns;
         this.oredCriteria = builder.exampleCriterias;
         this.orderByClause = builder.orderByClause.toString();
         this.forUpdate = builder.forUpdate;
@@ -923,10 +926,10 @@ public class Example implements IDynamicTableName {
         private boolean forUpdate;
 
         //查询字段
-        private String[] selectColumns;
+        private Set<String> selectColumns;
 
         //排除的查询字段
-        private String[] excludeColumns;
+        private Set<String> excludeColumns;
 
         private String countColumn;
 
@@ -962,11 +965,6 @@ public class Example implements IDynamicTableName {
             this.sqlsCriteria = new ArrayList<Sqls.Criteria>(2);
         }
 
-//        public Builder setOrderByClause(String orderByClause) {
-//            this.orderByClause = orderByClause;
-//            return this;
-//        }
-
         public Builder distinct() {
             return setDistinct(true);
         }
@@ -986,18 +984,36 @@ public class Example implements IDynamicTableName {
         }
 
         public Builder selectDistinct(String... properties) {
-            this.selectColumns = properties;
-            this.distinct = distinct;
+            select(properties);
+            this.distinct = true;
             return this;
         }
 
         public Builder select(String... properties) {
-            this.selectColumns = properties;
+            if (properties != null && properties.length > 0) {
+                if (this.selectColumns == null) {
+                    this.selectColumns = new LinkedHashSet<String>();
+                }
+                for (String property : properties) {
+                    if (this.propertyMap.containsKey(property)) {
+                        this.selectColumns.add(propertyMap.get(property).getColumn());
+                    }
+                }
+            }
             return this;
         }
 
         public Builder notSelect(String... properties) {
-            this.excludeColumns = properties;
+            if (properties != null && properties.length > 0) {
+                if (this.excludeColumns == null) {
+                    this.excludeColumns = new LinkedHashSet<String>();
+                }
+                for (String property : properties) {
+                    if (propertyMap.containsKey(property)) {
+                        this.excludeColumns.add(propertyMap.get(property).getColumn());
+                    }
+                }
+            }
             return this;
         }
 
@@ -1076,13 +1092,11 @@ public class Example implements IDynamicTableName {
 
             if (this.orderByClause.length() > 0) {
                 this.orderByClause = new StringBuilder(this.orderByClause.substring(1, this.orderByClause.length()));
+            } else {
+                this.orderByClause.append("id desc");
             }
 
-            Example innerExample =  new Example(this);
-            innerExample.selectProperties(this.selectColumns);
-            innerExample.excludeProperties(this.excludeColumns);
-
-            return  innerExample;
+            return new Example(this);
         }
 
         private void transformCriterion(Example.Criteria exampleCriteria, String condition, String property, Object[] values, String andOr) {
