@@ -145,21 +145,22 @@ public class TestExampleBuilder {
     }
     /*
     * @description: 单个where组合查询测试
+    * 直接把example的构造放到selectByExample()函数里
     * */
     @Test
     public void testWhereCompound0() {
         SqlSession sqlSession = MybatisHelper.getSqlSession();
         try {
             CountryMapper mapper = sqlSession.getMapper(CountryMapper.class);
-            Example example = Example.builder(Country.class)
+            List<Country> countries = mapper.selectByExample(
+                    Example.builder(Country.class)
                     .where(Sqls.custom()
                             .andEqualTo("countryname", "China")
                             .andEqualTo("id", 35)
                             .orIn("id", new ArrayList<Integer>(Arrays.asList(35, 183)))
                             .orLike("countryname","Ye%")
                     )
-                    .build();
-            List<Country> countries = mapper.selectByExample(example);
+                    .build());
             Country country35 = countries.get(2);
             Assert.assertEquals(Integer.valueOf(35), country35.getId());
             Assert.assertEquals("China", country35.getCountryname());
