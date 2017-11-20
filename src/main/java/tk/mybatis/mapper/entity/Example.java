@@ -114,7 +114,8 @@ public class Example implements IDynamicTableName {
         this.entityClass = builder.entityClass;
         this.propertyMap = builder.propertyMap;
         this.oredCriteria = builder.exampleCriterias;
-        this.ORDERBY = new OrderBy(this, propertyMap);
+        this.orderByClause = builder.orderByClause.toString();
+        this.forUpdate = builder.forUpdate;
     }
 
     public static Builder builder(Class<?> entityClass) {
@@ -910,10 +911,8 @@ public class Example implements IDynamicTableName {
         this.tableName = tableName;
     }
 
-
-
     public static class Builder {
-        private String orderByClause;
+        private StringBuilder orderByClause;
 
         private boolean distinct;
 
@@ -957,15 +956,16 @@ public class Example implements IDynamicTableName {
             this.entityClass = entityClass;
             this.exists = exists;
             this.notNull = notNull;
+            this.orderByClause = new StringBuilder();
             this.table = EntityHelper.getEntityTable(entityClass);
             this.propertyMap = table.getPropertyMap();
             this.sqlsCriteria = new ArrayList<Sqls.Criteria>(2);
         }
 
-        public Builder setOrderByClause(String orderByClause) {
-            this.orderByClause = orderByClause;
-            return this;
-        }
+//        public Builder setOrderByClause(String orderByClause) {
+//            this.orderByClause = orderByClause;
+//            return this;
+//        }
 
         public Builder distinct() {
             return setDistinct(true);
@@ -1001,7 +1001,7 @@ public class Example implements IDynamicTableName {
             return this;
         }
 
-        public Builder fromTable(String tableName) {
+        public Builder from(String tableName) {
             return setTableName(tableName);
         }
 
@@ -1031,6 +1031,33 @@ public class Example implements IDynamicTableName {
             return  this;
         }
 
+        public Builder orderBy(String... properties) {
+            return orderByAsc(properties);
+        }
+
+        public Builder orderByAsc(String... properties) {
+            contactOrderByClause(" Asc", properties);
+            return this;
+        }
+
+        public Builder orderByDesc(String... properties) {
+            contactOrderByClause(" Desc", properties);
+            return this;
+        }
+
+        private void contactOrderByClause(String order, String... properties) {
+            StringBuilder columns = new StringBuilder();
+            for (String property : properties) {
+                String column;
+                if ((column = propertyforOderBy(property)) != null) {
+                    columns.append(",").append(column);
+                }
+            }
+            columns.append(order);
+            if (columns.length() > 0) {
+                orderByClause.append(columns);
+            }
+        }
 
         public Example build() {
             this.exampleCriterias = new ArrayList<Criteria>();
@@ -1045,6 +1072,10 @@ public class Example implements IDynamicTableName {
                     transformCriterion(exampleCriteria, condition, property, values, andOr);
                 }
                 exampleCriterias.add(exampleCriteria);
+            }
+
+            if (this.orderByClause.length() > 0) {
+                this.orderByClause = new StringBuilder(this.orderByClause.substring(1, this.orderByClause.length()));
             }
 
             Example innerExample =  new Example(this);
@@ -1094,6 +1125,17 @@ public class Example implements IDynamicTableName {
             } else {
                 return null;
             }
+        }
+
+        private String propertyforOderBy(String property) {
+            if (StringUtil.isEmpty(property) || StringUtil.isEmpty(property.trim())) {
+                throw new MapperException("接收的property为空！");
+            }
+            property = property.trim();
+            if (!propertyMap.containsKey(property)) {
+                throw new MapperException("当前实体类不包含名为" + property + "的属性!");
+            }
+            return propertyMap.get(property).getColumn();
         }
     }
 }
