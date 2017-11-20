@@ -44,12 +44,14 @@ public class TestExampleBuilder {
         try {
             CountryMapper mapper = sqlSession.getMapper(CountryMapper.class);
             Example example = Example.builder(Country.class)
-                    .distinct().build();
+                    .distinct()
+                    .build();
             List<Country> countries = mapper.selectByExample(example);
             Assert.assertEquals(183, countries.size());
 
+            // distinct和order by冲突问题
             Example example0 = Example.builder(Country.class)
-                    .selectDistinct("countryname").build();
+                    .selectDistinct("id", "countryname").build();
             List<Country> countries0 = mapper.selectByExample(example0);
             Assert.assertEquals(183, countries0.size());
         } finally {
@@ -200,7 +202,7 @@ public class TestExampleBuilder {
         }
     }
     /*
-    *   @description: 多个where连接的查询语句
+    *   @description: 多个where连接的查询语句测试
     * */
     @Test
     public void testWhereAndWhereCompound() {
@@ -224,6 +226,9 @@ public class TestExampleBuilder {
         }
     }
 
+    /*
+     *   @description: 多个where连接的查询语句测试
+     * */
     @Test
     public void testWhereOrWhereCompound() {
         SqlSession sqlSession = MybatisHelper.getSqlSession();
@@ -240,6 +245,43 @@ public class TestExampleBuilder {
                     .build();
             List<Country> countries = mapper.selectByExample(example);
             Assert.assertEquals(2, countries.size());
+
+        } finally {
+            sqlSession.close();
+        }
+    }
+
+    /*
+     *   @description: 多个where连接的查询语句测试
+     * */
+    @Test
+    public void testMultiWhereCompound() {
+        SqlSession sqlSession = MybatisHelper.getSqlSession();
+        try {
+            CountryMapper mapper = sqlSession.getMapper(CountryMapper.class);
+            Example example = Example.builder(Country.class)
+                    .selectDistinct()
+                    .where(Sqls.custom()
+                        .andEqualTo("countryname", "China")
+                        .andEqualTo("id", 35)
+                    )
+                    .orWhere(Sqls.custom()
+                        .andBetween("countryname", 'C', 'H')
+                        .andNotLike("countryname", "Co%")
+                    )
+                    .andWhere(Sqls.custom()
+                        .andLessThan("id", "100")
+                        .orGreaterThan("id", "55")
+                    )
+                    .orWhere(Sqls.custom()
+                        .andEqualTo("countryname", "Cook Is.")
+                    )
+                    .orderByAsc("id", "countryname")
+                    .orderByDesc("countrycode")
+                    .forUpdate()
+                    .build();
+            List<Country> countries = mapper.selectByExample(example);
+            Assert.assertEquals(35, countries.size());
 
         } finally {
             sqlSession.close();

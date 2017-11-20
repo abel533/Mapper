@@ -117,8 +117,11 @@ public class Example implements IDynamicTableName {
         this.selectColumns = builder.selectColumns;
         this.excludeColumns = builder.excludeColumns;
         this.oredCriteria = builder.exampleCriterias;
-        this.orderByClause = builder.orderByClause.toString();
         this.forUpdate = builder.forUpdate;
+
+        if (!StringUtil.isEmpty(builder.orderByClause.toString())) {
+            this.orderByClause = builder.orderByClause.toString();
+        }
     }
 
     public static Builder builder(Class<?> entityClass) {
@@ -997,6 +1000,8 @@ public class Example implements IDynamicTableName {
                 for (String property : properties) {
                     if (this.propertyMap.containsKey(property)) {
                         this.selectColumns.add(propertyMap.get(property).getColumn());
+                    } else {
+                        throw new MapperException("当前实体类不包含名为" + property + "的属性!");
                     }
                 }
             }
@@ -1011,6 +1016,8 @@ public class Example implements IDynamicTableName {
                 for (String property : properties) {
                     if (propertyMap.containsKey(property)) {
                         this.excludeColumns.add(propertyMap.get(property).getColumn());
+                    } else {
+                        throw new MapperException("当前实体类不包含名为" + property + "的属性!");
                     }
                 }
             }
@@ -1092,8 +1099,6 @@ public class Example implements IDynamicTableName {
 
             if (this.orderByClause.length() > 0) {
                 this.orderByClause = new StringBuilder(this.orderByClause.substring(1, this.orderByClause.length()));
-            } else {
-                this.orderByClause.append("id desc");
             }
 
             return new Example(this);
