@@ -58,6 +58,24 @@ public class TestExampleBuilder {
     }
 
     @Test
+    public void testForUpdate() {
+        SqlSession sqlSession = MybatisHelper.getSqlSession();
+        try {
+            CountryMapper mapper = sqlSession.getMapper(CountryMapper.class);
+            Example example = Example.builder(Country.class)
+                    .select("countryname")
+                    .where(Sqls.custom().andGreaterThan("id", 100))
+                    .orderByAsc("countrycode")
+                    .forUpdate()
+                    .build();
+            List<Country> countries = mapper.selectByExample(example);
+            Assert.assertEquals(83, countries.size());
+        } finally {
+            sqlSession.close();
+        }
+    }
+
+    @Test
     public void testEqualTo() {
         SqlSession sqlSession = MybatisHelper.getSqlSession();
         try {
@@ -123,9 +141,11 @@ public class TestExampleBuilder {
             sqlSession.close();
         }
     }
-
+    /*
+    * @description: 单个where组合查询测试
+    * */
     @Test
-    public void testCompound() {
+    public void testWhereCompound0() {
         SqlSession sqlSession = MybatisHelper.getSqlSession();
         try {
             CountryMapper mapper = sqlSession.getMapper(CountryMapper.class);
@@ -158,6 +178,30 @@ public class TestExampleBuilder {
         }
     }
 
+    /*
+     * @description: 单个where组合查询测试
+     * */
+    @Test
+    public void testWhereCompound1() {
+        SqlSession sqlSession = MybatisHelper.getSqlSession();
+        try {
+            CountryMapper mapper = sqlSession.getMapper(CountryMapper.class);
+            Example example = Example.builder(Country.class)
+                    .where(Sqls.custom()
+                        .andBetween("id", 35, 50)
+                        .orLessThan("id", 40)
+                        .orIsNull("countryname")
+                    )
+                    .build();
+            List<Country> countries = mapper.selectByExample(example);
+            Assert.assertEquals(50, countries.size());
+        } finally {
+            sqlSession.close();
+        }
+    }
+    /*
+    *   @description: 多个where连接的查询语句
+    * */
     @Test
     public void testWhereAndWhereCompound() {
         SqlSession sqlSession = MybatisHelper.getSqlSession();
