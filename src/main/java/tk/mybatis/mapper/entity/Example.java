@@ -118,6 +118,7 @@ public class Example implements IDynamicTableName {
         this.excludeColumns = builder.excludeColumns;
         this.oredCriteria = builder.exampleCriterias;
         this.forUpdate = builder.forUpdate;
+        this.tableName = builder.tableName;
 
         if (!StringUtil.isEmpty(builder.orderByClause.toString())) {
             this.orderByClause = builder.orderByClause.toString();
