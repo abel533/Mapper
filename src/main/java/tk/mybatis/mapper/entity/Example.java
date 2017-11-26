@@ -29,10 +29,8 @@ import org.apache.ibatis.reflection.SystemMetaObject;
 import org.apache.ibatis.type.TypeHandler;
 import tk.mybatis.mapper.MapperException;
 import tk.mybatis.mapper.mapperhelper.EntityHelper;
-import tk.mybatis.mapper.mapperhelper.FieldHelper;
 import tk.mybatis.mapper.util.StringUtil;
 
-import javax.persistence.Transient;
 import java.util.*;
 
 /**
