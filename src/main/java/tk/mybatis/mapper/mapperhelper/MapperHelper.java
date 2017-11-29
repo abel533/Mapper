@@ -46,6 +46,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * <p>项目地址 : <a href="https://github.com/abel533/Mapper" target="_blank">https://github.com/abel533/Mapper</a></p>
  *
  * @author liuzh
+ * @author wuyi
  */
 public class MapperHelper {
     /**
@@ -98,48 +99,44 @@ public class MapperHelper {
      */
     private MapperTemplate fromMapperClass(Class<?> mapperClass) {
         Method[] methods = mapperClass.getDeclaredMethods();
-        Class<?> templateClass = null;
+        Class<?> templateClass = EmptyProvider.class;
         Class<?> tempClass = null;
-        Set<String> methodSet = new HashSet<String>();
+        MapperTemplate mapperTemplate = new EmptyProvider(mapperClass, this);
         for (Method method : methods) {
-            if (method.isAnnotationPresent(SelectProvider.class)) {
-                SelectProvider provider = method.getAnnotation(SelectProvider.class);
-                tempClass = provider.type();
-                methodSet.add(method.getName());
-            } else if (method.isAnnotationPresent(InsertProvider.class)) {
-                InsertProvider provider = method.getAnnotation(InsertProvider.class);
-                tempClass = provider.type();
-                methodSet.add(method.getName());
-            } else if (method.isAnnotationPresent(DeleteProvider.class)) {
-                DeleteProvider provider = method.getAnnotation(DeleteProvider.class);
-                tempClass = provider.type();
-                methodSet.add(method.getName());
-            } else if (method.isAnnotationPresent(UpdateProvider.class)) {
-                UpdateProvider provider = method.getAnnotation(UpdateProvider.class);
-                tempClass = provider.type();
-                methodSet.add(method.getName());
+            if (mapperTemplate.getClass() == EmptyProvider.class) {
+                if (method.isAnnotationPresent(SelectProvider.class)) {
+                    SelectProvider provider = method.getAnnotation(SelectProvider.class);
+                    templateClass = provider.type();
+                } else if (method.isAnnotationPresent(InsertProvider.class)) {
+                    InsertProvider provider = method.getAnnotation(InsertProvider.class);
+                    templateClass = provider.type();
+                } else if (method.isAnnotationPresent(DeleteProvider.class)) {
+                    DeleteProvider provider = method.getAnnotation(DeleteProvider.class);
+                    templateClass = provider.type();
+                } else if (method.isAnnotationPresent(UpdateProvider.class)) {
+                    UpdateProvider provider = method.getAnnotation(UpdateProvider.class);
+                    templateClass = provider.type();
+                }
+                if (templateClass != EmptyProvider.class && MapperTemplate.class.isAssignableFrom(templateClass)) {
+                    try {
+                        mapperTemplate = (MapperTemplate) templateClass.getConstructor(Class.class, MapperHelper.class).newInstance(mapperClass, this);
+                    } catch (Exception e) {
+                        throw new MapperException("实例化MapperTemplate对象失败:" + e.getMessage());
+                    }
+                }
             }
-            if (templateClass == null) {
-                templateClass = tempClass;
-            } else if (templateClass != tempClass) {
-                throw new MapperException("一个通用Mapper中只允许存在一个MapperTemplate子类!");
-            }
-        }
-        if (templateClass == null || !MapperTemplate.class.isAssignableFrom(templateClass)) {
-            templateClass = EmptyProvider.class;
-        }
-        MapperTemplate mapperTemplate = null;
-        try {
-            mapperTemplate = (MapperTemplate) templateClass.getConstructor(Class.class, MapperHelper.class).newInstance(mapperClass, this);
-        } catch (Exception e) {
-            throw new MapperException("实例化MapperTemplate对象失败:" + e.getMessage());
-        }
-        //注册方法
-        for (String methodName : methodSet) {
-            try {
-                mapperTemplate.addMethodMap(methodName, templateClass.getMethod(methodName, MappedStatement.class));
-            } catch (NoSuchMethodException e) {
-                throw new MapperException(templateClass.getCanonicalName() + "中缺少" + methodName + "方法!");
+            String methodName = method.getName();
+            if (mapperTemplate.getClass() != EmptyProvider.class) {
+                if (tempClass == null) {
+                    tempClass = templateClass;
+                } else if (templateClass != tempClass) {
+                    throw new MapperException("一个通用Mapper中只允许存在一个MapperTemplate子类!");
+                }
+                try {
+                    mapperTemplate.addMethodMap(methodName, templateClass.getMethod(methodName, MappedStatement.class));
+                } catch (NoSuchMethodException e) {
+                    throw new MapperException(templateClass.getCanonicalName() + "中缺少" + methodName + "方法!");
+                }
             }
         }
         return mapperTemplate;
