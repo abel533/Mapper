@@ -103,35 +103,33 @@ public class MapperHelper {
         Class<?> tempClass = null;
         MapperTemplate mapperTemplate = new EmptyProvider(mapperClass, this);
         for (Method method : methods) {
-            if (mapperTemplate.getClass() == EmptyProvider.class) {
-                if (method.isAnnotationPresent(SelectProvider.class)) {
-                    SelectProvider provider = method.getAnnotation(SelectProvider.class);
-                    templateClass = provider.type();
-                } else if (method.isAnnotationPresent(InsertProvider.class)) {
-                    InsertProvider provider = method.getAnnotation(InsertProvider.class);
-                    templateClass = provider.type();
-                } else if (method.isAnnotationPresent(DeleteProvider.class)) {
-                    DeleteProvider provider = method.getAnnotation(DeleteProvider.class);
-                    templateClass = provider.type();
-                } else if (method.isAnnotationPresent(UpdateProvider.class)) {
-                    UpdateProvider provider = method.getAnnotation(UpdateProvider.class);
-                    templateClass = provider.type();
-                }
-                if (templateClass != EmptyProvider.class && MapperTemplate.class.isAssignableFrom(templateClass)) {
+            if (method.isAnnotationPresent(SelectProvider.class)) {
+                SelectProvider provider = method.getAnnotation(SelectProvider.class);
+                templateClass = provider.type();
+            } else if (method.isAnnotationPresent(InsertProvider.class)) {
+                InsertProvider provider = method.getAnnotation(InsertProvider.class);
+                templateClass = provider.type();
+            } else if (method.isAnnotationPresent(DeleteProvider.class)) {
+                DeleteProvider provider = method.getAnnotation(DeleteProvider.class);
+                templateClass = provider.type();
+            } else if (method.isAnnotationPresent(UpdateProvider.class)) {
+                UpdateProvider provider = method.getAnnotation(UpdateProvider.class);
+                templateClass = provider.type();
+            }
+            if (templateClass != EmptyProvider.class && MapperTemplate.class.isAssignableFrom(templateClass)) {
+                if (tempClass == null) {
+                    tempClass = templateClass;
                     try {
                         mapperTemplate = (MapperTemplate) templateClass.getConstructor(Class.class, MapperHelper.class).newInstance(mapperClass, this);
                     } catch (Exception e) {
                         throw new MapperException("实例化MapperTemplate对象失败:" + e.getMessage());
                     }
-                }
-            }
-            String methodName = method.getName();
-            if (mapperTemplate.getClass() != EmptyProvider.class) {
-                if (tempClass == null) {
-                    tempClass = templateClass;
                 } else if (templateClass != tempClass) {
                     throw new MapperException("一个通用Mapper中只允许存在一个MapperTemplate子类!");
                 }
+            }
+            if (mapperTemplate.getClass() != EmptyProvider.class) {
+                String methodName = method.getName();
                 try {
                     mapperTemplate.addMethodMap(methodName, templateClass.getMethod(methodName, MappedStatement.class));
                 } catch (NoSuchMethodException e) {
