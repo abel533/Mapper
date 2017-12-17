@@ -1,9 +1,39 @@
 # 更新日志
 
-## 3.4.6-SNAPSHOT 
+## 3.4.6
 
+- `Example` 新增 builder 模式（by [Ngone51](https://github.com/abel533/Mapper/commits?author=Ngone51)）。
 - 设置下划线风格替换为驼峰风格的Pattern为StringUtil的静态变量（by [Ngone51](https://github.com/abel533/Mapper/commits?author=Ngone51)）。
 
+一个简单的 builder 用法示例：
+```java
+/*
+ *   @description: 多个where连接的查询语句测试
+ *
+ */
+@Test
+public void testWhereAndWhereCompound() {
+    SqlSession sqlSession = MybatisHelper.getSqlSession();
+    try {
+        CountryMapper mapper = sqlSession.getMapper(CountryMapper.class);
+        Example example = Example.builder(Country.class)
+                .where(Sqls.custom()
+                    .andEqualTo("countryname", "China")
+                    .andEqualTo("id", 35)
+                )
+                .andWhere(Sqls.custom()
+                    .andEqualTo("id", 183)
+                )
+                .build();
+        List<Country> countries = mapper.selectByExample(example);
+        Assert.assertEquals(0, countries.size());
+
+    } finally {
+        sqlSession.close();
+    }
+}
+```
+更多用法可以通过测试 [`TestExampleBuilder`](https://github.com/abel533/Mapper/blob/master/src/test/java/tk/mybatis/mapper/test/example/TestExampleBuilder.java) 了解。
 
 ## 3.4.5 - 2017-11-11
 
