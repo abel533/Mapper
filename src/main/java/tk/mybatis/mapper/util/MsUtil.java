@@ -44,11 +44,28 @@ public class MsUtil {
             throw new MapperException("当前MappedStatement的id=" + msId + ",不符合MappedStatement的规则!");
         }
         String mapperClassStr = msId.substring(0, msId.lastIndexOf("."));
-        try {
-            return Class.forName(mapperClassStr);
-        } catch (ClassNotFoundException e) {
-            return null;
+        ClassLoader[] classLoader = getClassLoaders();
+        Class<?> mapperClass = null;
+        for (ClassLoader cl : classLoader) {
+            if (null != cl) {
+                try {
+                    mapperClass = Class.forName(mapperClassStr, true, cl);
+                    if (mapperClass != null) {
+                        break;
+                    }
+                } catch (ClassNotFoundException e) {
+                    // we'll ignore this until all class loaders fail to locate the class
+                }
+            }
         }
+        if (mapperClass == null) {
+            throw new MapperException("class loaders failed to locate the class " + mapperClassStr);
+        }
+        return mapperClass;
+    }
+
+    private static ClassLoader[] getClassLoaders() {
+        return new ClassLoader[]{Thread.currentThread().getContextClassLoader(), MsUtil.class.getClassLoader()};
     }
 
     /**
