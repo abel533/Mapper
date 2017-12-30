@@ -35,6 +35,7 @@ import org.mybatis.generator.internal.util.StringUtility;
 
 import java.text.MessageFormat;
 import java.util.Properties;
+import java.util.Set;
 
 public class MapperCommentGenerator implements CommentGenerator {
     //开始的分隔符，例如mysql为`，sqlserver为[
@@ -272,5 +273,45 @@ public class MapperCommentGenerator implements CommentGenerator {
      */
     @Override
     public void addClassComment(InnerClass innerClass, IntrospectedTable introspectedTable, boolean markAsDoNotDelete) {
+    }
+
+    /**
+     * @since mbg 1.3.6
+     */
+    @Override
+    public void addGeneralMethodAnnotation(Method method, IntrospectedTable introspectedTable, Set<FullyQualifiedJavaType> set) {
+
+    }
+
+    /**
+     * @since mbg 1.3.6
+     */
+    @Override
+    public void addGeneralMethodAnnotation(Method method, IntrospectedTable introspectedTable, IntrospectedColumn introspectedColumn, Set<FullyQualifiedJavaType> set) {
+
+    }
+
+    /**
+     * @since mbg 1.3.6
+     */
+    @Override
+    public void addFieldAnnotation(Field field, IntrospectedTable introspectedTable, Set<FullyQualifiedJavaType> set) {
+
+    }
+
+    /**
+     * @since mbg 1.3.6
+     */
+    @Override
+    public void addFieldAnnotation(Field field, IntrospectedTable introspectedTable, IntrospectedColumn introspectedColumn, Set<FullyQualifiedJavaType> set) {
+
+    }
+
+    /**
+     * @since mbg 1.3.6
+     */
+    @Override
+    public void addClassAnnotation(InnerClass innerClass, IntrospectedTable introspectedTable, Set<FullyQualifiedJavaType> set) {
+
     }
 }

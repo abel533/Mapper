@@ -79,7 +79,7 @@
         </plugin>
 
         <jdbcConnection driverClass="com.mysql.jdbc.Driver"
-                        connectionURL="jdbc:mysql://localhost:3306/test"
+                        connectionURL="jdbc:mysql://localhost:3306/test?useSSL=false"
                         userId="root"
                         password="">
         </jdbcConnection>
