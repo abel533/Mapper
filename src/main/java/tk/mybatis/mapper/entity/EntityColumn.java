@@ -51,6 +51,12 @@ public class EntityColumn {
     private boolean insertable = true;
     //可更新
     private boolean updatable = true;
+    /**
+     * 对应的字段信息
+     *
+     * @since 3.5.0
+     */
+    private EntityField entityField;
 
     public EntityColumn() {
     }
@@ -199,6 +205,14 @@ public class EntityColumn {
      */
     public String getColumnHolder() {
         return getColumnHolder(null);
+    }
+
+    public EntityField getEntityField() {
+        return entityField;
+    }
+
+    public void setEntityField(EntityField entityField) {
+        this.entityField = entityField;
     }
 
     public String getGenerator() {
