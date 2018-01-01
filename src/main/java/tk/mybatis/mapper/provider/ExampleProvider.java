@@ -49,7 +49,7 @@ public class ExampleProvider extends MapperTemplate {
     public String selectCountByExample(MappedStatement ms) {
         Class<?> entityClass = getEntityClass(ms);
         StringBuilder sql = new StringBuilder();
-        if(isCheckExampleEntityClass()){
+        if (isCheckExampleEntityClass()) {
             sql.append(SqlHelper.exampleCheck(entityClass));
         }
         sql.append(SqlHelper.selectCount(entityClass));
@@ -68,7 +68,7 @@ public class ExampleProvider extends MapperTemplate {
     public String deleteByExample(MappedStatement ms) {
         Class<?> entityClass = getEntityClass(ms);
         StringBuilder sql = new StringBuilder();
-        if(isCheckExampleEntityClass()){
+        if (isCheckExampleEntityClass()) {
             sql.append(SqlHelper.exampleCheck(entityClass));
         }
         sql.append(SqlHelper.deleteFromTable(entityClass, tableName(entityClass)));
@@ -88,7 +88,7 @@ public class ExampleProvider extends MapperTemplate {
         //将返回值修改为实体类型
         setResultType(ms, entityClass);
         StringBuilder sql = new StringBuilder("SELECT ");
-        if(isCheckExampleEntityClass()){
+        if (isCheckExampleEntityClass()) {
             sql.append(SqlHelper.exampleCheck(entityClass));
         }
         sql.append("<if test=\"distinct\">distinct</if>");
@@ -120,7 +120,7 @@ public class ExampleProvider extends MapperTemplate {
     public String updateByExampleSelective(MappedStatement ms) {
         Class<?> entityClass = getEntityClass(ms);
         StringBuilder sql = new StringBuilder();
-        if(isCheckExampleEntityClass()){
+        if (isCheckExampleEntityClass()) {
             sql.append(SqlHelper.exampleCheck(entityClass));
         }
         sql.append(SqlHelper.updateTable(entityClass, tableName(entityClass), "example"));
@@ -138,12 +138,22 @@ public class ExampleProvider extends MapperTemplate {
     public String updateByExample(MappedStatement ms) {
         Class<?> entityClass = getEntityClass(ms);
         StringBuilder sql = new StringBuilder();
-        if(isCheckExampleEntityClass()){
+        if (isCheckExampleEntityClass()) {
             sql.append(SqlHelper.exampleCheck(entityClass));
         }
         sql.append(SqlHelper.updateTable(entityClass, tableName(entityClass), "example"));
         sql.append(SqlHelper.updateSetColumns(entityClass, "record", false, false));
         sql.append(SqlHelper.updateByExampleWhereClause());
         return sql.toString();
+    }
+
+    /**
+     * 根据Example查询一个结果
+     *
+     * @param ms
+     * @return
+     */
+    public String selectOneByExample(MappedStatement ms) {
+        return selectByExample(ms);
     }
 }

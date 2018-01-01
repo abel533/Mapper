@@ -22,9 +22,10 @@
  * THE SOFTWARE.
  */
 
-package tk.mybatis.mapper.common;
+package tk.mybatis.mapper.common.example;
 
-import tk.mybatis.mapper.common.example.*;
+import org.apache.ibatis.annotations.SelectProvider;
+import tk.mybatis.mapper.provider.ExampleProvider;
 
 /**
  * 通用Mapper接口,Example查询
@@ -32,12 +33,15 @@ import tk.mybatis.mapper.common.example.*;
  * @param <T> 不能为空
  * @author liuzh
  */
-public interface ExampleMapper<T> extends
-        SelectByExampleMapper<T>,
-        SelectOneByExampleMapper<T>,
-        SelectCountByExampleMapper<T>,
-        DeleteByExampleMapper<T>,
-        UpdateByExampleMapper<T>,
-        UpdateByExampleSelectiveMapper<T> {
+public interface SelectOneByExampleMapper<T> {
+
+    /**
+     * 根据Example条件进行查询
+     *
+     * @param example
+     * @return
+     */
+    @SelectProvider(type = ExampleProvider.class, method = "dynamicSQL")
+    T selectOneByExample(Object example);
 
 }
