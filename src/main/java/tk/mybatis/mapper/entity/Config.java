@@ -47,7 +47,12 @@ public class Config {
     //校验调用Example方法时，Example(entityClass)和Mapper<EntityClass>是否一致
     private boolean checkExampleEntityClass;
     //使用简单类型
-    private boolean useSimpleType;
+    //3.5.0 后默认值改为 true
+    private boolean useSimpleType          = true;
+    /**
+     * @since 3.5.0
+     */
+    private boolean annotationAsSimpleType = false;
     /**
      * 是否支持方法上的注解，默认false
      */
@@ -184,6 +189,14 @@ public class Config {
         this.UUID = UUID;
     }
 
+    public boolean isAnnotationAsSimpleType() {
+        return annotationAsSimpleType;
+    }
+
+    public void setAnnotationAsSimpleType(boolean annotationAsSimpleType) {
+        this.annotationAsSimpleType = annotationAsSimpleType;
+    }
+
     /**
      * 获取SelectKey的Order
      *
@@ -288,6 +301,10 @@ public class Config {
         String useSimpleTypeStr = properties.getProperty("useSimpleType");
         if (StringUtil.isNotEmpty(useSimpleTypeStr)) {
             this.useSimpleType = useSimpleTypeStr.equalsIgnoreCase("TRUE");
+        }
+        String annotationAsSimpleTypeStr = properties.getProperty("annotationAsSimpleType");
+        if (StringUtil.isNotEmpty(annotationAsSimpleTypeStr)) {
+            this.annotationAsSimpleType = annotationAsSimpleTypeStr.equalsIgnoreCase("TRUE");
         }
         //注册新的基本类型，以逗号隔开，使用全限定类名
         String simpleTypes = properties.getProperty("simpleTypes");

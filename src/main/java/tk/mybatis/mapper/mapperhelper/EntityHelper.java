@@ -39,6 +39,7 @@ import tk.mybatis.mapper.util.SimpleTypeUtil;
 import tk.mybatis.mapper.util.StringUtil;
 
 import javax.persistence.*;
+import java.lang.annotation.Annotation;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -224,7 +225,11 @@ public class EntityHelper {
         }
         for (EntityField field : fields) {
             //如果启用了简单类型，就做简单类型校验，如果不是简单类型，直接跳过
-            if(config.isUseSimpleType() && !SimpleTypeUtil.isSimpleType(field.getJavaType())){
+            //3.5.0 如果启用了枚举作为简单类型，就不会自动忽略枚举类型
+            if (config.isUseSimpleType() &&
+                    !(SimpleTypeUtil.isSimpleType(field.getJavaType())
+                            ||
+                            (config.isAnnotationAsSimpleType() && Annotation.class.isAssignableFrom(field.getJavaType())))) {
                 continue;
             }
             processField(entityTable, style, field);
