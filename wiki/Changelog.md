@@ -1,5 +1,15 @@
 # 更新日志
 
+## 3.5.0-SNAPSHOT
+
+- 兼容 mbg 1.3.6 版本。
+- `EntityColumn` 记录 `EntityField` 信息，方便后续扩展使用。
+- 新增 `selectOneByExample` 方法，必须保证返回值最多 1 个，否则抛出异常。
+- 针对 update 两个基本方法增加乐观锁功能，在实体类对版本字段增加 `@Version` 注解即可，默认支持 `Integer` 和 `Long` 类型，其他情况可以实现 `NextVersion` 接口并在注解中指定该实现，一个实体类中最多只能有一个加 `@Version` 注解的字段。
+- 3.4.0增加的 `useSimpleType` 默认值改为 `true`，默认忽略复杂类型的字段，复杂类型不需要加 `@Transient` 注解，具体类型可以参考 `SimpleTypeUtil` 类。
+- 新增 `annotationAsSimpleType` 参数，默认 `false`，设置为 `true` 后会把枚举作为简单类型对待，需要配合 `useSimpleType = true` 使用。
+- `FieldHelper` 改为判断当前jdk版本是否为6和7，其他情况按jdk8处理，因此支持jdk9+
+
 ## 3.4.6
 
 - `Example` 新增 builder 模式（by [Ngone51](https://github.com/abel533/Mapper/commits?author=Ngone51)）。
