@@ -47,10 +47,10 @@ public class FieldHelper {
 
     static {
         String version = System.getProperty("java.version");
-        if (version.contains("1.8.")) {
-            fieldHelper = new Jdk8FieldHelper();
-        } else {
+        if (version.contains("1.6.") || version.contains("1.7.")) {
             fieldHelper = new Jdk6_7FieldHelper();
+        } else {
+            fieldHelper = new Jdk8FieldHelper();
         }
     }
 
@@ -136,6 +136,7 @@ public class FieldHelper {
          * @param entityClass
          * @return
          */
+        @Override
         public List<EntityField> getFields(Class<?> entityClass) {
             List<EntityField> fields = _getFields(entityClass, null, null);
             List<EntityField> properties = getProperties(entityClass);
@@ -175,7 +176,7 @@ public class FieldHelper {
             for (int i = 0; i < fields.length; i++) {
                 Field field = fields[i];
                 //排除静态字段，解决bug#2
-                if (!Modifier.isStatic(field.getModifiers())) {
+                if (!Modifier.isStatic(field.getModifiers()) && !Modifier.isTransient(field.getModifiers())) {
                     if (level.intValue() != 0) {
                         //将父类的字段放在前面
                         fieldList.add(index, new EntityField(field, null));
@@ -202,6 +203,7 @@ public class FieldHelper {
          * @param entityClass
          * @return
          */
+        @Override
         public List<EntityField> getProperties(Class<?> entityClass) {
             List<EntityField> entityFields = new ArrayList<EntityField>();
             BeanInfo beanInfo = null;
@@ -238,6 +240,7 @@ public class FieldHelper {
          * @param entityClass
          * @return
          */
+        @Override
         public List<EntityField> getProperties(Class<?> entityClass) {
             Map<String, Class<?>> genericMap = _getGenericTypeMap(entityClass);
             List<EntityField> entityFields = new ArrayList<EntityField>();
