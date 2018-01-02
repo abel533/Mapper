@@ -50,7 +50,7 @@ public class BaseUpdateProvider extends MapperTemplate {
         StringBuilder sql = new StringBuilder();
         sql.append(SqlHelper.updateTable(entityClass, tableName(entityClass)));
         sql.append(SqlHelper.updateSetColumns(entityClass, null, false, false));
-        sql.append(SqlHelper.wherePKColumns(entityClass));
+        sql.append(SqlHelper.wherePKColumns(entityClass, true));
         return sql.toString();
     }
 
@@ -65,7 +65,7 @@ public class BaseUpdateProvider extends MapperTemplate {
         StringBuilder sql = new StringBuilder();
         sql.append(SqlHelper.updateTable(entityClass, tableName(entityClass)));
         sql.append(SqlHelper.updateSetColumns(entityClass, null, true, isNotEmpty()));
-        sql.append(SqlHelper.wherePKColumns(entityClass));
+        sql.append(SqlHelper.wherePKColumns(entityClass, true));
         return sql.toString();
     }
 }

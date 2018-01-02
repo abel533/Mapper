@@ -28,8 +28,10 @@ import org.apache.ibatis.session.SqlSession;
 import org.junit.Assert;
 import org.junit.Test;
 import tk.mybatis.mapper.mapper.CountryMapper;
+import tk.mybatis.mapper.mapper.CountryVersionMapper;
 import tk.mybatis.mapper.mapper.MybatisHelper;
 import tk.mybatis.mapper.model.Country;
+import tk.mybatis.mapper.model.CountryVersion;
 
 /**
  * 通过PK更新实体类全部属性
@@ -111,6 +113,42 @@ public class TestUpdateByPrimaryKey {
         }
     }
 
+    /**
+     * 根据查询条件进行查询
+     */
+    @Test
+    public void testUpdateByPrimaryKeyAndVersion() {
+        SqlSession sqlSession = MybatisHelper.getSqlSession();
+        try {
+            CountryVersionMapper mapper = sqlSession.getMapper(CountryVersionMapper.class);
+            CountryVersion country = mapper.selectByPrimaryKey(174);
+            Assert.assertNotNull(country);
+            Assert.assertEquals(new Integer(1), country.getVersion());
+            country.setCountryname("美国2");
+            Assert.assertEquals(1, mapper.updateByPrimaryKey(country));
+
+            country = mapper.selectByPrimaryKey(174);
+            Assert.assertNotNull(country);
+            Assert.assertEquals(new Integer(2), country.getVersion());
+
+            country.setCountryname("美国3");
+            Assert.assertEquals(1, mapper.updateByPrimaryKey(country));
+
+            country = mapper.selectByPrimaryKey(174);
+            Assert.assertNotNull(country);
+            Assert.assertEquals(new Integer(3), country.getVersion());
+
+            country.setCountryname("美国4");
+            Assert.assertEquals(1, mapper.updateByPrimaryKey(country));
+
+            country = mapper.selectByPrimaryKey(174);
+            Assert.assertNotNull(country);
+            Assert.assertEquals(new Integer(4), country.getVersion());
+        } finally {
+            sqlSession.close();
+        }
+    }
+
     class Key extends Country {
         private String countrytel;
 
@@ -122,5 +160,4 @@ public class TestUpdateByPrimaryKey {
             this.countrytel = countrytel;
         }
     }
-
 }

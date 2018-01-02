@@ -74,6 +74,7 @@
         <mapper class="tk.mybatis.mapper.mapper.UserLoginMapper"/>
         <mapper class="tk.mybatis.mapper.mapper.UserLogin2Mapper"/>
         <mapper class="tk.mybatis.mapper.mapper.JDBCMapper"/>
+        <mapper class="tk.mybatis.mapper.mapper.CountryVersionMapper"/>
 
     </mappers>
 

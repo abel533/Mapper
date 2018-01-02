@@ -24,9 +24,11 @@
 
 package tk.mybatis.mapper.mapperhelper;
 
+import tk.mybatis.mapper.annotation.Version;
 import tk.mybatis.mapper.entity.EntityColumn;
 import tk.mybatis.mapper.entity.IDynamicTableName;
 import tk.mybatis.mapper.util.StringUtil;
+import tk.mybatis.mapper.version.VersionException;
 
 import java.util.Set;
 
@@ -448,10 +450,26 @@ public class SqlHelper {
         sql.append("<set>");
         //获取全部列
         Set<EntityColumn> columnList = EntityHelper.getColumns(entityClass);
+        //对乐观锁的支持
+        EntityColumn versionColumn = null;
         //当某个列有主键策略时，不需要考虑他的属性是否为空，因为如果为空，一定会根据主键策略给他生成一个值
         for (EntityColumn column : columnList) {
+            if (column.getEntityField().isAnnotationPresent(Version.class)) {
+                if (versionColumn != null) {
+                    throw new VersionException(entityClass.getCanonicalName() + " 中包含多个带有 @Version 注解的字段，一个类中只能存在一个带有 @Version 注解的字段!");
+                }
+                versionColumn = column;
+            }
             if (!column.isId() && column.isUpdatable()) {
-                if (notNull) {
+                if (column == versionColumn) {
+                    Version version = versionColumn.getEntityField().getAnnotation(Version.class);
+                    String versionClass = version.nextVersion().getCanonicalName();
+                    //version = ${@tk.mybatis.mapper.version@nextVersionClass("versionClass", version)}
+                    sql.append(column.getColumn())
+                            .append(" = ${@tk.mybatis.mapper.version.VersionUtil@nextVersion(\"")
+                            .append(versionClass).append("\", ")
+                            .append(column.getProperty()).append(")},");
+                } else if (notNull) {
                     sql.append(SqlHelper.getIfNotNull(entityName, column, column.getColumnEqualsHolder(entityName) + ",", notEmpty));
                 } else {
                     sql.append(column.getColumnEqualsHolder(entityName) + ",");
@@ -469,6 +487,16 @@ public class SqlHelper {
      * @return
      */
     public static String wherePKColumns(Class<?> entityClass) {
+        return wherePKColumns(entityClass, false);
+    }
+
+    /**
+     * where主键条件
+     *
+     * @param entityClass
+     * @return
+     */
+    public static String wherePKColumns(Class<?> entityClass, boolean useVersion) {
         StringBuilder sql = new StringBuilder();
         sql.append("<where>");
         //获取全部列
@@ -476,6 +504,19 @@ public class SqlHelper {
         //当某个列有主键策略时，不需要考虑他的属性是否为空，因为如果为空，一定会根据主键策略给他生成一个值
         for (EntityColumn column : columnList) {
             sql.append(" AND " + column.getColumnEqualsHolder());
+        }
+        if (useVersion) {
+            columnList = EntityHelper.getColumns(entityClass);
+            boolean hasVersion = false;
+            for (EntityColumn column : columnList) {
+                if (column.getEntityField().isAnnotationPresent(Version.class)) {
+                    if (hasVersion) {
+                        throw new VersionException(entityClass.getCanonicalName() + " 中包含多个带有 @Version 注解的字段，一个类中只能存在一个带有 @Version 注解的字段!");
+                    }
+                    hasVersion = true;
+                    sql.append(" AND " + column.getColumnEqualsHolder());
+                }
+            }
         }
         sql.append("</where>");
         return sql.toString();
