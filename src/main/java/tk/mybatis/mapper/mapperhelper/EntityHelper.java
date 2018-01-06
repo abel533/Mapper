@@ -36,10 +36,12 @@ import tk.mybatis.mapper.entity.EntityColumn;
 import tk.mybatis.mapper.entity.EntityField;
 import tk.mybatis.mapper.entity.EntityTable;
 import tk.mybatis.mapper.util.SimpleTypeUtil;
+import tk.mybatis.mapper.util.SqlReservedWords;
 import tk.mybatis.mapper.util.StringUtil;
 
 import javax.persistence.*;
 import java.lang.annotation.Annotation;
+import java.text.MessageFormat;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -232,7 +234,7 @@ public class EntityHelper {
                             (config.isAnnotationAsSimpleType() && Annotation.class.isAssignableFrom(field.getJavaType())))) {
                 continue;
             }
-            processField(entityTable, style, field);
+            processField(entityTable, style, field, config.getWrapKeyword());
         }
         //当pk.size=0的时候使用所有列作为主键
         if (entityTable.getEntityClassPKColumns().size() == 0) {
@@ -249,7 +251,7 @@ public class EntityHelper {
      * @param style
      * @param field
      */
-    private static void processField(EntityTable entityTable, Style style, EntityField field) {
+    private static void processField(EntityTable entityTable, Style style, EntityField field, String wrapKeyword) {
         //排除字段
         if (field.isAnnotationPresent(Transient.class)) {
             return;
@@ -286,6 +288,10 @@ public class EntityHelper {
         //表名
         if (StringUtil.isEmpty(columnName)) {
             columnName = StringUtil.convertByStyle(field.getName(), style);
+        }
+        //自动处理关键字
+        if (StringUtil.isNotEmpty(wrapKeyword) && SqlReservedWords.containsWord(columnName)) {
+            columnName = MessageFormat.format(wrapKeyword, columnName);
         }
         entityColumn.setProperty(field.getName());
         entityColumn.setColumn(columnName);

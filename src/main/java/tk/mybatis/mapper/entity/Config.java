@@ -61,11 +61,14 @@ public class Config {
      * 对于一般的getAllIfColumnNode，是否判断!=''，默认不判断
      */
     private boolean notEmpty = false;
-
     /**
      * 字段转换风格，默认驼峰转下划线
      */
     private Style style;
+    /**
+     * 处理关键字，默认空，mysql可以设置为 `{0}`, sqlserver 为 [{0}]，{0} 代表的列名
+     */
+    private String wrapKeyword = "";
 
     public String getCatalog() {
         return catalog;
@@ -187,6 +190,14 @@ public class Config {
      */
     public void setUUID(String UUID) {
         this.UUID = UUID;
+    }
+
+    public String getWrapKeyword() {
+        return wrapKeyword;
+    }
+
+    public void setWrapKeyword(String wrapKeyword) {
+        this.wrapKeyword = wrapKeyword;
     }
 
     public boolean isAnnotationAsSimpleType() {
@@ -321,6 +332,11 @@ public class Config {
         } else {
             //默认驼峰
             this.style = Style.camelhump;
+        }
+        //处理关键字
+        String wrapKeyword = properties.getProperty("wrapKeyword");
+        if (StringUtil.isNotEmpty(wrapKeyword)) {
+            this.wrapKeyword = wrapKeyword;
         }
     }
 }
