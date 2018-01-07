@@ -1,16 +1,35 @@
 # 更新日志
 
-## 3.5.0-SNAPSHOT
+## 3.5.0 - 2018-01-08
 
 - 兼容 mbg 1.3.6 版本。
 - `EntityColumn` 记录 `EntityField` 信息，方便后续扩展使用。
-- 新增 `selectOneByExample` 方法，必须保证返回值最多 1 个，否则抛出异常。
 - 针对 update 两个基本方法增加乐观锁功能，在实体类对版本字段增加 `@Version` 注解即可，默认支持 `Integer` 和 `Long` 类型，其他情况可以实现 `NextVersion` 接口并在注解中指定该实现，一个实体类中最多只能有一个加 `@Version` 注解的字段。
+
 - 3.4.0增加的 `useSimpleType` 默认值改为 `true`，默认忽略复杂类型的字段，复杂类型不需要加 `@Transient` 注解，具体类型可以参考 `SimpleTypeUtil` 类。
 - 新增 `annotationAsSimpleType` 参数，默认 `false`，设置为 `true` 后会把枚举作为简单类型对待，需要配合 `useSimpleType = true` 使用。
+- 新增 `wrapKeyword` 参数，配置后会自动处理关键字，可以配的值和数据库有关，例如 sqlserver 可以配置为 `[{0}]`，使用 `{0}` 替代原来的列名。
 - `FieldHelper` 改为判断当前jdk版本是否为6和7，其他情况按jdk8处理，因此支持jdk9+
 
-## 3.4.6
+- 新增 `selectOneByExample` 方法，必须保证返回值最多 1 个，否则抛出异常。
+- 增加新的 `tk.mybatis.mapper.additional.insert.InsertListMapper`，这个批量插入方法不支持主键策略，不会返回自动生成的主键
+
+使用 `@Version` 注解的效果如下：
+
+```sql
+DEBUG [main] - ==>  Preparing: UPDATE country SET countryname = ?,countrycode = ?,version = 2 WHERE id = ? AND version = ? 
+DEBUG [main] - ==> Parameters: 美国2(String), US(String), 174(Integer), 1(Integer)
+```
+
+自动处理关键字代码：
+```java
+//自动处理关键字
+if (StringUtil.isNotEmpty(wrapKeyword) && SqlReservedWords.containsWord(columnName)) {
+    columnName = MessageFormat.format(wrapKeyword, columnName);
+}
+```
+
+## 3.4.6 - 2017-12-17
 
 - `Example` 新增 builder 模式（by [Ngone51](https://github.com/abel533/Mapper/commits?author=Ngone51)）。
 - 设置下划线风格替换为驼峰风格的Pattern为StringUtil的静态变量（by [Ngone51](https://github.com/abel533/Mapper/commits?author=Ngone51)）。
