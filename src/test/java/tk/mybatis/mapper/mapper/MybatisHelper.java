@@ -88,6 +88,8 @@ public class MybatisHelper {
                 //config.setSchema("");
                 // 主键自增回写方法执行顺序,默认AFTER,可选值为(BEFORE|AFTER)
                 //config.setOrder("AFTER");
+                //自动关键字 - mysql
+                //config.setWrapKeyword("`{0}`");
                 //设置配置
                 mapperHelper.setConfig(config);
                 // 注册通用Mapper接口 - 可以自动注册继承的接口
