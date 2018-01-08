@@ -25,9 +25,15 @@
 package tk.mybatis.mapper.provider.base;
 
 import org.apache.ibatis.mapping.MappedStatement;
+import tk.mybatis.mapper.MapperException;
+import tk.mybatis.mapper.annotation.LogicalDelete;
+import tk.mybatis.mapper.entity.EntityColumn;
+import tk.mybatis.mapper.mapperhelper.EntityHelper;
 import tk.mybatis.mapper.mapperhelper.MapperHelper;
 import tk.mybatis.mapper.mapperhelper.MapperTemplate;
 import tk.mybatis.mapper.mapperhelper.SqlHelper;
+
+import java.util.Set;
 
 /**
  * BaseDeleteMapper实现类，基础方法实现类
@@ -62,7 +68,31 @@ public class BaseDeleteProvider extends MapperTemplate {
     public String deleteByPrimaryKey(MappedStatement ms) {
         final Class<?> entityClass = getEntityClass(ms);
         StringBuilder sql = new StringBuilder();
-        sql.append(SqlHelper.deleteFromTable(entityClass, tableName(entityClass)));
+        // 这里查看是否需要逻辑删除
+        //获取全部列
+        Set<EntityColumn> columnList = EntityHelper.getColumns(entityClass);
+        //对逻辑删除的支持
+        EntityColumn logicalDeleteColumn = null;
+        for (EntityColumn column : columnList) {
+            if (column.getEntityField().isAnnotationPresent(LogicalDelete.class)) {
+                if (logicalDeleteColumn != null) {
+                    throw new MapperException(entityClass.getCanonicalName() + " 中包含多个带有 @LogicalDelete 注解的字段，一个类中只能存在一个带有 @LogicalDelete 注解的字段!");
+                }
+                logicalDeleteColumn = column;
+            }
+        }
+
+        // 如果是逻辑删除就执行 update 否则执行 delete
+        if (logicalDeleteColumn != null) {
+            sql.append(SqlHelper.updateTable(entityClass, tableName(entityClass)));
+            sql.append("<set>");
+            sql.append(logicalDeleteColumn.getColumnEqualsHolder());
+            sql.append("</set>");
+        }else{
+            sql.append(SqlHelper.deleteFromTable(entityClass, tableName(entityClass)));
+        }
+
+        // 删除条件
         sql.append(SqlHelper.wherePKColumns(entityClass));
         return sql.toString();
     }
