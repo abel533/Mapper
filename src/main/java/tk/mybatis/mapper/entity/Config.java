@@ -48,11 +48,11 @@ public class Config {
     private boolean checkExampleEntityClass;
     //使用简单类型
     //3.5.0 后默认值改为 true
-    private boolean useSimpleType          = true;
+    private boolean useSimpleType    = true;
     /**
      * @since 3.5.0
      */
-    private boolean annotationAsSimpleType = false;
+    private boolean enumAsSimpleType = false;
     /**
      * 是否支持方法上的注解，默认false
      */
@@ -200,14 +200,6 @@ public class Config {
         this.wrapKeyword = wrapKeyword;
     }
 
-    public boolean isAnnotationAsSimpleType() {
-        return annotationAsSimpleType;
-    }
-
-    public void setAnnotationAsSimpleType(boolean annotationAsSimpleType) {
-        this.annotationAsSimpleType = annotationAsSimpleType;
-    }
-
     /**
      * 获取SelectKey的Order
      *
@@ -235,6 +227,14 @@ public class Config {
 
     public void setEnableMethodAnnotation(boolean enableMethodAnnotation) {
         this.enableMethodAnnotation = enableMethodAnnotation;
+    }
+
+    public boolean isEnumAsSimpleType() {
+        return enumAsSimpleType;
+    }
+
+    public void setEnumAsSimpleType(boolean enumAsSimpleType) {
+        this.enumAsSimpleType = enumAsSimpleType;
     }
 
     public boolean isNotEmpty() {
@@ -313,9 +313,9 @@ public class Config {
         if (StringUtil.isNotEmpty(useSimpleTypeStr)) {
             this.useSimpleType = useSimpleTypeStr.equalsIgnoreCase("TRUE");
         }
-        String annotationAsSimpleTypeStr = properties.getProperty("annotationAsSimpleType");
-        if (StringUtil.isNotEmpty(annotationAsSimpleTypeStr)) {
-            this.annotationAsSimpleType = annotationAsSimpleTypeStr.equalsIgnoreCase("TRUE");
+        String enumAsSimpleTypeStr = properties.getProperty("enumAsSimpleType");
+        if (StringUtil.isNotEmpty(enumAsSimpleTypeStr)) {
+            this.enumAsSimpleType = enumAsSimpleTypeStr.equalsIgnoreCase("TRUE");
         }
         //注册新的基本类型，以逗号隔开，使用全限定类名
         String simpleTypes = properties.getProperty("simpleTypes");

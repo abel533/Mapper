@@ -40,7 +40,6 @@ import tk.mybatis.mapper.util.SqlReservedWords;
 import tk.mybatis.mapper.util.StringUtil;
 
 import javax.persistence.*;
-import java.lang.annotation.Annotation;
 import java.text.MessageFormat;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -231,7 +230,7 @@ public class EntityHelper {
             if (config.isUseSimpleType() &&
                     !(SimpleTypeUtil.isSimpleType(field.getJavaType())
                             ||
-                            (config.isAnnotationAsSimpleType() && Annotation.class.isAssignableFrom(field.getJavaType())))) {
+                            (config.isEnumAsSimpleType() && Enum.class.isAssignableFrom(field.getJavaType())))) {
                 continue;
             }
             processField(entityTable, style, field, config.getWrapKeyword());
