@@ -36,6 +36,18 @@ import java.util.Set;
  * 参考 org.apache.ibatis.type.SimpleTypeRegistry
  */
 public class SimpleTypeUtil {
+    public static final  String[]      JAVA8_DATE_TIME = {
+            "java.time.Instant",
+            "java.time.LocalDateTime",
+            "java.time.LocalDate",
+            "java.time.LocalTime",
+            "java.time.OffsetDateTime",
+            "java.time.OffsetTime",
+            "java.time.ZonedDateTime",
+            "java.time.Year",
+            "java.time.Month",
+            "java.time.YearMonth"
+    };
     private static final Set<Class<?>> SIMPLE_TYPE_SET = new HashSet<Class<?>>();
 
     /**
@@ -56,6 +68,10 @@ public class SimpleTypeUtil {
         SIMPLE_TYPE_SET.add(Class.class);
         SIMPLE_TYPE_SET.add(BigInteger.class);
         SIMPLE_TYPE_SET.add(BigDecimal.class);
+        //反射方式设置 java8 中的日期类型
+        for (String time : JAVA8_DATE_TIME) {
+            registerSimpleTypeSilence(time);
+        }
     }
 
     /**
@@ -82,6 +98,19 @@ public class SimpleTypeUtil {
                     throw new MapperException("注册类型出错:" + c, e);
                 }
             }
+        }
+    }
+
+    /**
+     * 注册新的类型，不存在时不抛出异常
+     *
+     * @param clazz
+     */
+    private static void registerSimpleTypeSilence(String clazz) {
+        try {
+            SIMPLE_TYPE_SET.add(Class.forName(clazz));
+        } catch (ClassNotFoundException e) {
+            //ignore
         }
     }
 
