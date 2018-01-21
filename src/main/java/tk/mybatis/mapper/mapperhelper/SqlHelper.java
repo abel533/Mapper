@@ -506,17 +506,7 @@ public class SqlHelper {
             sql.append(" AND " + column.getColumnEqualsHolder());
         }
         if (useVersion) {
-            columnList = EntityHelper.getColumns(entityClass);
-            boolean hasVersion = false;
-            for (EntityColumn column : columnList) {
-                if (column.getEntityField().isAnnotationPresent(Version.class)) {
-                    if (hasVersion) {
-                        throw new VersionException(entityClass.getCanonicalName() + " 中包含多个带有 @Version 注解的字段，一个类中只能存在一个带有 @Version 注解的字段!");
-                    }
-                    hasVersion = true;
-                    sql.append(" AND " + column.getColumnEqualsHolder());
-                }
-            }
+            sql.append(whereVersion(entityClass));
         }
         sql.append("</where>");
         return sql.toString();
@@ -526,19 +516,59 @@ public class SqlHelper {
      * where所有列的条件，会判断是否!=null
      *
      * @param entityClass
+     * @param empty
      * @return
      */
     public static String whereAllIfColumns(Class<?> entityClass, boolean empty) {
+        return whereAllIfColumns(entityClass, empty, false);
+    }
+
+    /**
+     * where所有列的条件，会判断是否!=null
+     *
+     * @param entityClass
+     * @param empty
+     * @param useVersion
+     * @return
+     */
+    public static String whereAllIfColumns(Class<?> entityClass, boolean empty, boolean useVersion) {
         StringBuilder sql = new StringBuilder();
         sql.append("<where>");
         //获取全部列
         Set<EntityColumn> columnList = EntityHelper.getColumns(entityClass);
         //当某个列有主键策略时，不需要考虑他的属性是否为空，因为如果为空，一定会根据主键策略给他生成一个值
         for (EntityColumn column : columnList) {
-            sql.append(getIfNotNull(column, " AND " + column.getColumnEqualsHolder(), empty));
+            if (!useVersion || !column.getEntityField().isAnnotationPresent(Version.class)) {
+                sql.append(getIfNotNull(column, " AND " + column.getColumnEqualsHolder(), empty));
+            }
+        }
+        if (useVersion) {
+            sql.append(whereVersion(entityClass));
         }
         sql.append("</where>");
         return sql.toString();
+    }
+
+    /**
+     * 乐观锁字段条件
+     *
+     * @param entityClass
+     * @return
+     */
+    public static String whereVersion(Class<?> entityClass) {
+        Set<EntityColumn> columnList = EntityHelper.getColumns(entityClass);
+        boolean hasVersion = false;
+        String result = "";
+        for (EntityColumn column : columnList) {
+            if (column.getEntityField().isAnnotationPresent(Version.class)) {
+                if (hasVersion) {
+                    throw new VersionException(entityClass.getCanonicalName() + " 中包含多个带有 @Version 注解的字段，一个类中只能存在一个带有 @Version 注解的字段!");
+                }
+                hasVersion = true;
+                result = " AND " + column.getColumnEqualsHolder();
+            }
+        }
+        return result;
     }
 
     /**

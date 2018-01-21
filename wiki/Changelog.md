@@ -1,5 +1,56 @@
 # 更新日志
 
+## 3.5.1-beta - 2018-01-21
+
+#### 1. `delete` 和 `deleteByPrimaryKey` 增加对乐观锁注解 `@Version` 的支持。
+
+测试用例如下：
+```java
+/**
+ * 乐观锁删除
+ */
+@Test
+public void testDeleteByPrimaryKeyAndVersion() {
+    SqlSession sqlSession = MybatisHelper.getSqlSession();
+    try {
+        CountryVersionMapper mapper = sqlSession.getMapper(CountryVersionMapper.class);
+        //根据主键删除，没有指定版本时删除不了
+        Assert.assertEquals(0, mapper.deleteByPrimaryKey(100));
+
+        CountryVersion countryVersion = new CountryVersion();
+        countryVersion.setId(100);
+        countryVersion.setVersion(2);
+        //版本不对的时候的时候删除不了
+        Assert.assertEquals(0, mapper.deleteByPrimaryKey(countryVersion));
+
+        countryVersion.setId(100);
+        countryVersion.setVersion(1);
+        //版本正确的时候可以真正删除
+        Assert.assertEquals(1, mapper.deleteByPrimaryKey(countryVersion));
+    } finally {
+        sqlSession.rollback();
+        sqlSession.close();
+    }
+}
+```
+日志如下：
+```
+DEBUG [main] - ==>  Preparing: DELETE FROM country WHERE id = ? AND version = ? 
+DEBUG [main] - ==> Parameters: 100(Integer), 100(Integer)
+DEBUG [main] - <==    Updates: 0
+DEBUG [main] - ==>  Preparing: DELETE FROM country WHERE id = ? AND version = ? 
+DEBUG [main] - ==> Parameters: 100(Integer), 2(Integer)
+DEBUG [main] - <==    Updates: 0
+DEBUG [main] - ==>  Preparing: DELETE FROM country WHERE id = ? AND version = ? 
+DEBUG [main] - ==> Parameters: 100(Integer), 1(Integer)
+DEBUG [main] - <==    Updates: 1
+```
+**特别注意：** 上面测试用例已经展示了增加乐观锁后的参数如何传递，当主键多个值或者使用乐观锁的时候就需要通过实体（Map也可以）传递多个参数值。和之前的 update 一样，需要自己对执行结果进行判断来判断是否执行成功。
+
+#### 2. 3.5.0 版本中的参数 `annotationAsSimpleType` 名字错了，现在改为 `enumAsSimpleType`，用于配置是否将枚举类型当成基本类型对待。
+
+#### 3. `SimpleTypeUtil` 增加对 java8 中的日期类型的支持。
+
 ## 3.5.0 - 2018-01-08
 
 - 兼容 mbg 1.3.6 版本。
