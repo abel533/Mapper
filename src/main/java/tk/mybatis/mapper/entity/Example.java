@@ -31,6 +31,7 @@ import tk.mybatis.mapper.MapperException;
 import tk.mybatis.mapper.mapperhelper.EntityHelper;
 import tk.mybatis.mapper.util.Sqls;
 import tk.mybatis.mapper.util.StringUtil;
+import tk.mybatis.mapper.weekend.WeekendSqls;
 
 import java.util.*;
 
@@ -1041,22 +1042,42 @@ public class Example implements IDynamicTableName {
             Sqls.Criteria criteria = sqls.getCriteria();
             criteria.setAndOr("and");
             this.sqlsCriteria.add(criteria);
-            return  this;
+            return this;
+        }
+
+        public Builder where(WeekendSqls sqls) {
+            Sqls.Criteria criteria = sqls.getCriteria();
+            criteria.setAndOr("and");
+            this.sqlsCriteria.add(criteria);
+            return this;
         }
 
         public Builder andWhere(Sqls sqls) {
             Sqls.Criteria criteria = sqls.getCriteria();
             criteria.setAndOr("and");
             this.sqlsCriteria.add(criteria);
-            return  this;
+            return this;
         }
 
+        public Builder andWhere(WeekendSqls sqls) {
+            Sqls.Criteria criteria = sqls.getCriteria();
+            criteria.setAndOr("and");
+            this.sqlsCriteria.add(criteria);
+            return this;
+        }
 
         public Builder orWhere(Sqls sqls) {
             Sqls.Criteria criteria = sqls.getCriteria();
             criteria.setAndOr("or");
             this.sqlsCriteria.add(criteria);
-            return  this;
+            return this;
+        }
+
+        public Builder orWhere(WeekendSqls sqls) {
+            Sqls.Criteria criteria = sqls.getCriteria();
+            criteria.setAndOr("or");
+            this.sqlsCriteria.add(criteria);
+            return this;
         }
 
         public Builder orderBy(String... properties) {
