@@ -51,6 +51,29 @@ DEBUG [main] - <==    Updates: 1
 
 #### 3. `SimpleTypeUtil` 增加对 java8 中的日期类型的支持。
 
+#### 4. `Example.Builder` 增加类似 `Weekend` 中 Java8 方法引用的用法，该功能由 [chinaerserver](https://github.com/chinaerserver) 提交([#pr207](https://github.com/abel533/Mapper/pull/207))
+
+示例如下：
+```java
+@Test
+public void testWeekend() {
+    SqlSession sqlSession = MybatisHelper.getSqlSession();
+    try {
+        CountryMapper mapper = sqlSession.getMapper(CountryMapper.class);
+        //普通方式
+        List<Country> selectByExample = mapper.selectByExample(
+                new Example.Builder(Country.class).where(Sqls.custom().andLike("countryname", "China")).build());
+        //Java8 方式
+        List<Country> selectByWeekendSql = mapper.selectByExample(new Example.Builder(Country.class)
+                .where(WeekendSqls.<Country>custom().andLike(Country::getCountryname, "China")).build());
+        // 判断两个结果数组内容是否相同
+        Assert.assertArrayEquals(selectByExample.toArray(), selectByWeekendSql.toArray());
+    } finally {
+        sqlSession.close();
+    }
+}
+```
+
 ## 3.5.0 - 2018-01-08
 
 - 兼容 mbg 1.3.6 版本。
