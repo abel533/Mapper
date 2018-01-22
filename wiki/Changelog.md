@@ -74,6 +74,8 @@ public void testWeekend() {
 }
 ```
 
+#### 5. 当项目中使用了自定义classloader的时候，可以通过设置classloader上下文的方式来使得自己的mapper class能够被找到(这里的修改参照了 mybatis 源码中的 ClassLoaderWrapper 类)，by [liyongjun1](https://github.com/liyongjun1) [#pr185](https://github.com/abel533/Mapper/pull/185)
+
 ## 3.5.0 - 2018-01-08
 
 - 兼容 mbg 1.3.6 版本。
