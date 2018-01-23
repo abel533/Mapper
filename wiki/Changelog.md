@@ -1,6 +1,6 @@
 # 更新日志
 
-## 3.5.1-beta - 2018-01-21
+## 3.5.1 - 2018-01-24
 
 #### 1. `delete` 和 `deleteByPrimaryKey` 增加对乐观锁注解 `@Version` 的支持。
 
@@ -75,6 +75,13 @@ public void testWeekend() {
 ```
 
 #### 5. 当项目中使用了自定义classloader的时候，可以通过设置classloader上下文的方式来使得自己的mapper class能够被找到(这里的修改参照了 mybatis 源码中的 ClassLoaderWrapper 类)，by [liyongjun1](https://github.com/liyongjun1) [#pr185](https://github.com/abel533/Mapper/pull/185)
+
+#### 6. 重点提醒，3.5.0 中 `useSimpleType` 默认值改为 `true`，默认忽略复杂类型的字段，复杂类型不需要加 `@Transient` 注解，具体类型可以参考 `SimpleTypeUtil` 类。
+
+在 `SimpleTypeUtil` 类中，由于一般的 JavaBean （尤其是 MyBatis）规范中，不能使用基本类型，这主要是由于基本类型有默认值，在一些动态 SQL 情况下（如所有 Selective 方法），无法判断基本类型的值是不是 `null`。
+所以在这里的简单类型是不包含 `byte,short,int,long,float,double,char,boolean` 这八种基本类型的。
+
+如果你要升级通用 Mapper 但是不想修改原来的基本类型，就设置 `useSimpleType=false`。
 
 ## 3.5.0 - 2018-01-08
 
