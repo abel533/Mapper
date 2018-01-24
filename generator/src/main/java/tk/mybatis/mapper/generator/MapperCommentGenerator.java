@@ -242,7 +242,7 @@ public class MapperCommentGenerator implements CommentGenerator {
         }
         sb.setLength(0);
         sb.append(" * @return ");
-        sb.append(introspectedColumn.getActualColumnName());
+        sb.append(introspectedColumn.getJavaProperty());
         if (StringUtility.stringHasValue(introspectedColumn.getRemarks())) {
             sb.append(" - ");
             sb.append(introspectedColumn.getRemarks());
