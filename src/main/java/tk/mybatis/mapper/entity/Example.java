@@ -31,7 +31,6 @@ import tk.mybatis.mapper.MapperException;
 import tk.mybatis.mapper.mapperhelper.EntityHelper;
 import tk.mybatis.mapper.util.Sqls;
 import tk.mybatis.mapper.util.StringUtil;
-import tk.mybatis.mapper.weekend.WeekendSqls;
 
 import java.util.*;
 
@@ -847,114 +846,26 @@ public class Example implements IDynamicTableName {
         }
     }
 
-    public String getCountColumn() {
-        return countColumn;
-    }
-
-    @Override
-    public String getDynamicTableName() {
-        return tableName;
-    }
-
-    public Class<?> getEntityClass() {
-        return entityClass;
-    }
-
-    public String getOrderByClause() {
-        return orderByClause;
-    }
-
-    public void setOrderByClause(String orderByClause) {
-        this.orderByClause = orderByClause;
-    }
-
-    public List<Criteria> getOredCriteria() {
-        return oredCriteria;
-    }
-
-    public Set<String> getSelectColumns() {
-        if (selectColumns != null && selectColumns.size() > 0) {
-            //不需要处理
-        } else if (excludeColumns != null && excludeColumns.size() > 0) {
-            Collection<EntityColumn> entityColumns = propertyMap.values();
-            selectColumns = new LinkedHashSet<String>(entityColumns.size() - excludeColumns.size());
-            for (EntityColumn column : entityColumns) {
-                if (!excludeColumns.contains(column.getColumn())) {
-                    selectColumns.add(column.getColumn());
-                }
-            }
-        }
-        return selectColumns;
-    }
-
-    public boolean isDistinct() {
-        return distinct;
-    }
-
-    public void setDistinct(boolean distinct) {
-        this.distinct = distinct;
-    }
-
-    public boolean isForUpdate() {
-        return forUpdate;
-    }
-
-    public void setForUpdate(boolean forUpdate) {
-        this.forUpdate = forUpdate;
-    }
-
-    /**
-     * 指定 count(property) 查询属性
-     *
-     * @param property
-     */
-    public void setCountProperty(String property) {
-        if (propertyMap.containsKey(property)) {
-            this.countColumn = propertyMap.get(property).getColumn();
-        }
-    }
-
-    /**
-     * 设置表名
-     *
-     * @param tableName
-     */
-    public void setTableName(String tableName) {
-        this.tableName = tableName;
-    }
-
     public static class Builder {
-        private StringBuilder orderByClause;
-
-        private boolean distinct;
-
-        private boolean exists;
-
-        private boolean notNull;
-
-        private boolean forUpdate;
-
-        //查询字段
-        private Set<String> selectColumns;
-
-        //排除的查询字段
-        private Set<String> excludeColumns;
-
-        private String countColumn;
-
-        private List<Sqls.Criteria> sqlsCriteria;
-
-        private List<Example.Criteria> exampleCriterias;
-        private final Class<?> entityClass;
-
-        protected EntityTable table;
-        //动态表名
-
+        private final Class<?>                  entityClass;
+        protected     EntityTable               table;
         //属性和列对应
-        protected Map<String, EntityColumn> propertyMap;
-
+        protected     Map<String, EntityColumn> propertyMap;
+        private       StringBuilder             orderByClause;
+        private       boolean                   distinct;
+        private       boolean                   exists;
+        private       boolean                   notNull;
+        private       boolean                   forUpdate;
+        //查询字段
+        private       Set<String>               selectColumns;
+        //排除的查询字段
+        private       Set<String>               excludeColumns;
+        private       String                    countColumn;
+        private       List<Sqls.Criteria>       sqlsCriteria;
         //动态表名
-        private String tableName;
+        private       List<Example.Criteria>    exampleCriterias;
+        //动态表名
+        private       String                    tableName;
 
         public Builder(Class<?> entityClass) {
             this(entityClass, true);
@@ -978,18 +889,8 @@ public class Example implements IDynamicTableName {
             return setDistinct(true);
         }
 
-        public Builder setDistinct(boolean distinct) {
-            this.distinct = distinct;
-            return this;
-        }
-
         public Builder forUpdate() {
             return setForUpdate(true);
-        }
-
-        public Builder setForUpdate(boolean forUpdate) {
-            this.forUpdate = forUpdate;
-            return this;
         }
 
         public Builder selectDistinct(String... properties) {
@@ -1034,10 +935,6 @@ public class Example implements IDynamicTableName {
             return setTableName(tableName);
         }
 
-        public Builder setTableName(String tableName) {
-            this.tableName = tableName;
-            return this;
-        }
         public Builder where(Sqls sqls) {
             Sqls.Criteria criteria = sqls.getCriteria();
             criteria.setAndOr("and");
@@ -1045,7 +942,7 @@ public class Example implements IDynamicTableName {
             return this;
         }
 
-        public Builder where(WeekendSqls sqls) {
+        public Builder where(SqlsCriteria sqls) {
             Sqls.Criteria criteria = sqls.getCriteria();
             criteria.setAndOr("and");
             this.sqlsCriteria.add(criteria);
@@ -1059,7 +956,7 @@ public class Example implements IDynamicTableName {
             return this;
         }
 
-        public Builder andWhere(WeekendSqls sqls) {
+        public Builder andWhere(SqlsCriteria sqls) {
             Sqls.Criteria criteria = sqls.getCriteria();
             criteria.setAndOr("and");
             this.sqlsCriteria.add(criteria);
@@ -1073,7 +970,7 @@ public class Example implements IDynamicTableName {
             return this;
         }
 
-        public Builder orWhere(WeekendSqls sqls) {
+        public Builder orWhere(SqlsCriteria sqls) {
             Sqls.Criteria criteria = sqls.getCriteria();
             criteria.setAndOr("or");
             this.sqlsCriteria.add(criteria);
@@ -1182,5 +1079,96 @@ public class Example implements IDynamicTableName {
             }
             return propertyMap.get(property).getColumn();
         }
+
+        public Builder setDistinct(boolean distinct) {
+            this.distinct = distinct;
+            return this;
+        }
+
+        public Builder setForUpdate(boolean forUpdate) {
+            this.forUpdate = forUpdate;
+            return this;
+        }
+
+        public Builder setTableName(String tableName) {
+            this.tableName = tableName;
+            return this;
+        }
+    }
+
+    public String getCountColumn() {
+        return countColumn;
+    }
+
+    @Override
+    public String getDynamicTableName() {
+        return tableName;
+    }
+
+    public Class<?> getEntityClass() {
+        return entityClass;
+    }
+
+    public String getOrderByClause() {
+        return orderByClause;
+    }
+
+    public void setOrderByClause(String orderByClause) {
+        this.orderByClause = orderByClause;
+    }
+
+    public List<Criteria> getOredCriteria() {
+        return oredCriteria;
+    }
+
+    public Set<String> getSelectColumns() {
+        if (selectColumns != null && selectColumns.size() > 0) {
+            //不需要处理
+        } else if (excludeColumns != null && excludeColumns.size() > 0) {
+            Collection<EntityColumn> entityColumns = propertyMap.values();
+            selectColumns = new LinkedHashSet<String>(entityColumns.size() - excludeColumns.size());
+            for (EntityColumn column : entityColumns) {
+                if (!excludeColumns.contains(column.getColumn())) {
+                    selectColumns.add(column.getColumn());
+                }
+            }
+        }
+        return selectColumns;
+    }
+
+    public boolean isDistinct() {
+        return distinct;
+    }
+
+    public void setDistinct(boolean distinct) {
+        this.distinct = distinct;
+    }
+
+    public boolean isForUpdate() {
+        return forUpdate;
+    }
+
+    public void setForUpdate(boolean forUpdate) {
+        this.forUpdate = forUpdate;
+    }
+
+    /**
+     * 指定 count(property) 查询属性
+     *
+     * @param property
+     */
+    public void setCountProperty(String property) {
+        if (propertyMap.containsKey(property)) {
+            this.countColumn = propertyMap.get(property).getColumn();
+        }
+    }
+
+    /**
+     * 设置表名
+     *
+     * @param tableName
+     */
+    public void setTableName(String tableName) {
+        this.tableName = tableName;
     }
 }
