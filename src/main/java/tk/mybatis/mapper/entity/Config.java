@@ -30,6 +30,8 @@ import tk.mybatis.mapper.code.Style;
 import tk.mybatis.mapper.util.SimpleTypeUtil;
 import tk.mybatis.mapper.util.StringUtil;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 
 /**
@@ -38,6 +40,9 @@ import java.util.Properties;
  * @author liuzh
  */
 public class Config {
+    public static final String PREFIX = "mapper";
+
+    private List<Class> mappers = new ArrayList<Class>();
     private String  UUID;
     private String  IDENTITY;
     private boolean BEFORE;
@@ -260,6 +265,38 @@ public class Config {
      */
     public void setOrder(String order) {
         this.BEFORE = "BEFORE".equalsIgnoreCase(order);
+    }
+
+    public String getIdentity() {
+        return getIDENTITY();
+    }
+
+    public void setIdentity(String identity) {
+        setIDENTITY(identity);
+    }
+
+    public List<Class> getMappers() {
+        return mappers;
+    }
+
+    public void setMappers(List<Class> mappers) {
+        this.mappers = mappers;
+    }
+
+    public String getUuid() {
+        return getUUID();
+    }
+
+    public void setUuid(String uuid) {
+        setUUID(uuid);
+    }
+
+    public boolean isBefore() {
+        return isBEFORE();
+    }
+
+    public void setBefore(boolean before) {
+        setBEFORE(before);
     }
 
     /**
