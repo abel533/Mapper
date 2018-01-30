@@ -34,6 +34,7 @@ import tk.mybatis.mapper.provider.SqlServerProvider;
  * @param <T> 不能为空
  * @author liuzh
  */
+@tk.mybatis.mapper.annotation.RegisterMapper
 public interface InsertSelectiveMapper<T> {
 
     @Options(useGeneratedKeys = true, keyProperty = "id")

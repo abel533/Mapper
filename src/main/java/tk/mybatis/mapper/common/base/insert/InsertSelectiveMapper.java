@@ -25,6 +25,7 @@
 package tk.mybatis.mapper.common.base.insert;
 
 import org.apache.ibatis.annotations.InsertProvider;
+import tk.mybatis.mapper.annotation.RegisterMapper;
 import tk.mybatis.mapper.provider.base.BaseInsertProvider;
 
 /**
@@ -33,6 +34,7 @@ import tk.mybatis.mapper.provider.base.BaseInsertProvider;
  * @param <T> 不能为空
  * @author liuzh
  */
+@RegisterMapper
 public interface InsertSelectiveMapper<T> {
 
     /**

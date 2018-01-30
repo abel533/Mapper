@@ -24,6 +24,7 @@
 
 package tk.mybatis.mapper.common.base;
 
+import tk.mybatis.mapper.annotation.RegisterMapper;
 import tk.mybatis.mapper.common.base.insert.InsertMapper;
 import tk.mybatis.mapper.common.base.insert.InsertSelectiveMapper;
 
@@ -33,6 +34,7 @@ import tk.mybatis.mapper.common.base.insert.InsertSelectiveMapper;
  * @param <T> 不能为空
  * @author liuzh
  */
+@RegisterMapper
 public interface BaseInsertMapper<T> extends
         InsertMapper<T>,
         InsertSelectiveMapper<T> {

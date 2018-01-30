@@ -33,6 +33,7 @@ import tk.mybatis.mapper.provider.ExampleProvider;
  * @param <T> 不能为空
  * @author liuzh
  */
+@tk.mybatis.mapper.annotation.RegisterMapper
 public interface DeleteByExampleMapper<T> {
 
     /**

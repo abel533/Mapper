@@ -25,6 +25,7 @@
 package tk.mybatis.mapper.common.base.select;
 
 import org.apache.ibatis.annotations.SelectProvider;
+import tk.mybatis.mapper.annotation.RegisterMapper;
 import tk.mybatis.mapper.provider.base.BaseSelectProvider;
 
 /**
@@ -33,6 +34,7 @@ import tk.mybatis.mapper.provider.base.BaseSelectProvider;
  * @param <T> 不能为空
  * @author liuzh
  */
+@RegisterMapper
 public interface SelectCountMapper<T> {
 
     /**

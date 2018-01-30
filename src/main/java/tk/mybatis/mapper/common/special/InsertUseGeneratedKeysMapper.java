@@ -34,6 +34,7 @@ import tk.mybatis.mapper.provider.SpecialProvider;
  * @param <T> 不能为空
  * @author liuzh
  */
+@tk.mybatis.mapper.annotation.RegisterMapper
 public interface InsertUseGeneratedKeysMapper<T> {
 
     /**

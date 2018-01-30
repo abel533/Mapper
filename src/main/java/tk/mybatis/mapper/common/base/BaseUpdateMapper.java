@@ -24,6 +24,7 @@
 
 package tk.mybatis.mapper.common.base;
 
+import tk.mybatis.mapper.annotation.RegisterMapper;
 import tk.mybatis.mapper.common.base.update.UpdateByPrimaryKeyMapper;
 import tk.mybatis.mapper.common.base.update.UpdateByPrimaryKeySelectiveMapper;
 
@@ -33,6 +34,7 @@ import tk.mybatis.mapper.common.base.update.UpdateByPrimaryKeySelectiveMapper;
  * @param <T> 不能为空
  * @author liuzh
  */
+@RegisterMapper
 public interface BaseUpdateMapper<T> extends
         UpdateByPrimaryKeyMapper<T>,
         UpdateByPrimaryKeySelectiveMapper<T> {

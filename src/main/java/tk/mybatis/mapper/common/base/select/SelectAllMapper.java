@@ -25,6 +25,7 @@
 package tk.mybatis.mapper.common.base.select;
 
 import org.apache.ibatis.annotations.SelectProvider;
+import tk.mybatis.mapper.annotation.RegisterMapper;
 import tk.mybatis.mapper.provider.base.BaseSelectProvider;
 
 import java.util.List;
@@ -32,6 +33,7 @@ import java.util.List;
 /**
  * @author liuzh
  */
+@RegisterMapper
 public interface SelectAllMapper<T> {
 
     /**

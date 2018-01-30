@@ -29,12 +29,7 @@ import org.apache.ibatis.jdbc.ScriptRunner;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
-import tk.mybatis.mapper.common.IdsMapper;
-import tk.mybatis.mapper.common.Mapper;
-import tk.mybatis.mapper.common.MySqlMapper;
-import tk.mybatis.mapper.common.SqlServerMapper;
 import tk.mybatis.mapper.entity.Config;
-import tk.mybatis.mapper.hsqldb.HsqldbMapper;
 import tk.mybatis.mapper.mapperhelper.MapperHelper;
 
 import java.io.IOException;
@@ -92,12 +87,6 @@ public class MybatisHelper {
                 //config.setWrapKeyword("`{0}`");
                 //设置配置
                 mapperHelper.setConfig(config);
-                // 注册通用Mapper接口 - 可以自动注册继承的接口
-                mapperHelper.registerMapper(Mapper.class);
-                mapperHelper.registerMapper(HsqldbMapper.class);
-                mapperHelper.registerMapper(MySqlMapper.class);
-                mapperHelper.registerMapper(SqlServerMapper.class);
-                mapperHelper.registerMapper(IdsMapper.class);
                 //配置完成后，执行下面的操作
                 mapperHelper.processConfiguration(session.getConfiguration());
                 //OK - mapperHelper的任务已经完成，可以不管了
@@ -120,9 +109,10 @@ public class MybatisHelper {
 
     /**
      * 获取Session
+     *
      * @return
      */
-    public static SqlSession getSqlSession(){
+    public static SqlSession getSqlSession() {
         return sqlSessionFactory.openSession();
     }
 }

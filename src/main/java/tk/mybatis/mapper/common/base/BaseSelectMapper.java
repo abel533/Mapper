@@ -24,6 +24,7 @@
 
 package tk.mybatis.mapper.common.base;
 
+import tk.mybatis.mapper.annotation.RegisterMapper;
 import tk.mybatis.mapper.common.base.select.*;
 
 /**
@@ -32,6 +33,7 @@ import tk.mybatis.mapper.common.base.select.*;
  * @param <T> 不能为空
  * @author liuzh
  */
+@RegisterMapper
 public interface BaseSelectMapper<T> extends
         SelectOneMapper<T>,
         SelectMapper<T>,

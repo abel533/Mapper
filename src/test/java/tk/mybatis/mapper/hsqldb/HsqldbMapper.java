@@ -26,6 +26,7 @@ package tk.mybatis.mapper.hsqldb;
 
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.SelectProvider;
+import tk.mybatis.mapper.annotation.RegisterMapper;
 
 import java.util.List;
 
@@ -34,6 +35,7 @@ import java.util.List;
  *
  * @author liuzh
  */
+@RegisterMapper
 public interface HsqldbMapper<T> {
     /**
      * 单表分页查询
