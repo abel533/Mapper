@@ -75,6 +75,11 @@ public class Config {
      */
     private String wrapKeyword = "";
 
+    /**
+     * 处理CRUD操作时，根据该方法选择需要处理的列
+     */
+    private Predicate<EntityColumn> columnPredicate;
+
     public String getCatalog() {
         return catalog;
     }
@@ -299,6 +304,14 @@ public class Config {
         setBEFORE(before);
     }
 
+    public Predicate<EntityColumn> getColumnPredicate() {
+        return columnPredicate;
+    }
+
+    public void setColumnPredicate(Predicate<EntityColumn> columnPredicate) {
+        this.columnPredicate = columnPredicate;
+    }
+
     /**
      * 配置属性
      *
@@ -374,6 +387,22 @@ public class Config {
         String wrapKeyword = properties.getProperty("wrapKeyword");
         if (StringUtil.isNotEmpty(wrapKeyword)) {
             this.wrapKeyword = wrapKeyword;
+        }
+        String columnPredicateStr = properties.getProperty("columnPredicate");
+        if (StringUtil.isNotEmpty(columnPredicateStr)) {
+            try {
+                Class<?> predicateClazz = Class.forName(columnPredicateStr);
+                if (!Predicate.class.isAssignableFrom(predicateClazz)) {
+                    throw new MapperException(columnPredicateStr + "未实现Predicate接口");
+                }
+                columnPredicate = (Predicate<EntityColumn>) predicateClazz.newInstance();
+            } catch (ClassNotFoundException e) {
+                throw new MapperException(columnPredicateStr + "不是合法的类路径！");
+            } catch (IllegalAccessException e) {
+                throw new MapperException(columnPredicateStr + "不是合法的类路径！");
+            } catch (InstantiationException e) {
+                throw new MapperException(columnPredicateStr + "不是合法的类路径！");
+            }
         }
     }
 }
