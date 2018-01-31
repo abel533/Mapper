@@ -24,6 +24,9 @@
 
 package tk.mybatis.mapper.util;
 
+import org.apache.ibatis.cache.Cache;
+import org.apache.ibatis.cache.decorators.SoftCache;
+import org.apache.ibatis.cache.impl.PerpetualCache;
 import org.apache.ibatis.mapping.MappedStatement;
 import tk.mybatis.mapper.MapperException;
 
@@ -32,6 +35,8 @@ import tk.mybatis.mapper.MapperException;
  * @since 2017/7/9.
  */
 public class MsUtil {
+
+    public static final Cache CLASS_CACHE = new SoftCache(new PerpetualCache("MAPPER_CLASS_CACHE"));
 
     /**
      * 根据msId获取接口类
@@ -44,8 +49,13 @@ public class MsUtil {
             throw new MapperException("当前MappedStatement的id=" + msId + ",不符合MappedStatement的规则!");
         }
         String mapperClassStr = msId.substring(0, msId.lastIndexOf("."));
+        //由于一个接口中的每个方法都会进行下面的操作，因此缓存
+        Class<?> mapperClass = (Class<?>) CLASS_CACHE.getObject(mapperClassStr);
+        if(mapperClass != null){
+            return mapperClass;
+        }
         ClassLoader[] classLoader = getClassLoaders();
-        Class<?> mapperClass = null;
+
         for (ClassLoader cl : classLoader) {
             if (null != cl) {
                 try {
@@ -61,6 +71,7 @@ public class MsUtil {
         if (mapperClass == null) {
             throw new MapperException("class loaders failed to locate the class " + mapperClassStr);
         }
+        CLASS_CACHE.putObject(mapperClassStr, mapperClass);
         return mapperClass;
     }
 
