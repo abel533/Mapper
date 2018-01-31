@@ -26,6 +26,7 @@ package tk.mybatis.mapper.common.base.update;
 
 import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.UpdateProvider;
+import tk.mybatis.mapper.annotation.RegisterMapper;
 import tk.mybatis.mapper.provider.base.BaseUpdateProvider;
 
 /**
@@ -34,6 +35,7 @@ import tk.mybatis.mapper.provider.base.BaseUpdateProvider;
  * @param <T> 不能为空
  * @author liuzh
  */
+@RegisterMapper
 public interface UpdateByPrimaryKeySelectiveMapper<T> {
 
     /**

@@ -36,6 +36,7 @@ import java.util.List;
  * @param <T> 不能为空
  * @author liuzh
  */
+@tk.mybatis.mapper.annotation.RegisterMapper
 public interface SelectRowBoundsMapper<T> {
 
     /**

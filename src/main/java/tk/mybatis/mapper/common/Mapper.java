@@ -34,6 +34,7 @@ package tk.mybatis.mapper.common;
  * @param <T> 不能为空
  * @author liuzh
  */
+@tk.mybatis.mapper.annotation.RegisterMapper
 public interface Mapper<T> extends
         BaseMapper<T>,
         ExampleMapper<T>,

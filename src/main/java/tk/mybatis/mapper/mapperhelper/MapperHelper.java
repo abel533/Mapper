@@ -32,6 +32,7 @@ import org.apache.ibatis.builder.annotation.ProviderSqlSource;
 import org.apache.ibatis.mapping.MappedStatement;
 import org.apache.ibatis.session.Configuration;
 import tk.mybatis.mapper.MapperException;
+import tk.mybatis.mapper.annotation.RegisterMapper;
 import tk.mybatis.mapper.entity.Config;
 import tk.mybatis.mapper.provider.EmptyProvider;
 import tk.mybatis.mapper.util.StringUtil;
@@ -39,6 +40,8 @@ import tk.mybatis.mapper.util.StringUtil;
 import java.lang.reflect.Method;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+
+import static tk.mybatis.mapper.util.MsUtil.getMapperClass;
 
 /**
  * 处理主要逻辑，最关键的一个类
@@ -48,10 +51,6 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author liuzh
  */
 public class MapperHelper {
-    /**
-     * 缓存skip结果
-     */
-    private final Map<String, Boolean> msIdSkip = new ConcurrentHashMap<String, Boolean>();
 
     /**
      * 注册的接口
@@ -62,11 +61,6 @@ public class MapperHelper {
      * 注册的通用Mapper接口
      */
     private Map<Class<?>, MapperTemplate> registerMapper = new ConcurrentHashMap<Class<?>, MapperTemplate>();
-
-    /**
-     * 缓存msid和MapperTemplate
-     */
-    private Map<String, MapperTemplate> msIdCache = new ConcurrentHashMap<String, MapperTemplate>();
 
     /**
      * 通用Mapper配置
@@ -183,23 +177,39 @@ public class MapperHelper {
      * @param msId
      * @return
      */
-    public boolean isMapperMethod(String msId) {
-        if (msIdSkip.get(msId) != null) {
-            return msIdSkip.get(msId);
-        }
-        for (Map.Entry<Class<?>, MapperTemplate> entry : registerMapper.entrySet()) {
-            if (entry.getValue().supportMethod(msId)) {
-                msIdSkip.put(msId, true);
-                msIdCache.put(msId, entry.getValue());
-                return true;
+    public MapperTemplate isMapperMethod(String msId) {
+        MapperTemplate mapperTemplate = getMapperTemplateByMsId(msId);
+        if(mapperTemplate == null){
+            //通过 @RegisterMapper 注解自动注册的功能
+            try {
+                Class<?> mapperClass = getMapperClass(msId);
+                if(mapperClass.isInterface() && hasRegisterMapper(mapperClass)){
+                    mapperTemplate = getMapperTemplateByMsId(msId);
+                }
+            } catch (Exception e){
             }
         }
-        msIdSkip.put(msId, false);
-        return false;
+
+        return mapperTemplate;
     }
 
     /**
-     * 判断接口是否包含通用接口
+     * 根据 msId 获取 MapperTemplate
+     *
+     * @param msId
+     * @return
+     */
+    public MapperTemplate getMapperTemplateByMsId(String msId){
+        for (Map.Entry<Class<?>, MapperTemplate> entry : registerMapper.entrySet()) {
+            if (entry.getValue().supportMethod(msId)) {
+                return entry.getValue();
+            }
+        }
+        return null;
+    }
+
+    /**
+     * 判断接口是否包含通用接口，
      *
      * @param mapperInterface
      * @return
@@ -210,16 +220,33 @@ public class MapperHelper {
                 return true;
             }
         }
-        return false;
+        //通过 @RegisterMapper 注解自动注册的功能
+        return hasRegisterMapper(mapperInterface);
     }
 
     /**
-     * 如果当前注册的接口为空，自动注册默认接口
+     * 增加通过 @RegisterMapper 注解自动注册的功能
+     *
+     * @param mapperInterface
+     * @return
      */
-    public void ifEmptyRegisterDefaultInterface() {
-        if (registerClass.size() == 0) {
-            registerMapper("tk.mybatis.mapper.common.Mapper");
+    private boolean hasRegisterMapper(Class<?> mapperInterface){
+        //如果一个都没匹配上，很可能是还没有注册 mappers，此时通过 @RegisterMapper 注解进行判断
+        Class<?>[] interfaces = mapperInterface.getInterfaces();
+        boolean hasRegisterMapper = false;
+        if (interfaces != null && interfaces.length > 0) {
+            for (Class<?> anInterface : interfaces) {
+                //自动注册标记了 @RegisterMapper 的接口
+                if(anInterface.isAnnotationPresent(RegisterMapper.class)){
+                    hasRegisterMapper = true;
+                    //如果已经注册过，就避免在反复调用下面会迭代的方法
+                    if (!registerMapper.containsKey(anInterface)) {
+                        registerMapper(anInterface);
+                    }
+                }
+            }
         }
+        return hasRegisterMapper;
     }
 
     /**
@@ -248,9 +275,10 @@ public class MapperHelper {
         for (Object object : new ArrayList<Object>(configuration.getMappedStatements())) {
             if (object instanceof MappedStatement) {
                 MappedStatement ms = (MappedStatement) object;
-                if (ms.getId().startsWith(prefix) && isMapperMethod(ms.getId())) {
-                    if (ms.getSqlSource() instanceof ProviderSqlSource) {
-                        setSqlSource(ms);
+                if (ms.getId().startsWith(prefix)) {
+                    MapperTemplate mapperTemplate = isMapperMethod(ms.getId());
+                    if(mapperTemplate != null && ms.getSqlSource() instanceof ProviderSqlSource) {
+                        setSqlSource(ms, mapperTemplate);
                     }
                 }
             }
@@ -273,6 +301,11 @@ public class MapperHelper {
      */
     public void setConfig(Config config) {
         this.config = config;
+        if(config.getMappers() != null && config.getMappers().size() > 0){
+            for (Class mapperClass : config.getMappers()) {
+                registerMapper(mapperClass);
+            }
+        }
     }
 
     /**
@@ -303,9 +336,9 @@ public class MapperHelper {
      * 执行该方法前必须使用isMapperMethod判断，否则msIdCache会空
      *
      * @param ms
+     * @param mapperTemplate
      */
-    public void setSqlSource(MappedStatement ms) {
-        MapperTemplate mapperTemplate = msIdCache.get(ms.getId());
+    public void setSqlSource(MappedStatement ms, MapperTemplate mapperTemplate) {
         try {
             if (mapperTemplate != null) {
                 mapperTemplate.setSqlSource(ms);

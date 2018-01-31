@@ -39,6 +39,7 @@ import tk.mybatis.mapper.common.base.BaseUpdateMapper;
  * @param <T> 不能为空
  * @author liuzh
  */
+@tk.mybatis.mapper.annotation.RegisterMapper
 public interface BaseMapper<T> extends
         BaseSelectMapper<T>,
         BaseInsertMapper<T>,

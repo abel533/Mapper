@@ -25,6 +25,7 @@
 package tk.mybatis.mapper.common.base.delete;
 
 import org.apache.ibatis.annotations.DeleteProvider;
+import tk.mybatis.mapper.annotation.RegisterMapper;
 import tk.mybatis.mapper.provider.base.BaseDeleteProvider;
 
 /**
@@ -33,6 +34,7 @@ import tk.mybatis.mapper.provider.base.BaseDeleteProvider;
  * @param <T> 不能为空
  * @author liuzh
  */
+@RegisterMapper
 public interface DeleteMapper<T> {
 
     /**

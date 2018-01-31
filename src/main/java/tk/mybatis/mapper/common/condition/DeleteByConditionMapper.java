@@ -25,6 +25,7 @@
 package tk.mybatis.mapper.common.condition;
 
 import org.apache.ibatis.annotations.DeleteProvider;
+import tk.mybatis.mapper.annotation.RegisterMapper;
 import tk.mybatis.mapper.provider.ConditionProvider;
 
 /**
@@ -33,6 +34,7 @@ import tk.mybatis.mapper.provider.ConditionProvider;
  * @param <T> 不能为空
  * @author liuzh
  */
+@RegisterMapper
 public interface DeleteByConditionMapper<T> {
 
     /**

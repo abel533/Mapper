@@ -33,6 +33,7 @@ import tk.mybatis.mapper.common.ids.SelectByIdsMapper;
  * @param <T> 不能为空
  * @author liuzh
  */
+@tk.mybatis.mapper.annotation.RegisterMapper
 public interface IdsMapper<T> extends SelectByIdsMapper<T>, DeleteByIdsMapper<T> {
 
 }
