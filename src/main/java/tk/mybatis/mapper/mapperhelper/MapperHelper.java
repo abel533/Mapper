@@ -189,7 +189,6 @@ public class MapperHelper {
             } catch (Exception e){
             }
         }
-
         return mapperTemplate;
     }
 
@@ -276,12 +275,21 @@ public class MapperHelper {
             if (object instanceof MappedStatement) {
                 MappedStatement ms = (MappedStatement) object;
                 if (ms.getId().startsWith(prefix)) {
-                    MapperTemplate mapperTemplate = isMapperMethod(ms.getId());
-                    if(mapperTemplate != null && ms.getSqlSource() instanceof ProviderSqlSource) {
-                        setSqlSource(ms, mapperTemplate);
-                    }
+                    processMappedStatement(ms);
                 }
             }
+        }
+    }
+
+    /**
+     * 处理 MappedStatement
+     *
+     * @param ms
+     */
+    public void processMappedStatement(MappedStatement ms){
+        MapperTemplate mapperTemplate = isMapperMethod(ms.getId());
+        if(mapperTemplate != null && ms.getSqlSource() instanceof ProviderSqlSource) {
+            setSqlSource(ms, mapperTemplate);
         }
     }
 
