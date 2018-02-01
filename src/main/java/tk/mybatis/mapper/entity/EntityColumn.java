@@ -58,6 +58,12 @@ public class EntityColumn {
      */
     private EntityField entityField;
 
+    /**
+     * 字段是否进行CRUD操作的过滤器
+     * @since 3.6.0
+     */
+    private Predicate<EntityColumn> columnPredicate;
+
     public EntityColumn() {
     }
 
@@ -317,5 +323,13 @@ public class EntityColumn {
 
     public void setUuid(boolean uuid) {
         this.uuid = uuid;
+    }
+
+    public Predicate<EntityColumn> getColumnPredicate() {
+        return columnPredicate;
+    }
+
+    public void setColumnPredicate(Predicate<EntityColumn> columnPredicate) {
+        this.columnPredicate = columnPredicate;
     }
 }

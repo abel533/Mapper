@@ -35,12 +35,14 @@ import tk.mybatis.mapper.entity.Config;
 import tk.mybatis.mapper.entity.EntityColumn;
 import tk.mybatis.mapper.entity.EntityField;
 import tk.mybatis.mapper.entity.EntityTable;
+import tk.mybatis.mapper.entity.Predicate;
 import tk.mybatis.mapper.util.SimpleTypeUtil;
 import tk.mybatis.mapper.util.SqlReservedWords;
 import tk.mybatis.mapper.util.StringUtil;
 
 import javax.persistence.*;
 import java.text.MessageFormat;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -101,12 +103,18 @@ public class EntityHelper {
 
     /**
      * 获取全部列
-     *
      * @param entityClass
      * @return
      */
     public static Set<EntityColumn> getColumns(Class<?> entityClass) {
-        return getEntityTable(entityClass).getEntityClassColumns();
+        Set<EntityColumn> columnSet = getEntityTable(entityClass).getEntityClassColumns();
+        Set<EntityColumn> predicatedColumnSet = new HashSet<EntityColumn>();
+        for (EntityColumn column : columnSet) {
+            if (column.getColumnPredicate() == null || column.getColumnPredicate().apply(column)) {
+                predicatedColumnSet.add(column);
+            }
+        }
+        return predicatedColumnSet;
     }
 
     /**
@@ -233,7 +241,7 @@ public class EntityHelper {
                             (config.isEnumAsSimpleType() && Enum.class.isAssignableFrom(field.getJavaType())))) {
                 continue;
             }
-            processField(entityTable, style, field, config.getWrapKeyword());
+            processField(entityTable, style, field, config);
         }
         //当pk.size=0的时候使用所有列作为主键
         if (entityTable.getEntityClassPKColumns().size() == 0) {
@@ -245,12 +253,14 @@ public class EntityHelper {
 
     /**
      * 处理一列
-     *
-     * @param entityTable
+     *  @param entityTable
      * @param style
      * @param field
+     * @param config
      */
-    private static void processField(EntityTable entityTable, Style style, EntityField field, String wrapKeyword) {
+    private static void processField(EntityTable entityTable, Style style, EntityField field, Config config) {
+        String wrapKeyword = config.getWrapKeyword();
+        Predicate<EntityColumn> columnPredicate = config.getColumnPredicate();
         //排除字段
         if (field.isAnnotationPresent(Transient.class)) {
             return;
@@ -344,6 +354,9 @@ public class EntityHelper {
                             "\n3.类似mysql数据库的@GeneratedValue(strategy=GenerationType.IDENTITY[,generator=\"Mysql\"])");
                 }
             }
+        }
+        if (columnPredicate != null) {
+            entityColumn.setColumnPredicate(columnPredicate);
         }
         entityTable.getEntityClassColumns().add(entityColumn);
         if (entityColumn.isId()) {
