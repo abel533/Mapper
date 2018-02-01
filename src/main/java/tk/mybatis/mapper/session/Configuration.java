@@ -52,10 +52,11 @@ public class Configuration extends org.apache.ibatis.session.Configuration {
     public void addMappedStatement(MappedStatement ms) {
         try {
             super.addMappedStatement(ms);
-            //在这里处理时，更能保证所有的方法都会被正确处理
-            if (this.mapperHelper != null) {
-                this.mapperHelper.processMappedStatement(ms);
+            //没有任何配置时，使用默认配置
+            if (this.mapperHelper == null) {
+                this.mapperHelper = new MapperHelper();
             }
+            this.mapperHelper.processMappedStatement(ms);
         } catch (IllegalArgumentException e) {
             //这里的异常是导致 Spring 启动死循环的关键位置，为了避免后续会吞异常，这里直接输出
             e.printStackTrace();
