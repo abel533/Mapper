@@ -1,7 +1,7 @@
 <!--
   ~ The MIT License (MIT)
   ~
-  ~ Copyright (c) 2014-2017 abel533@gmail.com
+  ~ Copyright (c) 2018 abel533@gmail.com
   ~
   ~ Permission is hereby granted, free of charge, to any person obtaining a copy
   ~ of this software and associated documentation files (the "Software"), to deal
@@ -25,40 +25,211 @@
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <parent>
-        <groupId>tk.mybatis</groupId>
-        <artifactId>mapper-parent</artifactId>
-        <version>1</version>
-    </parent>
-    <artifactId>mapper</artifactId>
-    <version>3.6.0-SNAPSHOT</version>
-    <packaging>jar</packaging>
 
-    <name>mapper</name>
-    <description>Mybatis 通用 Mapper</description>
+    <groupId>tk.mybatis</groupId>
+    <artifactId>mapper-parent</artifactId>
+    <version>1</version>
+    <packaging>pom</packaging>
+
+    <name>mapper-parent</name>
+    <description>Mybatis 通用 Mapper 父依赖</description>
     <url>http://www.mybatis.tk</url>
 
+    <licenses>
+        <license>
+            <name>The MIT License (MIT)</name>
+            <url>https://github.com/abel533/mapper/blob/master/LICENSE</url>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <name>abel533</name>
+            <email>abel533@gmail.com</email>
+        </developer>
+    </developers>
+
     <scm>
-        <connection>scm:git@github.com:abel533/Mapper.git</connection>
-        <developerConnection>scm:git@github.com:abel533/Mapper.git</developerConnection>
-        <url>git@github.com:abel533/Mapper.git</url>
+        <connection>scm:git@github.com:abel533/mapper.git</connection>
+        <developerConnection>scm:git@github.com:abel533/mapper.git</developerConnection>
+        <url>git@github.com:abel533/mapper.git</url>
     </scm>
+	
+	<modules>
+        <module>all</module>
+        <module>base</module>
+        <module>core</module>
+        <module>extra</module>
+        <module>spring</module>
+        <!--为了可以在 jdk6,7上进行测试，这里排除 weekend-->
+        <!--<module>weekend</module>-->
+        <module>generator</module>
+        <module>spring-boot-starter</module>
+    </modules>
 
     <properties>
-        <weekend.version>1.1.2</weekend.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+        <jdk.version>1.6</jdk.version>
+        <jpa.version>1.0</jpa.version>
+        <slf4j.version>1.7.25</slf4j.version>
+        <mybatis.version>3.4.5</mybatis.version>
+        <!--test-->
+        <junit.version>4.12</junit.version>
+        <log4j.version>1.2.17</log4j.version>
+        <hsqldb.version>2.2.9</hsqldb.version>
     </properties>
 
-    <dependencies>
-        <!--必须依赖-->
-        <dependency>
-            <groupId>javax.persistence</groupId>
-            <artifactId>persistence-api</artifactId>
-        </dependency>
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>javax.persistence</groupId>
+                <artifactId>persistence-api</artifactId>
+                <version>${jpa.version}</version>
+            </dependency>
 
-        <!--可选依赖-->
+            <!--optional-->
+            <dependency>
+                <groupId>org.mybatis</groupId>
+                <artifactId>mybatis</artifactId>
+                <version>${mybatis.version}</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-api</artifactId>
+                <version>${slf4j.version}</version>
+                <scope>provided</scope>
+            </dependency>
+
+            <!--test-->
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>${junit.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>log4j</groupId>
+                <artifactId>log4j</artifactId>
+                <version>${log4j.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.hsqldb</groupId>
+                <artifactId>hsqldb</artifactId>
+                <version>${hsqldb.version}</version>
+                <scope>test</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <dependencies>
+        <!--test-->
         <dependency>
-            <groupId>org.mybatis</groupId>
-            <artifactId>mybatis</artifactId>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.hsqldb</groupId>
+            <artifactId>hsqldb</artifactId>
         </dependency>
     </dependencies>
+
+    <build>
+        <testResources>
+            <testResource>
+                <directory>src/test/resources</directory>
+            </testResource>
+            <testResource>
+                <directory>src/test/java</directory>
+            </testResource>
+        </testResources>
+        <plugins>
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>${jdk.version}</source>
+                    <target>${jdk.version}</target>
+                </configuration>
+            </plugin>
+            <!-- Source -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>jar-no-fork</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+    <profiles>
+        <profile>
+            <id>release</id>
+            <modules>
+                <module>all</module>
+                <module>base</module>
+                <module>core</module>
+                <module>extra</module>
+                <module>spring</module>
+                <module>weekend</module>
+                <module>generator</module>
+                <module>spring-boot-starter</module>
+            </modules>
+            <build>
+                <plugins>
+                    <!-- Javadoc -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <version>2.9</version>
+                        <executions>
+                            <execution>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                                <configuration>
+                                    <additionalparam>-Xdoclint:none</additionalparam>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <!-- GPG mvn clean deploy -P release -Dgpg.passphrase=YourPassphase-->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+            <distributionManagement>
+                <snapshotRepository>
+                    <id>oss</id>
+                    <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+                </snapshotRepository>
+                <repository>
+                    <id>oss</id>
+                    <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+                </repository>
+            </distributionManagement>
+        </profile>
+    </profiles>
 </project>
