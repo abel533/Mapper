@@ -34,6 +34,7 @@ import org.apache.ibatis.session.Configuration;
 import tk.mybatis.mapper.MapperException;
 import tk.mybatis.mapper.annotation.RegisterMapper;
 import tk.mybatis.mapper.entity.Config;
+import tk.mybatis.mapper.mapperhelper.resolve.EntityResolve;
 import tk.mybatis.mapper.provider.EmptyProvider;
 import tk.mybatis.mapper.util.StringUtil;
 
@@ -313,6 +314,14 @@ public class MapperHelper {
      */
     public void setConfig(Config config) {
         this.config = config;
+        if(config.getResolveClass() != null){
+            try {
+                EntityHelper.setResolve(config.getResolveClass().newInstance());
+            } catch (Exception e) {
+                throw new MapperException("创建 " + config.getResolveClass().getCanonicalName()
+                        + " 实例失败，请保证该类有默认的构造方法!", e);
+            }
+        }
         if(config.getMappers() != null && config.getMappers().size() > 0){
             for (Class mapperClass : config.getMappers()) {
                 registerMapper(mapperClass);
@@ -327,16 +336,26 @@ public class MapperHelper {
      */
     public void setProperties(Properties properties) {
         config.setProperties(properties);
-        //注册通用接口
-        String mapper = null;
+        //注册解析器
         if (properties != null) {
-            mapper = properties.getProperty("mappers");
+            String resolveClass = properties.getProperty("resolveClass");
+            if (StringUtil.isNotEmpty(resolveClass)) {
+                try {
+                    EntityHelper.setResolve((EntityResolve) Class.forName(resolveClass).newInstance());
+                } catch (Exception e) {
+                    throw new MapperException("创建 " + resolveClass + " 实例失败!", e);
+                }
+            }
         }
-        if (StringUtil.isNotEmpty(mapper)) {
-            String[] mappers = mapper.split(",");
-            for (String mapperClass : mappers) {
-                if (mapperClass.length() > 0) {
-                    registerMapper(mapperClass);
+        //注册通用接口
+        if (properties != null) {
+            String mapper = properties.getProperty("mappers");
+            if (StringUtil.isNotEmpty(mapper)) {
+                String[] mappers = mapper.split(",");
+                for (String mapperClass : mappers) {
+                    if (mapperClass.length() > 0) {
+                        registerMapper(mapperClass);
+                    }
                 }
             }
         }
