@@ -36,7 +36,8 @@ public enum IdentityDialect {
     HSQLDB("CALL IDENTITY()"),
     SYBASE("SELECT @@IDENTITY"),
     DB2_MF("SELECT IDENTITY_VAL_LOCAL() FROM SYSIBM.SYSDUMMY1"),
-    INFORMIX("select dbinfo('sqlca.sqlerrd1') from systables where tabid=1");
+    INFORMIX("select dbinfo('sqlca.sqlerrd1') from systables where tabid=1"),
+    DEFAULT("");
 
     private String identityRetrievalStatement;
 
@@ -64,6 +65,8 @@ public enum IdentityDialect {
             returnValue = DB2_MF;
         } else if ("Informix".equalsIgnoreCase(database)) {
             returnValue = INFORMIX;
+        } else if("".equals(database)){
+            return DEFAULT;
         }
         return returnValue;
     }
