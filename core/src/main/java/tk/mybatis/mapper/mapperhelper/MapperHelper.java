@@ -243,6 +243,10 @@ public class MapperHelper {
                         registerMapper(anInterface);
                     }
                 }
+                //如果父接口的父接口存在注解，也可以注册
+                else if(hasRegisterMapper(anInterface)){
+                    hasRegisterMapper = true;
+                }
             }
         }
         return hasRegisterMapper;
