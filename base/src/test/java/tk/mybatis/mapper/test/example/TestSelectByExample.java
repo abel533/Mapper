@@ -25,7 +25,6 @@
 package tk.mybatis.mapper.test.example;
 
 import org.apache.ibatis.session.SqlSession;
-import org.apache.ibatis.type.StringTypeHandler;
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
@@ -103,8 +102,7 @@ public class TestSelectByExample {
             Example example = new Example(Country.class);
             example.createCriteria()
                     .andCondition("countryname like 'C%' and id < 100")
-                    .andCondition("length(countryname) = ", 5)
-                    .andCondition("countrycode =", "CN", StringTypeHandler.class);
+                    .andCondition("length(countryname) = ", 5);
             List<Country> countries = mapper.selectByExample(example);
             //查询总数
             Assert.assertEquals(1, countries.size());
