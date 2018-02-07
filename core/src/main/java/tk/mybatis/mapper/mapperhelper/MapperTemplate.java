@@ -24,7 +24,9 @@
 
 package tk.mybatis.mapper.mapperhelper;
 
-import org.apache.ibatis.mapping.*;
+import org.apache.ibatis.mapping.MappedStatement;
+import org.apache.ibatis.mapping.ResultMap;
+import org.apache.ibatis.mapping.SqlSource;
 import org.apache.ibatis.reflection.MetaObject;
 import org.apache.ibatis.reflection.SystemMetaObject;
 import org.apache.ibatis.scripting.xmltags.DynamicSqlSource;
@@ -40,7 +42,10 @@ import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.text.MessageFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static tk.mybatis.mapper.util.MsUtil.getMapperClass;
@@ -171,26 +176,6 @@ public abstract class MapperTemplate {
             }
         }
         throw new MapperException("无法获取 " + msId + " 方法的泛型信息!");
-    }
-
-    /**
-     * 根据对象生成主键映射
-     *
-     * @param ms
-     * @return
-     * @deprecated 4.x版本会移除该方法
-     */
-    @Deprecated
-    protected List<ParameterMapping> getPrimaryKeyParameterMappings(MappedStatement ms) {
-        Class<?> entityClass = getEntityClass(ms);
-        Set<EntityColumn> entityColumns = EntityHelper.getPKColumns(entityClass);
-        List<ParameterMapping> parameterMappings = new ArrayList<ParameterMapping>();
-        for (EntityColumn column : entityColumns) {
-            ParameterMapping.Builder builder = new ParameterMapping.Builder(ms.getConfiguration(), column.getProperty(), column.getJavaType());
-            builder.mode(ParameterMode.IN);
-            parameterMappings.add(builder.build());
-        }
-        return parameterMappings;
     }
 
     /**

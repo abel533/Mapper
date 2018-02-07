@@ -27,6 +27,7 @@ package tk.mybatis.mapper.entity;
 import tk.mybatis.mapper.MapperException;
 import tk.mybatis.mapper.code.IdentityDialect;
 import tk.mybatis.mapper.code.Style;
+import tk.mybatis.mapper.mapperhelper.resolve.EntityResolve;
 import tk.mybatis.mapper.util.SimpleTypeUtil;
 import tk.mybatis.mapper.util.StringUtil;
 
@@ -74,6 +75,10 @@ public class Config {
      * 处理关键字，默认空，mysql可以设置为 `{0}`, sqlserver 为 [{0}]，{0} 代表的列名
      */
     private String wrapKeyword = "";
+    /**
+     * 配置解析器
+     */
+    private Class<? extends EntityResolve> resolveClass;
 
     public String getCatalog() {
         return catalog;
@@ -297,6 +302,14 @@ public class Config {
 
     public void setBefore(boolean before) {
         setBEFORE(before);
+    }
+
+    public Class<? extends EntityResolve> getResolveClass() {
+        return resolveClass;
+    }
+
+    public void setResolveClass(Class<? extends EntityResolve> resolveClass) {
+        this.resolveClass = resolveClass;
     }
 
     /**
