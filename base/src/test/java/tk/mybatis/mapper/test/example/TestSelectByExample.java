@@ -105,7 +105,7 @@ public class TestSelectByExample {
                     .andCondition("length(countryname) = ", 5);
             List<Country> countries = mapper.selectByExample(example);
             //查询总数
-            Assert.assertEquals(1, countries.size());
+            Assert.assertEquals(3, countries.size());
         } finally {
             sqlSession.close();
         }
