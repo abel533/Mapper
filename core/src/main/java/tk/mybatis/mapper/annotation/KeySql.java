@@ -25,6 +25,7 @@
 package tk.mybatis.mapper.annotation;
 
 import tk.mybatis.mapper.code.IdentityDialect;
+import tk.mybatis.mapper.code.ORDER;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -69,12 +70,4 @@ public @interface KeySql {
      */
     ORDER order() default ORDER.DEFAULT;
 
-    /**
-     * 执行 SQL 的时机
-     */
-    enum ORDER {
-        AFTER, //insert 后执行 SQL
-        BEFORE,//insert 前执行 SQL
-        DEFAULT//使用全局配置
-    }
 }
