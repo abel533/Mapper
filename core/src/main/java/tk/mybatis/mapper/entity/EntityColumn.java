@@ -127,16 +127,21 @@ public class EntityColumn {
         if (StringUtil.isNotEmpty(suffix)) {
             sb.append(suffix);
         }
+        //如果 null 被当作值来传递，对于所有可能为空的列，JDBC Type 是需要的
         if (this.jdbcType != null) {
-            sb.append(",jdbcType=");
+            sb.append(", jdbcType=");
             sb.append(this.jdbcType.toString());
-        } else if (this.typeHandler != null) {
-            sb.append(",typeHandler=");
-            sb.append(this.typeHandler.getCanonicalName());
-        } else if (!this.javaType.isArray()) {//当类型为数组时，不设置javaType#103
-            sb.append(",javaType=");
-            sb.append(javaType.getCanonicalName());
         }
+        //为了以后定制类型处理方式，你也可以指定一个特殊的类型处理器类，例如枚举
+        if (this.typeHandler != null) {
+            sb.append(", typeHandler=");
+            sb.append(this.typeHandler.getCanonicalName());
+        }
+        //取消 javaType 后，对 ByPrimaryKey 方法的参数校验就放宽了，会自动转型
+        /*if (!this.javaType.isArray()) {//当类型为数组时，不设置javaType#103
+            sb.append(", javaType=");
+            sb.append(javaType.getCanonicalName());
+        }*/
         sb.append("}");
         if (StringUtil.isNotEmpty(separator)) {
             sb.append(separator);
