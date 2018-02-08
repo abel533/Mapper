@@ -26,6 +26,7 @@ package tk.mybatis.mapper.entity;
 
 import org.apache.ibatis.type.JdbcType;
 import org.apache.ibatis.type.TypeHandler;
+import tk.mybatis.mapper.code.ORDER;
 import tk.mybatis.mapper.util.StringUtil;
 
 /**
@@ -51,6 +52,7 @@ public class EntityColumn {
     private boolean insertable = true;
     //可更新
     private boolean updatable = true;
+    private ORDER order;
     /**
      * 对应的字段信息
      *
@@ -317,5 +319,13 @@ public class EntityColumn {
 
     public void setUuid(boolean uuid) {
         this.uuid = uuid;
+    }
+
+    public ORDER getOrder() {
+        return order;
+    }
+
+    public void setOrder(ORDER order) {
+        this.order = order;
     }
 }

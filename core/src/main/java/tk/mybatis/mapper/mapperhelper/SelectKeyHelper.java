@@ -32,6 +32,7 @@ import org.apache.ibatis.reflection.MetaObject;
 import org.apache.ibatis.reflection.SystemMetaObject;
 import org.apache.ibatis.scripting.defaults.RawSqlSource;
 import org.apache.ibatis.session.Configuration;
+import tk.mybatis.mapper.code.ORDER;
 import tk.mybatis.mapper.entity.EntityColumn;
 
 import java.util.ArrayList;
@@ -108,7 +109,8 @@ public class SelectKeyHelper {
                 //ignore
             }
             MappedStatement keyStatement = configuration.getMappedStatement(keyId, false);
-            keyGenerator = new SelectKeyGenerator(keyStatement, executeBefore);
+            //如果单独设置了 order，使用 column 提供的，否则使用全局的
+            keyGenerator = new SelectKeyGenerator(keyStatement, column.getOrder() != ORDER.DEFAULT ? (column.getOrder() == ORDER.BEFORE) : executeBefore);
             try {
                 configuration.addKeyGenerator(keyId, keyGenerator);
             } catch (Exception e) {
