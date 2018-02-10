@@ -42,6 +42,7 @@ public class NameStyleTest {
         EntityHelper.initEntityNameMap(UserCamelhump.class, config);
         EntityTable entityTable = EntityHelper.getEntityTable(UserCamelhump.class);
         Assert.assertNotNull(entityTable);
+        Assert.assertEquals("user_camelhump", entityTable.getName());
 
         Set<EntityColumn> columns = entityTable.getEntityClassColumns();
         Assert.assertEquals(1, columns.size());
@@ -82,6 +83,7 @@ public class NameStyleTest {
         EntityHelper.initEntityNameMap(UserCamelhumpAndUppercase.class, config);
         EntityTable entityTable = EntityHelper.getEntityTable(UserCamelhumpAndUppercase.class);
         Assert.assertNotNull(entityTable);
+        Assert.assertEquals("USER_CAMELHUMP_AND_UPPERCASE", entityTable.getName());
 
         Set<EntityColumn> columns = entityTable.getEntityClassColumns();
         Assert.assertEquals(1, columns.size());
@@ -122,6 +124,7 @@ public class NameStyleTest {
         EntityHelper.initEntityNameMap(UserCamelhumpAndLowercase.class, config);
         EntityTable entityTable = EntityHelper.getEntityTable(UserCamelhumpAndLowercase.class);
         Assert.assertNotNull(entityTable);
+        Assert.assertEquals("user_camelhump_and_lowercase", entityTable.getName());
 
         Set<EntityColumn> columns = entityTable.getEntityClassColumns();
         Assert.assertEquals(1, columns.size());
@@ -162,6 +165,7 @@ public class NameStyleTest {
         EntityHelper.initEntityNameMap(UserNormal.class, config);
         EntityTable entityTable = EntityHelper.getEntityTable(UserNormal.class);
         Assert.assertNotNull(entityTable);
+        Assert.assertEquals("UserNormal", entityTable.getName());
 
         Set<EntityColumn> columns = entityTable.getEntityClassColumns();
         Assert.assertEquals(1, columns.size());
@@ -202,6 +206,7 @@ public class NameStyleTest {
         EntityHelper.initEntityNameMap(UserUppercase.class, config);
         EntityTable entityTable = EntityHelper.getEntityTable(UserUppercase.class);
         Assert.assertNotNull(entityTable);
+        Assert.assertEquals("USERUPPERCASE", entityTable.getName());
 
         Set<EntityColumn> columns = entityTable.getEntityClassColumns();
         Assert.assertEquals(1, columns.size());
@@ -242,6 +247,7 @@ public class NameStyleTest {
         EntityHelper.initEntityNameMap(UserLowercase.class, config);
         EntityTable entityTable = EntityHelper.getEntityTable(UserLowercase.class);
         Assert.assertNotNull(entityTable);
+        Assert.assertEquals("userlowercase", entityTable.getName());
 
         Set<EntityColumn> columns = entityTable.getEntityClassColumns();
         Assert.assertEquals(1, columns.size());
