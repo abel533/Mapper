@@ -33,9 +33,9 @@ import org.junit.Before;
 import tk.mybatis.mapper.entity.Config;
 import tk.mybatis.mapper.mapperhelper.MapperHelper;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.Reader;
+import java.net.URL;
 import java.sql.Connection;
 
 /**
@@ -49,7 +49,7 @@ public abstract class BaseTest {
     @Before
     public final void init(){
         try {
-            Reader reader = Resources.getResourceAsReader(getConfigPath());
+            Reader reader = getConfigFileAsReader();
             sqlSessionFactory = new SqlSessionFactoryBuilder().build(reader);
             reader.close();
             SqlSession session = null;
@@ -57,31 +57,46 @@ public abstract class BaseTest {
                 session = sqlSessionFactory.openSession();
                 //创建一个MapperHelper
                 MapperHelper mapperHelper = new MapperHelper();
-
                 //设置配置
                 mapperHelper.setConfig(getConfig());
                 //配置完成后，执行下面的操作
                 mapperHelper.processConfiguration(session.getConfiguration());
-                //OK - mapperHelper的任务已经完成，可以不管了
-
-                Connection conn = session.getConnection();
-                reader = Resources.getResourceAsReader(getSqlPath());
-                ScriptRunner runner = new ScriptRunner(conn);
-                runner.setLogWriter(null);
-                runner.runScript(reader);
-                reader.close();
             } finally {
                 if (session != null) {
                     session.close();
                 }
             }
+            runSql(getSqlFileAsReader());
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
 
     /**
-     * 获取配置
+     * 执行 Sql
+     *
+     * @param reader
+     */
+    protected void runSql(Reader reader) {
+        if(reader == null){
+            return;
+        }
+        SqlSession sqlSession = getSqlSession();
+        try {
+            Connection conn = sqlSession.getConnection();
+            ScriptRunner runner = new ScriptRunner(conn);
+            runner.setLogWriter(null);
+            runner.runScript(reader);
+            try {
+                reader.close();
+            } catch (IOException e) {}
+        } finally {
+            sqlSession.close();
+        }
+    }
+
+    /**
+     * 获取 Mapper 配置
      *
      * @return
      */
@@ -90,25 +105,35 @@ public abstract class BaseTest {
     }
 
     /**
-     * 获取 mybatis 配置路径
+     * 获取 mybatis 配置
      *
      * @return
      */
-    protected String getConfigPath(){
-        final String path = BaseTest.class.getResource("mybatis-config.xml").getPath();
-        File file = new File(path);
-        System.out.println(file.exists());
-        return path;
+    protected Reader getConfigFileAsReader() throws IOException {
+        URL url = BaseTest.class.getResource("mybatis-config.xml");
+        return toReader(url);
     };
 
     /**
-     * 获取初始化 sql 路径
+     * 获取初始化 sql
      *
      * @return
      */
-    protected String getSqlPath(){
-        return BaseTest.class.getResource("CreateDB.sql").getPath();
+    protected Reader getSqlFileAsReader() throws IOException {
+        URL url = BaseTest.class.getResource("CreateDB.sql");
+        return toReader(url);
     };
+
+    /**
+     * 转为 Reader
+     *
+     * @param url
+     * @return
+     * @throws IOException
+     */
+    protected Reader toReader(URL url) throws IOException {
+        return Resources.getUrlAsReader(url.toString());
+    }
 
     /**
      * 获取Session
