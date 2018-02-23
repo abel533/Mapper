@@ -24,10 +24,7 @@
 
 package tk.mybatis.mapper.model;
 
-import org.apache.ibatis.type.JdbcType;
-import tk.mybatis.mapper.annotation.ColumnType;
 import tk.mybatis.mapper.entity.IDynamicTableName;
-import tk.mybatis.mapper.typehandler.StringType2Handler;
 
 import javax.persistence.Column;
 import javax.persistence.Transient;
@@ -43,7 +40,6 @@ public class Country extends Entity<Integer, String> implements Serializable, ID
     private static final long serialVersionUID = -1626761012846137805L;
     List<Country> list;
     @Column
-    @ColumnType(jdbcType = JdbcType.VARCHAR, typeHandler = StringType2Handler.class)
     private String countryname;
     private String countrycode;
     @Transient
