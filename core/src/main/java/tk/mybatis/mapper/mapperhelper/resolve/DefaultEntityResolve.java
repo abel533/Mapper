@@ -63,9 +63,10 @@ public class DefaultEntityResolve implements EntityResolve {
         for (EntityField field : fields) {
             //如果启用了简单类型，就做简单类型校验，如果不是简单类型，直接跳过
             //3.5.0 如果启用了枚举作为简单类型，就不会自动忽略枚举类型
-            //4.0 如果标记了 Column 注解，也不忽略
+            //4.0 如果标记了 Column 或 ColumnType 注解，也不忽略
             if (config.isUseSimpleType()
                     && !field.isAnnotationPresent(Column.class)
+                    && !field.isAnnotationPresent(ColumnType.class)
                     && !(SimpleTypeUtil.isSimpleType(field.getJavaType())
                             ||
                             (config.isEnumAsSimpleType() && Enum.class.isAssignableFrom(field.getJavaType())))) {
