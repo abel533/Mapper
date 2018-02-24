@@ -52,23 +52,29 @@ public abstract class BaseTest {
             Reader reader = getConfigFileAsReader();
             sqlSessionFactory = new SqlSessionFactoryBuilder().build(reader);
             reader.close();
-            SqlSession session = null;
-            try {
-                session = sqlSessionFactory.openSession();
-                //创建一个MapperHelper
-                MapperHelper mapperHelper = new MapperHelper();
-                //设置配置
-                mapperHelper.setConfig(getConfig());
-                //配置完成后，执行下面的操作
-                mapperHelper.processConfiguration(session.getConfiguration());
-            } finally {
-                if (session != null) {
-                    session.close();
-                }
-            }
+            //配置通用 Mapper
+            configMapperHelper();
+            //执行初始化 SQL
             runSql(getSqlFileAsReader());
         } catch (IOException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * 配置通用 Mapper
+     */
+    protected void configMapperHelper(){
+        SqlSession session = getSqlSession();
+        try {
+            //创建一个MapperHelper
+            MapperHelper mapperHelper = new MapperHelper();
+            //设置配置
+            mapperHelper.setConfig(getConfig());
+            //配置完成后，执行下面的操作
+            mapperHelper.processConfiguration(session.getConfiguration());
+        } finally {
+            session.close();
         }
     }
 

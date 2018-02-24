@@ -29,6 +29,7 @@
 
 <configuration>
     <settings>
+        <setting name="cacheEnabled" value="true"/>
         <setting name="logImpl" value="LOG4J"/>
     </settings>
 
@@ -49,7 +50,11 @@
     </environments>
 
     <mappers>
-        <mapper class="tk.mybatis.mapper.typehandler.UserMapper"/>
+        <mapper class="tk.mybatis.mapper.base.CountryMapper"/>
+        <mapper class="tk.mybatis.mapper.cache.CountryCacheMapper"/>
+        <mapper class="tk.mybatis.mapper.cache.CountryCacheRefMapper"/>
+        <!--TODO 下面这种配置用法有 BUG，已提交给 MyBatis-->
+        <!--<mapper class="tk.mybatis.mapper.cache.CountryCacheWithXmlMapper"/>-->
     </mappers>
 
 </configuration>
