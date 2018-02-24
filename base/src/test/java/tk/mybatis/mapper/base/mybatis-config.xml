@@ -29,15 +29,8 @@
 
 <configuration>
     <settings>
-        <setting name="cacheEnabled" value="true"/>
-        <setting name="lazyLoadingEnabled" value="false"/>
-        <setting name="aggressiveLazyLoading" value="true"/>
         <setting name="logImpl" value="LOG4J"/>
     </settings>
-
-    <typeAliases>
-        <package name="tk.mybatis.mapper.model"/>
-    </typeAliases>
 
     <environments default="development">
         <environment id="development">
