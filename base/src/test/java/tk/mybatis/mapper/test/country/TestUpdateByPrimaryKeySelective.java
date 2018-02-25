@@ -38,30 +38,23 @@ import tk.mybatis.mapper.model.Country;
  */
 public class TestUpdateByPrimaryKeySelective {
 
-    /**
-     * set属性为0,导致异常
-     */
-    @Test(expected = Exception.class)
-    //TODO 测试手写的是否存在这个问题
+    @Test
     public void testDynamicUpdateByPrimaryKeySelectiveAll() {
         SqlSession sqlSession = MybatisHelper.getSqlSession();
         try {
             CountryMapper mapper = sqlSession.getMapper(CountryMapper.class);
-            mapper.updateByPrimaryKeySelective(new Country());
+            Assert.assertEquals(0, mapper.updateByPrimaryKeySelective(new Country()));
         } finally {
             sqlSession.close();
         }
     }
 
-    /**
-     * 除了通过主键的方法，其他的方法入参不能为null
-     */
-    @Test(expected = RuntimeException.class)
+    @Test
     public void testDynamicUpdateByPrimaryKeySelectiveAllByNull() {
         SqlSession sqlSession = MybatisHelper.getSqlSession();
         try {
             CountryMapper mapper = sqlSession.getMapper(CountryMapper.class);
-            mapper.updateByPrimaryKeySelective(null);
+            Assert.assertEquals(0, mapper.updateByPrimaryKeySelective(null));
         } finally {
             sqlSession.close();
         }
