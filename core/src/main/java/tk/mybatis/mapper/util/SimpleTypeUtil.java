@@ -28,6 +28,7 @@ import tk.mybatis.mapper.MapperException;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -65,6 +66,7 @@ public class SimpleTypeUtil {
         SIMPLE_TYPE_SET.add(Double.class);
         SIMPLE_TYPE_SET.add(Boolean.class);
         SIMPLE_TYPE_SET.add(Date.class);
+        SIMPLE_TYPE_SET.add(Timestamp.class);
         SIMPLE_TYPE_SET.add(Class.class);
         SIMPLE_TYPE_SET.add(BigInteger.class);
         SIMPLE_TYPE_SET.add(BigDecimal.class);
