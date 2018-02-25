@@ -44,7 +44,7 @@
         <!--通用代码生成器插件-->
         <!--mapper接口-->
         <plugin type="tk.mybatis.mapper.generator.TemplateFilePlugin">
-            <property name="targetProject" value="mapper-generator/src/test/java"/>
+            <property name="targetProject" value="generator/src/test/java"/>
             <property name="targetPackage" value="test.mapper"/>
             <property name="templatePath" value="generator/mapper.ftl"/>
             <property name="mapperSuffix" value="Dao"/>
@@ -52,7 +52,7 @@
         </plugin>
         <!--mapper.xml-->
         <plugin type="tk.mybatis.mapper.generator.TemplateFilePlugin">
-            <property name="targetProject" value="mapper-generator/src/test/java"/>
+            <property name="targetProject" value="generator/src/test/java"/>
             <property name="targetPackage" value="test.mappers"/>
             <property name="mapperPackage" value="test.mapper"/>
             <property name="templatePath" value="generator/mapperXml.ftl"/>
@@ -61,7 +61,7 @@
         </plugin>
         <!--测试输出单个文件，每个表都会生成一个对应的文件-->
         <plugin type="tk.mybatis.mapper.generator.TemplateFilePlugin">
-            <property name="targetProject" value="mapper-generator/src/test/java"/>
+            <property name="targetProject" value="generator/src/test/java"/>
             <property name="targetPackage" value="test.one"/>
             <property name="templatePath" value="generator/test-one.ftl"/>
             <property name="fileName" value="${tableClass.shortClassName}Test.txt"/>
@@ -72,7 +72,7 @@
         <!--测试输出整个文件，所有表都可用，一次只生成一个文件，用于聚合所有表使用-->
         <plugin type="tk.mybatis.mapper.generator.TemplateFilePlugin">
             <property name="singleMode" value="false"/>
-            <property name="targetProject" value="mapper-generator/src/test/java"/>
+            <property name="targetProject" value="generator/src/test/java"/>
             <property name="targetPackage" value="test.all"/>
             <property name="templatePath" value="generator/test-all.ftl"/>
             <property name="fileName" value="All.txt"/>
@@ -85,7 +85,7 @@
         </jdbcConnection>
 
         <!--MyBatis 生成器只需要生成 Model-->
-        <javaModelGenerator targetPackage="test.model" targetProject="mapper-generator/src/test/java"/>
+        <javaModelGenerator targetPackage="test.model" targetProject="generator/src/test/java"/>
 
         <table tableName="user_info">
             <generatedKey column="id" sqlStatement="JDBC"/>
