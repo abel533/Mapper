@@ -83,6 +83,10 @@ public class Config {
      * 安全删除，开启后，不允许删全表，如 delete from table
      */
     private boolean safeDelete;
+    /**
+     * 是否设置 javaType
+     */
+    private boolean useJavaType;
 
     public String getCatalog() {
         return catalog;
@@ -324,6 +328,14 @@ public class Config {
         this.safeDelete = safeDelete;
     }
 
+    public boolean isUseJavaType() {
+        return useJavaType;
+    }
+
+    public void setUseJavaType(boolean useJavaType) {
+        this.useJavaType = useJavaType;
+    }
+
     /**
      * 配置属性
      *
@@ -395,5 +407,7 @@ public class Config {
         }
         //安全删除
         this.safeDelete = Boolean.valueOf(properties.getProperty("safeDelete"));
+        //是否设置 javaType，true 时如 {id, javaType=java.lang.Long}
+        this.useJavaType = Boolean.valueOf(properties.getProperty("useJavaType"));
     }
 }

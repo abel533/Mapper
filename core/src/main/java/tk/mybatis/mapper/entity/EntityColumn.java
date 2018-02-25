@@ -55,6 +55,8 @@ public class EntityColumn {
     //可更新
     private boolean updatable = true;
     private ORDER order;
+    //是否设置 javaType
+    private boolean useJavaType;
     /**
      * 对应的字段信息
      *
@@ -139,11 +141,12 @@ public class EntityColumn {
             sb.append(", typeHandler=");
             sb.append(this.typeHandler.getCanonicalName());
         }
-        //取消 javaType 后，对 ByPrimaryKey 方法的参数校验就放宽了，会自动转型
-        /*if (!this.javaType.isArray()) {//当类型为数组时，不设置javaType#103
+        //3.4.0 以前的 mybatis 无法获取父类中泛型的 javaType，所以如果使用低版本，就需要设置 useJavaType = true
+        //useJavaType 默认 false,没有 javaType 限制时，对 ByPrimaryKey 方法的参数校验就放宽了，会自动转型
+        if (useJavaType && !this.javaType.isArray()) {//当类型为数组时，不设置javaType#103
             sb.append(", javaType=");
             sb.append(javaType.getCanonicalName());
-        }*/
+        }
         sb.append("}");
         if (StringUtil.isNotEmpty(separator)) {
             sb.append(separator);
@@ -342,6 +345,14 @@ public class EntityColumn {
 
     public void setBlob(boolean blob) {
         this.blob = blob;
+    }
+
+    public boolean isUseJavaType() {
+        return useJavaType;
+    }
+
+    public void setUseJavaType(boolean useJavaType) {
+        this.useJavaType = useJavaType;
     }
 
     @Override
