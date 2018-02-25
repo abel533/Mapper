@@ -24,7 +24,6 @@
 
 package tk.mybatis.mapper.common.condition;
 
-import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.UpdateProvider;
 import tk.mybatis.mapper.provider.ConditionProvider;
@@ -46,7 +45,6 @@ public interface UpdateByConditionMapper<T> {
      * @return
      */
     @UpdateProvider(type = ConditionProvider.class, method = "dynamicSQL")
-    @Options(useCache = false, useGeneratedKeys = false)
     int updateByCondition(@Param("record") T record, @Param("example") Object condition);
 
 }
