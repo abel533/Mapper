@@ -76,6 +76,18 @@ public class CacheTest extends BaseTest {
         } finally {
             sqlSession.close();
         }
+        //下面清空缓存再试
+        sqlSession = getSqlSession();
+        try {
+            CountryCacheMapper mapper = sqlSession.getMapper(CountryCacheMapper.class);
+            //调用 update 清空缓存
+            mapper.updateByPrimaryKey(new Country());
+            Country country = mapper.selectByPrimaryKey(35);
+            Assert.assertEquals("China", country.getCountryname());
+            Assert.assertEquals("CN", country.getCountrycode());
+        } finally {
+            sqlSession.close();
+        }
     }
 
     @Test
@@ -125,6 +137,18 @@ public class CacheTest extends BaseTest {
             Country country = mapper.selectById(35);
             Assert.assertEquals("中国", country.getCountryname());
             Assert.assertEquals("ZH", country.getCountrycode());
+        } finally {
+            sqlSession.close();
+        }
+        //下面清空缓存再试
+        sqlSession = getSqlSession();
+        try {
+            CountryCacheRefMapper mapper = sqlSession.getMapper(CountryCacheRefMapper.class);
+            //调用 update 清空缓存
+            mapper.updateByPrimaryKey(new Country());
+            Country country = mapper.selectById(35);
+            Assert.assertEquals("China", country.getCountryname());
+            Assert.assertEquals("CN", country.getCountrycode());
         } finally {
             sqlSession.close();
         }
@@ -178,6 +202,18 @@ public class CacheTest extends BaseTest {
             Country country = mapper.selectById(35);
             Assert.assertEquals("中国", country.getCountryname());
             Assert.assertEquals("ZH", country.getCountrycode());
+        } finally {
+            sqlSession.close();
+        }
+        //下面清空缓存再试
+        sqlSession = getSqlSession();
+        try {
+            CountryCacheWithXmlMapper mapper = sqlSession.getMapper(CountryCacheWithXmlMapper.class);
+            //调用 update 清空缓存
+            mapper.updateByPrimaryKey(new Country());
+            Country country = mapper.selectById(35);
+            Assert.assertEquals("China", country.getCountryname());
+            Assert.assertEquals("CN", country.getCountrycode());
         } finally {
             sqlSession.close();
         }
