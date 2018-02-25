@@ -42,18 +42,18 @@ public class TypeHandlerTest2 extends BaseTest{
             Assert.assertEquals(2, users.size());
 
             Assert.assertEquals("abel533", users.get(0).getName());
-            Assert.assertEquals("河北省", users.get(0).getAddress().getProvince());
-            Assert.assertEquals("石家庄市", users.get(0).getAddress().getCity());
+            Assert.assertEquals("Hebei", users.get(0).getAddress().getProvince());
+            Assert.assertEquals("Shijiazhuang", users.get(0).getAddress().getCity());
             Assert.assertEquals(StateEnum.enabled, users.get(0).getState());
 
             Assert.assertEquals("isea533", users.get(1).getName());
-            Assert.assertEquals("河北省/邯郸市", users.get(1).getAddress().toString());
+            Assert.assertEquals("Hebei/Handan", users.get(1).getAddress().toString());
             Assert.assertEquals(StateEnum.disabled, users.get(1).getState());
 
             User2 user = userMapper.selectByPrimaryKey(1);
             Assert.assertEquals("abel533", user.getName());
-            Assert.assertEquals("河北省", user.getAddress().getProvince());
-            Assert.assertEquals("石家庄市", user.getAddress().getCity());
+            Assert.assertEquals("Hebei", user.getAddress().getProvince());
+            Assert.assertEquals("Shijiazhuang", user.getAddress().getCity());
             Assert.assertEquals(StateEnum.enabled, user.getState());
         } finally {
             sqlSession.close();
@@ -70,8 +70,8 @@ public class TypeHandlerTest2 extends BaseTest{
             user.setId(3);
             user.setName("liuzh");
             Address address = new Address();
-            address.setProvince("河北省");
-            address.setCity("秦皇岛市");
+            address.setProvince("Hebei");
+            address.setCity("Qinhuangdao");
             user.setAddress(address);
             user.setState(StateEnum.enabled);
 
@@ -79,8 +79,8 @@ public class TypeHandlerTest2 extends BaseTest{
 
             user = userMapper.selectByPrimaryKey(3);
             Assert.assertEquals("liuzh", user.getName());
-            Assert.assertEquals("河北省", user.getAddress().getProvince());
-            Assert.assertEquals("秦皇岛市", user.getAddress().getCity());
+            Assert.assertEquals("Hebei", user.getAddress().getProvince());
+            Assert.assertEquals("Qinhuangdao", user.getAddress().getCity());
             Assert.assertEquals(StateEnum.enabled, user.getState());
         } finally {
             sqlSession.close();
@@ -94,18 +94,18 @@ public class TypeHandlerTest2 extends BaseTest{
             User2Mapper userMapper = sqlSession.getMapper(User2Mapper.class);
             User2 user = userMapper.selectByPrimaryKey(1);
             Assert.assertEquals("abel533", user.getName());
-            Assert.assertEquals("河北省", user.getAddress().getProvince());
-            Assert.assertEquals("石家庄市", user.getAddress().getCity());
+            Assert.assertEquals("Hebei", user.getAddress().getProvince());
+            Assert.assertEquals("Shijiazhuang", user.getAddress().getCity());
             Assert.assertEquals(StateEnum.enabled, user.getState());
 
             user.setState(StateEnum.disabled);
-            user.getAddress().setCity("邯郸市");
+            user.getAddress().setCity("Handan");
             Assert.assertEquals(1, userMapper.updateByPrimaryKey(user));
 
             user = userMapper.selectByPrimaryKey(1);
             Assert.assertEquals("abel533", user.getName());
-            Assert.assertEquals("河北省", user.getAddress().getProvince());
-            Assert.assertEquals("邯郸市", user.getAddress().getCity());
+            Assert.assertEquals("Hebei", user.getAddress().getProvince());
+            Assert.assertEquals("Handan", user.getAddress().getCity());
             Assert.assertEquals(StateEnum.disabled, user.getState());
         } finally {
             sqlSession.close();
@@ -121,8 +121,8 @@ public class TypeHandlerTest2 extends BaseTest{
 
             User2 user = new User2();
             Address address = new Address();
-            address.setProvince("河北省");
-            address.setCity("邯郸市");
+            address.setProvince("Hebei");
+            address.setCity("Handan");
             user.setAddress(address);
             user.setState(StateEnum.enabled);
             Assert.assertEquals(0, userMapper.delete(user));
