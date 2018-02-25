@@ -100,6 +100,8 @@ public class DefaultEntityResolve implements EntityResolve {
         }
         //Id
         EntityColumn entityColumn = new EntityColumn(entityTable);
+        //是否使用 {xx, javaType=xxx}
+        entityColumn.setUseJavaType(config.isUseJavaType());
         //记录 field 信息，方便后续扩展使用
         entityColumn.setEntityField(field);
         if (field.isAnnotationPresent(Id.class)) {

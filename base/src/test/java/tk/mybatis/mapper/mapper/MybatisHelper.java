@@ -85,6 +85,8 @@ public class MybatisHelper {
                 //config.setOrder("AFTER");
                 //自动关键字 - mysql
                 //config.setWrapKeyword("`{0}`");
+                //使用 javaType
+                config.setUseJavaType(true);
                 //设置配置
                 mapperHelper.setConfig(config);
                 //配置完成后，执行下面的操作
