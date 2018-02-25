@@ -372,6 +372,11 @@ public class Config {
         if (StringUtil.isNotEmpty(simpleTypes)) {
             SimpleTypeUtil.registerSimpleType(simpleTypes);
         }
+        //使用 8 种基本类型
+        String usePrimitiveType = properties.getProperty("usePrimitiveType");
+        if (StringUtil.isNotEmpty(usePrimitiveType) && "TRUE".equalsIgnoreCase(usePrimitiveType)) {
+            SimpleTypeUtil.registerPrimitiveTypes();
+        }
         String styleStr = properties.getProperty("style");
         if (StringUtil.isNotEmpty(styleStr)) {
             try {

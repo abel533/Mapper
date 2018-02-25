@@ -2,6 +2,8 @@ package tk.mybatis.mapper.mapperhelper.resolve;
 
 import org.apache.ibatis.type.JdbcType;
 import org.apache.ibatis.type.UnknownTypeHandler;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import tk.mybatis.mapper.MapperException;
 import tk.mybatis.mapper.annotation.ColumnType;
 import tk.mybatis.mapper.annotation.KeySql;
@@ -27,6 +29,7 @@ import java.util.List;
  * @author liuzh
  */
 public class DefaultEntityResolve implements EntityResolve {
+    private final Logger logger = LoggerFactory.getLogger(DefaultEntityResolve.class);
 
     @Override
     public EntityTable resolveEntity(Class<?> entityClass, Config config) {
@@ -137,6 +140,9 @@ public class DefaultEntityResolve implements EntityResolve {
         entityColumn.setProperty(field.getName());
         entityColumn.setColumn(columnName);
         entityColumn.setJavaType(field.getJavaType());
+        if(field.getJavaType().isPrimitive()){
+            logger.warn("{} 使用了基本类型，基本类型在动态 SQL 中由于存在默认值，因此任何时候都不等于 null，建议修改基本类型为对应的包装类型!");
+        }
         //OrderBy
         processOrderBy(entityTable, field, entityColumn);
         //处理主键策略
