@@ -63,7 +63,6 @@ public class ColumnTypeTest {
 
         ResultMap resultMap = entityTable.getResultMap(configuration);
         Assert.assertEquals("[USER_NAME]", resultMap.getMappedColumns().toString());
-        Assert.assertEquals("[name]", resultMap.getMappedProperties().toString());
 
         Assert.assertEquals(1, resultMap.getResultMappings().size());
 
@@ -103,7 +102,6 @@ public class ColumnTypeTest {
 
         ResultMap resultMap = entityTable.getResultMap(configuration);
         Assert.assertEquals("[NAME]", resultMap.getMappedColumns().toString());
-        Assert.assertEquals("[name]", resultMap.getMappedProperties().toString());
 
         Assert.assertEquals(1, resultMap.getResultMappings().size());
 
@@ -144,7 +142,6 @@ public class ColumnTypeTest {
 
         ResultMap resultMap = entityTable.getResultMap(configuration);
         Assert.assertEquals("[NAME]", resultMap.getMappedColumns().toString());
-        Assert.assertEquals("[name]", resultMap.getMappedProperties().toString());
 
         Assert.assertEquals(1, resultMap.getResultMappings().size());
 
@@ -185,7 +182,6 @@ public class ColumnTypeTest {
 
         ResultMap resultMap = entityTable.getResultMap(configuration);
         Assert.assertEquals("[NAME]", resultMap.getMappedColumns().toString());
-        Assert.assertEquals("[name]", resultMap.getMappedProperties().toString());
 
         Assert.assertEquals(1, resultMap.getResultMappings().size());
 
@@ -225,7 +221,6 @@ public class ColumnTypeTest {
 
         ResultMap resultMap = entityTable.getResultMap(configuration);
         Assert.assertEquals("[USER_NAME]", resultMap.getMappedColumns().toString());
-        Assert.assertEquals("[name]", resultMap.getMappedProperties().toString());
 
         Assert.assertEquals(1, resultMap.getResultMappings().size());
 
