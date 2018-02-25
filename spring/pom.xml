@@ -40,7 +40,7 @@
     <properties>
         <spring.version>4.3.8.RELEASE</spring.version>
         <mybatis-spring.version>1.3.1</mybatis-spring.version>
-        <mapper-core.version>4.0.0-SNAPSHOT</mapper-core.version>
+        <mapper-core.version>1.0.0-SNAPSHOT</mapper-core.version>
         <mapper-base.version>1.0.0-SNAPSHOT</mapper-base.version>
     </properties>
 

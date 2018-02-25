@@ -54,7 +54,7 @@
 
     <properties>
         <jdk.version>1.8</jdk.version>
-        <mapper-core.version>4.0.0-SNAPSHOT</mapper-core.version>
+        <mapper-core.version>1.0.0-SNAPSHOT</mapper-core.version>
         <mapper-base.version>1.0.0-SNAPSHOT</mapper-base.version>
     </properties>
 

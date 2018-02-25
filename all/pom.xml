@@ -31,7 +31,7 @@
         <version>1</version>
     </parent>
     <artifactId>mapper-all</artifactId>
-    <version>4.0.0-SNAPSHOT</version>
+    <version>4.0.0-beta</version>
     <packaging>pom</packaging>
 
     <name>mapper-all</name>
@@ -43,7 +43,7 @@
     </modules>
 
     <properties>
-        <mapper-core.version>4.0.0-SNAPSHOT</mapper-core.version>
+        <mapper-core.version>1.0.0-SNAPSHOT</mapper-core.version>
         <mapper-base.version>1.0.0-SNAPSHOT</mapper-base.version>
         <mapper-extra.version>1.0.0-SNAPSHOT</mapper-extra.version>
         <mapper-spring.version>1.0.0-SNAPSHOT</mapper-spring.version>
