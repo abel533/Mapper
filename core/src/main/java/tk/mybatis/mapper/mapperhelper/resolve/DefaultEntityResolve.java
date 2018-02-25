@@ -113,6 +113,8 @@ public class DefaultEntityResolve implements EntityResolve {
         //ColumnType
         if (field.isAnnotationPresent(ColumnType.class)) {
             ColumnType columnType = field.getAnnotation(ColumnType.class);
+            //是否为 blob 字段
+            entityColumn.setBlob(columnType.isBlob());
             //column可以起到别名的作用
             if (StringUtil.isEmpty(columnName) && StringUtil.isNotEmpty(columnType.column())) {
                 columnName = columnType.column();
