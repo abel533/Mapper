@@ -45,6 +45,8 @@ public class EntityColumn {
     private boolean id = false;
     private boolean uuid = false;
     private boolean identity = false;
+    //字段是否为 blob
+    private boolean blob;
     private String generator;
     //排序
     private String orderBy;
@@ -332,5 +334,13 @@ public class EntityColumn {
 
     public void setOrder(ORDER order) {
         this.order = order;
+    }
+
+    public boolean isBlob() {
+        return blob;
+    }
+
+    public void setBlob(boolean blob) {
+        this.blob = blob;
     }
 }

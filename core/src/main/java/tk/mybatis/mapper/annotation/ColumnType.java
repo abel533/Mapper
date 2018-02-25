@@ -44,6 +44,13 @@ import java.lang.annotation.Target;
 public @interface ColumnType {
     String column() default "";
 
+    /**
+     * 是否为 BLOB 字段
+     *
+     * @return
+     */
+    boolean isBlob() default false;
+
     JdbcType jdbcType() default JdbcType.UNDEFINED;
 
     Class<? extends TypeHandler<?>> typeHandler() default UnknownTypeHandler.class;
