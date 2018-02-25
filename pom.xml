@@ -73,7 +73,6 @@
         <jdk.version>1.6</jdk.version>
         <jpa.version>1.0</jpa.version>
         <slf4j.version>1.7.25</slf4j.version>
-        <mybatis.version>3.4.5</mybatis.version>
         <!--test-->
         <junit.version>4.12</junit.version>
         <log4j.version>1.2.17</log4j.version>
@@ -173,6 +172,39 @@
         </plugins>
     </build>
     <profiles>
+        <profile>
+            <id>mybatis-lastest</id>
+            <properties>
+                <mybatis.version>3.4.5</mybatis.version>
+            </properties>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+        </profile>
+        <profile>
+            <id>mybatis-3.2.4</id>
+            <properties>
+                <mybatis.version>3.2.4</mybatis.version>
+            </properties>
+        </profile>
+        <profile>
+            <id>mybatis-3.2.8</id>
+            <properties>
+                <mybatis.version>3.2.8</mybatis.version>
+            </properties>
+        </profile>
+        <profile>
+            <id>mybatis-3.3.0</id>
+            <properties>
+                <mybatis.version>3.3.0</mybatis.version>
+            </properties>
+        </profile>
+        <profile>
+            <id>mybatis-3.4.0</id>
+            <properties>
+                <mybatis.version>3.4.0</mybatis.version>
+            </properties>
+        </profile>
         <profile>
             <id>release</id>
             <modules>
