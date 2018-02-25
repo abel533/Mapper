@@ -71,6 +71,10 @@ public class ExampleProvider extends MapperTemplate {
         if (isCheckExampleEntityClass()) {
             sql.append(SqlHelper.exampleCheck(entityClass));
         }
+        //如果设置了安全删除，就不允许执行不带查询条件的 delete 方法
+        if (getConfig().isSafeDelete()) {
+            sql.append(SqlHelper.exampleHasAtLeastOneCriteriaCheck("_parameter"));
+        }
         sql.append(SqlHelper.deleteFromTable(entityClass, tableName(entityClass)));
         sql.append(SqlHelper.exampleWhereClause());
         return sql.toString();

@@ -58,7 +58,7 @@ public class Config {
     /**
      * @since 3.5.0
      */
-    private boolean enumAsSimpleType = false;
+    private boolean enumAsSimpleType;
     /**
      * 是否支持方法上的注解，默认false
      */
@@ -66,7 +66,7 @@ public class Config {
     /**
      * 对于一般的getAllIfColumnNode，是否判断!=''，默认不判断
      */
-    private boolean notEmpty = false;
+    private boolean notEmpty;
     /**
      * 字段转换风格，默认驼峰转下划线
      */
@@ -79,6 +79,10 @@ public class Config {
      * 配置解析器
      */
     private Class<? extends EntityResolve> resolveClass;
+    /**
+     * 安全删除，开启后，不允许删全表，如 delete from table
+     */
+    private boolean safeDelete;
 
     public String getCatalog() {
         return catalog;
@@ -312,6 +316,14 @@ public class Config {
         this.resolveClass = resolveClass;
     }
 
+    public boolean isSafeDelete() {
+        return safeDelete;
+    }
+
+    public void setSafeDelete(boolean safeDelete) {
+        this.safeDelete = safeDelete;
+    }
+
     /**
      * 配置属性
      *
@@ -347,34 +359,22 @@ public class Config {
         if (StringUtil.isNotEmpty(ORDER)) {
             setOrder(ORDER);
         }
-        String notEmpty = properties.getProperty("notEmpty");
-        if (StringUtil.isNotEmpty(notEmpty)) {
-            this.notEmpty = notEmpty.equalsIgnoreCase("TRUE");
-        }
-        String enableMethodAnnotation = properties.getProperty("enableMethodAnnotation");
-        if (StringUtil.isNotEmpty(enableMethodAnnotation)) {
-            this.enableMethodAnnotation = enableMethodAnnotation.equalsIgnoreCase("TRUE");
-        }
-        String checkExampleStr = properties.getProperty("checkExampleEntityClass");
-        if (StringUtil.isNotEmpty(checkExampleStr)) {
-            this.checkExampleEntityClass = checkExampleStr.equalsIgnoreCase("TRUE");
-        }
+        this.notEmpty = Boolean.valueOf(properties.getProperty("notEmpty"));
+        this.enableMethodAnnotation = Boolean.valueOf(properties.getProperty("enableMethodAnnotation"));
+        this.checkExampleEntityClass = Boolean.valueOf(properties.getProperty("checkExampleEntityClass"));
+        //默认值 true，所以要特殊判断
         String useSimpleTypeStr = properties.getProperty("useSimpleType");
         if (StringUtil.isNotEmpty(useSimpleTypeStr)) {
-            this.useSimpleType = useSimpleTypeStr.equalsIgnoreCase("TRUE");
+            this.useSimpleType = Boolean.valueOf(useSimpleTypeStr);
         }
-        String enumAsSimpleTypeStr = properties.getProperty("enumAsSimpleType");
-        if (StringUtil.isNotEmpty(enumAsSimpleTypeStr)) {
-            this.enumAsSimpleType = enumAsSimpleTypeStr.equalsIgnoreCase("TRUE");
-        }
+        this.enumAsSimpleType = Boolean.valueOf(properties.getProperty("enumAsSimpleType"));
         //注册新的基本类型，以逗号隔开，使用全限定类名
         String simpleTypes = properties.getProperty("simpleTypes");
         if (StringUtil.isNotEmpty(simpleTypes)) {
             SimpleTypeUtil.registerSimpleType(simpleTypes);
         }
         //使用 8 种基本类型
-        String usePrimitiveType = properties.getProperty("usePrimitiveType");
-        if (StringUtil.isNotEmpty(usePrimitiveType) && "TRUE".equalsIgnoreCase(usePrimitiveType)) {
+        if (Boolean.valueOf(properties.getProperty("usePrimitiveType"))) {
             SimpleTypeUtil.registerPrimitiveTypes();
         }
         String styleStr = properties.getProperty("style");
@@ -393,5 +393,7 @@ public class Config {
         if (StringUtil.isNotEmpty(wrapKeyword)) {
             this.wrapKeyword = wrapKeyword;
         }
+        //安全删除
+        this.safeDelete = Boolean.valueOf(properties.getProperty("safeDelete"));
     }
 }
