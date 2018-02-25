@@ -343,4 +343,26 @@ public class EntityColumn {
     public void setBlob(boolean blob) {
         this.blob = blob;
     }
+
+    @Override
+    public String toString() {
+        return "EntityColumn{" +
+                "table=" + table.getName() +
+                ", property='" + property + '\'' +
+                ", column='" + column + '\'' +
+                ", javaType=" + javaType +
+                ", jdbcType=" + jdbcType +
+                ", typeHandler=" + typeHandler +
+                ", sequenceName='" + sequenceName + '\'' +
+                ", id=" + id +
+                ", uuid=" + uuid +
+                ", identity=" + identity +
+                ", blob=" + blob +
+                ", generator='" + generator + '\'' +
+                ", orderBy='" + orderBy + '\'' +
+                ", insertable=" + insertable +
+                ", updatable=" + updatable +
+                ", order=" + order +
+                '}';
+    }
 }

@@ -86,6 +86,20 @@ public class SimpleTypeUtil {
     }
 
     /**
+     * 注册 8 种基本类型
+     */
+    public static void registerPrimitiveTypes(){
+        registerSimpleType(boolean.class);
+        registerSimpleType(byte.class);
+        registerSimpleType(short.class);
+        registerSimpleType(int.class);
+        registerSimpleType(long.class);
+        registerSimpleType(char.class);
+        registerSimpleType(float.class);
+        registerSimpleType(double.class);
+    }
+
+    /**
      * 注册新的类型
      *
      * @param classes
