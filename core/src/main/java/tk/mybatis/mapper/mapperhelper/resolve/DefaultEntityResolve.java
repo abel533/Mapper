@@ -1,9 +1,9 @@
 package tk.mybatis.mapper.mapperhelper.resolve;
 
+import org.apache.ibatis.logging.Log;
+import org.apache.ibatis.logging.LogFactory;
 import org.apache.ibatis.type.JdbcType;
 import org.apache.ibatis.type.UnknownTypeHandler;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import tk.mybatis.mapper.MapperException;
 import tk.mybatis.mapper.annotation.ColumnType;
 import tk.mybatis.mapper.annotation.KeySql;
@@ -29,7 +29,7 @@ import java.util.List;
  * @author liuzh
  */
 public class DefaultEntityResolve implements EntityResolve {
-    private final Logger logger = LoggerFactory.getLogger(DefaultEntityResolve.class);
+    private final Log log = LogFactory.getLog(DefaultEntityResolve.class);
 
     @Override
     public EntityTable resolveEntity(Class<?> entityClass, Config config) {
@@ -71,8 +71,8 @@ public class DefaultEntityResolve implements EntityResolve {
                     && !field.isAnnotationPresent(Column.class)
                     && !field.isAnnotationPresent(ColumnType.class)
                     && !(SimpleTypeUtil.isSimpleType(field.getJavaType())
-                            ||
-                            (config.isEnumAsSimpleType() && Enum.class.isAssignableFrom(field.getJavaType())))) {
+                    ||
+                    (config.isEnumAsSimpleType() && Enum.class.isAssignableFrom(field.getJavaType())))) {
                 continue;
             }
             processField(entityTable, field, config, style);
@@ -140,8 +140,8 @@ public class DefaultEntityResolve implements EntityResolve {
         entityColumn.setProperty(field.getName());
         entityColumn.setColumn(columnName);
         entityColumn.setJavaType(field.getJavaType());
-        if(field.getJavaType().isPrimitive()){
-            logger.warn("{} 使用了基本类型，基本类型在动态 SQL 中由于存在默认值，因此任何时候都不等于 null，建议修改基本类型为对应的包装类型!");
+        if (field.getJavaType().isPrimitive()) {
+            log.warn("通用 Mapper 警告信息: <[" + entityColumn + "]> 使用了基本类型，基本类型在动态 SQL 中由于存在默认值，因此任何时候都不等于 null，建议修改基本类型为对应的包装类型!");
         }
         //OrderBy
         processOrderBy(entityTable, field, entityColumn);
@@ -160,7 +160,7 @@ public class DefaultEntityResolve implements EntityResolve {
      * @param field
      * @param entityColumn
      */
-    protected void processOrderBy(EntityTable entityTable, EntityField field, EntityColumn entityColumn){
+    protected void processOrderBy(EntityTable entityTable, EntityField field, EntityColumn entityColumn) {
         if (field.isAnnotationPresent(OrderBy.class)) {
             OrderBy orderBy = field.getAnnotation(OrderBy.class);
             if ("".equals(orderBy.value())) {
@@ -178,16 +178,14 @@ public class DefaultEntityResolve implements EntityResolve {
      * @param field
      * @param entityColumn
      */
-    protected void processKeyGenerator(EntityTable entityTable, EntityField field, EntityColumn entityColumn){
+    protected void processKeyGenerator(EntityTable entityTable, EntityField field, EntityColumn entityColumn) {
         //KeySql 优先级最高
-        if(field.isAnnotationPresent(KeySql.class)){
+        if (field.isAnnotationPresent(KeySql.class)) {
             processKeySql(entityTable, entityColumn, field.getAnnotation(KeySql.class));
-        }
-        else if (field.isAnnotationPresent(SequenceGenerator.class)) {
+        } else if (field.isAnnotationPresent(SequenceGenerator.class)) {
             //序列
             processSequenceGenerator(entityTable, entityColumn, field.getAnnotation(SequenceGenerator.class));
-        }
-        else if (field.isAnnotationPresent(GeneratedValue.class)) {
+        } else if (field.isAnnotationPresent(GeneratedValue.class)) {
             //执行 sql - selectKey
             processGeneratedValue(entityTable, entityColumn, field.getAnnotation(GeneratedValue.class));
         }
@@ -200,7 +198,7 @@ public class DefaultEntityResolve implements EntityResolve {
      * @param entityColumn
      * @param sequenceGenerator
      */
-    protected void processSequenceGenerator(EntityTable entityTable, EntityColumn entityColumn, SequenceGenerator sequenceGenerator){
+    protected void processSequenceGenerator(EntityTable entityTable, EntityColumn entityColumn, SequenceGenerator sequenceGenerator) {
         if ("".equals(sequenceGenerator.sequenceName())) {
             throw new MapperException(entityTable.getEntityClass() + "字段" + entityColumn.getProperty() + "的注解@SequenceGenerator未指定sequenceName!");
         }
@@ -214,7 +212,7 @@ public class DefaultEntityResolve implements EntityResolve {
      * @param entityColumn
      * @param generatedValue
      */
-    protected void processGeneratedValue(EntityTable entityTable, EntityColumn entityColumn, GeneratedValue generatedValue){
+    protected void processGeneratedValue(EntityTable entityTable, EntityColumn entityColumn, GeneratedValue generatedValue) {
         if ("UUID".equals(generatedValue.generator())) {
             entityColumn.setUuid(true);
         } else if ("JDBC".equals(generatedValue.generator())) {
@@ -255,19 +253,19 @@ public class DefaultEntityResolve implements EntityResolve {
      * @param entityColumn
      * @param keySql
      */
-    protected void processKeySql(EntityTable entityTable, EntityColumn entityColumn, KeySql keySql){
-        if(keySql.useGeneratedKeys()){
+    protected void processKeySql(EntityTable entityTable, EntityColumn entityColumn, KeySql keySql) {
+        if (keySql.useGeneratedKeys()) {
             entityColumn.setIdentity(true);
             entityColumn.setGenerator("JDBC");
             entityTable.setKeyProperties(entityColumn.getProperty());
             entityTable.setKeyColumns(entityColumn.getColumn());
-        } else if(keySql.dialect() != IdentityDialect.DEFAULT){
+        } else if (keySql.dialect() != IdentityDialect.DEFAULT) {
             //自动增长
             entityColumn.setIdentity(true);
             entityColumn.setOrder(ORDER.AFTER);
             entityColumn.setGenerator(keySql.dialect().getIdentityRetrievalStatement());
         } else {
-            if(StringUtil.isEmpty(keySql.sql())){
+            if (StringUtil.isEmpty(keySql.sql())) {
                 throw new MapperException(entityTable.getEntityClass().getCanonicalName()
                         + " 类中的 @KeySql 注解配置无效!");
             }
