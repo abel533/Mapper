@@ -25,6 +25,7 @@
 package tk.mybatis.mapper.provider.base;
 
 import org.apache.ibatis.mapping.MappedStatement;
+import tk.mybatis.mapper.mapperhelper.EntityHelper;
 import tk.mybatis.mapper.mapperhelper.MapperHelper;
 import tk.mybatis.mapper.mapperhelper.MapperTemplate;
 import tk.mybatis.mapper.mapperhelper.SqlHelper;
@@ -49,6 +50,10 @@ public class BaseDeleteProvider extends MapperTemplate {
     public String delete(MappedStatement ms) {
         Class<?> entityClass = getEntityClass(ms);
         StringBuilder sql = new StringBuilder();
+        //如果设置了安全删除，就不允许执行不带查询条件的 delete 方法
+        if (getConfig().isSafeDelete()) {
+            sql.append(SqlHelper.notAllNullParameterCheck("_parameter", EntityHelper.getColumns(entityClass)));
+        }
         sql.append(SqlHelper.deleteFromTable(entityClass, tableName(entityClass)));
         sql.append(SqlHelper.whereAllIfColumns(entityClass, isNotEmpty(), true));
         return sql.toString();

@@ -33,6 +33,7 @@ import org.apache.ibatis.scripting.xmltags.DynamicSqlSource;
 import org.apache.ibatis.scripting.xmltags.SqlNode;
 import org.apache.ibatis.scripting.xmltags.XMLLanguageDriver;
 import tk.mybatis.mapper.MapperException;
+import tk.mybatis.mapper.entity.Config;
 import tk.mybatis.mapper.entity.EntityColumn;
 import tk.mybatis.mapper.entity.EntityTable;
 import tk.mybatis.mapper.util.StringUtil;
@@ -207,24 +208,28 @@ public abstract class MapperTemplate {
         return entityTable.getName();
     }
 
+    public Config getConfig(){
+        return mapperHelper.getConfig();
+    }
+
     public String getIDENTITY() {
-        return mapperHelper.getConfig().getIDENTITY();
+        return getConfig().getIDENTITY();
     }
 
     public String getUUID() {
-        return mapperHelper.getConfig().getUUID();
+        return getConfig().getUUID();
     }
 
     public boolean isBEFORE() {
-        return mapperHelper.getConfig().isBEFORE();
+        return getConfig().isBEFORE();
     }
 
     public boolean isCheckExampleEntityClass() {
-        return mapperHelper.getConfig().isCheckExampleEntityClass();
+        return getConfig().isCheckExampleEntityClass();
     }
 
     public boolean isNotEmpty() {
-        return mapperHelper.getConfig().isNotEmpty();
+        return getConfig().isNotEmpty();
     }
 
     /**

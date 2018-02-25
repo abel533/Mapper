@@ -241,9 +241,9 @@ public class SqlHelper {
      * @return
      */
     public static String getAllColumns(Class<?> entityClass) {
-        Set<EntityColumn> columnList = EntityHelper.getColumns(entityClass);
+        Set<EntityColumn> columnSet = EntityHelper.getColumns(entityClass);
         StringBuilder sql = new StringBuilder();
-        for (EntityColumn entityColumn : columnList) {
+        for (EntityColumn entityColumn : columnSet) {
             sql.append(entityColumn.getColumn()).append(",");
         }
         return sql.substring(0, sql.length() - 1);
@@ -385,9 +385,9 @@ public class SqlHelper {
         StringBuilder sql = new StringBuilder();
         sql.append("<trim prefix=\"(\" suffix=\")\" suffixOverrides=\",\">");
         //获取全部列
-        Set<EntityColumn> columnList = EntityHelper.getColumns(entityClass);
+        Set<EntityColumn> columnSet = EntityHelper.getColumns(entityClass);
         //当某个列有主键策略时，不需要考虑他的属性是否为空，因为如果为空，一定会根据主键策略给他生成一个值
-        for (EntityColumn column : columnList) {
+        for (EntityColumn column : columnSet) {
             if (!column.isInsertable()) {
                 continue;
             }
@@ -417,9 +417,9 @@ public class SqlHelper {
         StringBuilder sql = new StringBuilder();
         sql.append("<trim prefix=\"VALUES (\" suffix=\")\" suffixOverrides=\",\">");
         //获取全部列
-        Set<EntityColumn> columnList = EntityHelper.getColumns(entityClass);
+        Set<EntityColumn> columnSet = EntityHelper.getColumns(entityClass);
         //当某个列有主键策略时，不需要考虑他的属性是否为空，因为如果为空，一定会根据主键策略给他生成一个值
-        for (EntityColumn column : columnList) {
+        for (EntityColumn column : columnSet) {
             if (!column.isInsertable()) {
                 continue;
             }
@@ -449,11 +449,11 @@ public class SqlHelper {
         StringBuilder sql = new StringBuilder();
         sql.append("<set>");
         //获取全部列
-        Set<EntityColumn> columnList = EntityHelper.getColumns(entityClass);
+        Set<EntityColumn> columnSet = EntityHelper.getColumns(entityClass);
         //对乐观锁的支持
         EntityColumn versionColumn = null;
         //当某个列有主键策略时，不需要考虑他的属性是否为空，因为如果为空，一定会根据主键策略给他生成一个值
-        for (EntityColumn column : columnList) {
+        for (EntityColumn column : columnSet) {
             if (column.getEntityField().isAnnotationPresent(Version.class)) {
                 if (versionColumn != null) {
                     throw new VersionException(entityClass.getCanonicalName() + " 中包含多个带有 @Version 注解的字段，一个类中只能存在一个带有 @Version 注解的字段!");
@@ -484,6 +484,42 @@ public class SqlHelper {
     }
 
     /**
+     * 不是所有参数都是 null 的检查
+     *
+     * @param parameterName 参数名
+     * @param columnSet     需要检查的列
+     * @return
+     */
+    public static String notAllNullParameterCheck(String parameterName, Set<EntityColumn> columnSet) {
+        StringBuilder sql = new StringBuilder();
+        sql.append("<bind name=\"notAllNullParameterCheck\" value=\"@tk.mybatis.mapper.util.OGNL@notAllNullParameterCheck(");
+        sql.append(parameterName).append(", '");
+        StringBuilder fields = new StringBuilder();
+        for (EntityColumn column : columnSet) {
+            if(fields.length() > 0){
+                fields.append(",");
+            }
+            fields.append(column.getProperty());
+        }
+        sql.append(fields);
+        sql.append("')\"/>");
+        return sql.toString();
+    }
+
+    /**
+     * Example 中包含至少 1 个查询条件
+     *
+     * @param parameterName 参数名
+     * @return
+     */
+    public static String exampleHasAtLeastOneCriteriaCheck(String parameterName) {
+        StringBuilder sql = new StringBuilder();
+        sql.append("<bind name=\"exampleHasAtLeastOneCriteriaCheck\" value=\"@tk.mybatis.mapper.util.OGNL@exampleHasAtLeastOneCriteriaCheck(");
+        sql.append(parameterName).append(")\"/>");
+        return sql.toString();
+    }
+
+    /**
      * where主键条件
      *
      * @param entityClass
@@ -503,9 +539,9 @@ public class SqlHelper {
         StringBuilder sql = new StringBuilder();
         sql.append("<where>");
         //获取全部列
-        Set<EntityColumn> columnList = EntityHelper.getPKColumns(entityClass);
+        Set<EntityColumn> columnSet = EntityHelper.getPKColumns(entityClass);
         //当某个列有主键策略时，不需要考虑他的属性是否为空，因为如果为空，一定会根据主键策略给他生成一个值
-        for (EntityColumn column : columnList) {
+        for (EntityColumn column : columnSet) {
             sql.append(" AND " + column.getColumnEqualsHolder());
         }
         if (useVersion) {
@@ -538,9 +574,9 @@ public class SqlHelper {
         StringBuilder sql = new StringBuilder();
         sql.append("<where>");
         //获取全部列
-        Set<EntityColumn> columnList = EntityHelper.getColumns(entityClass);
+        Set<EntityColumn> columnSet = EntityHelper.getColumns(entityClass);
         //当某个列有主键策略时，不需要考虑他的属性是否为空，因为如果为空，一定会根据主键策略给他生成一个值
-        for (EntityColumn column : columnList) {
+        for (EntityColumn column : columnSet) {
             if (!useVersion || !column.getEntityField().isAnnotationPresent(Version.class)) {
                 sql.append(getIfNotNull(column, " AND " + column.getColumnEqualsHolder(), empty));
             }
@@ -559,10 +595,10 @@ public class SqlHelper {
      * @return
      */
     public static String whereVersion(Class<?> entityClass) {
-        Set<EntityColumn> columnList = EntityHelper.getColumns(entityClass);
+        Set<EntityColumn> columnSet = EntityHelper.getColumns(entityClass);
         boolean hasVersion = false;
         String result = "";
-        for (EntityColumn column : columnList) {
+        for (EntityColumn column : columnSet) {
             if (column.getEntityField().isAnnotationPresent(Version.class)) {
                 if (hasVersion) {
                     throw new VersionException(entityClass.getCanonicalName() + " 中包含多个带有 @Version 注解的字段，一个类中只能存在一个带有 @Version 注解的字段!");

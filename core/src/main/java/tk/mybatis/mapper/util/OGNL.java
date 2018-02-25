@@ -25,8 +25,16 @@
 package tk.mybatis.mapper.util;
 
 import tk.mybatis.mapper.MapperException;
+import tk.mybatis.mapper.entity.EntityColumn;
 import tk.mybatis.mapper.entity.Example;
 import tk.mybatis.mapper.entity.IDynamicTableName;
+import tk.mybatis.mapper.mapperhelper.EntityHelper;
+
+import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * OGNL静态方法
@@ -46,12 +54,67 @@ public abstract class OGNL {
         if (parameter != null && parameter instanceof Example && StringUtil.isNotEmpty(entityFullName)) {
             Example example = (Example) parameter;
             Class<?> entityClass = example.getEntityClass();
-            if(!entityClass.getCanonicalName().equals(entityFullName)){
+            if (!entityClass.getCanonicalName().equals(entityFullName)) {
                 throw new MapperException("当前 Example 方法对应实体为:" + entityFullName
                         + ", 但是参数 Example 中的 entityClass 为:" + entityClass.getCanonicalName());
             }
         }
         return true;
+    }
+
+    /**
+     * 检查 paremeter 对象中指定的 fields 是否全是 null，如果是则抛出异常
+     *
+     * @param parameter
+     * @param fields
+     * @return
+     */
+    public static boolean notAllNullParameterCheck(Object parameter, String fields) {
+        if (parameter != null) {
+            try {
+                Set<EntityColumn> columns = EntityHelper.getColumns(parameter.getClass());
+                Set<String> fieldSet = new HashSet<String>(Arrays.asList(fields.split(",")));
+                for (EntityColumn column : columns) {
+                    if (fieldSet.contains(column.getProperty())) {
+                        Object value = column.getEntityField().getValue(parameter);
+                        if (value != null) {
+                            return true;
+                        }
+                    }
+                }
+            } catch (Exception e) {
+                throw new MapperException("对 delete 方法参数进行检查时出错!", e);
+            }
+        }
+        throw new MapperException("delete 方法没有指定查询条件，不允许执行该操作!");
+    }
+
+    /**
+     * 检查 paremeter 对象中指定的 fields 是否全是 null，如果是则抛出异常
+     *
+     * @param parameter
+     * @return
+     */
+    public static boolean exampleHasAtLeastOneCriteriaCheck(Object parameter) {
+        if (parameter != null) {
+            try {
+                if (parameter instanceof Example) {
+                    List<Example.Criteria> criteriaList = ((Example) parameter).getOredCriteria();
+                    if (criteriaList != null && criteriaList.size() > 0) {
+                        return true;
+                    }
+                } else {
+                    Method getter = parameter.getClass().getDeclaredMethod("getOredCriteria");
+                    Object list = getter.invoke(parameter);
+                    if(list != null && list instanceof List && ((List) list).size() > 0){
+                        return true;
+                    }
+                }
+            } catch (Exception e) {
+                throw new MapperException("对 delete 方法参数进行检查时出错!", e);
+            }
+        }
+        throw new MapperException("delete 方法没有指定查询条件，不允许执行该操作!");
     }
 
     /**
@@ -137,12 +200,12 @@ public abstract class OGNL {
      * @param parameter
      * @return
      */
-    public static String andOr(Object parameter){
-        if(parameter instanceof Example.Criteria){
-            return ((Example.Criteria)parameter).getAndOr();
-        } else if(parameter instanceof Example.Criterion){
-            return ((Example.Criterion)parameter).getAndOr();
-        } else if(parameter.getClass().getCanonicalName().endsWith("Criteria")){
+    public static String andOr(Object parameter) {
+        if (parameter instanceof Example.Criteria) {
+            return ((Example.Criteria) parameter).getAndOr();
+        } else if (parameter instanceof Example.Criterion) {
+            return ((Example.Criterion) parameter).getAndOr();
+        } else if (parameter.getClass().getCanonicalName().endsWith("Criteria")) {
             return "or";
         } else {
             return "and";

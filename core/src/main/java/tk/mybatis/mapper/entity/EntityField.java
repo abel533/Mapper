@@ -27,6 +27,7 @@ package tk.mybatis.mapper.entity;
 import java.beans.PropertyDescriptor;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 /**
@@ -110,6 +111,27 @@ public class EntityField {
         }
         if (result == null && getter != null) {
             result = getter.getAnnotation(annotationClass);
+        }
+        return result;
+    }
+
+    /**
+     * 反射获取值
+     *
+     * @param object
+     * @return
+     * @throws IllegalAccessException
+     * @throws InvocationTargetException
+     */
+    public Object getValue(Object object) throws IllegalAccessException, InvocationTargetException {
+        Object result = null;
+        if (getter != null) {
+            result = getter.invoke(object);
+        } else if (field != null) {
+            if(!field.isAccessible()){
+                field.setAccessible(true);
+            }
+            result = field.get(object);
         }
         return result;
     }
