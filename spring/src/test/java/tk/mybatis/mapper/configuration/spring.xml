@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+						http://www.springframework.org/schema/beans/spring-beans.xsd
+       					http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc.xsd"
+       default-lazy-init="false">
+
+    <jdbc:embedded-database id="dataSource">
+        <jdbc:script location="tk/mybatis/mapper/configuration/CreateDB.sql"/>
+    </jdbc:embedded-database>
+
+    <!--使用 Configuration 方式进行配置-->
+    <bean id="mybatisConfig" class="tk.mybatis.mapper.session.Configuration">
+        <property name="mapperProperties">
+            <value>
+                notEmpty=true
+            </value>
+        </property>
+    </bean>
+
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="configuration" ref="mybatisConfig"/>
+    </bean>
+
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="tk.mybatis.mapper.configuration"/>
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
+    </bean>
+</beans>

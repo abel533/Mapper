@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  ~ The MIT License (MIT)
+  ~
+  ~ Copyright (c) 2014-2017 abel533@gmail.com
+  ~
+  ~ Permission is hereby granted, free of charge, to any person obtaining a copy
+  ~ of this software and associated documentation files (the "Software"), to deal
+  ~ in the Software without restriction, including without limitation the rights
+  ~ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+  ~ copies of the Software, and to permit persons to whom the Software is
+  ~ furnished to do so, subject to the following conditions:
+  ~
+  ~ The above copyright notice and this permission notice shall be included in
+  ~ all copies or substantial portions of the Software.
+  ~
+  ~ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  ~ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  ~ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+  ~ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  ~ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+  ~ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+  ~ THE SOFTWARE.
+  -->
+
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+    <settings>
+        <setting name="cacheEnabled" value="true"/>
+        <setting name="logImpl" value="LOG4J"/>
+    </settings>
+
+    <typeHandlers>
+        <typeHandler handler="org.apache.ibatis.type.EnumOrdinalTypeHandler" javaType="tk.mybatis.mapper.typehandler.StateEnum"/>
+    </typeHandlers>
+
+    <environments default="development">
+        <environment id="development">
+            <transactionManager type="JDBC">
+            </transactionManager>
+            <dataSource type="UNPOOLED">
+                <property name="driver" value="org.hsqldb.jdbcDriver" />
+                <property name="url" value="jdbc:hsqldb:mem:typehandler" />
+                <property name="username" value="sa" />
+            </dataSource>
+        </environment>
+    </environments>
+
+    <mappers>
+        <mapper class="tk.mybatis.mapper.base.CountryMapper"/>
+        <mapper class="tk.mybatis.mapper.cache.CountryCacheMapper"/>
+        <mapper class="tk.mybatis.mapper.cache.CountryCacheRefMapper"/>
+        <!--TODO 下面这种配置用法有 BUG，已提交给 MyBatis-->
+        <!--<mapper class="tk.mybatis.mapper.cache.CountryCacheWithXmlMapper"/>-->
+    </mappers>
+
+</configuration>

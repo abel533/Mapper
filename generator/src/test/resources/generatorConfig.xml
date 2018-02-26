@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ The MIT License (MIT)
+  ~
+  ~ Copyright (c) 2014-2017 abel533@gmail.com
+  ~
+  ~ Permission is hereby granted, free of charge, to any person obtaining a copy
+  ~ of this software and associated documentation files (the "Software"), to deal
+  ~ in the Software without restriction, including without limitation the rights
+  ~ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+  ~ copies of the Software, and to permit persons to whom the Software is
+  ~ furnished to do so, subject to the following conditions:
+  ~
+  ~ The above copyright notice and this permission notice shall be included in
+  ~ all copies or substantial portions of the Software.
+  ~
+  ~ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  ~ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  ~ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+  ~ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  ~ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+  ~ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+  ~ THE SOFTWARE.
+  -->
+
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<!--suppress MybatisGenerateCustomPluginInspection -->
+<generatorConfiguration>
+    <context id="Mysql" targetRuntime="MyBatis3Simple" defaultModelType="flat">
+        <property name="javaFileEncoding" value="UTF-8"/>
+        <property name="useMapperCommentGenerator" value="false"/>
+
+        <plugin type="tk.mybatis.mapper.generator.MapperPlugin">
+            <property name="mappers" value="tk.mybatis.mapper.common.Mapper"/>
+            <property name="caseSensitive" value="true"/>
+            <property name="forceAnnotation" value="true"/>
+            <property name="beginningDelimiter" value="`"/>
+            <property name="endingDelimiter" value="`"/>
+        </plugin>
+
+        <!--通用代码生成器插件-->
+        <!--mapper接口-->
+        <plugin type="tk.mybatis.mapper.generator.TemplateFilePlugin">
+            <property name="targetProject" value="generator/src/test/java"/>
+            <property name="targetPackage" value="test.mapper"/>
+            <property name="templatePath" value="generator/mapper.ftl"/>
+            <property name="mapperSuffix" value="Dao"/>
+            <property name="fileName" value="${tableClass.shortClassName}${mapperSuffix}.java"/>
+        </plugin>
+        <!--mapper.xml-->
+        <plugin type="tk.mybatis.mapper.generator.TemplateFilePlugin">
+            <property name="targetProject" value="generator/src/test/java"/>
+            <property name="targetPackage" value="test.mappers"/>
+            <property name="mapperPackage" value="test.mapper"/>
+            <property name="templatePath" value="generator/mapperXml.ftl"/>
+            <property name="mapperSuffix" value="Dao"/>
+            <property name="fileName" value="${tableClass.shortClassName}${mapperSuffix}.xml"/>
+        </plugin>
+        <!--测试输出单个文件，每个表都会生成一个对应的文件-->
+        <plugin type="tk.mybatis.mapper.generator.TemplateFilePlugin">
+            <property name="targetProject" value="generator/src/test/java"/>
+            <property name="targetPackage" value="test.one"/>
+            <property name="templatePath" value="generator/test-one.ftl"/>
+            <property name="fileName" value="${tableClass.shortClassName}Test.txt"/>
+            <!--默认值是下面这个，可以不配置-->
+            <property name="templateFormatter"
+                      value="tk.mybatis.mapper.generator.formatter.FreemarkerTemplateFormatter"/>
+        </plugin>
+        <!--测试输出整个文件，所有表都可用，一次只生成一个文件，用于聚合所有表使用-->
+        <plugin type="tk.mybatis.mapper.generator.TemplateFilePlugin">
+            <property name="singleMode" value="false"/>
+            <property name="targetProject" value="generator/src/test/java"/>
+            <property name="targetPackage" value="test.all"/>
+            <property name="templatePath" value="generator/test-all.ftl"/>
+            <property name="fileName" value="All.txt"/>
+        </plugin>
+
+        <jdbcConnection driverClass="org.hsqldb.jdbcDriver"
+                        connectionURL="jdbc:hsqldb:mem:generator"
+                        userId="sa"
+                        password="">
+        </jdbcConnection>
+
+        <!--MyBatis 生成器只需要生成 Model-->
+        <javaModelGenerator targetPackage="test.model" targetProject="generator/src/test/java"/>
+
+        <table tableName="user_info">
+            <generatedKey column="id" sqlStatement="JDBC"/>
+        </table>
+        <table tableName="country">
+            <generatedKey column="id" sqlStatement="JDBC"/>
+        </table>
+    </context>
+</generatorConfiguration>
