@@ -11,10 +11,11 @@ import java.io.Serializable;
 public class User implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
-    private Integer   id;
-    private String    name;
+    private Integer id;
+    private String name;
     @ColumnType(typeHandler = AddressTypeHandler.class)
-    private Address   address;
+    private Address address;
+    //@ColumnType(typeHandler = StateEnumTypeHandler.class)
     private StateEnum state;
 
     public Address getAddress() {
