@@ -87,6 +87,7 @@
                         </goals>
                         <configuration>
                             <createDependencyReducedPom>false</createDependencyReducedPom>
+                            <createSourcesJar>true</createSourcesJar>
                             <artifactSet>
                                 <includes>
                                     <include>tk.mybatis:mapper-core</include>

@@ -43,12 +43,12 @@
     </modules>
 
     <properties>
-        <mapper-core.version>1.0.0-SNAPSHOT</mapper-core.version>
-        <mapper-base.version>1.0.0-SNAPSHOT</mapper-base.version>
-        <mapper-extra.version>1.0.0-SNAPSHOT</mapper-extra.version>
-        <mapper-spring.version>1.0.0-SNAPSHOT</mapper-spring.version>
-        <mapper-weekend.version>1.1.3-SNAPSHOT</mapper-weekend.version>
-        <mapper-generator.version>1.0.0-SNAPSHOT</mapper-generator.version>
+        <mapper-core.version>1.0.0-beta</mapper-core.version>
+        <mapper-base.version>1.0.0-beta</mapper-base.version>
+        <mapper-extra.version>1.0.0-beta</mapper-extra.version>
+        <mapper-spring.version>1.0.0-beta</mapper-spring.version>
+        <mapper-weekend.version>1.1.3-beta</mapper-weekend.version>
+        <mapper-generator.version>1.0.0-beta</mapper-generator.version>
     </properties>
 
 	<dependencyManagement>

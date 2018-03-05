@@ -32,7 +32,7 @@
         <version>1</version>
     </parent>
     <artifactId>mapper-spring-boot</artifactId>
-    <version>2.0.0-SNAPSHOT</version>
+    <version>2.0.0-beta</version>
     <packaging>pom</packaging>
 
     <name>mapper-spring-boot</name>
@@ -46,12 +46,12 @@
     </modules>
 
     <properties>
-        <mapper-core.version>1.0.0-SNAPSHOT</mapper-core.version>
-        <mapper-base.version>1.0.0-SNAPSHOT</mapper-base.version>
-        <mapper-spring.version>1.0.0-SNAPSHOT</mapper-spring.version>
+        <mapper-core.version>1.0.0-beta</mapper-core.version>
+        <mapper-base.version>1.0.0-beta</mapper-base.version>
+        <mapper-spring.version>1.0.0-beta</mapper-spring.version>
         <mybatis.version>3.4.5</mybatis.version>
         <mybatis-spring.version>1.3.1</mybatis-spring.version>
-        <spring-boot.version>1.5.9.RELEASE</spring-boot.version>
+        <spring-boot.version>2.0.0.RELEASE</spring-boot.version>
     </properties>
 
     <repositories>
