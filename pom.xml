@@ -61,8 +61,7 @@
         <module>core</module>
         <module>extra</module>
         <module>spring</module>
-        <!--为了可以在 jdk6,7上进行测试，这里排除 weekend-->
-        <!--<module>weekend</module>-->
+        <module>weekend</module>
         <module>generator</module>
         <module>spring-boot-starter</module>
     </modules>
@@ -73,6 +72,7 @@
         <jdk.version>1.6</jdk.version>
         <jpa.version>1.0</jpa.version>
         <slf4j.version>1.7.25</slf4j.version>
+        <mybatis.version>3.4.5</mybatis.version>
         <!--test-->
         <junit.version>4.12</junit.version>
         <log4j.version>1.2.17</log4j.version>
@@ -173,15 +173,6 @@
     </build>
     <profiles>
         <profile>
-            <id>mybatis-lastest</id>
-            <properties>
-                <mybatis.version>3.4.5</mybatis.version>
-            </properties>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
-        </profile>
-        <profile>
             <id>mybatis-3.2.4</id>
             <properties>
                 <mybatis.version>3.2.4</mybatis.version>
@@ -207,16 +198,6 @@
         </profile>
         <profile>
             <id>release</id>
-            <modules>
-                <module>all</module>
-                <module>base</module>
-                <module>core</module>
-                <module>extra</module>
-                <module>spring</module>
-                <module>weekend</module>
-                <module>generator</module>
-                <module>spring-boot-starter</module>
-            </modules>
             <build>
                 <plugins>
                     <!-- Javadoc -->
