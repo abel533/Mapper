@@ -61,7 +61,7 @@
         <module>core</module>
         <module>extra</module>
         <module>spring</module>
-        <module>weekend</module>
+        <!--<module>weekend</module>-->
         <module>generator</module>
         <module>spring-boot-starter</module>
     </modules>
@@ -198,6 +198,16 @@
         </profile>
         <profile>
             <id>release</id>
+            <modules>
+                <module>all</module>
+                <module>base</module>
+                <module>core</module>
+                <module>extra</module>
+                <module>spring</module>
+                <module>weekend</module>
+                <module>generator</module>
+                <module>spring-boot-starter</module>
+            </modules>
             <build>
                 <plugins>
                     <!-- Javadoc -->
