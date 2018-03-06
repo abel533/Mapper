@@ -27,9 +27,6 @@ package tk.mybatis.mapper.autoconfigure;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import tk.mybatis.mapper.entity.Config;
 
-import java.util.ArrayList;
-import java.util.List;
-
 
 /**
  * 这个类存在的主要目的是方便 IDE 自动提示 mapper. 开头的配置
@@ -39,39 +36,5 @@ import java.util.List;
  */
 @ConfigurationProperties(prefix = MapperProperties.PREFIX)
 public class MapperProperties extends Config {
-    public static final String PREFIX = "mapper";
 
-    private List<Class> mappers = new ArrayList<Class>();
-
-    public String getIdentity() {
-        return getIDENTITY();
-    }
-
-    public void setIdentity(String identity) {
-        setIDENTITY(identity);
-    }
-
-    public List<Class> getMappers() {
-        return mappers;
-    }
-
-    public void setMappers(List<Class> mappers) {
-        this.mappers = mappers;
-    }
-
-    public String getUuid() {
-        return getUUID();
-    }
-
-    public void setUuid(String uuid) {
-        setUUID(uuid);
-    }
-
-    public boolean isBefore() {
-        return isBEFORE();
-    }
-
-    public void setBefore(boolean before) {
-        setBEFORE(before);
-    }
 }
