@@ -273,6 +273,11 @@ public class MapperHelper {
      */
     public void setConfig(Config config) {
         this.config = config;
+        if(config.getMappers() != null && config.getMappers().size() > 0){
+            for (Class mapperClass : config.getMappers()) {
+                registerMapper(mapperClass);
+            }
+        }
     }
 
     /**

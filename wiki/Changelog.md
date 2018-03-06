@@ -1,5 +1,9 @@
 # 更新日志
 
+## 3.5.3 - 2018-03-06
+
+- 解决 MapperHelper.setConfig 方法中没有处理 mappers 的 BUG，主要影响 starter 中的使用。
+
 ## 3.5.2 - 2018-01-24
 
 #### 1. `delete` 和 `deleteByPrimaryKey` 增加对乐观锁注解 `@Version` 的支持。

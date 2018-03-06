@@ -30,6 +30,8 @@ import tk.mybatis.mapper.code.Style;
 import tk.mybatis.mapper.util.SimpleTypeUtil;
 import tk.mybatis.mapper.util.StringUtil;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 
 /**
@@ -38,6 +40,9 @@ import java.util.Properties;
  * @author liuzh
  */
 public class Config {
+    public static final String PREFIX = "mapper";
+
+    private List<Class> mappers = new ArrayList<Class>();
     private String  UUID;
     private String  IDENTITY;
     private boolean BEFORE;
@@ -52,7 +57,7 @@ public class Config {
     /**
      * @since 3.5.0
      */
-    private boolean enumAsSimpleType = false;
+    private boolean enumAsSimpleType;
     /**
      * 是否支持方法上的注解，默认false
      */
@@ -60,7 +65,7 @@ public class Config {
     /**
      * 对于一般的getAllIfColumnNode，是否判断!=''，默认不判断
      */
-    private boolean notEmpty = false;
+    private boolean notEmpty;
     /**
      * 字段转换风格，默认驼峰转下划线
      */
@@ -262,6 +267,38 @@ public class Config {
         this.BEFORE = "BEFORE".equalsIgnoreCase(order);
     }
 
+    public String getIdentity() {
+        return getIDENTITY();
+    }
+
+    public void setIdentity(String identity) {
+        setIDENTITY(identity);
+    }
+
+    public List<Class> getMappers() {
+        return mappers;
+    }
+
+    public void setMappers(List<Class> mappers) {
+        this.mappers = mappers;
+    }
+
+    public String getUuid() {
+        return getUUID();
+    }
+
+    public void setUuid(String uuid) {
+        setUUID(uuid);
+    }
+
+    public boolean isBefore() {
+        return isBEFORE();
+    }
+
+    public void setBefore(boolean before) {
+        setBEFORE(before);
+    }
+
     /**
      * 配置属性
      *
@@ -297,26 +334,15 @@ public class Config {
         if (StringUtil.isNotEmpty(ORDER)) {
             setOrder(ORDER);
         }
-        String notEmpty = properties.getProperty("notEmpty");
-        if (StringUtil.isNotEmpty(notEmpty)) {
-            this.notEmpty = notEmpty.equalsIgnoreCase("TRUE");
-        }
-        String enableMethodAnnotation = properties.getProperty("enableMethodAnnotation");
-        if (StringUtil.isNotEmpty(enableMethodAnnotation)) {
-            this.enableMethodAnnotation = enableMethodAnnotation.equalsIgnoreCase("TRUE");
-        }
-        String checkExampleStr = properties.getProperty("checkExampleEntityClass");
-        if (StringUtil.isNotEmpty(checkExampleStr)) {
-            this.checkExampleEntityClass = checkExampleStr.equalsIgnoreCase("TRUE");
-        }
+        this.notEmpty = Boolean.valueOf(properties.getProperty("notEmpty"));
+        this.enableMethodAnnotation = Boolean.valueOf(properties.getProperty("enableMethodAnnotation"));
+        this.checkExampleEntityClass = Boolean.valueOf(properties.getProperty("checkExampleEntityClass"));
+        //默认值 true，所以要特殊判断
         String useSimpleTypeStr = properties.getProperty("useSimpleType");
         if (StringUtil.isNotEmpty(useSimpleTypeStr)) {
-            this.useSimpleType = useSimpleTypeStr.equalsIgnoreCase("TRUE");
+            this.useSimpleType = Boolean.valueOf(useSimpleTypeStr);
         }
-        String enumAsSimpleTypeStr = properties.getProperty("enumAsSimpleType");
-        if (StringUtil.isNotEmpty(enumAsSimpleTypeStr)) {
-            this.enumAsSimpleType = enumAsSimpleTypeStr.equalsIgnoreCase("TRUE");
-        }
+        this.enumAsSimpleType = Boolean.valueOf(properties.getProperty("enumAsSimpleType"));
         //注册新的基本类型，以逗号隔开，使用全限定类名
         String simpleTypes = properties.getProperty("simpleTypes");
         if (StringUtil.isNotEmpty(simpleTypes)) {
