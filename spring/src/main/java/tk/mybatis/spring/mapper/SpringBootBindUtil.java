@@ -124,7 +124,11 @@ public abstract class SpringBootBindUtil {
                 Object bind = getMethod.invoke(null, environment);
                 Object bindResult = bindMethod.invoke(bind, prefix, targetClass);
                 Method resultGetMethod = bindResult.getClass().getDeclaredMethod("get");
-                return (T) resultGetMethod.invoke(bindResult);
+                Method isBoundMethod = bindResult.getClass().getDeclaredMethod("isBound");
+                if ((Boolean) isBoundMethod.invoke(bindResult)) {
+                    return (T) resultGetMethod.invoke(bindResult);
+                }
+                return null;
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }

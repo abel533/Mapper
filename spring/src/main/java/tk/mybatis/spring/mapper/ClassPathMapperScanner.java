@@ -275,7 +275,9 @@ public class ClassPathMapperScanner extends ClassPathBeanDefinitionScanner {
         if (mapperHelper == null) {
             mapperHelper = new MapperHelper();
         }
-        mapperHelper.setConfig(config);
+        if(config != null){
+            mapperHelper.setConfig(config);
+        }
     }
 
     /**
