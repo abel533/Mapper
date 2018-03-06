@@ -5,6 +5,4 @@ sudo: false
 dist: precise
 
 jdk:
-  - oraclejdk9
   - oraclejdk8
-  - openjdk8
