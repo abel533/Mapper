@@ -54,8 +54,8 @@
 
     <properties>
         <jdk.version>1.8</jdk.version>
-        <mapper-core.version>1.0.0-beta</mapper-core.version>
-        <mapper-base.version>1.0.0-beta</mapper-base.version>
+        <mapper-core.version>1.0.0-beta2</mapper-core.version>
+        <mapper-base.version>1.0.0-beta2</mapper-base.version>
     </properties>
 
     <dependencies>
