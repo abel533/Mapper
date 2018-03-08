@@ -84,6 +84,10 @@ public class Config {
      */
     private boolean safeDelete;
     /**
+     * 安全更新，开启后，不允许更新全表，如 update table set xx=?
+     */
+    private boolean safeUpdate;
+    /**
      * 是否设置 javaType
      */
     private boolean useJavaType;
@@ -328,6 +332,14 @@ public class Config {
         this.safeDelete = safeDelete;
     }
 
+    public boolean isSafeUpdate() {
+        return safeUpdate;
+    }
+
+    public void setSafeUpdate(boolean safeUpdate) {
+        this.safeUpdate = safeUpdate;
+    }
+
     public boolean isUseJavaType() {
         return useJavaType;
     }
@@ -407,6 +419,8 @@ public class Config {
         }
         //安全删除
         this.safeDelete = Boolean.valueOf(properties.getProperty("safeDelete"));
+        //安全更新
+        this.safeUpdate = Boolean.valueOf(properties.getProperty("safeUpdate"));
         //是否设置 javaType，true 时如 {id, javaType=java.lang.Long}
         this.useJavaType = Boolean.valueOf(properties.getProperty("useJavaType"));
     }

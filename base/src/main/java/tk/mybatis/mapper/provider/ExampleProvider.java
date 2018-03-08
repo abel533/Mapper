@@ -127,6 +127,10 @@ public class ExampleProvider extends MapperTemplate {
         if (isCheckExampleEntityClass()) {
             sql.append(SqlHelper.exampleCheck(entityClass));
         }
+        //安全更新，Example 必须包含条件
+        if (getConfig().isSafeUpdate()) {
+            sql.append(SqlHelper.exampleHasAtLeastOneCriteriaCheck("example"));
+        }
         sql.append(SqlHelper.updateTable(entityClass, tableName(entityClass), "example"));
         sql.append(SqlHelper.updateSetColumns(entityClass, "record", true, isNotEmpty()));
         sql.append(SqlHelper.updateByExampleWhereClause());
@@ -144,6 +148,10 @@ public class ExampleProvider extends MapperTemplate {
         StringBuilder sql = new StringBuilder();
         if (isCheckExampleEntityClass()) {
             sql.append(SqlHelper.exampleCheck(entityClass));
+        }
+        //安全更新，Example 必须包含条件
+        if (getConfig().isSafeUpdate()) {
+            sql.append(SqlHelper.exampleHasAtLeastOneCriteriaCheck("example"));
         }
         sql.append(SqlHelper.updateTable(entityClass, tableName(entityClass), "example"));
         sql.append(SqlHelper.updateSetColumns(entityClass, "record", false, false));

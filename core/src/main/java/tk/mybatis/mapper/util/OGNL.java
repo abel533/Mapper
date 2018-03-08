@@ -42,8 +42,8 @@ import java.util.Set;
  * @author liuzh
  */
 public abstract class OGNL {
-    public static final String SAFE_DELETE_ERROR = "<[通用 Mapper 配置 safeDelete=true]> 对 delete 方法参数进行检查时出错!";
-    public static final String SAFE_DELETE_EXCEPTION = "<[通用 Mapper 配置 safeDelete=true]> delete 方法没有指定查询条件，不允许执行该操作!";
+    public static final String SAFE_DELETE_ERROR = "通用 Mapper 安全检查: 对查询条件参数进行检查时出错!";
+    public static final String SAFE_DELETE_EXCEPTION = "通用 Mapper 安全检查: 当前操作的方法没有指定查询条件，不允许执行该操作!";
 
     /**
      * 校验通用 Example 的 entityClass 和当前方法是否匹配
