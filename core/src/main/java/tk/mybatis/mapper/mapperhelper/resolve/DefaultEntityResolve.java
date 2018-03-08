@@ -261,7 +261,10 @@ public class DefaultEntityResolve implements EntityResolve {
             entityColumn.setGenerator("JDBC");
             entityTable.setKeyProperties(entityColumn.getProperty());
             entityTable.setKeyColumns(entityColumn.getColumn());
-        } else if (keySql.dialect() != IdentityDialect.DEFAULT) {
+        } else if (keySql.dialect() == IdentityDialect.DEFAULT) {
+            entityColumn.setIdentity(true);
+            entityColumn.setOrder(ORDER.AFTER);
+        }  else if (keySql.dialect() != IdentityDialect.DEFAULT) {
             //自动增长
             entityColumn.setIdentity(true);
             entityColumn.setOrder(ORDER.AFTER);
