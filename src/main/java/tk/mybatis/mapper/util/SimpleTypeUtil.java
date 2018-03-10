@@ -28,6 +28,7 @@ import tk.mybatis.mapper.MapperException;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -65,6 +66,7 @@ public class SimpleTypeUtil {
         SIMPLE_TYPE_SET.add(Double.class);
         SIMPLE_TYPE_SET.add(Boolean.class);
         SIMPLE_TYPE_SET.add(Date.class);
+        SIMPLE_TYPE_SET.add(Timestamp.class);
         SIMPLE_TYPE_SET.add(Class.class);
         SIMPLE_TYPE_SET.add(BigInteger.class);
         SIMPLE_TYPE_SET.add(BigDecimal.class);
@@ -81,6 +83,20 @@ public class SimpleTypeUtil {
      */
     public static void registerSimpleType(Class<?> clazz){
         SIMPLE_TYPE_SET.add(clazz);
+    }
+
+    /**
+     * 注册 8 种基本类型
+     */
+    public static void registerPrimitiveTypes(){
+        registerSimpleType(boolean.class);
+        registerSimpleType(byte.class);
+        registerSimpleType(short.class);
+        registerSimpleType(int.class);
+        registerSimpleType(long.class);
+        registerSimpleType(char.class);
+        registerSimpleType(float.class);
+        registerSimpleType(double.class);
     }
 
     /**
