@@ -264,7 +264,7 @@ public class DefaultEntityResolve implements EntityResolve {
         } else if (keySql.dialect() == IdentityDialect.DEFAULT) {
             entityColumn.setIdentity(true);
             entityColumn.setOrder(ORDER.AFTER);
-        }  else if (keySql.dialect() != IdentityDialect.DEFAULT) {
+        }  else if (keySql.dialect() != IdentityDialect.NULL) {
             //自动增长
             entityColumn.setIdentity(true);
             entityColumn.setOrder(ORDER.AFTER);

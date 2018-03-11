@@ -37,7 +37,8 @@ public enum IdentityDialect {
     SYBASE("SELECT @@IDENTITY"),
     DB2_MF("SELECT IDENTITY_VAL_LOCAL() FROM SYSIBM.SYSDUMMY1"),
     INFORMIX("select dbinfo('sqlca.sqlerrd1') from systables where tabid=1"),
-    DEFAULT("");
+    DEFAULT(""),
+    NULL("");
 
     private String identityRetrievalStatement;
 

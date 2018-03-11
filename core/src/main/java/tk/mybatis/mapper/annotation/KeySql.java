@@ -54,7 +54,7 @@ public @interface KeySql {
      *
      * @return
      */
-    IdentityDialect dialect() default IdentityDialect.DEFAULT;
+    IdentityDialect dialect() default IdentityDialect.NULL;
 
     /**
      * 取主键的 SQL
