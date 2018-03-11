@@ -58,10 +58,6 @@ public class MybatisHelper {
                 MapperHelper mapperHelper = new MapperHelper();
                 //特殊配置
                 Config config = new Config();
-                // 设置UUID生成策略
-                // 配置UUID生成策略需要使用OGNL表达式
-                // 默认值32位长度:@java.util.UUID@randomUUID().toString().replace("-", "")
-                //config.setUUID("");
                 // 主键自增回写方法,默认值MYSQL,详细说明请看文档
                 config.setIDENTITY("HSQLDB");
                 // 支持方法上的注解
