@@ -31,7 +31,7 @@
         <version>2</version>
     </parent>
     <artifactId>mapper-all</artifactId>
-    <version>4.0.0-beta2</version>
+    <version>4.0.0-beta3</version>
     <packaging>pom</packaging>
 
     <name>mapper-all</name>
@@ -43,12 +43,12 @@
     </modules>
 
     <properties>
-        <mapper-core.version>1.0.0-beta2</mapper-core.version>
-        <mapper-base.version>1.0.0-beta2</mapper-base.version>
-        <mapper-extra.version>1.0.0-beta2</mapper-extra.version>
-        <mapper-spring.version>1.0.0-beta2</mapper-spring.version>
-        <mapper-weekend.version>1.1.3-beta2</mapper-weekend.version>
-        <mapper-generator.version>1.0.0-beta2</mapper-generator.version>
+        <mapper-core.version>1.0.0-beta3</mapper-core.version>
+        <mapper-base.version>1.0.0-beta3</mapper-base.version>
+        <mapper-extra.version>1.0.0-beta3</mapper-extra.version>
+        <mapper-spring.version>1.0.0-beta3</mapper-spring.version>
+        <mapper-weekend.version>1.1.3-beta3</mapper-weekend.version>
+        <mapper-generator.version>1.0.0-beta3</mapper-generator.version>
     </properties>
 
 	<dependencyManagement>

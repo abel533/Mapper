@@ -28,7 +28,7 @@
     <parent>
         <groupId>tk.mybatis</groupId>
         <artifactId>mapper-all</artifactId>
-        <version>4.0.0-beta2</version>
+        <version>4.0.0-beta3</version>
     </parent>
     <artifactId>mapper</artifactId>
     <packaging>jar</packaging>
