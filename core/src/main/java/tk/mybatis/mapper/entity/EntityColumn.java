@@ -43,7 +43,6 @@ public class EntityColumn {
     private Class<? extends TypeHandler<?>> typeHandler;
     private String sequenceName;
     private boolean id = false;
-    private boolean uuid = false;
     private boolean identity = false;
     //字段是否为 blob
     private boolean blob;
@@ -162,7 +161,6 @@ public class EntityColumn {
         EntityColumn that = (EntityColumn) o;
 
         if (id != that.id) return false;
-        if (uuid != that.uuid) return false;
         if (identity != that.identity) return false;
         if (table != null ? !table.equals(that.table) : that.table != null) return false;
         if (property != null ? !property.equals(that.property) : that.property != null) return false;
@@ -186,7 +184,6 @@ public class EntityColumn {
         result = 31 * result + (typeHandler != null ? typeHandler.hashCode() : 0);
         result = 31 * result + (sequenceName != null ? sequenceName.hashCode() : 0);
         result = 31 * result + (id ? 1 : 0);
-        result = 31 * result + (uuid ? 1 : 0);
         result = 31 * result + (identity ? 1 : 0);
         result = 31 * result + (generator != null ? generator.hashCode() : 0);
         result = 31 * result + (orderBy != null ? orderBy.hashCode() : 0);
@@ -323,14 +320,6 @@ public class EntityColumn {
         this.updatable = updatable;
     }
 
-    public boolean isUuid() {
-        return uuid;
-    }
-
-    public void setUuid(boolean uuid) {
-        this.uuid = uuid;
-    }
-
     public ORDER getOrder() {
         return order;
     }
@@ -366,7 +355,6 @@ public class EntityColumn {
                 ", typeHandler=" + typeHandler +
                 ", sequenceName='" + sequenceName + '\'' +
                 ", id=" + id +
-                ", uuid=" + uuid +
                 ", identity=" + identity +
                 ", blob=" + blob +
                 ", generator='" + generator + '\'' +

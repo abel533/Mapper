@@ -216,10 +216,6 @@ public abstract class MapperTemplate {
         return getConfig().getIDENTITY();
     }
 
-    public String getUUID() {
-        return getConfig().getUUID();
-    }
-
     public boolean isBEFORE() {
         return getConfig().isBEFORE();
     }

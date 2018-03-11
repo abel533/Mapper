@@ -44,7 +44,6 @@ public class Config {
     public static final String PREFIX = "mapper";
 
     private List<Class> mappers = new ArrayList<Class>();
-    private String  UUID;
     private String  IDENTITY;
     private boolean BEFORE;
     private String  seqFormat;
@@ -191,29 +190,6 @@ public class Config {
         this.style = style;
     }
 
-    /**
-     * 获取UUID生成规则
-     *
-     * @return
-     */
-    public String getUUID() {
-        if (StringUtil.isNotEmpty(this.UUID)) {
-            return this.UUID;
-        }
-        return "@java.util.UUID@randomUUID().toString().replace(\"-\", \"\")";
-    }
-
-    /**
-     * 设置UUID生成策略
-     * <br>配置UUID生成策略需要使用OGNL表达式
-     * <br>默认值32位长度:@java.util.UUID@randomUUID().toString().replace("-", "")
-     *
-     * @param UUID
-     */
-    public void setUUID(String UUID) {
-        this.UUID = UUID;
-    }
-
     public String getWrapKeyword() {
         return wrapKeyword;
     }
@@ -300,14 +276,6 @@ public class Config {
         this.mappers = mappers;
     }
 
-    public String getUuid() {
-        return getUUID();
-    }
-
-    public void setUuid(String uuid) {
-        setUUID(uuid);
-    }
-
     public boolean isBefore() {
         return isBEFORE();
     }
@@ -358,10 +326,6 @@ public class Config {
             //默认驼峰
             this.style = Style.camelhump;
             return;
-        }
-        String UUID = properties.getProperty("UUID");
-        if (StringUtil.isNotEmpty(UUID)) {
-            setUUID(UUID);
         }
         String IDENTITY = properties.getProperty("IDENTITY");
         if (StringUtil.isNotEmpty(IDENTITY)) {

@@ -215,9 +215,7 @@ public class DefaultEntityResolve implements EntityResolve {
      * @param generatedValue
      */
     protected void processGeneratedValue(EntityTable entityTable, EntityColumn entityColumn, GeneratedValue generatedValue) {
-        if ("UUID".equals(generatedValue.generator())) {
-            entityColumn.setUuid(true);
-        } else if ("JDBC".equals(generatedValue.generator())) {
+        if ("JDBC".equals(generatedValue.generator())) {
             entityColumn.setIdentity(true);
             entityColumn.setGenerator("JDBC");
             entityTable.setKeyProperties(entityColumn.getProperty());
