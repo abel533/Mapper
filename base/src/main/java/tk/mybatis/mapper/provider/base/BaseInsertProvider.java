@@ -28,7 +28,6 @@ import org.apache.ibatis.mapping.MappedStatement;
 import tk.mybatis.mapper.MapperException;
 import tk.mybatis.mapper.entity.EntityColumn;
 import tk.mybatis.mapper.mapperhelper.*;
-import tk.mybatis.mapper.util.StringUtil;
 
 import java.util.Set;
 
@@ -43,25 +42,6 @@ public class BaseInsertProvider extends MapperTemplate {
         super(mapperClass, mapperHelper);
     }
 
-    /**
-     * 插入全部,这段代码比较复杂，这里举个例子
-     * CountryU生成的insert方法结构如下：
-     * <pre>
-     &lt;bind name="countryname_bind" value='@java.util.UUID@randomUUID().toString().replace("-", "")'/&gt;
-     INSERT INTO country_u(id,countryname,countrycode) VALUES
-     &lt;trim prefix="(" suffix=")" suffixOverrides=","&gt;
-     &lt;if test="id != null"&gt;#{id,javaType=java.lang.Integer},&lt;/if&gt;
-     &lt;if test="id == null"&gt;#{id,javaType=java.lang.Integer},&lt;/if&gt;
-     &lt;if test="countryname != null"&gt;#{countryname,javaType=java.lang.String},&lt;/if&gt;
-     &lt;if test="countryname == null"&gt;#{countryname_bind,javaType=java.lang.String},&lt;/if&gt;
-     &lt;if test="countrycode != null"&gt;#{countrycode,javaType=java.lang.String},&lt;/if&gt;
-     &lt;if test="countrycode == null"&gt;#{countrycode,javaType=java.lang.String},&lt;/if&gt;
-     &lt;/trim&gt;
-     </pre>
-     *
-     * @param ms
-     * @return
-     */
     public String insert(MappedStatement ms) {
         Class<?> entityClass = getEntityClass(ms);
         StringBuilder sql = new StringBuilder();
@@ -84,10 +64,7 @@ public class BaseInsertProvider extends MapperTemplate {
                 sql.append(SqlHelper.getIfNotNull(column, column.getColumnHolder(null, null, ","), isNotEmpty()));
             }
             //当属性为null时，如果存在主键策略，会自动获取值，如果不存在，则使用null
-            //序列的情况
-            if (StringUtil.isNotEmpty(column.getSequenceName())) {
-                sql.append(SqlHelper.getIfIsNull(column, getSeqNextVal(column) + " ,", false));
-            } else if (column.isIdentity()) {
+            if (column.isIdentity()) {
                 sql.append(SqlHelper.getIfCacheIsNull(column, column.getColumnHolder() + ","));
             } else {
                 //当null的时候，如果不指定jdbcType，oracle可能会报异常，指定VARCHAR不影响其他
@@ -98,30 +75,6 @@ public class BaseInsertProvider extends MapperTemplate {
         return sql.toString();
     }
 
-    /**
-     * 插入不为null的字段,这段代码比较复杂，这里举个例子
-     * CountryU生成的insertSelective方法结构如下：
-     * <pre>
-     &lt;bind name="countryname_bind" value='@java.util.UUID@randomUUID().toString().replace("-", "")'/&gt;
-     INSERT INTO country_u
-     &lt;trim prefix="(" suffix=")" suffixOverrides=","&gt;
-     &lt;if test="id != null"&gt;id,&lt;/if&gt;
-     countryname,
-     &lt;if test="countrycode != null"&gt;countrycode,&lt;/if&gt;
-     &lt;/trim&gt;
-     VALUES
-     &lt;trim prefix="(" suffix=")" suffixOverrides=","&gt;
-     &lt;if test="id != null"&gt;#{id,javaType=java.lang.Integer},&lt;/if&gt;
-     &lt;if test="countryname != null"&gt;#{countryname,javaType=java.lang.String},&lt;/if&gt;
-     &lt;if test="countryname == null"&gt;#{countryname_bind,javaType=java.lang.String},&lt;/if&gt;
-     &lt;if test="countrycode != null"&gt;#{countrycode,javaType=java.lang.String},&lt;/if&gt;
-     &lt;/trim&gt;
-     </pre>
-     * 这段代码可以注意对countryname的处理
-     *
-     * @param ms
-     * @return
-     */
     public String insertSelective(MappedStatement ms) {
         Class<?> entityClass = getEntityClass(ms);
         StringBuilder sql = new StringBuilder();
@@ -134,7 +87,7 @@ public class BaseInsertProvider extends MapperTemplate {
             if (!column.isInsertable()) {
                 continue;
             }
-            if (StringUtil.isNotEmpty(column.getSequenceName()) || column.isIdentity()) {
+            if (column.isIdentity()) {
                 sql.append(column.getColumn() + ",");
             } else {
                 sql.append(SqlHelper.getIfNotNull(column, column.getColumn() + ",", isNotEmpty()));
@@ -156,9 +109,7 @@ public class BaseInsertProvider extends MapperTemplate {
             }
             //当属性为null时，如果存在主键策略，会自动获取值，如果不存在，则使用null
             //序列的情况
-            if (StringUtil.isNotEmpty(column.getSequenceName())) {
-                sql.append(SqlHelper.getIfIsNull(column, getSeqNextVal(column) + " ,", isNotEmpty()));
-            } else if (column.isIdentity()) {
+            if (column.isIdentity()) {
                 sql.append(SqlHelper.getIfCacheIsNull(column, column.getColumnHolder() + ","));
             }
         }
@@ -171,8 +122,7 @@ public class BaseInsertProvider extends MapperTemplate {
         Boolean hasIdentityKey = false;
         //先处理cache或bind节点
         for (EntityColumn column : columnList) {
-            if (StringUtil.isNotEmpty(column.getSequenceName())) {
-            } else if (column.isIdentity()) {
+            if (column.isIdentity()) {
                 //这种情况下,如果原先的字段有值,需要先缓存起来,否则就一定会使用自动增长
                 //这是一个bind节点
                 sql.append(SqlHelper.getBindCache(column));

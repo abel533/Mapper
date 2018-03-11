@@ -184,27 +184,10 @@ public class DefaultEntityResolve implements EntityResolve {
         //KeySql 优先级最高
         if (field.isAnnotationPresent(KeySql.class)) {
             processKeySql(entityTable, entityColumn, field.getAnnotation(KeySql.class));
-        } else if (field.isAnnotationPresent(SequenceGenerator.class)) {
-            //序列
-            processSequenceGenerator(entityTable, entityColumn, field.getAnnotation(SequenceGenerator.class));
         } else if (field.isAnnotationPresent(GeneratedValue.class)) {
             //执行 sql - selectKey
             processGeneratedValue(entityTable, entityColumn, field.getAnnotation(GeneratedValue.class));
         }
-    }
-
-    /**
-     * 处理 SequenceGenerator 注解
-     *
-     * @param entityTable
-     * @param entityColumn
-     * @param sequenceGenerator
-     */
-    protected void processSequenceGenerator(EntityTable entityTable, EntityColumn entityColumn, SequenceGenerator sequenceGenerator) {
-        if ("".equals(sequenceGenerator.sequenceName())) {
-            throw new MapperException(entityTable.getEntityClass() + "字段" + entityColumn.getProperty() + "的注解@SequenceGenerator未指定sequenceName!");
-        }
-        entityColumn.setSequenceName(sequenceGenerator.sequenceName());
     }
 
     /**

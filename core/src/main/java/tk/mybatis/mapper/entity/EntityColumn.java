@@ -41,7 +41,6 @@ public class EntityColumn {
     private Class<?> javaType;
     private JdbcType jdbcType;
     private Class<? extends TypeHandler<?>> typeHandler;
-    private String sequenceName;
     private boolean id = false;
     private boolean identity = false;
     //字段是否为 blob
@@ -168,7 +167,6 @@ public class EntityColumn {
         if (javaType != null ? !javaType.equals(that.javaType) : that.javaType != null) return false;
         if (jdbcType != that.jdbcType) return false;
         if (typeHandler != null ? !typeHandler.equals(that.typeHandler) : that.typeHandler != null) return false;
-        if (sequenceName != null ? !sequenceName.equals(that.sequenceName) : that.sequenceName != null) return false;
         if (generator != null ? !generator.equals(that.generator) : that.generator != null) return false;
         return !(orderBy != null ? !orderBy.equals(that.orderBy) : that.orderBy != null);
 
@@ -182,7 +180,6 @@ public class EntityColumn {
         result = 31 * result + (javaType != null ? javaType.hashCode() : 0);
         result = 31 * result + (jdbcType != null ? jdbcType.hashCode() : 0);
         result = 31 * result + (typeHandler != null ? typeHandler.hashCode() : 0);
-        result = 31 * result + (sequenceName != null ? sequenceName.hashCode() : 0);
         result = 31 * result + (id ? 1 : 0);
         result = 31 * result + (identity ? 1 : 0);
         result = 31 * result + (generator != null ? generator.hashCode() : 0);
@@ -262,14 +259,6 @@ public class EntityColumn {
 
     public void setProperty(String property) {
         this.property = property;
-    }
-
-    public String getSequenceName() {
-        return sequenceName;
-    }
-
-    public void setSequenceName(String sequenceName) {
-        this.sequenceName = sequenceName;
     }
 
     public EntityTable getTable() {
@@ -353,7 +342,6 @@ public class EntityColumn {
                 ", javaType=" + javaType +
                 ", jdbcType=" + jdbcType +
                 ", typeHandler=" + typeHandler +
-                ", sequenceName='" + sequenceName + '\'' +
                 ", id=" + id +
                 ", identity=" + identity +
                 ", blob=" + blob +

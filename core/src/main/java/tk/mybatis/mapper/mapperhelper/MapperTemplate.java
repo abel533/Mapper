@@ -96,7 +96,7 @@ public abstract class MapperTemplate {
      * @return
      */
     public String getIDENTITY(EntityColumn column) {
-        return MessageFormat.format(mapperHelper.getConfig().getIDENTITY(), column.getSequenceName(), column.getColumn(), column.getProperty(), column.getTable().getName());
+        return MessageFormat.format(mapperHelper.getConfig().getIDENTITY(), column.getColumn(), column.getProperty(), column.getTable().getName());
     }
 
     /**
@@ -177,16 +177,6 @@ public abstract class MapperTemplate {
             }
         }
         throw new MapperException("无法获取 " + msId + " 方法的泛型信息!");
-    }
-
-    /**
-     * 获取序列下个值的表达式
-     *
-     * @param column
-     * @return
-     */
-    protected String getSeqNextVal(EntityColumn column) {
-        return MessageFormat.format(mapperHelper.getConfig().getSeqFormat(), column.getSequenceName(), column.getColumn(), column.getProperty(), column.getTable().getName());
     }
 
     /**
