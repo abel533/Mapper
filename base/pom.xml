@@ -31,7 +31,7 @@
         <version>2</version>
     </parent>
     <artifactId>mapper-base</artifactId>
-    <version>1.0.0-beta3</version>
+    <version>1.0.0</version>
     <packaging>jar</packaging>
 
     <name>mapper-base</name>
@@ -39,7 +39,7 @@
     <url>http://www.mybatis.tk</url>
 
     <properties>
-        <mapper-core.version>1.0.0-beta3</mapper-core.version>
+        <mapper-core.version>1.0.0</mapper-core.version>
     </properties>
 
     <dependencies>

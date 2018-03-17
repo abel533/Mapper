@@ -31,14 +31,14 @@
         <version>2</version>
     </parent>
     <artifactId>mapper-extra</artifactId>
-    <version>1.0.0-beta3</version>
+    <version>1.0.0</version>
     <packaging>jar</packaging>
 
     <name>mapper-extra</name>
     <description>Mybatis 通用 Mapper 扩展方法</description>
 
     <properties>
-        <mapper-core.version>1.0.0-beta3</mapper-core.version>
+        <mapper-core.version>1.0.0</mapper-core.version>
     </properties>
 
     <dependencies>

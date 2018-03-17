@@ -31,7 +31,7 @@
         <version>2</version>
     </parent>
     <artifactId>mapper-core</artifactId>
-    <version>1.0.0-beta3</version>
+    <version>1.0.0</version>
     <packaging>jar</packaging>
 
     <name>mapper-core</name>
