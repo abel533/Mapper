@@ -14,7 +14,10 @@
 
 ## Mapper3 拆接口，Mapper4 拆项目
 
-Mapper 4 改动很大，正式发布前会提供详细的更新日志。
+此次更新最大的变化是项目结构调整了，将原来的 mapper 拆分成了 core, base, extra, generator, spring 五个子模块，将独立的 mapper-weekend 和 spring-boot-starter 项目添加到 mapper 中作为两个子项目。
+
+由于更新日志内容太长，请移步 **[4.0 更新日志](4.0.changelog)** 查看完整内容。
+
 
 ## 项目文档
 
