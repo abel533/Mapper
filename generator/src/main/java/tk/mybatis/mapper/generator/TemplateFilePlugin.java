@@ -98,6 +98,11 @@ public class TemplateFilePlugin extends PluginAdapter {
     private Object          templateFormatter;
     private String          templateFormatterClass;
     private Set<TableClass> cacheTables;
+    
+    /**
+     * 编码
+     */
+    private String encoding;
 
     /**
      * 列转换为字段
@@ -123,7 +128,7 @@ public class TemplateFilePlugin extends PluginAdapter {
      * @throws IOException
      */
     protected String read(InputStream inputStream) throws IOException {
-        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, encoding));
         StringBuffer stringBuffer = new StringBuffer();
         String line = reader.readLine();
         while (line != null) {
@@ -225,5 +230,6 @@ public class TemplateFilePlugin extends PluginAdapter {
         this.templatePath = properties.getProperty("templatePath");
         this.fileName = properties.getProperty("fileName");
         this.templateFormatterClass = properties.getProperty("templateFormatter");
+        this.encoding = properties.getProperty("encoding", "UTF-8");
     }
 }
