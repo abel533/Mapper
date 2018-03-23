@@ -141,7 +141,7 @@ public class NameStyleTest {
         }
 
         ResultMap resultMap = entityTable.getResultMap(configuration);
-        Assert.assertEquals("[USER_NAME]", resultMap.getMappedColumns().toString());
+        Assert.assertEquals("[USERNAME]", resultMap.getMappedColumns().toString());
 
         Assert.assertEquals(1, resultMap.getResultMappings().size());
 
