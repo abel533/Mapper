@@ -62,12 +62,12 @@ public class ColumnTypeTest {
         }
 
         ResultMap resultMap = entityTable.getResultMap(configuration);
-        Assert.assertEquals("[USER_NAME]", resultMap.getMappedColumns().toString());
+        Assert.assertEquals("[NAME]", resultMap.getMappedColumns().toString());
 
         Assert.assertEquals(1, resultMap.getResultMappings().size());
 
         ResultMapping resultMapping = resultMap.getResultMappings().get(0);
-        Assert.assertEquals("user_name", resultMapping.getColumn());
+        Assert.assertEquals("name", resultMapping.getColumn());
         Assert.assertEquals("name", resultMapping.getProperty());
         Assert.assertNull(resultMapping.getJdbcType());
         Assert.assertEquals(StringTypeHandler.class, resultMapping.getTypeHandler().getClass());
@@ -220,12 +220,12 @@ public class ColumnTypeTest {
         }
 
         ResultMap resultMap = entityTable.getResultMap(configuration);
-        Assert.assertEquals("[USER_NAME]", resultMap.getMappedColumns().toString());
+        Assert.assertEquals("[NAME]", resultMap.getMappedColumns().toString());
 
         Assert.assertEquals(1, resultMap.getResultMappings().size());
 
         ResultMapping resultMapping = resultMap.getResultMappings().get(0);
-        Assert.assertEquals("user_name", resultMapping.getColumn());
+        Assert.assertEquals("name", resultMapping.getColumn());
         Assert.assertEquals("name", resultMapping.getProperty());
         Assert.assertNotNull(resultMapping.getJdbcType());
         Assert.assertEquals(BlobTypeHandler.class, resultMapping.getTypeHandler().getClass());
