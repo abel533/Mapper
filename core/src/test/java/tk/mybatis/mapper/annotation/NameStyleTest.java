@@ -146,7 +146,7 @@ public class NameStyleTest {
         Assert.assertEquals(1, resultMap.getResultMappings().size());
 
         ResultMapping resultMapping = resultMap.getResultMappings().get(0);
-        Assert.assertEquals("user_name", resultMapping.getColumn());
+        Assert.assertEquals("userName", resultMapping.getColumn());
         Assert.assertEquals("userName", resultMapping.getProperty());
         Assert.assertNull(resultMapping.getJdbcType());
         Assert.assertEquals(StringTypeHandler.class, resultMapping.getTypeHandler().getClass());
@@ -226,7 +226,7 @@ public class NameStyleTest {
         Assert.assertEquals(1, resultMap.getResultMappings().size());
 
         ResultMapping resultMapping = resultMap.getResultMappings().get(0);
-        Assert.assertEquals("USERNAME", resultMapping.getColumn());
+        Assert.assertEquals("userName", resultMapping.getColumn());
         Assert.assertEquals("userName", resultMapping.getProperty());
         Assert.assertNull(resultMapping.getJdbcType());
         Assert.assertEquals(StringTypeHandler.class, resultMapping.getTypeHandler().getClass());
@@ -266,7 +266,7 @@ public class NameStyleTest {
         Assert.assertEquals(1, resultMap.getResultMappings().size());
 
         ResultMapping resultMapping = resultMap.getResultMappings().get(0);
-        Assert.assertEquals("username", resultMapping.getColumn());
+        Assert.assertEquals("userName", resultMapping.getColumn());
         Assert.assertEquals("userName", resultMapping.getProperty());
         Assert.assertNull(resultMapping.getJdbcType());
         Assert.assertEquals(StringTypeHandler.class, resultMapping.getTypeHandler().getClass());
