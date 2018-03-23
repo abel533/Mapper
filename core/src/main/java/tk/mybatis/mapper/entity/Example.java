@@ -168,7 +168,7 @@ public class Example implements IDynamicTableName {
             }
             for (String property : properties) {
                 if (propertyMap.containsKey(property)) {
-                    this.selectColumns.add(propertyMap.get(property).getColumn());
+                    this.selectColumns.add(propertyMap.get(property).getColumn() + " AS " + propertyMap.get(property).getProperty());
                 } else {
                     throw new MapperException("类 " + entityClass.getSimpleName() + " 不包含属性 \'" + property + "\'，或该属性被@Transient注释！");
                 }
@@ -1098,7 +1098,7 @@ public class Example implements IDynamicTableName {
             selectColumns = new LinkedHashSet<String>(entityColumns.size() - excludeColumns.size());
             for (EntityColumn column : entityColumns) {
                 if (!excludeColumns.contains(column.getColumn())) {
-                    selectColumns.add(column.getColumn());
+                    selectColumns.add(column.getColumn() + " AS " +column.getProperty());
                 }
             }
         }

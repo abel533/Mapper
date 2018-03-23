@@ -244,7 +244,7 @@ public class SqlHelper {
         Set<EntityColumn> columnSet = EntityHelper.getColumns(entityClass);
         StringBuilder sql = new StringBuilder();
         for (EntityColumn entityColumn : columnSet) {
-            sql.append(entityColumn.getColumn()).append(",");
+            sql.append(entityColumn.getColumn()).append(" AS ").append(entityColumn.getProperty()).append(",");
         }
         return sql.substring(0, sql.length() - 1);
     }
