@@ -343,10 +343,22 @@ public class Config {
         if (StringUtil.isNotEmpty(schema)) {
             setSchema(schema);
         }
+
+        //ORDER 有三个属性名可以进行配置
         String ORDER = properties.getProperty("ORDER");
         if (StringUtil.isNotEmpty(ORDER)) {
             setOrder(ORDER);
         }
+        ORDER = properties.getProperty("order");
+        if (StringUtil.isNotEmpty(ORDER)) {
+            setOrder(ORDER);
+        }
+        ORDER = properties.getProperty("before");
+        if (StringUtil.isNotEmpty(ORDER)) {
+            setBefore(Boolean.valueOf(ORDER));
+        }
+
+
         this.notEmpty = Boolean.valueOf(properties.getProperty("notEmpty"));
         this.enableMethodAnnotation = Boolean.valueOf(properties.getProperty("enableMethodAnnotation"));
         this.checkExampleEntityClass = Boolean.valueOf(properties.getProperty("checkExampleEntityClass"));

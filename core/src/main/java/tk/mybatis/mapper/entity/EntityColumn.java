@@ -52,7 +52,7 @@ public class EntityColumn {
     private boolean insertable = true;
     //可更新
     private boolean updatable = true;
-    private ORDER order;
+    private ORDER order = ORDER.DEFAULT;
     //是否设置 javaType
     private boolean useJavaType;
     /**
