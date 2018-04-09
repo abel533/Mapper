@@ -52,7 +52,12 @@ public class DefaultEntityResolve implements EntityResolve {
         if (entityTable == null) {
             entityTable = new EntityTable(entityClass);
             //可以通过stye控制
-            entityTable.setName(StringUtil.convertByStyle(entityClass.getSimpleName(), style));
+            String tableName = StringUtil.convertByStyle(entityClass.getSimpleName(), style);
+            //自动处理关键字
+            if (StringUtil.isNotEmpty(config.getWrapKeyword()) && SqlReservedWords.containsWord(tableName)) {
+                tableName = MessageFormat.format(config.getWrapKeyword(), tableName);
+            }
+            entityTable.setName(tableName);
         }
         entityTable.setEntityClassColumns(new LinkedHashSet<EntityColumn>());
         entityTable.setEntityClassPKColumns(new LinkedHashSet<EntityColumn>());
