@@ -70,7 +70,7 @@ public class IdListProvider extends MapperTemplate {
         final Class<?> entityClass = getEntityClass(ms);
         StringBuilder sql = new StringBuilder();
         sql.append(SqlHelper.deleteFromTable(entityClass, tableName(entityClass)));
-        appendWhereIdList(sql, entityClass);
+        appendWhereIdList(sql, entityClass, getConfig().isSafeDelete());
         return sql.toString();
     }
 
@@ -87,7 +87,7 @@ public class IdListProvider extends MapperTemplate {
         StringBuilder sql = new StringBuilder();
         sql.append(SqlHelper.selectAllColumns(entityClass));
         sql.append(SqlHelper.fromTable(entityClass, tableName(entityClass)));
-        appendWhereIdList(sql, entityClass);
+        appendWhereIdList(sql, entityClass, false);
         return sql.toString();
     }
 
@@ -97,18 +97,22 @@ public class IdListProvider extends MapperTemplate {
      * @param sql
      * @param entityClass
      */
-    private void appendWhereIdList(StringBuilder sql, Class<?> entityClass){
+    private void appendWhereIdList(StringBuilder sql, Class<?> entityClass, boolean notEmpty){
         Set<EntityColumn> columnList = EntityHelper.getPKColumns(entityClass);
         if (columnList.size() == 1) {
             EntityColumn column = columnList.iterator().next();
-            sql.append("<bind name=\"notEmptyListCheck\" value=\"@tk.mybatis.mapper.additional.idlist.IdListProvider@notEmpty(");
-            sql.append("idList, 'idList 不能为空')/>");
-            sql.append(" where ");
+            if(notEmpty){
+                sql.append("<bind name=\"notEmptyListCheck\" value=\"@tk.mybatis.mapper.additional.idlist.IdListProvider@notEmpty(");
+                sql.append("idList, 'idList 不能为空')\"/>");
+            }
+            sql.append("<where>");
+            sql.append("<foreach collection=\"idList\" item=\"id\" separator=\",\" open=\"");
             sql.append(column.getColumn());
             sql.append(" in ");
-            sql.append("<foreach collection=\"idList\" item=\"id\" separator=\",\" open=\"(\" close=\")\">");
+            sql.append("(\" close=\")\">");
             sql.append("#{id}");
             sql.append("</foreach>");
+            sql.append("</where>");
         } else {
             throw new MapperException("继承 ByIdList 方法的实体类[" + entityClass.getCanonicalName() + "]中必须只有一个带有 @Id 注解的字段");
         }
