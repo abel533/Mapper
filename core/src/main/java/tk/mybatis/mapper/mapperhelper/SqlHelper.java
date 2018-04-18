@@ -474,7 +474,7 @@ public class SqlHelper {
                 } else {
                     sql.append(column.getColumnEqualsHolder(entityName) + ",");
                 }
-            } else if(column.isId()){
+            } else if(column.isId() && !column.isUpdatable()){
                 //set id = id,
                 sql.append(column.getColumn()).append(" = ").append(column.getColumn()).append(",");
             }
