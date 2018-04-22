@@ -689,6 +689,25 @@ public class SqlHelper {
     }
 
     /**
+     * example查询中的orderBy条件，会判断默认orderBy
+     *
+     * @return
+     */
+    public static String exampleOrderBy(String entityName, Class<?> entityClass) {
+        StringBuilder sql = new StringBuilder();
+        sql.append("<if test=\"").append(entityName).append(".orderByClause != null\">");
+        sql.append("order by ${").append(entityName).append(".orderByClause}");
+        sql.append("</if>");
+        String orderByClause = EntityHelper.getOrderByClause(entityClass);
+        if (orderByClause.length() > 0) {
+            sql.append("<if test=\"").append(entityName).append(".orderByClause == null\">");
+            sql.append("ORDER BY " + orderByClause);
+            sql.append("</if>");
+        }
+        return sql.toString();
+    }
+
+    /**
      * example 支持 for update
      *
      * @return
