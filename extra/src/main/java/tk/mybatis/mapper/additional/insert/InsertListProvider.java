@@ -58,6 +58,17 @@ public class InsertListProvider extends MapperTemplate {
         sql.append("<trim prefix=\"(\" suffix=\")\" suffixOverrides=\",\">");
         //获取全部列
         Set<EntityColumn> columnList = EntityHelper.getColumns(entityClass);
+        //单独增加对 genId 方式的支持
+        for (EntityColumn column : columnList) {
+            if(column.getGenIdClass() != null){
+                sql.append("<bind name=\"").append(column.getColumn()).append("GenIdBind\" value=\"@tk.mybatis.mapper.genid.GenIdUtil@genId(");
+                sql.append("record").append(", '").append(column.getProperty()).append("'");
+                sql.append(", @").append(column.getGenIdClass().getCanonicalName()).append("@class");
+                sql.append(", '").append(tableName(entityClass)).append("'");
+                sql.append(", '").append(column.getColumn()).append("')");
+                sql.append("\"/>");
+            }
+        }
         //当某个列有主键策略时，不需要考虑他的属性是否为空，因为如果为空，一定会根据主键策略给他生成一个值
         for (EntityColumn column : columnList) {
             if (column.isInsertable()) {
