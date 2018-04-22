@@ -1,7 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" ?>
 <!--
   ~ The MIT License (MIT)
   ~
-  ~ Copyright (c) 2018 abel533@gmail.com
+  ~ Copyright (c) 2014-2017 abel533@gmail.com
   ~
   ~ Permission is hereby granted, free of charge, to any person obtaining a copy
   ~ of this software and associated documentation files (the "Software"), to deal
@@ -22,35 +23,29 @@
   ~ THE SOFTWARE.
   -->
 
-<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-    <parent>
-        <groupId>tk.mybatis</groupId>
-        <artifactId>mapper-parent</artifactId>
-        <version>2</version>
-    </parent>
-    <artifactId>mapper-extra</artifactId>
-    <version>1.0.0</version>
-    <packaging>jar</packaging>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
 
-    <name>mapper-extra</name>
-    <description>Mybatis 通用 Mapper 扩展方法</description>
+<configuration>
+    <settings>
+        <setting name="logImpl" value="LOG4J"/>
+    </settings>
 
-    <properties>
-        <mapper-core.version>1.0.2</mapper-core.version>
-    </properties>
+    <environments default="development">
+        <environment id="development">
+            <transactionManager type="JDBC">
+            </transactionManager>
+            <dataSource type="UNPOOLED">
+                <property name="driver" value="org.hsqldb.jdbcDriver" />
+                <property name="url" value="jdbc:hsqldb:mem:basetest" />
+                <property name="username" value="sa" />
+            </dataSource>
+        </environment>
+    </environments>
 
-    <dependencies>
-        <dependency>
-            <groupId>org.mybatis</groupId>
-            <artifactId>mybatis</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>tk.mybatis</groupId>
-            <artifactId>mapper-core</artifactId>
-            <version>${mapper-core.version}</version>
-            <scope>provided</scope>
-        </dependency>
-    </dependencies>
-</project>
+    <mappers>
+        <mapper class="tk.mybatis.mapper.additional.aggregation.UserMapper"/>
+    </mappers>
+
+</configuration>
