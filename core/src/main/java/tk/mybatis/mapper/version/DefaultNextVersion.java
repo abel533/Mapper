@@ -24,6 +24,8 @@
 
 package tk.mybatis.mapper.version;
 
+import java.sql.Timestamp;
+
 /**
  * @author liuzh
  * @since 3.5.0
@@ -39,8 +41,10 @@ public class DefaultNextVersion implements NextVersion {
             return (Integer) current + 1;
         } else if (current instanceof Long) {
             return (Long) current + 1L;
+        } else if (current instanceof Timestamp) {
+            return new Timestamp(System.currentTimeMillis());
         } else {
-            throw new VersionException("默认的 NextVersion 只支持 Integer 和 Long 类型的版本号，如果有需要请自行扩展!");
+            throw new VersionException("默认的 NextVersion 只支持 Integer, Long 和 java.sql.Timestamp 类型的版本号，如果有需要请自行扩展!");
         }
     }
 
