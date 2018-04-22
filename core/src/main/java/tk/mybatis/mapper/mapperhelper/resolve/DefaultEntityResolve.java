@@ -15,6 +15,7 @@ import tk.mybatis.mapper.entity.Config;
 import tk.mybatis.mapper.entity.EntityColumn;
 import tk.mybatis.mapper.entity.EntityField;
 import tk.mybatis.mapper.entity.EntityTable;
+import tk.mybatis.mapper.genid.GenId;
 import tk.mybatis.mapper.mapperhelper.FieldHelper;
 import tk.mybatis.mapper.util.SimpleTypeUtil;
 import tk.mybatis.mapper.util.SqlReservedWords;
@@ -255,14 +256,16 @@ public class DefaultEntityResolve implements EntityResolve {
             entityColumn.setIdentity(true);
             entityColumn.setOrder(ORDER.AFTER);
             entityColumn.setGenerator(keySql.dialect().getIdentityRetrievalStatement());
-        } else {
-            if (StringUtil.isEmpty(keySql.sql())) {
-                throw new MapperException(entityTable.getEntityClass().getCanonicalName()
-                        + " 类中的 @KeySql 注解配置无效!");
-            }
+        } else if (StringUtil.isNotEmpty(keySql.sql())){
             entityColumn.setIdentity(true);
             entityColumn.setOrder(keySql.order());
             entityColumn.setGenerator(keySql.sql());
+        } else if(keySql.genId() != GenId.NULL.class){
+            entityColumn.setIdentity(false);
+            entityColumn.setGenIdClass(keySql.genId());
+        } else {
+            throw new MapperException(entityTable.getEntityClass().getCanonicalName()
+                    + " 类中的 @KeySql 注解配置无效!");
         }
     }
 

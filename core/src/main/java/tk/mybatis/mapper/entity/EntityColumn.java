@@ -27,6 +27,7 @@ package tk.mybatis.mapper.entity;
 import org.apache.ibatis.type.JdbcType;
 import org.apache.ibatis.type.TypeHandler;
 import tk.mybatis.mapper.code.ORDER;
+import tk.mybatis.mapper.genid.GenId;
 import tk.mybatis.mapper.util.StringUtil;
 
 /**
@@ -43,6 +44,7 @@ public class EntityColumn {
     private Class<? extends TypeHandler<?>> typeHandler;
     private boolean id = false;
     private boolean identity = false;
+    private Class<? extends GenId> genIdClass;
     //字段是否为 blob
     private boolean blob;
     private String generator;
@@ -291,6 +293,14 @@ public class EntityColumn {
 
     public void setIdentity(boolean identity) {
         this.identity = identity;
+    }
+
+    public Class<? extends GenId> getGenIdClass() {
+        return genIdClass;
+    }
+
+    public void setGenIdClass(Class<? extends GenId> genIdClass) {
+        this.genIdClass = genIdClass;
     }
 
     public boolean isInsertable() {

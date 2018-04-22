@@ -26,6 +26,7 @@ package tk.mybatis.mapper.annotation;
 
 import tk.mybatis.mapper.code.IdentityDialect;
 import tk.mybatis.mapper.code.ORDER;
+import tk.mybatis.mapper.genid.GenId;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -69,5 +70,12 @@ public @interface KeySql {
      * @return
      */
     ORDER order() default ORDER.DEFAULT;
+
+    /**
+     * Java 方式生成主键，可以和发号器一类的服务配合使用
+     *
+     * @return
+     */
+    Class<? extends GenId> genId() default GenId.NULL.class;
 
 }

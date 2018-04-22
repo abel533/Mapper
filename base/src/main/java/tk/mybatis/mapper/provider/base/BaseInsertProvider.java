@@ -138,7 +138,15 @@ public class BaseInsertProvider extends MapperTemplate {
                 //插入selectKey
                 SelectKeyHelper.newSelectKeyMappedStatement(ms, column, entityClass, isBEFORE(), getIDENTITY(column));
                 hasIdentityKey = true;
+            } else if(column.getGenIdClass() != null){
+                sql.append("<bind name=\"").append(column.getColumn()).append("GenIdBind\" value=\"@tk.mybatis.mapper.genid.GenIdUtil@genId(");
+                sql.append("_parameter").append(", '").append(column.getProperty()).append("'");
+                sql.append(", @").append(column.getGenIdClass().getCanonicalName()).append("@class");
+                sql.append(", '").append(tableName(entityClass)).append("'");
+                sql.append(", '").append(column.getColumn()).append("')");
+                sql.append("\"/>");
             }
+
         }
     }
 }
