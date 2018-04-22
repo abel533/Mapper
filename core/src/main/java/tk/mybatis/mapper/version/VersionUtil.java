@@ -24,11 +24,19 @@
 
 package tk.mybatis.mapper.version;
 
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.locks.ReentrantLock;
+
 /**
  * @author liuzh
  * @since 3.5.0
  */
 public class VersionUtil {
+
+    private static final Map<Class<? extends NextVersion>, NextVersion> CACHE = new ConcurrentHashMap<Class<? extends NextVersion>, NextVersion>();
+
+    private static final ReentrantLock LOCK = new ReentrantLock();
 
     /**
      * 获取下一个版本
@@ -38,9 +46,22 @@ public class VersionUtil {
      * @return
      * @throws VersionException
      */
-    public static Object nextVersion(String nextVersionClass, Object current) throws VersionException {
+    public static Object nextVersion(Class<? extends NextVersion> nextVersionClass, Object current) throws VersionException {
         try {
-            NextVersion nextVersion = (NextVersion) Class.forName(nextVersionClass).newInstance();
+            NextVersion nextVersion;
+            if (CACHE.containsKey(nextVersionClass)) {
+                nextVersion = CACHE.get(nextVersionClass);
+            } else {
+                LOCK.lock();
+                try {
+                    if (!CACHE.containsKey(nextVersionClass)) {
+                        CACHE.put(nextVersionClass, nextVersionClass.newInstance());
+                    }
+                    nextVersion = CACHE.get(nextVersionClass);
+                } finally {
+                    LOCK.unlock();
+                }
+            }
             return nextVersion.nextVersion(current);
         } catch (Exception e) {
             throw new VersionException("获取下一个版本号失败!", e);

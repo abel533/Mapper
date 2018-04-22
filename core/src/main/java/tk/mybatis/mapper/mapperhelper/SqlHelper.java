@@ -466,8 +466,8 @@ public class SqlHelper {
                     String versionClass = version.nextVersion().getCanonicalName();
                     //version = ${@tk.mybatis.mapper.version@nextVersionClass("versionClass", version)}
                     sql.append(column.getColumn())
-                            .append(" = ${@tk.mybatis.mapper.version.VersionUtil@nextVersion(\"")
-                            .append(versionClass).append("\", ")
+                            .append(" = ${@tk.mybatis.mapper.version.VersionUtil@nextVersion(")
+                            .append("@").append(versionClass).append("@class, ")
                             .append(column.getProperty()).append(")},");
                 } else if (notNull) {
                     sql.append(SqlHelper.getIfNotNull(entityName, column, column.getColumnEqualsHolder(entityName) + ",", notEmpty));
