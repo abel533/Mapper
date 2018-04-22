@@ -28,7 +28,6 @@ import org.apache.ibatis.mapping.MappedStatement;
 import org.apache.ibatis.mapping.ResultMap;
 import org.apache.ibatis.mapping.SqlSource;
 import org.apache.ibatis.reflection.MetaObject;
-import org.apache.ibatis.reflection.SystemMetaObject;
 import org.apache.ibatis.scripting.xmltags.DynamicSqlSource;
 import org.apache.ibatis.scripting.xmltags.SqlNode;
 import org.apache.ibatis.scripting.xmltags.XMLLanguageDriver;
@@ -36,6 +35,7 @@ import tk.mybatis.mapper.MapperException;
 import tk.mybatis.mapper.entity.Config;
 import tk.mybatis.mapper.entity.EntityColumn;
 import tk.mybatis.mapper.entity.EntityTable;
+import tk.mybatis.mapper.util.MetaObjectUtil;
 import tk.mybatis.mapper.util.StringUtil;
 
 import java.lang.reflect.InvocationTargetException;
@@ -58,11 +58,11 @@ import static tk.mybatis.mapper.util.MsUtil.getMethodName;
  * @author liuzh
  */
 public abstract class MapperTemplate {
-    private static final XMLLanguageDriver languageDriver = new XMLLanguageDriver();
-    protected Map<String, Method> methodMap = new ConcurrentHashMap<String, Method>();
-    protected Map<String, Class<?>> entityClassMap = new ConcurrentHashMap<String, Class<?>>();
-    protected Class<?> mapperClass;
-    protected MapperHelper mapperHelper;
+    private static final XMLLanguageDriver     languageDriver = new XMLLanguageDriver();
+    protected            Map<String, Method>   methodMap      = new ConcurrentHashMap<String, Method>();
+    protected            Map<String, Class<?>> entityClassMap = new ConcurrentHashMap<String, Class<?>>();
+    protected            Class<?>              mapperClass;
+    protected            MapperHelper          mapperHelper;
 
     public MapperTemplate(Class<?> mapperClass, MapperHelper mapperHelper) {
         this.mapperClass = mapperClass;
@@ -89,7 +89,7 @@ public abstract class MapperTemplate {
         methodMap.put(methodName, method);
     }
 
-	/**
+    /**
      * 获取IDENTITY值的表达式
      *
      * @param column
@@ -124,7 +124,7 @@ public abstract class MapperTemplate {
         EntityTable entityTable = EntityHelper.getEntityTable(entityClass);
         List<ResultMap> resultMaps = new ArrayList<ResultMap>();
         resultMaps.add(entityTable.getResultMap(ms.getConfiguration()));
-        MetaObject metaObject = SystemMetaObject.forObject(ms);
+        MetaObject metaObject = MetaObjectUtil.forObject(ms);
         metaObject.setValue("resultMaps", Collections.unmodifiableList(resultMaps));
     }
 
@@ -135,7 +135,7 @@ public abstract class MapperTemplate {
      * @param sqlSource
      */
     protected void setSqlSource(MappedStatement ms, SqlSource sqlSource) {
-        MetaObject msObject = SystemMetaObject.forObject(ms);
+        MetaObject msObject = MetaObjectUtil.forObject(ms);
         msObject.setValue("sqlSource", sqlSource);
     }
 
@@ -198,7 +198,7 @@ public abstract class MapperTemplate {
         return entityTable.getName();
     }
 
-    public Config getConfig(){
+    public Config getConfig() {
         return mapperHelper.getConfig();
     }
 

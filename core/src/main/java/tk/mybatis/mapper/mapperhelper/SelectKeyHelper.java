@@ -29,11 +29,11 @@ import org.apache.ibatis.executor.keygen.KeyGenerator;
 import org.apache.ibatis.executor.keygen.NoKeyGenerator;
 import org.apache.ibatis.mapping.*;
 import org.apache.ibatis.reflection.MetaObject;
-import org.apache.ibatis.reflection.SystemMetaObject;
 import org.apache.ibatis.scripting.defaults.RawSqlSource;
 import org.apache.ibatis.session.Configuration;
 import tk.mybatis.mapper.code.ORDER;
 import tk.mybatis.mapper.entity.EntityColumn;
+import tk.mybatis.mapper.util.MetaObjectUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -119,7 +119,7 @@ public class SelectKeyHelper {
         }
         //keyGenerator
         try {
-            MetaObject msObject = SystemMetaObject.forObject(ms);
+            MetaObject msObject = MetaObjectUtil.forObject(ms);
             msObject.setValue("keyGenerator", keyGenerator);
             msObject.setValue("keyProperties", column.getTable().getKeyProperties());
             msObject.setValue("keyColumns", column.getTable().getKeyColumns());

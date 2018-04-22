@@ -25,9 +25,9 @@
 package tk.mybatis.mapper.entity;
 
 import org.apache.ibatis.reflection.MetaObject;
-import org.apache.ibatis.reflection.SystemMetaObject;
 import tk.mybatis.mapper.MapperException;
 import tk.mybatis.mapper.mapperhelper.EntityHelper;
+import tk.mybatis.mapper.util.MetaObjectUtil;
 import tk.mybatis.mapper.util.Sqls;
 import tk.mybatis.mapper.util.StringUtil;
 
@@ -61,11 +61,11 @@ public class Example implements IDynamicTableName {
 
     protected Class<?> entityClass;
 
-    protected EntityTable table;
+    protected EntityTable               table;
     //属性和列对应
     protected Map<String, EntityColumn> propertyMap;
     //动态表名
-    protected String tableName;
+    protected String                    tableName;
 
     protected OrderBy ORDERBY;
 
@@ -276,13 +276,13 @@ public class Example implements IDynamicTableName {
     }
 
     protected abstract static class GeneratedCriteria {
-        protected List<Criterion> criteria;
+        protected List<Criterion>           criteria;
         //字段是否必须存在
-        protected boolean exists;
+        protected boolean                   exists;
         //值是否不能为空
-        protected boolean notNull;
+        protected boolean                   notNull;
         //连接条件
-        protected String andOr;
+        protected String                    andOr;
         //属性和列对应
         protected Map<String, EntityColumn> propertyMap;
 
@@ -491,7 +491,7 @@ public class Example implements IDynamicTableName {
          * @Date 2015年7月17日 下午12:48:08
          */
         public Criteria andEqualTo(Object param) {
-            MetaObject metaObject = SystemMetaObject.forObject(param);
+            MetaObject metaObject = MetaObjectUtil.forObject(param);
             String[] properties = metaObject.getGetterNames();
             for (String property : properties) {
                 //属性和列对应Map中有此属性
@@ -512,7 +512,7 @@ public class Example implements IDynamicTableName {
          * @param param 参数对象
          */
         public Criteria andAllEqualTo(Object param) {
-            MetaObject metaObject = SystemMetaObject.forObject(param);
+            MetaObject metaObject = MetaObjectUtil.forObject(param);
             String[] properties = metaObject.getGetterNames();
             for (String property : properties) {
                 //属性和列对应Map中有此属性
@@ -630,7 +630,7 @@ public class Example implements IDynamicTableName {
          * @Date 2015年7月17日 下午12:48:08
          */
         public Criteria orEqualTo(Object param) {
-            MetaObject metaObject = SystemMetaObject.forObject(param);
+            MetaObject metaObject = MetaObjectUtil.forObject(param);
             String[] properties = metaObject.getGetterNames();
             for (String property : properties) {
                 //属性和列对应Map中有此属性
@@ -651,7 +651,7 @@ public class Example implements IDynamicTableName {
          * @param param 参数对象
          */
         public Criteria orAllEqualTo(Object param) {
-            MetaObject metaObject = SystemMetaObject.forObject(param);
+            MetaObject metaObject = MetaObjectUtil.forObject(param);
             String[] properties = metaObject.getGetterNames();
             for (String property : properties) {
                 //属性和列对应Map中有此属性
