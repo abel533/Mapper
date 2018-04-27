@@ -1,5 +1,6 @@
 package tk.mybatis.mapper.autoconfigure;
 
+import org.apache.ibatis.cache.Cache;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
@@ -12,6 +13,8 @@ import java.util.Map;
 
 /**
  * 初始化完成后，清空类信息的缓存
+ *
+ * @author liuzh
  */
 public class MapperCacheDisabler implements InitializingBean {
 
@@ -48,8 +51,11 @@ public class MapperCacheDisabler implements InitializingBean {
                 Object cache = ReflectionUtils.getField(cacheField, null);
                 if (cache instanceof Map) {
                     ((Map) cache).clear();
+                } else if (cache instanceof Cache) {
+                    ((Cache) cache).clear();
                 } else {
-                    throw new UnsupportedOperationException("cache field must be a Map instance");
+                    throw new UnsupportedOperationException("cache field must be a java.util.Map " +
+                            "or org.apache.ibatis.cache.Cache instance");
                 }
                 logger.info("Clear " + utilClass.getCanonicalName() + " " + fieldName + " cache.");
             }
