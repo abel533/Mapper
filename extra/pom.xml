@@ -27,19 +27,14 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>tk.mybatis</groupId>
-        <artifactId>mapper-parent</artifactId>
-        <version>2</version>
+        <artifactId>mapper-modules</artifactId>
+        <version>1.0.4-SNAPSHOT</version>
     </parent>
     <artifactId>mapper-extra</artifactId>
-    <version>1.0.1</version>
     <packaging>jar</packaging>
 
     <name>mapper-extra</name>
     <description>Mybatis 通用 Mapper 扩展方法</description>
-
-    <properties>
-        <mapper-core.version>1.0.2</mapper-core.version>
-    </properties>
 
     <dependencies>
         <dependency>
@@ -49,7 +44,7 @@
         <dependency>
             <groupId>tk.mybatis</groupId>
             <artifactId>mapper-core</artifactId>
-            <version>${mapper-core.version}</version>
+            <version>${project.version}</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>
