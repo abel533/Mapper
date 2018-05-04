@@ -21,12 +21,19 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 #
-spring.datasource.schema=import.sql
-mybatis.config-location=mybatis-config.xml
+spring:
+  datasource:
+    schema: import.sql
+mybatis:
+  config-location: mybatis-config.xml
 
-logging.level.root=WARN
-logging.level.tk.mybatis.sample.mapper=TRACE
-mapper.not-empty=true
-mapper.b-e-f-o-r-e=true
-mapper.mappers[0]=tk.mybatis.sample.mapper.BaseMapper
-mapper.mappers[1]=tk.mybatis.mapper.common.Mapper
+logging:
+  level:
+    root: WARN
+    tk.mybatis.sample.mapper: TRACE
+mapper:
+  not-empty: true
+  before: true
+  mappers:
+    - tk.mybatis.sample.mapper.BaseMapper
+    - tk.mybatis.mapper.common.Mapper
