@@ -55,6 +55,15 @@ public class MapperPlugin extends FalseMethodPlugin {
     private CommentGeneratorConfiguration commentCfg;
     //强制生成注解
     private boolean                       forceAnnotation;
+    
+    //是否需要生成Getter注解
+    private boolean needsGetter = false;
+    //是否需要生成Setter注解
+    private boolean needsSetter = false;
+    //是否需要生成ToString注解
+    private boolean needsToString = false;
+    //是否需要生成Accessors(chain = true)注解
+    private boolean needsAccessors = false;
 
     public String getDelimiterName(String name) {
         StringBuilder nameBuilder = new StringBuilder();
@@ -99,6 +108,28 @@ public class MapperPlugin extends FalseMethodPlugin {
     private void processEntityClass(TopLevelClass topLevelClass, IntrospectedTable introspectedTable) {
         //引入JPA注解
         topLevelClass.addImportedType("javax.persistence.*");
+        //lombok扩展开始
+        //如果需要Getter，引入包，代码增加注解
+        if (this.needsGetter) {
+            topLevelClass.addImportedType("lombok.Getter");
+            topLevelClass.addAnnotation("@Getter");
+        }
+        //如果需要Setter，引入包，代码增加注解
+        if (this.needsSetter) {
+            topLevelClass.addImportedType("lombok.Setter");
+            topLevelClass.addAnnotation("@Setter");
+        }
+        //如果需要ToString，引入包，代码增加注解
+        if (this.needsToString) {
+            topLevelClass.addImportedType("lombok.ToString");
+            topLevelClass.addAnnotation("@ToString");
+        }
+        //如果需要Getter，引入包，代码增加注解
+        if (this.needsAccessors) {
+            topLevelClass.addImportedType("lombok.experimental.Accessors");
+            topLevelClass.addAnnotation("@Accessors(chain = true)");
+        }
+        //lombok扩展结束
         String tableName = introspectedTable.getFullyQualifiedTableNameAtRuntime();
         //如果包含空格，或者需要分隔符，需要完善
         if (StringUtility.stringContainsSpace(tableName)) {
@@ -118,6 +149,29 @@ public class MapperPlugin extends FalseMethodPlugin {
         } else if (forceAnnotation) {
             topLevelClass.addAnnotation("@Table(name = \"" + getDelimiterName(tableName) + "\")");
         }
+    }
+    
+    /**
+     * 如果需要生成Getter注解，就不需要生成get相关代码了
+     */
+    @Override
+    public boolean modelGetterMethodGenerated(Method method,
+                                              TopLevelClass topLevelClass, IntrospectedColumn introspectedColumn,
+                                              IntrospectedTable introspectedTable,
+                                              Plugin.ModelClassType modelClassType) {
+
+        return !this.needsGetter;
+    }
+
+    /**
+     * 如果需要生成Setter注解，就不需要生成set相关代码了
+     */
+    @Override
+    public boolean modelSetterMethodGenerated(Method method,
+                                              TopLevelClass topLevelClass, IntrospectedColumn introspectedColumn,
+                                              IntrospectedTable introspectedTable,
+                                              Plugin.ModelClassType modelClassType) {
+        return !this.needsSetter;
     }
 
     /**
@@ -208,6 +262,24 @@ public class MapperPlugin extends FalseMethodPlugin {
         if (StringUtility.stringHasValue(schema)) {
             this.schema = schema;
         }
+        
+        //lombok扩展
+        String lombok = this.properties.getProperty("lombok");
+        if (lombok != null && !"".equals(lombok)) {
+            if (lombok.contains("Getter")) {
+                this.needsGetter = true;
+            }
+            if (lombok.contains("Setter")) {
+                this.needsSetter = true;
+            }
+            if (lombok.contains("ToString")) {
+                this.needsToString = true;
+            }
+            if (lombok.contains("Accessors")) {
+                this.needsAccessors = true;
+            }
+        }
+        
         if (useMapperCommentGenerator) {
             commentCfg.addProperty("beginningDelimiter", this.beginningDelimiter);
             commentCfg.addProperty("endingDelimiter", this.endingDelimiter);
