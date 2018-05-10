@@ -228,9 +228,8 @@ public class DefaultEntityResolve implements EntityResolve {
             } else {
                 throw new MapperException(entityColumn.getProperty()
                         + " - 该字段@GeneratedValue配置只允许以下几种形式:" +
-                        "\n1.全部数据库通用的@GeneratedValue(generator=\"UUID\")" +
-                        "\n2.useGeneratedKeys的@GeneratedValue(generator=\\\"JDBC\\\")  " +
-                        "\n3.类似mysql数据库的@GeneratedValue(strategy=GenerationType.IDENTITY[,generator=\"Mysql\"])");
+                        "\n1.useGeneratedKeys的@GeneratedValue(generator=\\\"JDBC\\\")  " +
+                        "\n2.类似mysql数据库的@GeneratedValue(strategy=GenerationType.IDENTITY[,generator=\"Mysql\"])");
             }
         }
     }
