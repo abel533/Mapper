@@ -29,7 +29,7 @@
     <parent>
         <groupId>tk.mybatis</groupId>
         <artifactId>mapper-spring-boot</artifactId>
-        <version>2.0.3-beta1</version>
+        <version>2.0.3</version>
     </parent>
     <artifactId>mapper-spring-boot-samples</artifactId>
     <packaging>pom</packaging>
