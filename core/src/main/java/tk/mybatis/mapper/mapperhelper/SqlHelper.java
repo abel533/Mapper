@@ -656,16 +656,12 @@ public class SqlHelper {
         StringBuilder sql = new StringBuilder();
         sql.append("<choose>");
         sql.append("<when test=\"@tk.mybatis.mapper.util.OGNL@hasCountColumn(_parameter)\">");
-        sql.append("COUNT(${countColumn})");
+        sql.append("COUNT(<if test=\"distinct\">distinct </if>${countColumn})");
         sql.append("</when>");
         sql.append("<otherwise>");
-        sql.append("COUNT(0)");
+        sql.append("COUNT(*)");
         sql.append("</otherwise>");
         sql.append("</choose>");
-        //不支持指定列的时候查询全部列
-        sql.append("<if test=\"@tk.mybatis.mapper.util.OGNL@hasNoSelectColumns(_parameter)\">");
-        sql.append(getAllColumns(entityClass));
-        sql.append("</if>");
         return sql.toString();
     }
 
