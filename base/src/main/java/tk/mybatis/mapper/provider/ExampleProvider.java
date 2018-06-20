@@ -48,11 +48,11 @@ public class ExampleProvider extends MapperTemplate {
      */
     public String selectCountByExample(MappedStatement ms) {
         Class<?> entityClass = getEntityClass(ms);
-        StringBuilder sql = new StringBuilder();
+        StringBuilder sql = new StringBuilder("SELECT ");
         if (isCheckExampleEntityClass()) {
             sql.append(SqlHelper.exampleCheck(entityClass));
         }
-        sql.append(SqlHelper.selectCount(entityClass));
+        sql.append(SqlHelper.exampleCountColumn(entityClass));
         sql.append(SqlHelper.fromTable(entityClass, tableName(entityClass)));
         sql.append(SqlHelper.exampleWhereClause());
         sql.append(SqlHelper.exampleForUpdate());
