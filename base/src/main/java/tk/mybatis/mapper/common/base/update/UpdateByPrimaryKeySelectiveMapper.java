@@ -24,12 +24,9 @@
 
 package tk.mybatis.mapper.common.base.update;
 
-import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.UpdateProvider;
 import tk.mybatis.mapper.annotation.RegisterMapper;
 import tk.mybatis.mapper.provider.base.BaseUpdateProvider;
-
-import java.util.List;
 
 /**
  * 通用Mapper接口,更新
