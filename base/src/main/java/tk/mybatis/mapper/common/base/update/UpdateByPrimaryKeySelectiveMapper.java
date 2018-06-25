@@ -49,14 +49,4 @@ public interface UpdateByPrimaryKeySelectiveMapper<T> {
     @UpdateProvider(type = BaseUpdateProvider.class, method = "dynamicSQL")
     int updateByPrimaryKeySelective(T record);
 
-
-    /**
-     * 根据主键更新属性不为null的值, 指定的属性(null值)会被强制更新
-     * @param record
-     * @param forceUpdateProperties
-     * @return
-     */
-    @UpdateProvider(type = BaseUpdateProvider.class, method = "dynamicSQL")
-    int updateByPrimaryKeySelectiveWithForceUpdate(@Param("record") T record, @Param("forceUpdateProperties") List<String> forceUpdateProperties);
-
 }

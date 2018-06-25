@@ -28,9 +28,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.junit.Assert;
 import org.junit.Test;
 import tk.mybatis.mapper.mapper.CountryIntMapper;
-import tk.mybatis.mapper.mapper.CountryMapper;
 import tk.mybatis.mapper.mapper.MybatisHelper;
-import tk.mybatis.mapper.model.Country;
 import tk.mybatis.mapper.model.CountryInt;
 
 import java.util.Arrays;
@@ -63,11 +61,11 @@ public class TestUpdateByPrimaryKeySelectiveWithForceUpdate {
     public void testDynamicUpdateByPrimaryKeySelectiveWithForceUpdate() {
         SqlSession sqlSession = MybatisHelper.getSqlSession();
         try {
-            CountryMapper mapper = sqlSession.getMapper(CountryMapper.class);
-            Country country = new Country();
+            CountryIntMapper mapper = sqlSession.getMapper(CountryIntMapper.class);
+            CountryInt country = new CountryInt();
             country.setId(174);
             country.setCountryname("英国");
-            mapper.updateByPrimaryKeySelectiveWithForceUpdate(country, Arrays.asList("countrycode"));
+            mapper.updateByPrimaryKeySelectiveWithForceUpdate(country, Arrays.asList("countrycode", "countryname"));
 
             country = mapper.selectByPrimaryKey(174);
             Assert.assertNull(country.getCountrycode());
