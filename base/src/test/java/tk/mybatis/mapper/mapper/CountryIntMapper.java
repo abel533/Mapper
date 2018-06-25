@@ -22,41 +22,18 @@
  * THE SOFTWARE.
  */
 
-package tk.mybatis.mapper.common.base.update;
+package tk.mybatis.mapper.mapper;
 
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.UpdateProvider;
-import tk.mybatis.mapper.annotation.RegisterMapper;
-import tk.mybatis.mapper.provider.base.BaseUpdateProvider;
-
-import java.util.List;
+import tk.mybatis.mapper.common.IdsMapper;
+import tk.mybatis.mapper.common.Mapper;
+import tk.mybatis.mapper.common.MySqlMapper;
+import tk.mybatis.mapper.hsqldb.HsqldbMapper;
+import tk.mybatis.mapper.model.CountryInt;
 
 /**
- * 通用Mapper接口,更新
- *
- * @param <T> 不能为空
- * @author liuzh
+ * @Description:  验证数值空值强制更新
+ * @author qrqhuang
+ * @date 2018-06-25
  */
-@RegisterMapper
-public interface UpdateByPrimaryKeySelectiveMapper<T> {
-
-    /**
-     * 根据主键更新属性不为null的值
-     *
-     * @param record
-     * @return
-     */
-    @UpdateProvider(type = BaseUpdateProvider.class, method = "dynamicSQL")
-    int updateByPrimaryKeySelective(T record);
-
-
-    /**
-     * 根据主键更新属性不为null的值, 指定的属性(null值)会被强制更新
-     * @param record
-     * @param forceUpdateProperties
-     * @return
-     */
-    @UpdateProvider(type = BaseUpdateProvider.class, method = "dynamicSQL")
-    int updateByPrimaryKeySelectiveWithForceUpdate(@Param("record") T record, @Param("forceUpdateProperties") List<String> forceUpdateProperties);
-
+public interface CountryIntMapper extends Mapper<CountryInt>, HsqldbMapper<CountryInt>, MySqlMapper<CountryInt>, IdsMapper<CountryInt> {
 }

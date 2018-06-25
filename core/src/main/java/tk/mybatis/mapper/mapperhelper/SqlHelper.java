@@ -206,6 +206,50 @@ public class SqlHelper {
     }
 
     /**
+     * 判断自动!=null的条件结构
+     *
+     * @param entityName
+     * @param column
+     * @param contents
+     * @param empty
+     * @param forceUpdate
+     * @return
+     */
+    public static String getIfNotNull(String entityName, EntityColumn column, String contents, boolean empty, boolean forceUpdate) {
+        StringBuilder sql = new StringBuilder();
+        sql.append("<choose>");
+        sql.append("<when test=\"");
+        if (StringUtil.isNotEmpty(entityName)) {
+            sql.append(entityName).append(".");
+        }
+        sql.append(column.getProperty()).append(" != null");
+        if (empty && column.getJavaType().equals(String.class)) {
+            sql.append(" and ");
+            if (StringUtil.isNotEmpty(entityName)) {
+                sql.append(entityName).append(".");
+            }
+            sql.append(column.getProperty()).append(" != '' ");
+        }
+        sql.append("\">");
+        sql.append(contents);
+        sql.append("</when>");
+
+        //指定的字段会被强制更新
+        if(forceUpdate) {
+            sql.append("<when test=\"");
+            sql.append("forceUpdateProperties != null and forceUpdateProperties.contains('");
+            sql.append(column.getProperty());
+            sql.append("')\">");
+            sql.append(contents);
+            sql.append("</when>");
+        }
+
+        sql.append("<otherwise></otherwise>");
+        sql.append("</choose>");
+        return sql.toString();
+    }
+
+    /**
      * 判断自动==null的条件结构
      *
      * @param entityName
@@ -446,6 +490,20 @@ public class SqlHelper {
      * @return
      */
     public static String updateSetColumns(Class<?> entityClass, String entityName, boolean notNull, boolean notEmpty) {
+        return updateSetColumns(entityClass, entityName, notNull, notEmpty, false);
+    }
+
+    /**
+     * update set列
+     *
+     * @param entityClass
+     * @param entityName  实体映射名
+     * @param notNull     是否判断!=null
+     * @param notEmpty    是否判断String类型!=''
+     * @param forceUpdate    是否强制更新空字段
+     * @return
+     */
+    public static String updateSetColumns(Class<?> entityClass, String entityName, boolean notNull, boolean notEmpty, boolean forceUpdate) {
         StringBuilder sql = new StringBuilder();
         sql.append("<set>");
         //获取全部列
@@ -470,7 +528,7 @@ public class SqlHelper {
                             .append("@").append(versionClass).append("@class, ")
                             .append(column.getProperty()).append(")},");
                 } else if (notNull) {
-                    sql.append(SqlHelper.getIfNotNull(entityName, column, column.getColumnEqualsHolder(entityName) + ",", notEmpty));
+                    sql.append(SqlHelper.getIfNotNull(entityName, column, column.getColumnEqualsHolder(entityName) + ",", notEmpty, forceUpdate));
                 } else {
                     sql.append(column.getColumnEqualsHolder(entityName) + ",");
                 }
@@ -533,16 +591,29 @@ public class SqlHelper {
      * where主键条件
      *
      * @param entityClass
+     * @param useVersion
      * @return
      */
     public static String wherePKColumns(Class<?> entityClass, boolean useVersion) {
+        return wherePKColumns(entityClass, null, useVersion);
+    }
+
+    /**
+     * where主键条件
+     *
+     * @param entityClass
+     * @param entityName
+     * @param useVersion
+     * @return
+     */
+    public static String wherePKColumns(Class<?> entityClass,String entityName, boolean useVersion) {
         StringBuilder sql = new StringBuilder();
         sql.append("<where>");
         //获取全部列
         Set<EntityColumn> columnSet = EntityHelper.getPKColumns(entityClass);
         //当某个列有主键策略时，不需要考虑他的属性是否为空，因为如果为空，一定会根据主键策略给他生成一个值
         for (EntityColumn column : columnSet) {
-            sql.append(" AND " + column.getColumnEqualsHolder());
+            sql.append(" AND " + column.getColumnEqualsHolder(entityName));
         }
         if (useVersion) {
             sql.append(whereVersion(entityClass));
