@@ -22,18 +22,14 @@
  * THE SOFTWARE.
  */
 
-package tk.mybatis.mapper.mapper;
+package tk.mybatis.mapper.additional.update.force;
 
-import tk.mybatis.mapper.common.IdsMapper;
-import tk.mybatis.mapper.common.Mapper;
-import tk.mybatis.mapper.common.MySqlMapper;
-import tk.mybatis.mapper.hsqldb.HsqldbMapper;
-import tk.mybatis.mapper.model.CountryInt;
+import tk.mybatis.mapper.common.base.BaseSelectMapper;
 
 /**
  * @Description:  验证数值空值强制更新
- * @author qrqhuang
+ * @author qrqhuangcy
  * @date 2018-06-25
  */
-public interface CountryIntMapper extends Mapper<CountryInt>, HsqldbMapper<CountryInt>, MySqlMapper<CountryInt>, IdsMapper<CountryInt> {
+public interface CountryIntMapper extends BaseSelectMapper<CountryInt>, UpdateByPrimaryKeySelectiveWithForceUpdateMapper<CountryInt> {
 }

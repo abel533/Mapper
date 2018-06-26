@@ -22,26 +22,31 @@
  * THE SOFTWARE.
  */
 
-package tk.mybatis.mapper.model;
+package tk.mybatis.mapper.additional.update.force;
 
-import tk.mybatis.mapper.entity.IDynamicTableName;
-
-import javax.persistence.Transient;
+import javax.persistence.Id;
 import java.io.Serializable;
-import java.util.List;
 
 /**
- * @Description:  验证数值空值强制更新
- * @author qrqhuang
+ * @author qrqhuangcy
+ * @Description: 验证数值空值强制更新
  * @date 2018-06-25
  */
-public class CountryInt extends Entity<Integer, String> implements Serializable, IDynamicTableName {
+public class CountryInt implements Serializable {
+
     private static final long serialVersionUID = -1626761012846137805L;
-    List<CountryInt> list;
+    @Id
+    private Integer id;
     private String countryname;
     private Integer countrycode;
-    @Transient
-    private String dynamicTableName123;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public Integer getCountrycode() {
         return countrycode;
@@ -59,21 +64,4 @@ public class CountryInt extends Entity<Integer, String> implements Serializable,
         this.countryname = countryname;
     }
 
-    @Override
-    @Transient
-    public String getDynamicTableName() {
-        return dynamicTableName123;
-    }
-
-    public List<CountryInt> getList() {
-        return list;
-    }
-
-    public void setList(List<CountryInt> list) {
-        this.list = list;
-    }
-
-    public void setDynamicTableName123(String dynamicTableName) {
-        this.dynamicTableName123 = dynamicTableName;
-    }
 }

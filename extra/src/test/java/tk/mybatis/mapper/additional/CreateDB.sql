@@ -7,6 +7,12 @@ create table country (
   version     INTEGER DEFAULT 1 NOT NULL
 );
 
+create table country_int (
+  id          integer NOT NULL PRIMARY KEY,
+  countryname varchar(32),
+  countrycode integer,
+);
+
 INSERT INTO country (id, countryname, countrycode, version) VALUES (1, 'Angola', 'AO', 1);
 INSERT INTO country (id, countryname, countrycode, version) VALUES (2, 'Afghanistan', 'AF', 1);
 INSERT INTO country (id, countryname, countrycode, version) VALUES (3, 'Albania', 'AL', 1);
@@ -190,3 +196,6 @@ INSERT INTO country (id, countryname, countrycode, version) VALUES (180, 'Yugosl
 INSERT INTO country (id, countryname, countrycode, version) VALUES (181, 'Zimbabwe', 'ZW', 1);
 INSERT INTO country (id, countryname, countrycode, version) VALUES (182, 'Zaire', 'ZR', 1);
 INSERT INTO country (id, countryname, countrycode, version) VALUES (183, 'Zambia', 'ZM', 1);
+
+
+INSERT INTO country_int (id, countryname, countrycode) VALUES (174, 'United States of America', 100);

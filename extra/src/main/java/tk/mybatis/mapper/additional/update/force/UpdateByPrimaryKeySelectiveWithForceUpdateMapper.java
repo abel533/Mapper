@@ -1,16 +1,17 @@
-package tk.mybatis.mapper.common.base.update;
+package tk.mybatis.mapper.additional.update.force;
 
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.UpdateProvider;
-import tk.mybatis.mapper.provider.base.BaseUpdateProvider;
+import tk.mybatis.mapper.annotation.RegisterMapper;
 
 import java.util.List;
 
 /**
  * @Description:  通用Mapper接口,更新,强制
- * @author qrqhu
+ * @author qrqhuangcy
  * @date 2018-06-26
  */
+@RegisterMapper
 public interface UpdateByPrimaryKeySelectiveWithForceUpdateMapper<T> {
 
     /**
@@ -19,6 +20,6 @@ public interface UpdateByPrimaryKeySelectiveWithForceUpdateMapper<T> {
      * @param forceUpdateProperties
      * @return
      */
-    @UpdateProvider(type = BaseUpdateProvider.class, method = "dynamicSQL")
+    @UpdateProvider(type = UpdateByPrimaryKeySelectiveWithForceUpdateProvider.class, method = "dynamicSQL")
     int updateByPrimaryKeySelectiveWithForceUpdate(@Param("record") T record, @Param("forceUpdateProperties") List<String> forceUpdateProperties);
 }
