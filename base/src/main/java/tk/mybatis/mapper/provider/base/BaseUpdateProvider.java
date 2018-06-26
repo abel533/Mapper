@@ -68,15 +68,4 @@ public class BaseUpdateProvider extends MapperTemplate {
         sql.append(SqlHelper.wherePKColumns(entityClass, true));
         return sql.toString();
     }
-
-
-    public String updateByPrimaryKeySelectiveWithForceUpdate(MappedStatement ms) {
-        Class entityClass = getEntityClass(ms);
-        StringBuilder sql = new StringBuilder();
-        sql.append(SqlHelper.updateTable(entityClass, tableName(entityClass), "record"));
-        sql.append(SqlHelper.updateSetColumns(entityClass, "record", true, isNotEmpty(), true));
-        sql.append(SqlHelper.wherePKColumns(entityClass, "record", true));
-
-        return sql.toString();
-    }
 }
