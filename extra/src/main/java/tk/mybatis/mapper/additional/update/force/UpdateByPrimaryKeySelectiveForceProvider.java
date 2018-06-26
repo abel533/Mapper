@@ -43,6 +43,8 @@ import java.util.Set;
  */
 public class UpdateByPrimaryKeySelectiveForceProvider extends MapperTemplate {
 
+    public static final String FORCE_UPDATE_PROPERTIES = "forceUpdateProperties";
+
     public UpdateByPrimaryKeySelectiveForceProvider(Class<?> mapperClass, MapperHelper mapperHelper) {
         super(mapperClass, mapperHelper);
     }
@@ -135,7 +137,7 @@ public class UpdateByPrimaryKeySelectiveForceProvider extends MapperTemplate {
 
         //指定的字段会被强制更新
         sql.append("<when test=\"");
-        sql.append("forceUpdateProperties != null and forceUpdateProperties.contains('");
+        sql.append(FORCE_UPDATE_PROPERTIES).append(" != null and ").append(FORCE_UPDATE_PROPERTIES).append(".contains('");
         sql.append(column.getProperty());
         sql.append("')\">");
         sql.append(contents);
