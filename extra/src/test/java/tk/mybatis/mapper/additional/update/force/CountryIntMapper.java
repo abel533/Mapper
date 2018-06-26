@@ -31,5 +31,5 @@ import tk.mybatis.mapper.common.base.BaseSelectMapper;
  * @author qrqhuangcy
  * @date 2018-06-25
  */
-public interface CountryIntMapper extends BaseSelectMapper<CountryInt>, UpdateByPrimaryKeySelectiveWithForceUpdateMapper<CountryInt> {
+public interface CountryIntMapper extends BaseSelectMapper<CountryInt>, UpdateByPrimaryKeySelectiveForceMapper<CountryInt> {
 }

@@ -41,18 +41,18 @@ import java.util.Set;
  * @author qrqhuangcy
  * @date 2018-06-26
  */
-public class UpdateByPrimaryKeySelectiveWithForceUpdateProvider extends MapperTemplate {
+public class UpdateByPrimaryKeySelectiveForceProvider extends MapperTemplate {
 
-    public UpdateByPrimaryKeySelectiveWithForceUpdateProvider(Class<?> mapperClass, MapperHelper mapperHelper) {
+    public UpdateByPrimaryKeySelectiveForceProvider(Class<?> mapperClass, MapperHelper mapperHelper) {
         super(mapperClass, mapperHelper);
     }
 
 
-    public String updateByPrimaryKeySelectiveWithForceUpdate(MappedStatement ms) {
+    public String updateByPrimaryKeySelectiveForce(MappedStatement ms) {
         Class entityClass = getEntityClass(ms);
         StringBuilder sql = new StringBuilder();
         sql.append(SqlHelper.updateTable(entityClass, tableName(entityClass), "record"));
-        sql.append(this.updateSetColumnsWithForce(entityClass, "record", true, isNotEmpty()));
+        sql.append(this.updateSetColumnsForce(entityClass, "record", true, isNotEmpty()));
         sql.append(SqlHelper.wherePKColumns(entityClass, "record", true));
 
         return sql.toString();
@@ -67,7 +67,7 @@ public class UpdateByPrimaryKeySelectiveWithForceUpdateProvider extends MapperTe
      * @param notEmpty    是否判断String类型!=''
      * @return
      */
-    public String updateSetColumnsWithForce(Class<?> entityClass, String entityName, boolean notNull, boolean notEmpty) {
+    public String updateSetColumnsForce(Class<?> entityClass, String entityName, boolean notNull, boolean notEmpty) {
         StringBuilder sql = new StringBuilder();
         sql.append("<set>");
         //获取全部列

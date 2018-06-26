@@ -12,7 +12,7 @@ import java.util.List;
  * @date 2018-06-26
  */
 @RegisterMapper
-public interface UpdateByPrimaryKeySelectiveWithForceUpdateMapper<T> {
+public interface UpdateByPrimaryKeySelectiveForceMapper<T> {
 
     /**
      * 根据主键更新属性不为null的值, 指定的属性(null值)会被强制更新
@@ -20,6 +20,6 @@ public interface UpdateByPrimaryKeySelectiveWithForceUpdateMapper<T> {
      * @param forceUpdateProperties
      * @return
      */
-    @UpdateProvider(type = UpdateByPrimaryKeySelectiveWithForceUpdateProvider.class, method = "dynamicSQL")
-    int updateByPrimaryKeySelectiveWithForceUpdate(@Param("record") T record, @Param("forceUpdateProperties") List<String> forceUpdateProperties);
+    @UpdateProvider(type = UpdateByPrimaryKeySelectiveForceProvider.class, method = "dynamicSQL")
+    int updateByPrimaryKeySelectiveForce(@Param("record") T record, @Param("forceUpdateProperties") List<String> forceUpdateProperties);
 }

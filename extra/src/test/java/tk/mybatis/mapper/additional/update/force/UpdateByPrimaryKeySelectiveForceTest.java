@@ -39,7 +39,7 @@ import java.util.Arrays;
  * @author qrqhuangcy
  * @date 2018-06-25
  */
-public class UpdateByPrimaryKeySelectiveWithForceUpdateTest extends BaseTest {
+public class UpdateByPrimaryKeySelectiveForceTest extends BaseTest {
 
     /**
      * 获取 mybatis 配置
@@ -51,16 +51,25 @@ public class UpdateByPrimaryKeySelectiveWithForceUpdateTest extends BaseTest {
         return toReader(url);
     };
 
+    /**
+     * 获取初始化 sql
+     *
+     * @return
+     */
+    protected Reader getSqlFileAsReader() throws IOException {
+        URL url = getClass().getResource("CreateDB.sql");
+        return toReader(url);
+    }
 
     @Test
-    public void testDynamicUpdateByPrimaryKeySelectiveWithForceUpdateByEmpty() {
+    public void testUpdateByPrimaryKeySelectiveForceByNull() {
         SqlSession sqlSession = getSqlSession();
         try {
             CountryIntMapper mapper = sqlSession.getMapper(CountryIntMapper.class);
             CountryInt country = new CountryInt();
             country.setId(174);
             country.setCountryname("英国");
-            mapper.updateByPrimaryKeySelectiveWithForceUpdate(country, null);
+            mapper.updateByPrimaryKeySelectiveForce(country, null);
 
             country = mapper.selectByPrimaryKey(174);
             Assert.assertNotNull(country.getCountrycode());
@@ -70,17 +79,17 @@ public class UpdateByPrimaryKeySelectiveWithForceUpdateTest extends BaseTest {
     }
 
     @Test
-    public void testDynamicUpdateByPrimaryKeySelectiveWithForceUpdate() {
+    public void testUpdateByPrimaryKeySelectiveForce() {
         SqlSession sqlSession = getSqlSession();
         try {
             CountryIntMapper mapper = sqlSession.getMapper(CountryIntMapper.class);
             CountryInt country = new CountryInt();
             country.setId(174);
-            country.setCountryname("英国");
-            mapper.updateByPrimaryKeySelectiveWithForceUpdate(country, Arrays.asList("countrycode", "countryname"));
+            mapper.updateByPrimaryKeySelectiveForce(country, Arrays.asList("countrycode", "countryname"));
 
             country = mapper.selectByPrimaryKey(174);
             Assert.assertNull(country.getCountrycode());
+            Assert.assertNull(country.getCountryname());
         } finally {
             sqlSession.close();
         }
