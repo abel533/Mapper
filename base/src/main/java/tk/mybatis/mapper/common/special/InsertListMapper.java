@@ -47,7 +47,7 @@ public interface InsertListMapper<T> {
      */
     @Options(useGeneratedKeys = true, keyProperty = "id")
     @InsertProvider(type = SpecialProvider.class, method = "dynamicSQL")
-    int insertList(List<T> recordList);
+    int insertList(List<? extends T> recordList);
 
     /**
      * ======如果主键不是id怎么用？==========
