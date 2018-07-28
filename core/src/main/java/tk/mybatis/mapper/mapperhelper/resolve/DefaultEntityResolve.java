@@ -16,6 +16,7 @@ import tk.mybatis.mapper.entity.EntityColumn;
 import tk.mybatis.mapper.entity.EntityField;
 import tk.mybatis.mapper.entity.EntityTable;
 import tk.mybatis.mapper.genid.GenId;
+import tk.mybatis.mapper.gensql.GenSql;
 import tk.mybatis.mapper.mapperhelper.FieldHelper;
 import tk.mybatis.mapper.util.SimpleTypeUtil;
 import tk.mybatis.mapper.util.SqlReservedWords;
@@ -256,9 +257,20 @@ public class DefaultEntityResolve implements EntityResolve {
             entityColumn.setOrder(ORDER.AFTER);
             entityColumn.setGenerator(keySql.dialect().getIdentityRetrievalStatement());
         } else if (StringUtil.isNotEmpty(keySql.sql())){
+
             entityColumn.setIdentity(true);
             entityColumn.setOrder(keySql.order());
             entityColumn.setGenerator(keySql.sql());
+        } else if (keySql.genSql() != GenSql.NULL.class){
+            entityColumn.setIdentity(true);
+            entityColumn.setOrder(keySql.order());
+            try {
+                GenSql genSql = keySql.genSql().newInstance();
+                entityColumn.setGenerator(genSql.genSql(entityTable, entityColumn));
+            } catch (Exception e) {
+                log.error("实例化 GenSql 失败: " + e, e);
+                throw new MapperException("实例化 GenSql 失败: " + e, e);
+            }
         } else if(keySql.genId() != GenId.NULL.class){
             entityColumn.setIdentity(false);
             entityColumn.setGenIdClass(keySql.genId());
