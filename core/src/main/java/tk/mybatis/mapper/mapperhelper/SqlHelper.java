@@ -436,7 +436,7 @@ public class SqlHelper {
         return sql.toString();
     }
 
-    /**
+   /**
      * update set列
      *
      * @param entityClass
@@ -533,16 +533,29 @@ public class SqlHelper {
      * where主键条件
      *
      * @param entityClass
+     * @param useVersion
      * @return
      */
     public static String wherePKColumns(Class<?> entityClass, boolean useVersion) {
+        return wherePKColumns(entityClass, null, useVersion);
+    }
+
+    /**
+     * where主键条件
+     *
+     * @param entityClass
+     * @param entityName
+     * @param useVersion
+     * @return
+     */
+    public static String wherePKColumns(Class<?> entityClass,String entityName, boolean useVersion) {
         StringBuilder sql = new StringBuilder();
         sql.append("<where>");
         //获取全部列
         Set<EntityColumn> columnSet = EntityHelper.getPKColumns(entityClass);
         //当某个列有主键策略时，不需要考虑他的属性是否为空，因为如果为空，一定会根据主键策略给他生成一个值
         for (EntityColumn column : columnSet) {
-            sql.append(" AND " + column.getColumnEqualsHolder());
+            sql.append(" AND " + column.getColumnEqualsHolder(entityName));
         }
         if (useVersion) {
             sql.append(whereVersion(entityClass));
