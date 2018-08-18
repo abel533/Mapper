@@ -72,7 +72,7 @@ public class EntityColumn {
     }
 
     /**
-     * 返回格式如:colum = #{age,jdbcType=NUMERIC,typeHandler=MyTypeHandler}
+     * 返回格式如:colum = #{entityName.age,jdbcType=NUMERIC,typeHandler=MyTypeHandler}
      *
      * @param entityName
      * @return
