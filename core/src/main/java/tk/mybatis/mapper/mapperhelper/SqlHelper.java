@@ -460,24 +460,24 @@ public class SqlHelper {
                 }
                 versionColumn = column;
             }
-            if (!column.isId() && column.isUpdatable()) {
-                if (column == versionColumn) {
-                    Version version = versionColumn.getEntityField().getAnnotation(Version.class);
-                    String versionClass = version.nextVersion().getCanonicalName();
-                    //version = ${@tk.mybatis.mapper.version@nextVersionClass("versionClass", version)}
-                    sql.append(column.getColumn())
-                            .append(" = ${@tk.mybatis.mapper.version.VersionUtil@nextVersion(")
-                            .append("@").append(versionClass).append("@class, ")
-                            .append(column.getProperty()).append(")},");
-                } else if (notNull) {
-                    sql.append(SqlHelper.getIfNotNull(entityName, column, column.getColumnEqualsHolder(entityName) + ",", notEmpty));
-                } else {
-                    sql.append(column.getColumnEqualsHolder(entityName) + ",");
-                }
-            } else if(column.isId() && column.isUpdatable()){
-                //set id = id,
-                sql.append(column.getColumn()).append(" = ").append(column.getColumn()).append(",");
-            }
+			if (column.isId()) {
+				continue;
+			}
+			if (column.isUpdatable()) {
+				if (column == versionColumn) {
+					Version version = versionColumn.getEntityField().getAnnotation(Version.class);
+					String versionClass = version.nextVersion().getCanonicalName();
+					//version = ${@tk.mybatis.mapper.version@nextVersionClass("versionClass", version)}
+					sql.append(column.getColumn()).append(" = ${@tk.mybatis.mapper.version.VersionUtil@nextVersion(")
+							.append("@").append(versionClass).append("@class, ").append(column.getProperty())
+							.append(")},");
+				} else if (notNull) {
+					sql.append(SqlHelper.getIfNotNull(entityName, column, column.getColumnEqualsHolder(entityName) + ",",
+							notEmpty));
+				} else {
+					sql.append(column.getColumnEqualsHolder(entityName)).append(",");
+				}
+			}
         }
         sql.append("</set>");
         return sql.toString();
