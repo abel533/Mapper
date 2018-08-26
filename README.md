@@ -23,7 +23,9 @@
 
 - [文档 - Gitee](https://gitee.com/free/Mapper/wikis/Home)  
 
-- [文档 - GitHub](https://github.com/abel533/Mapper/wiki)  
+- [文档 - GitHub](https://github.com/abel533/Mapper/wiki)
+
+- [JavaDoc](https://apidoc.gitee.com/free/Mapper/)
 
 - [更新日志 - Gitee](https://gitee.com/free/Mapper/wikis/changelog)
 
