@@ -24,10 +24,9 @@
 
 package tk.mybatis.mapper.generator;
 
+import org.mybatis.generator.api.IntrospectedColumn;
 import org.mybatis.generator.api.IntrospectedTable;
-import org.mybatis.generator.api.dom.java.FullyQualifiedJavaType;
-import org.mybatis.generator.api.dom.java.Interface;
-import org.mybatis.generator.api.dom.java.TopLevelClass;
+import org.mybatis.generator.api.dom.java.*;
 import org.mybatis.generator.config.CommentGeneratorConfiguration;
 import org.mybatis.generator.config.Context;
 import org.mybatis.generator.internal.util.StringUtility;
@@ -117,6 +116,18 @@ public class MapperPlugin extends FalseMethodPlugin {
             topLevelClass.addAnnotation("@Table(name = \"" + getDelimiterName(tableName) + "\")");
         } else if (forceAnnotation) {
             topLevelClass.addAnnotation("@Table(name = \"" + getDelimiterName(tableName) + "\")");
+        }
+
+        for (IntrospectedColumn introspectedColumn : introspectedTable.getAllColumns()) {
+            Field field = new Field();
+            field.setVisibility(JavaVisibility.PUBLIC);
+            field.setStatic(true);
+            field.setFinal(true);
+            field.setName(introspectedColumn.getActualColumnName().toUpperCase()); //$NON-NLS-1$
+            field.setType(new FullyQualifiedJavaType(String.class.getName())); //$NON-NLS-1$
+            field.setInitializationString("\""+ introspectedColumn.getJavaProperty()+"\"");
+            context.getCommentGenerator().addClassComment(topLevelClass, introspectedTable);
+            topLevelClass.addField(field);
         }
     }
 
