@@ -130,7 +130,7 @@ public class BaseInsertProvider extends MapperTemplate {
                 //如果已经存在Identity列，抛出异常
                 if (hasIdentityKey) {
                     //jdbc类型只需要添加一次
-                    if (column.getGenerator() != null && column.getGenerator().equals("JDBC")) {
+                    if (column.getGenerator() != null && "JDBC".equals(column.getGenerator())) {
                         continue;
                     }
                     throw new MapperException(ms.getId() + "对应的实体类" + entityClass.getCanonicalName() + "中包含多个MySql的自动增长列,最多只能有一个!");
