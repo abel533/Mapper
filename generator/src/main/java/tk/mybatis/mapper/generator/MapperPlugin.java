@@ -187,14 +187,14 @@ public class MapperPlugin extends FalseMethodPlugin {
         }
         String caseSensitive = this.properties.getProperty("caseSensitive");
         if (StringUtility.stringHasValue(caseSensitive)) {
-            this.caseSensitive = caseSensitive.equalsIgnoreCase("TRUE");
+            this.caseSensitive = "TRUE".equalsIgnoreCase(caseSensitive);
         }
         String forceAnnotation = this.properties.getProperty("forceAnnotation");
         if (StringUtility.stringHasValue(forceAnnotation)) {
             if (useMapperCommentGenerator) {
                 commentCfg.addProperty("forceAnnotation", forceAnnotation);
             }
-            this.forceAnnotation = forceAnnotation.equalsIgnoreCase("TRUE");
+            this.forceAnnotation = "TRUE".equalsIgnoreCase(forceAnnotation);
         }
         String beginningDelimiter = this.properties.getProperty("beginningDelimiter");
         if (StringUtility.stringHasValue(beginningDelimiter)) {

@@ -86,7 +86,7 @@ public class MapperCommentGenerator implements CommentGenerator {
         }
         String forceAnnotation = properties.getProperty("forceAnnotation");
         if (StringUtility.stringHasValue(forceAnnotation)) {
-            this.forceAnnotation = forceAnnotation.equalsIgnoreCase("TRUE");
+            this.forceAnnotation = "TRUE".equalsIgnoreCase(forceAnnotation);
         }
     }
 
@@ -171,7 +171,7 @@ public class MapperCommentGenerator implements CommentGenerator {
             field.addAnnotation("@Column(name = \"" + getDelimiterName(column) + "\")");
         }
         if (introspectedColumn.isIdentity()) {
-            if (introspectedTable.getTableConfiguration().getGeneratedKey().getRuntimeSqlStatement().equals("JDBC")) {
+            if ("JDBC".equals(introspectedTable.getTableConfiguration().getGeneratedKey().getRuntimeSqlStatement())) {
                 field.addAnnotation("@GeneratedValue(generator = \"JDBC\")");
             } else {
                 field.addAnnotation("@GeneratedValue(strategy = GenerationType.IDENTITY)");
