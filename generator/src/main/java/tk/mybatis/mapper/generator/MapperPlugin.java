@@ -54,6 +54,8 @@ public class MapperPlugin extends FalseMethodPlugin {
     private CommentGeneratorConfiguration commentCfg;
     //强制生成注解
     private boolean                       forceAnnotation;
+    //是否生成字段名常量
+    private boolean generateColumnConsts = false;
 
     public String getDelimiterName(String name) {
         StringBuilder nameBuilder = new StringBuilder();
@@ -205,7 +207,6 @@ public class MapperPlugin extends FalseMethodPlugin {
             if (useMapperCommentGenerator) {
                 commentCfg.addProperty("forceAnnotation", forceAnnotation);
             }
-            this.forceAnnotation = forceAnnotation.equalsIgnoreCase("TRUE");
         }
         String beginningDelimiter = this.properties.getProperty("beginningDelimiter");
         if (StringUtility.stringHasValue(beginningDelimiter)) {
@@ -223,5 +224,10 @@ public class MapperPlugin extends FalseMethodPlugin {
             commentCfg.addProperty("beginningDelimiter", this.beginningDelimiter);
             commentCfg.addProperty("endingDelimiter", this.endingDelimiter);
         }
+        String generateColumnConsts = this.properties.getProperty("generateColumnConsts");
+        if (StringUtility.stringHasValue(generateColumnConsts)) {
+            this.generateColumnConsts = generateColumnConsts.equalsIgnoreCase("TRUE");
+        }
+
     }
 }
