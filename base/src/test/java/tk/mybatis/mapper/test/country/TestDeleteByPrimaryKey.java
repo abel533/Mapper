@@ -181,25 +181,21 @@ public class TestDeleteByPrimaryKey {
     }
 
     /**
-     * 乐观锁删除
+     * 按主键删除，忽略乐观锁
      */
     @Test
-    public void testDeleteByPrimaryKeyAndVersion() {
+    public void testDeleteByPrimaryKeyIgnoreVersion() {
         SqlSession sqlSession = MybatisHelper.getSqlSession();
         try {
             CountryVersionMapper mapper = sqlSession.getMapper(CountryVersionMapper.class);
-            //根据主键删除，没有指定版本时删除不了
-            Assert.assertEquals(0, mapper.deleteByPrimaryKey(100));
 
+            //根据主键删除，没有指定版本时可以正常删除
+            Assert.assertEquals(1, mapper.deleteByPrimaryKey(100));
+
+            //根据对象删除，版本不对的时候的时候也可以正常删除
             CountryVersion countryVersion = new CountryVersion();
-            countryVersion.setId(100);
-
-            //版本不对的时候的时候删除不了
+            countryVersion.setId(101);
             countryVersion.setVersion(2);
-            Assert.assertEquals(0, mapper.deleteByPrimaryKey(countryVersion));
-
-            //版本正确的时候可以真正删除
-            countryVersion.setVersion(1);
             Assert.assertEquals(1, mapper.deleteByPrimaryKey(countryVersion));
         } finally {
             sqlSession.rollback();
