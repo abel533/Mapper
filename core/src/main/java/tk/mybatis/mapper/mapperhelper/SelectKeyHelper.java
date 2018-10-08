@@ -60,8 +60,8 @@ public class SelectKeyHelper {
         //defaults
         Configuration configuration = ms.getConfiguration();
         KeyGenerator keyGenerator;
-        String IDENTITY = (column.getGenerator() == null || column.getGenerator().equals("")) ? identity : column.getGenerator();
-        if (IDENTITY.equalsIgnoreCase("JDBC")) {
+        String IDENTITY = (column.getGenerator() == null || "".equals(column.getGenerator())) ? identity : column.getGenerator();
+        if ("JDBC".equalsIgnoreCase(IDENTITY)) {
             keyGenerator = new Jdbc3KeyGenerator();
         } else {
             SqlSource sqlSource = new RawSqlSource(configuration, IDENTITY, entityClass);

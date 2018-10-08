@@ -214,7 +214,7 @@ public class FieldHelper {
             }
             PropertyDescriptor[] descriptors = beanInfo.getPropertyDescriptors();
             for (PropertyDescriptor desc : descriptors) {
-                if (!desc.getName().equals("class")) {
+                if (!"class".equals(desc.getName())) {
                     entityFields.add(new EntityField(null, desc));
                 }
             }
