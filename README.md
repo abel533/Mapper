@@ -12,12 +12,11 @@
 
 **通用 Mapper 支持 Mybatis-3.2.4 及以上版本。**
 
-## Mapper3 拆接口，Mapper4 拆项目
+## [**快速入门 - MyBatis 为什么需要通用 Mapper ?**](https://blog.csdn.net/isea533/article/details/83045335)
 
-此次更新最大的变化是项目结构调整了，将原来的 mapper 拆分成了 core, base, extra, generator, spring 五个子模块，将独立的 mapper-weekend 和 spring-boot-starter 项目添加到 mapper 中作为两个子项目。
-
-由于更新日志内容太长，请移步 **[4.0 更新日志](https://github.com/abel533/Mapper/wiki/4.0.changelog)** 查看完整内容。
-
+> 简介: 在早期项目文档中有过类似主题的内容，但是最近我自己看文档的时候发现一个问题，文档虽然很详细，但是并不适合初次接触的人。为了方便第一次听说，第一次尝试的开发人员了解通用 Mapper，补充此文档。
+>
+> 强烈建议初学者阅读本文，先从整体上了解 通用 Mapper，然后再通过下面的文档更深入的了解。
 
 ## 项目文档
 
