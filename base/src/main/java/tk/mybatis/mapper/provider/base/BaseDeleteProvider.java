@@ -68,8 +68,7 @@ public class BaseDeleteProvider extends MapperTemplate {
         final Class<?> entityClass = getEntityClass(ms);
         StringBuilder sql = new StringBuilder();
         sql.append(SqlHelper.deleteFromTable(entityClass, tableName(entityClass)));
-        //增加 @Version 乐观锁支持
-        sql.append(SqlHelper.wherePKColumns(entityClass, true));
+        sql.append(SqlHelper.wherePKColumns(entityClass));
         return sql.toString();
     }
 }
