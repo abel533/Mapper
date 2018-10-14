@@ -31,10 +31,7 @@ import tk.mybatis.mapper.entity.IDynamicTableName;
 import tk.mybatis.mapper.mapperhelper.EntityHelper;
 
 import java.lang.reflect.Method;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * OGNL静态方法
@@ -89,6 +86,20 @@ public abstract class OGNL {
             }
         }
         throw new MapperException(SAFE_DELETE_EXCEPTION);
+    }
+
+    /**
+     * 校验集合类型参数不能为空
+     *
+     * @param parameter
+     * @param error
+     * @return
+     */
+    public static boolean notEmptyCollectionCheck(Object parameter, String error){
+        if(parameter == null || (parameter instanceof Collection && ((Collection) parameter).size() == 0)){
+            throw new IllegalArgumentException(error);
+        }
+        return true;
     }
 
     /**

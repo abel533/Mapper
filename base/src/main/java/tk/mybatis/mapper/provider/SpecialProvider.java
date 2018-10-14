@@ -53,6 +53,7 @@ public class SpecialProvider extends MapperTemplate {
         final Class<?> entityClass = getEntityClass(ms);
         //开始拼sql
         StringBuilder sql = new StringBuilder();
+        sql.append("<bind name=\"listNotEmptyCheck\" value=\"@tk.mybatis.mapper.util.OGNL@notEmptyCollectionCheck(list, '" + ms.getId() + " 方法参数为空')\"/>");
         sql.append(SqlHelper.insertIntoTable(entityClass, tableName(entityClass)));
         sql.append(SqlHelper.insertColumns(entityClass, true, false, false));
         sql.append(" VALUES ");
