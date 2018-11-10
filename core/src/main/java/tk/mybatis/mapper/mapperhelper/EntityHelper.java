@@ -31,8 +31,7 @@ import tk.mybatis.mapper.entity.EntityTable;
 import tk.mybatis.mapper.mapperhelper.resolve.DefaultEntityResolve;
 import tk.mybatis.mapper.mapperhelper.resolve.EntityResolve;
 
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -81,15 +80,34 @@ public class EntityHelper {
         if (table.getOrderByClause() != null) {
             return table.getOrderByClause();
         }
-        StringBuilder orderBy = new StringBuilder();
+
+        List<EntityColumn> orderEntityColumns = new ArrayList<EntityColumn>();
         for (EntityColumn column : table.getEntityClassColumns()) {
             if (column.getOrderBy() != null) {
-                if (orderBy.length() != 0) {
-                    orderBy.append(",");
-                }
-                orderBy.append(column.getColumn()).append(" ").append(column.getOrderBy());
+                orderEntityColumns.add(column);
             }
         }
+
+        Collections.sort(orderEntityColumns, new Comparator<EntityColumn>() {
+            @Override
+            public int compare(EntityColumn o1, EntityColumn o2) {
+                return o1.getOrderPriority() - o2.getOrderPriority();
+            }
+        });
+
+        StringBuilder orderBy = new StringBuilder();
+        for (EntityColumn column : orderEntityColumns) {
+            if (orderBy.length() != 0) {
+                orderBy.append(",");
+            }
+            orderBy.append(column.getColumn()).append(" ").append(column.getOrderBy());
+        }
+
+//        String orderBy = table.getEntityClassColumns().stream().filter(t -> t.getOrder() != null)
+//                                                                .sorted(Comparator.comparing(EntityColumn::getOrderPriority))
+//                                                                .map(t -> t.getColumn() + " " + t.getOrder())
+//                                                                .collect(Collectors.joining(","));
+
         table.setOrderByClause(orderBy.toString());
         return table.getOrderByClause();
     }
