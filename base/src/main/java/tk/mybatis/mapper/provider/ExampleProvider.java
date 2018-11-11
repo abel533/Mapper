@@ -25,9 +25,13 @@
 package tk.mybatis.mapper.provider;
 
 import org.apache.ibatis.mapping.MappedStatement;
+import org.apache.ibatis.mapping.SqlCommandType;
+import tk.mybatis.mapper.LogicDeleteException;
 import tk.mybatis.mapper.mapperhelper.MapperHelper;
 import tk.mybatis.mapper.mapperhelper.MapperTemplate;
 import tk.mybatis.mapper.mapperhelper.SqlHelper;
+
+import java.lang.reflect.Field;
 
 /**
  * ExampleProvider实现类，基础方法实现类
@@ -75,7 +79,23 @@ public class ExampleProvider extends MapperTemplate {
         if (getConfig().isSafeDelete()) {
             sql.append(SqlHelper.exampleHasAtLeastOneCriteriaCheck("_parameter"));
         }
-        sql.append(SqlHelper.deleteFromTable(entityClass, tableName(entityClass)));
+        if (SqlHelper.hasLogicDeleteAndCheckRepeated(entityClass)) {
+            sql.append(SqlHelper.updateTable(entityClass, tableName(entityClass)));
+            sql.append("<set>");
+            sql.append(SqlHelper.logicDeleteColumnEqualsValue(entityClass, true));
+            sql.append("</set>");
+
+            try {
+                Field sqlCommandTypeField = ms.getClass().getDeclaredField("sqlCommandType");
+
+                sqlCommandTypeField.setAccessible(true);
+                sqlCommandTypeField.set(ms, SqlCommandType.UPDATE);
+            } catch (Exception e) {
+                throw new LogicDeleteException("逻辑删除无法将SqlCommandType设置为update！", e);
+            }
+        } else {
+            sql.append(SqlHelper.deleteFromTable(entityClass, tableName(entityClass)));
+        }
         sql.append(SqlHelper.exampleWhereClause());
         return sql.toString();
     }

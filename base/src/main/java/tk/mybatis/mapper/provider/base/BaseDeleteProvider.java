@@ -25,10 +25,14 @@
 package tk.mybatis.mapper.provider.base;
 
 import org.apache.ibatis.mapping.MappedStatement;
+import org.apache.ibatis.mapping.SqlCommandType;
+import tk.mybatis.mapper.LogicDeleteException;
 import tk.mybatis.mapper.mapperhelper.EntityHelper;
 import tk.mybatis.mapper.mapperhelper.MapperHelper;
 import tk.mybatis.mapper.mapperhelper.MapperTemplate;
 import tk.mybatis.mapper.mapperhelper.SqlHelper;
+
+import java.lang.reflect.Field;
 
 /**
  * BaseDeleteMapper实现类，基础方法实现类
@@ -54,7 +58,24 @@ public class BaseDeleteProvider extends MapperTemplate {
         if (getConfig().isSafeDelete()) {
             sql.append(SqlHelper.notAllNullParameterCheck("_parameter", EntityHelper.getColumns(entityClass)));
         }
-        sql.append(SqlHelper.deleteFromTable(entityClass, tableName(entityClass)));
+        // 如果是逻辑删除，则修改为更新表，修改逻辑删除字段的值
+        if (SqlHelper.hasLogicDeleteAndCheckRepeated(entityClass)) {
+            sql.append(SqlHelper.updateTable(entityClass, tableName(entityClass)));
+            sql.append("<set>");
+            sql.append(SqlHelper.logicDeleteColumnEqualsValue(entityClass, true));
+            sql.append("</set>");
+
+            try {
+                Field sqlCommandTypeField = ms.getClass().getDeclaredField("sqlCommandType");
+
+                sqlCommandTypeField.setAccessible(true);
+                sqlCommandTypeField.set(ms, SqlCommandType.UPDATE);
+            } catch (Exception e) {
+                throw new LogicDeleteException("逻辑删除无法将SqlCommandType设置为update！", e);
+            }
+        } else {
+            sql.append(SqlHelper.deleteFromTable(entityClass, tableName(entityClass)));
+        }
         sql.append(SqlHelper.whereAllIfColumns(entityClass, isNotEmpty(), true));
         return sql.toString();
     }
@@ -66,8 +87,26 @@ public class BaseDeleteProvider extends MapperTemplate {
      */
     public String deleteByPrimaryKey(MappedStatement ms) {
         final Class<?> entityClass = getEntityClass(ms);
+
         StringBuilder sql = new StringBuilder();
-        sql.append(SqlHelper.deleteFromTable(entityClass, tableName(entityClass)));
+
+        if (SqlHelper.hasLogicDeleteAndCheckRepeated(entityClass)) {
+            sql.append(SqlHelper.updateTable(entityClass, tableName(entityClass)));
+            sql.append("<set>");
+            sql.append(SqlHelper.logicDeleteColumnEqualsValue(entityClass, true));
+            sql.append("</set>");
+
+            try {
+                Field sqlCommandTypeField = ms.getClass().getDeclaredField("sqlCommandType");
+
+                sqlCommandTypeField.setAccessible(true);
+                sqlCommandTypeField.set(ms, SqlCommandType.UPDATE);
+            } catch (Exception e) {
+                throw new LogicDeleteException("逻辑删除无法将SqlCommandType设置为update！", e);
+            }
+        } else {
+            sql.append(SqlHelper.deleteFromTable(entityClass, tableName(entityClass)));
+        }
         sql.append(SqlHelper.wherePKColumns(entityClass));
         return sql.toString();
     }
