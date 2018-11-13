@@ -1,9 +1,11 @@
 package tk.mybatis.mapper.test.logic;
 
+import java.util.List;
 import org.apache.ibatis.session.SqlSession;
 import org.junit.Assert;
 import org.junit.Test;
 import tk.mybatis.mapper.entity.Example;
+import tk.mybatis.mapper.entity.Example.Criteria;
 import tk.mybatis.mapper.mapper.MybatisHelper;
 import tk.mybatis.mapper.mapper.TbUserLogicDeleteMapper;
 import tk.mybatis.mapper.mapper.TbUserMapper;
@@ -302,12 +304,84 @@ public class TestLogicDelete {
 
             Example example = new Example(TbUserLogicDelete.class);
             example.createCriteria().andEqualTo("id", 9);
+            Assert.assertEquals(0, logicDeleteMapper.selectByExample(example).size());
+
+            example.or().andEqualTo("username", "test");
             Assert.assertEquals(1, logicDeleteMapper.selectByExample(example).size());
 
-            example.and().andEqualTo("username", "test");
+
+        } finally {
+            sqlSession.rollback();
+            sqlSession.close();
+        }
+    }
+
+    @Test
+    public void testSelectByExample2() {
+        SqlSession sqlSession = MybatisHelper.getSqlSession();
+        try {
+            TbUserLogicDeleteMapper logicDeleteMapper = sqlSession.getMapper(TbUserLogicDeleteMapper.class);
+
+            // username为test的有两条  一条标记为已删除
+            Example example = new Example(TbUserLogicDelete.class);
+            example.createCriteria().andEqualTo("username", "test");
             Assert.assertEquals(1, logicDeleteMapper.selectByExample(example).size());
 
+            // password为dddd的已删除  username为test2的未删除
+            example.or().andEqualTo("password", "dddd").orEqualTo("username", "test2");
 
+            Assert.assertEquals(2, logicDeleteMapper.selectByExample(example).size());
+        } finally {
+            sqlSession.rollback();
+            sqlSession.close();
+        }
+    }
+
+    @Test
+    public void testUpdateByExample() {
+        SqlSession sqlSession = MybatisHelper.getSqlSession();
+        try {
+            TbUserLogicDeleteMapper logicDeleteMapper = sqlSession.getMapper(TbUserLogicDeleteMapper.class);
+
+            // username为test的有两条  一条标记为已删除
+            Example example = new Example(TbUserLogicDelete.class);
+            example.createCriteria().andEqualTo("username", "test");
+
+            TbUserLogicDelete tbUserLogicDelete = new TbUserLogicDelete();
+            tbUserLogicDelete.setUsername("123");
+            logicDeleteMapper.updateByExample(tbUserLogicDelete, example);
+
+            example.clear();
+            example.createCriteria().andEqualTo("username", "123");
+            List<TbUserLogicDelete> list = logicDeleteMapper.selectByExample(example);
+            Assert.assertEquals(1, list.size());
+
+            Assert.assertNull(list.get(0).getPassword());
+        } finally {
+            sqlSession.rollback();
+            sqlSession.close();
+        }
+    }
+
+    @Test
+    public void testUpdateByExampleSelective() {
+        SqlSession sqlSession = MybatisHelper.getSqlSession();
+        try {
+            TbUserLogicDeleteMapper logicDeleteMapper = sqlSession.getMapper(TbUserLogicDeleteMapper.class);
+
+            Example example = new Example(TbUserLogicDelete.class);
+            example.createCriteria().andEqualTo("username", "test");
+
+            TbUserLogicDelete tbUserLogicDelete = new TbUserLogicDelete();
+            tbUserLogicDelete.setUsername("123");
+            logicDeleteMapper.updateByExampleSelective(tbUserLogicDelete, example);
+
+            example.clear();
+            example.createCriteria().andEqualTo("username", "123");
+            List<TbUserLogicDelete> list = logicDeleteMapper.selectByExample(example);
+            Assert.assertEquals(1, list.size());
+
+            Assert.assertEquals("gggg", list.get(0).getPassword());
         } finally {
             sqlSession.rollback();
             sqlSession.close();

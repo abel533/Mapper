@@ -294,6 +294,11 @@ public class Example implements IDynamicTableName {
             this.propertyMap = propertyMap;
         }
 
+        public Map<String, EntityColumn> getPropertyMap() {
+
+            return propertyMap;
+        }
+
         private String column(String property) {
             if (propertyMap.containsKey(property)) {
                 return propertyMap.get(property).getColumn();

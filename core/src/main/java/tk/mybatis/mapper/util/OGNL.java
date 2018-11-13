@@ -25,10 +25,12 @@
 package tk.mybatis.mapper.util;
 
 import tk.mybatis.mapper.MapperException;
+import tk.mybatis.mapper.annotation.LogicDelete;
 import tk.mybatis.mapper.entity.EntityColumn;
 import tk.mybatis.mapper.entity.Example;
 import tk.mybatis.mapper.entity.IDynamicTableName;
 import tk.mybatis.mapper.mapperhelper.EntityHelper;
+import tk.mybatis.mapper.mapperhelper.SqlHelper;
 
 import java.lang.reflect.Method;
 import java.util.*;
@@ -224,4 +226,33 @@ public abstract class OGNL {
             return "and";
         }
     }
+
+    /**
+     * 拼接逻辑删除字段的未删除查询条件
+     * @param criteriaList
+     * @return
+     */
+    public static String andNotLogicDelete(List<Example.Criteria> criteriaList) {
+
+        if (criteriaList != null && criteriaList.size() != 0) {
+            // 随便拿一个得到propertyMap，判断是否有逻辑删除注解的字段
+            Example.Criteria tempCriteria = criteriaList.get(0);
+
+            Map<String, EntityColumn> propertyMap = tempCriteria.getPropertyMap();
+
+            for (Map.Entry<String, EntityColumn> entry: propertyMap.entrySet()) {
+                EntityColumn column = entry.getValue();
+
+                if (column.getEntityField().isAnnotationPresent(LogicDelete.class)) {
+
+                    // 未逻辑删除的条件
+                    return column.getColumn() + " = " + SqlHelper.getLogicDeletedValue(column, false) + " and ";
+                }
+            }
+
+        }
+
+        return "";
+    }
+
 }
