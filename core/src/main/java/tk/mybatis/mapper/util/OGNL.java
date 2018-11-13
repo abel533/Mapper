@@ -232,22 +232,32 @@ public abstract class OGNL {
      * @param criteriaList
      * @return
      */
-    public static String andNotLogicDelete(List<Example.Criteria> criteriaList) {
+    public static String andNotLogicDelete(Object parameter) {
 
-        if (criteriaList != null && criteriaList.size() != 0) {
-            // 随便拿一个得到propertyMap，判断是否有逻辑删除注解的字段
-            Example.Criteria tempCriteria = criteriaList.get(0);
+        if (parameter instanceof List) {
+            try {
+                // 自定义的example暂时没想到合适的处理方法
+                List<Example.Criteria> criteriaList = (List<Example.Criteria>) parameter;
 
-            Map<String, EntityColumn> propertyMap = tempCriteria.getPropertyMap();
+                if (criteriaList != null && criteriaList.size() != 0) {
+                    // 随便拿一个得到propertyMap，判断是否有逻辑删除注解的字段
+                    Example.Criteria tempCriteria = criteriaList.get(0);
 
-            for (Map.Entry<String, EntityColumn> entry: propertyMap.entrySet()) {
-                EntityColumn column = entry.getValue();
+                    Map<String, EntityColumn> propertyMap = tempCriteria.getPropertyMap();
 
-                if (column.getEntityField().isAnnotationPresent(LogicDelete.class)) {
+                    for (Map.Entry<String, EntityColumn> entry: propertyMap.entrySet()) {
+                        EntityColumn column = entry.getValue();
 
-                    // 未逻辑删除的条件
-                    return column.getColumn() + " = " + SqlHelper.getLogicDeletedValue(column, false) + " and ";
+                        if (column.getEntityField().isAnnotationPresent(LogicDelete.class)) {
+
+                            // 未逻辑删除的条件
+                            return column.getColumn() + " = " + SqlHelper.getLogicDeletedValue(column, false) + " and ";
+                        }
+                    }
+
                 }
+            } catch (ClassCastException e) {
+                return "";
             }
 
         }
