@@ -43,7 +43,7 @@ public interface InsertUseGeneratedKeysMapper<T> {
      * @param record
      * @return
      */
-    @Options(useGeneratedKeys = true, keyProperty = "id")
+    @Options(useGeneratedKeys = true)
     @InsertProvider(type = SpecialProvider.class, method = "dynamicSQL")
     int insertUseGeneratedKeys(T record);
 

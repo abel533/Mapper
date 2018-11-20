@@ -25,6 +25,7 @@
 package tk.mybatis.mapper.common.base.insert;
 
 import org.apache.ibatis.annotations.InsertProvider;
+import org.apache.ibatis.annotations.Options;
 import tk.mybatis.mapper.annotation.RegisterMapper;
 import tk.mybatis.mapper.provider.base.BaseInsertProvider;
 
@@ -44,6 +45,7 @@ public interface InsertMapper<T> {
      * @return
      */
     @InsertProvider(type = BaseInsertProvider.class, method = "dynamicSQL")
+    @Options(useGeneratedKeys = true)
     int insert(T record);
 
 }

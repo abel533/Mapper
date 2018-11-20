@@ -61,7 +61,7 @@ public class InsertListProvider extends MapperTemplate {
         Set<EntityColumn> columnList = EntityHelper.getColumns(entityClass);
         //单独增加对 genId 方式的支持
         for (EntityColumn column : columnList) {
-            if(column.getGenIdClass() != null){
+            if (column.getGenIdClass() != null) {
                 sql.append("<bind name=\"").append(column.getColumn()).append("GenIdBind\" value=\"@tk.mybatis.mapper.genid.GenIdUtil@genId(");
                 sql.append("record").append(", '").append(column.getProperty()).append("'");
                 sql.append(", @").append(column.getGenIdClass().getCanonicalName()).append("@class");
@@ -78,6 +78,10 @@ public class InsertListProvider extends MapperTemplate {
         }
         sql.append("</trim>");
         sql.append("</foreach>");
+
+        // 反射把MappedStatement中的设置主键名
+        EntityHelper.setKeyProperties(EntityHelper.getPKColumns(entityClass), ms);
+
         return sql.toString();
     }
 

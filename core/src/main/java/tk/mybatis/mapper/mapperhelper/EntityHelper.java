@@ -24,13 +24,17 @@
 
 package tk.mybatis.mapper.mapperhelper;
 
+import org.apache.ibatis.mapping.MappedStatement;
 import tk.mybatis.mapper.MapperException;
 import tk.mybatis.mapper.entity.Config;
 import tk.mybatis.mapper.entity.EntityColumn;
 import tk.mybatis.mapper.entity.EntityTable;
 import tk.mybatis.mapper.mapperhelper.resolve.DefaultEntityResolve;
 import tk.mybatis.mapper.mapperhelper.resolve.EntityResolve;
+import tk.mybatis.mapper.util.MetaObjectUtil;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -167,5 +171,24 @@ public class EntityHelper {
      */
     static void setResolve(EntityResolve resolve) {
         EntityHelper.resolve = resolve;
+    }
+
+    /**
+     * 通过反射设置MappedStatement的keyProperties字段值
+     *
+     * @param pkColumns 所有的主键字段
+     * @param ms        MappedStatement
+     */
+    public static void setKeyProperties(Set<EntityColumn> pkColumns, MappedStatement ms) {
+        if (pkColumns == null || pkColumns.isEmpty()) {
+            return;
+        }
+
+        List<String> keyProperties = new ArrayList<String>(pkColumns.size());
+        for (EntityColumn column : pkColumns) {
+            keyProperties.add(column.getProperty());
+        }
+
+        MetaObjectUtil.forObject(ms).setValue("keyProperties", keyProperties.toArray(new String[]{}));
     }
 }

@@ -69,6 +69,10 @@ public class SpecialProvider extends MapperTemplate {
         }
         sql.append("</trim>");
         sql.append("</foreach>");
+
+        // 反射把MappedStatement中的设置主键名
+        EntityHelper.setKeyProperties(EntityHelper.getPKColumns(entityClass), ms);
+
         return sql.toString();
     }
 
@@ -84,6 +88,10 @@ public class SpecialProvider extends MapperTemplate {
         sql.append(SqlHelper.insertIntoTable(entityClass, tableName(entityClass)));
         sql.append(SqlHelper.insertColumns(entityClass, true, false, false));
         sql.append(SqlHelper.insertValuesColumns(entityClass, true, false, false));
+
+        // 反射把MappedStatement中的设置主键名
+        EntityHelper.setKeyProperties(EntityHelper.getPKColumns(entityClass), ms);
+
         return sql.toString();
     }
 }

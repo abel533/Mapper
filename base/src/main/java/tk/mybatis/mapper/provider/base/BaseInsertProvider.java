@@ -72,6 +72,10 @@ public class BaseInsertProvider extends MapperTemplate {
             }
         }
         sql.append("</trim>");
+
+        // 反射把MappedStatement中的设置主键名
+        EntityHelper.setKeyProperties(EntityHelper.getPKColumns(entityClass), ms);
+
         return sql.toString();
     }
 
@@ -114,6 +118,10 @@ public class BaseInsertProvider extends MapperTemplate {
             }
         }
         sql.append("</trim>");
+
+        // 反射把MappedStatement中的设置主键名
+        EntityHelper.setKeyProperties(EntityHelper.getPKColumns(entityClass), ms);
+
         return sql.toString();
     }
 
