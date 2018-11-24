@@ -42,6 +42,8 @@
             <property name="forceAnnotation" value="true"/>
             <property name="beginningDelimiter" value="`"/>
             <property name="endingDelimiter" value="`"/>
+            <!--配置是否启用lombok, 支持如下四种注解-->
+            <property name="lombok" value="Getter,Setter,ToString,Accessors"/>
         </plugin>
 
         <!--通用代码生成器插件-->
