@@ -171,18 +171,25 @@ public class DefaultEntityResolve implements EntityResolve {
      * @param entityColumn
      */
     protected void processOrderBy(EntityTable entityTable, EntityField field, EntityColumn entityColumn) {
+        String orderBy = "";
         if(field.isAnnotationPresent(OrderBy.class)){
-            throw new MapperException(OrderBy.class + " is outdated, use " + Order.class + " instead!");
+            orderBy = field.getAnnotation(OrderBy.class).value();
+            if ("".equals(orderBy)) {
+                orderBy = "ASC";
+            }
+            log.warn(OrderBy.class + " is outdated, use " + Order.class + " instead!");
         }
-
         if (field.isAnnotationPresent(Order.class)) {
             Order order = field.getAnnotation(Order.class);
-            if ("".equals(order.value())) {
-                entityColumn.setOrderBy("ASC");
+            if ("".equals(order.value()) && "".equals(orderBy)) {
+                orderBy = "ASC";
             } else {
-                entityColumn.setOrderBy(order.value());
+                orderBy = order.value();
             }
             entityColumn.setOrderPriority(order.priority());
+        }
+        if (StringUtil.isNotEmpty(orderBy)) {
+            entityColumn.setOrderBy(orderBy);
         }
     }
 

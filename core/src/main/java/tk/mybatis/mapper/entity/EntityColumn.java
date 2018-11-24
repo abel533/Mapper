@@ -50,7 +50,7 @@ public class EntityColumn {
     private String generator;
     //排序
     private String orderBy;
-    private Integer orderPriority;
+    private int orderPriority;
     //可插入
     private boolean insertable = true;
     //可更新
@@ -344,11 +344,11 @@ public class EntityColumn {
         this.useJavaType = useJavaType;
     }
 
-    public Integer getOrderPriority() {
+    public int getOrderPriority() {
         return orderPriority;
     }
 
-    public void setOrderPriority(Integer orderPriority) {
+    public void setOrderPriority(int orderPriority) {
         this.orderPriority = orderPriority;
     }
 
