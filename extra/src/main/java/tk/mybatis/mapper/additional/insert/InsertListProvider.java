@@ -78,10 +78,6 @@ public class InsertListProvider extends MapperTemplate {
         }
         sql.append("</trim>");
         sql.append("</foreach>");
-
-        // 反射把MappedStatement中的设置主键名
-        EntityHelper.setKeyProperties(EntityHelper.getPKColumns(entityClass), ms);
-
         return sql.toString();
     }
 

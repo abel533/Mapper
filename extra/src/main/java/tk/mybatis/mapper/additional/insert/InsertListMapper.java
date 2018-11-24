@@ -25,7 +25,6 @@
 package tk.mybatis.mapper.additional.insert;
 
 import org.apache.ibatis.annotations.InsertProvider;
-import org.apache.ibatis.annotations.Options;
 import tk.mybatis.mapper.annotation.RegisterMapper;
 
 import java.util.List;
@@ -51,6 +50,5 @@ public interface InsertListMapper<T> {
      * @return
      */
     @InsertProvider(type = InsertListProvider.class, method = "dynamicSQL")
-    @Options(useGeneratedKeys = true)
     int insertList(List<? extends T> recordList);
 }
