@@ -28,10 +28,8 @@ import org.apache.ibatis.session.SqlSession;
 import org.junit.Assert;
 import org.junit.Test;
 import tk.mybatis.mapper.mapper.CountryMapper;
-import tk.mybatis.mapper.mapper.CountryVersionMapper;
 import tk.mybatis.mapper.mapper.MybatisHelper;
 import tk.mybatis.mapper.model.Country;
-import tk.mybatis.mapper.model.CountryVersion;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -147,60 +145,6 @@ public class TestDeleteByPrimaryKey {
             CountryMapper mapper = sqlSession.getMapper(CountryMapper.class);
             //根据主键删除
             Assert.assertEquals(1, mapper.deleteByPrimaryKey(100));
-        } finally {
-            sqlSession.rollback();
-            sqlSession.close();
-        }
-    }
-
-    /**
-     * 乐观锁删除
-     */
-    @Test
-    public void testDeleteByVersion() {
-        SqlSession sqlSession = MybatisHelper.getSqlSession();
-        try {
-            CountryVersionMapper mapper = sqlSession.getMapper(CountryVersionMapper.class);
-            CountryVersion countryVersion = new CountryVersion();
-            countryVersion.setId(100);
-
-            //没有指定版本时删除不了
-            Assert.assertEquals(0, mapper.delete(countryVersion));
-
-            //版本不对的时候的时候删除不了
-            countryVersion.setVersion(2);
-            Assert.assertEquals(0, mapper.delete(countryVersion));
-
-            //版本正确的时候可以真正删除
-            countryVersion.setVersion(1);
-            Assert.assertEquals(1, mapper.delete(countryVersion));
-        } finally {
-            sqlSession.rollback();
-            sqlSession.close();
-        }
-    }
-
-    /**
-     * 乐观锁删除
-     */
-    @Test
-    public void testDeleteByPrimaryKeyAndVersion() {
-        SqlSession sqlSession = MybatisHelper.getSqlSession();
-        try {
-            CountryVersionMapper mapper = sqlSession.getMapper(CountryVersionMapper.class);
-            //根据主键删除，没有指定版本时删除不了
-            Assert.assertEquals(0, mapper.deleteByPrimaryKey(100));
-
-            CountryVersion countryVersion = new CountryVersion();
-            countryVersion.setId(100);
-
-            //版本不对的时候的时候删除不了
-            countryVersion.setVersion(2);
-            Assert.assertEquals(0, mapper.deleteByPrimaryKey(countryVersion));
-
-            //版本正确的时候可以真正删除
-            countryVersion.setVersion(1);
-            Assert.assertEquals(1, mapper.deleteByPrimaryKey(countryVersion));
         } finally {
             sqlSession.rollback();
             sqlSession.close();
