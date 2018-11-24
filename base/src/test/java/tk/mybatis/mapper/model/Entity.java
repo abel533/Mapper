@@ -24,8 +24,9 @@
 
 package tk.mybatis.mapper.model;
 
+import tk.mybatis.mapper.annotation.Order;
+
 import javax.persistence.Id;
-import javax.persistence.OrderBy;
 import javax.persistence.Transient;
 import java.io.Serializable;
 
@@ -37,6 +38,7 @@ public class Entity<ID extends Serializable, NAME extends Serializable> {
     //这里的a,b,c,d仅用来测试FieldHelper中的静态字段
     private static Integer a, b, c, d;
 
+    @Order(value = "desc", priority = 1)
     private ID id;
 
     @Transient
@@ -47,7 +49,6 @@ public class Entity<ID extends Serializable, NAME extends Serializable> {
         return id;
     }
 
-    @OrderBy("desc")
     public void setId(ID id) {
         this.id = id;
     }

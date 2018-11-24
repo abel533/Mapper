@@ -8,6 +8,7 @@ import tk.mybatis.mapper.MapperException;
 import tk.mybatis.mapper.annotation.ColumnType;
 import tk.mybatis.mapper.annotation.KeySql;
 import tk.mybatis.mapper.annotation.NameStyle;
+import tk.mybatis.mapper.annotation.Order;
 import tk.mybatis.mapper.code.IdentityDialect;
 import tk.mybatis.mapper.code.ORDER;
 import tk.mybatis.mapper.code.Style;
@@ -170,13 +171,25 @@ public class DefaultEntityResolve implements EntityResolve {
      * @param entityColumn
      */
     protected void processOrderBy(EntityTable entityTable, EntityField field, EntityColumn entityColumn) {
-        if (field.isAnnotationPresent(OrderBy.class)) {
-            OrderBy orderBy = field.getAnnotation(OrderBy.class);
-            if ("".equals(orderBy.value())) {
-                entityColumn.setOrderBy("ASC");
-            } else {
-                entityColumn.setOrderBy(orderBy.value());
+        String orderBy = "";
+        if(field.isAnnotationPresent(OrderBy.class)){
+            orderBy = field.getAnnotation(OrderBy.class).value();
+            if ("".equals(orderBy)) {
+                orderBy = "ASC";
             }
+            log.warn(OrderBy.class + " is outdated, use " + Order.class + " instead!");
+        }
+        if (field.isAnnotationPresent(Order.class)) {
+            Order order = field.getAnnotation(Order.class);
+            if ("".equals(order.value()) && "".equals(orderBy)) {
+                orderBy = "ASC";
+            } else {
+                orderBy = order.value();
+            }
+            entityColumn.setOrderPriority(order.priority());
+        }
+        if (StringUtil.isNotEmpty(orderBy)) {
+            entityColumn.setOrderBy(orderBy);
         }
     }
 
