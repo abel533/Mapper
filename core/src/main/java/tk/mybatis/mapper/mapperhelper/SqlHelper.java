@@ -24,6 +24,8 @@
 
 package tk.mybatis.mapper.mapperhelper;
 
+import tk.mybatis.mapper.LogicDeleteException;
+import tk.mybatis.mapper.annotation.LogicDelete;
 import tk.mybatis.mapper.annotation.Version;
 import tk.mybatis.mapper.entity.EntityColumn;
 import tk.mybatis.mapper.entity.IDynamicTableName;
@@ -452,6 +454,8 @@ public class SqlHelper {
         Set<EntityColumn> columnSet = EntityHelper.getColumns(entityClass);
         //对乐观锁的支持
         EntityColumn versionColumn = null;
+        // 逻辑删除列
+        EntityColumn logicDeleteColumn = null;
         //当某个列有主键策略时，不需要考虑他的属性是否为空，因为如果为空，一定会根据主键策略给他生成一个值
         for (EntityColumn column : columnSet) {
             if (column.getEntityField().isAnnotationPresent(Version.class)) {
@@ -459,6 +463,12 @@ public class SqlHelper {
                     throw new VersionException(entityClass.getCanonicalName() + " 中包含多个带有 @Version 注解的字段，一个类中只能存在一个带有 @Version 注解的字段!");
                 }
                 versionColumn = column;
+            }
+            if (column.getEntityField().isAnnotationPresent(LogicDelete.class)) {
+                if (logicDeleteColumn != null) {
+                    throw new LogicDeleteException(entityClass.getCanonicalName() + " 中包含多个带有 @LogicDelete 注解的字段，一个类中只能存在一个带有 @LogicDelete 注解的字段!");
+                }
+                logicDeleteColumn = column;
             }
             if (!column.isId() && column.isUpdatable()) {
                 if (column == versionColumn) {
@@ -469,6 +479,8 @@ public class SqlHelper {
                             .append(" = ${@tk.mybatis.mapper.version.VersionUtil@nextVersion(")
                             .append("@").append(versionClass).append("@class, ")
                             .append(column.getProperty()).append(")},");
+                } else if (column == logicDeleteColumn) {
+                    sql.append(logicDeleteColumnEqualsValue(column, false)).append(",");
                 } else if (notNull) {
                     sql.append(SqlHelper.getIfNotNull(entityName, column, column.getColumnEqualsHolder(entityName) + ",", notEmpty));
                 } else {
@@ -550,16 +562,23 @@ public class SqlHelper {
      */
     public static String wherePKColumns(Class<?> entityClass,String entityName, boolean useVersion) {
         StringBuilder sql = new StringBuilder();
+        boolean hasLogicDelete = hasLogicDeleteAndCheckRepeated(entityClass);
+
         sql.append("<where>");
         //获取全部列
         Set<EntityColumn> columnSet = EntityHelper.getPKColumns(entityClass);
         //当某个列有主键策略时，不需要考虑他的属性是否为空，因为如果为空，一定会根据主键策略给他生成一个值
         for (EntityColumn column : columnSet) {
-            sql.append(" AND " + column.getColumnEqualsHolder(entityName));
+            sql.append(" AND ").append(column.getColumnEqualsHolder(entityName));
         }
         if (useVersion) {
             sql.append(whereVersion(entityClass));
         }
+
+        if (hasLogicDelete) {
+            sql.append(whereLogicDelete(entityClass, false));
+        }
+
         sql.append("</where>");
         return sql.toString();
     }
@@ -585,18 +604,29 @@ public class SqlHelper {
      */
     public static String whereAllIfColumns(Class<?> entityClass, boolean empty, boolean useVersion) {
         StringBuilder sql = new StringBuilder();
+        boolean hasLogicDelete = false;
+
         sql.append("<where>");
         //获取全部列
         Set<EntityColumn> columnSet = EntityHelper.getColumns(entityClass);
         //当某个列有主键策略时，不需要考虑他的属性是否为空，因为如果为空，一定会根据主键策略给他生成一个值
         for (EntityColumn column : columnSet) {
+            hasLogicDelete = isLogicDeleteColumn(entityClass, column, hasLogicDelete);
             if (!useVersion || !column.getEntityField().isAnnotationPresent(Version.class)) {
+                // 逻辑删除，后面拼接逻辑删除字段的未删除条件
+                if (hasLogicDelete) {
+                    continue;
+                }
                 sql.append(getIfNotNull(column, " AND " + column.getColumnEqualsHolder(), empty));
             }
         }
         if (useVersion) {
             sql.append(whereVersion(entityClass));
         }
+        if (hasLogicDelete) {
+            sql.append(whereLogicDelete(entityClass, false));
+        }
+
         sql.append("</where>");
         return sql.toString();
     }
@@ -621,6 +651,125 @@ public class SqlHelper {
             }
         }
         return result;
+    }
+
+    /**
+     * 逻辑删除的where条件，没有逻辑删除注解则返回空字符串
+     * <br>
+     *  AND column = value
+     * @param entityClass
+     * @param isDeleted true：已经逻辑删除，false：未逻辑删除
+     * @return
+     */
+    public static String whereLogicDelete(Class<?> entityClass, boolean isDeleted) {
+        String value = logicDeleteColumnEqualsValue(entityClass, isDeleted);
+        return "".equals(value) ? "" : " AND " + value;
+    }
+
+    /**
+     * 返回格式: column = value
+     * <br>
+     * 默认isDeletedValue = 1  notDeletedValue = 0
+     * <br>
+     * 则返回is_deleted = 1 或 is_deleted = 0
+     * <br>
+     * 若没有逻辑删除注解，则返回空字符串
+     *
+     * @param entityClass
+     * @param isDeleted true 已经逻辑删除  false 未逻辑删除
+     */
+    public static String logicDeleteColumnEqualsValue(Class<?> entityClass, boolean isDeleted) {
+        Set<EntityColumn> columnSet = EntityHelper.getColumns(entityClass);
+        boolean hasLogicDelete = false;
+        String result = "";
+        for (EntityColumn column : columnSet) {
+            hasLogicDelete = isLogicDeleteColumn(entityClass, column, hasLogicDelete);
+            if (hasLogicDelete) {
+                result = logicDeleteColumnEqualsValue(column, isDeleted);
+            }
+        }
+        return result;
+    }
+
+    /**
+     * 返回格式: column = value
+     * <br>
+     * 默认isDeletedValue = 1  notDeletedValue = 0
+     * <br>
+     * 则返回is_deleted = 1 或 is_deleted = 0
+     * <br>
+     * 若没有逻辑删除注解，则返回空字符串
+     *
+     * @param column
+     * @param isDeleted true 已经逻辑删除  false 未逻辑删除
+     */
+    public static String logicDeleteColumnEqualsValue(EntityColumn column, boolean isDeleted) {
+        String result = "";
+        if (column.getEntityField().isAnnotationPresent(LogicDelete.class)) {
+            result = column.getColumn() + " = " + getLogicDeletedValue(column, isDeleted);
+        }
+        return result;
+    }
+
+    /**
+     * 获取逻辑删除注解的参数值
+     * @param column
+     * @param isDeleted true：逻辑删除的值，false：未逻辑删除的值
+     * @return
+     */
+    public static int getLogicDeletedValue(EntityColumn column, boolean isDeleted) {
+        if (!column.getEntityField().isAnnotationPresent(LogicDelete.class)) {
+            throw new LogicDeleteException(column.getColumn() + " 没有 @LogicDelete 注解!");
+        }
+        LogicDelete logicDelete = column.getEntityField().getAnnotation(LogicDelete.class);
+        if (isDeleted) {
+            return logicDelete.isDeletedValue();
+        }
+        return logicDelete.notDeletedValue();
+    }
+
+    /**
+     * 是否有逻辑删除的注解，并且检查重复注解
+     * @param entityClass
+     * @return
+     */
+    public static boolean hasLogicDeleteAndCheckRepeated(Class<?> entityClass) {
+        return getLogicDeleteColumn(entityClass) != null;
+    }
+
+    /**
+     * 获取逻辑删除注解的列，若没有返回null
+     * @param entityClass
+     * @return
+     */
+    public static EntityColumn getLogicDeleteColumn(Class<?> entityClass) {
+        EntityColumn logicDeleteColumn = null;
+        Set<EntityColumn> columnSet = EntityHelper.getColumns(entityClass);
+        boolean hasLogicDelete = false;
+        for (EntityColumn column: columnSet) {
+            hasLogicDelete = isLogicDeleteColumn(entityClass, column, hasLogicDelete);
+            if (hasLogicDelete) {
+                logicDeleteColumn = column;
+            }
+        }
+        return logicDeleteColumn;
+    }
+
+    /**
+     * column是否为逻辑删除注解的列
+     * @param entityClass
+     * @param column
+     * @param hasLogicDelete 当前是否已经有逻辑删除的列，主要用来在循环column中判断重复抛异常，直接调用传false即可
+     * @return
+     */
+    public static boolean isLogicDeleteColumn(Class<?> entityClass, EntityColumn column, boolean hasLogicDelete) {
+        if (column.getEntityField().isAnnotationPresent(LogicDelete.class)) {
+            if (hasLogicDelete) {
+                throw new LogicDeleteException(entityClass.getCanonicalName() + " 中包含多个带有 @LogicDelete 注解的字段，一个类中只能存在一个带有 @LogicDelete 注解的字段!");
+            }
+            hasLogicDelete = true;
+        }
+        return hasLogicDelete;
     }
 
     /**
@@ -750,6 +899,8 @@ public class SqlHelper {
     public static String exampleWhereClause() {
         return "<if test=\"_parameter != null\">" +
                 "<where>\n" +
+                " ${@tk.mybatis.mapper.util.OGNL@andNotLogicDelete(_parameter)}" +
+                " <trim prefix=\"(\" prefixOverrides=\"and |or \" suffix=\")\">\n" +
                 "  <foreach collection=\"oredCriteria\" item=\"criteria\">\n" +
                 "    <if test=\"criteria.valid\">\n" +
                 "      ${@tk.mybatis.mapper.util.OGNL@andOr(criteria)}" +
@@ -776,6 +927,7 @@ public class SqlHelper {
                 "      </trim>\n" +
                 "    </if>\n" +
                 "  </foreach>\n" +
+                " </trim>\n" +
                 "</where>" +
                 "</if>";
     }
@@ -787,6 +939,8 @@ public class SqlHelper {
      */
     public static String updateByExampleWhereClause() {
         return "<where>\n" +
+                " ${@tk.mybatis.mapper.util.OGNL@andNotLogicDelete(example)}" +
+                " <trim prefix=\"(\" prefixOverrides=\"and |or \" suffix=\")\">\n" +
                 "  <foreach collection=\"example.oredCriteria\" item=\"criteria\">\n" +
                 "    <if test=\"criteria.valid\">\n" +
                 "      ${@tk.mybatis.mapper.util.OGNL@andOr(criteria)}" +
@@ -813,6 +967,7 @@ public class SqlHelper {
                 "      </trim>\n" +
                 "    </if>\n" +
                 "  </foreach>\n" +
+                " </trim>\n" +
                 "</where>";
     }
 

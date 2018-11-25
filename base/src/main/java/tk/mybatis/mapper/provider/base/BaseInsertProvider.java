@@ -45,6 +45,7 @@ public class BaseInsertProvider extends MapperTemplate {
     public String insert(MappedStatement ms) {
         Class<?> entityClass = getEntityClass(ms);
         StringBuilder sql = new StringBuilder();
+        boolean hasLogicDelete = false;
         //获取全部列
         Set<EntityColumn> columnList = EntityHelper.getColumns(entityClass);
         processKey(sql, entityClass, ms, columnList);
@@ -53,6 +54,11 @@ public class BaseInsertProvider extends MapperTemplate {
         sql.append("<trim prefix=\"VALUES(\" suffix=\")\" suffixOverrides=\",\">");
         for (EntityColumn column : columnList) {
             if (!column.isInsertable()) {
+                continue;
+            }
+            hasLogicDelete = SqlHelper.isLogicDeleteColumn(entityClass, column, hasLogicDelete);
+            if (hasLogicDelete) {
+                sql.append(SqlHelper.getLogicDeletedValue(column, false)).append(",");
                 continue;
             }
             //优先使用传入的属性值,当原属性property!=null时，用原属性
@@ -78,6 +84,7 @@ public class BaseInsertProvider extends MapperTemplate {
     public String insertSelective(MappedStatement ms) {
         Class<?> entityClass = getEntityClass(ms);
         StringBuilder sql = new StringBuilder();
+        boolean hasLogicDelete = false;
         //获取全部列
         Set<EntityColumn> columnList = EntityHelper.getColumns(entityClass);
         processKey(sql, entityClass, ms, columnList);
@@ -90,13 +97,26 @@ public class BaseInsertProvider extends MapperTemplate {
             if (column.isIdentity()) {
                 sql.append(column.getColumn() + ",");
             } else {
+                hasLogicDelete = SqlHelper.isLogicDeleteColumn(entityClass, column, hasLogicDelete);
+                if (hasLogicDelete) {
+                    sql.append(column.getColumn()).append(",");
+                    continue;
+                }
                 sql.append(SqlHelper.getIfNotNull(column, column.getColumn() + ",", isNotEmpty()));
             }
         }
         sql.append("</trim>");
+
+        // 上面column遍历结束，重置是否有逻辑删除注解的判断值
+        hasLogicDelete = false;
         sql.append("<trim prefix=\"VALUES(\" suffix=\")\" suffixOverrides=\",\">");
         for (EntityColumn column : columnList) {
             if (!column.isInsertable()) {
+                continue;
+            }
+            hasLogicDelete = SqlHelper.isLogicDeleteColumn(entityClass, column, hasLogicDelete);
+            if (hasLogicDelete) {
+                sql.append(SqlHelper.getLogicDeletedValue(column, false)).append(",");
                 continue;
             }
             //优先使用传入的属性值,当原属性property!=null时，用原属性

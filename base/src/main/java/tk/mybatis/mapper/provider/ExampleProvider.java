@@ -25,9 +25,11 @@
 package tk.mybatis.mapper.provider;
 
 import org.apache.ibatis.mapping.MappedStatement;
+import org.apache.ibatis.mapping.SqlCommandType;
 import tk.mybatis.mapper.mapperhelper.MapperHelper;
 import tk.mybatis.mapper.mapperhelper.MapperTemplate;
 import tk.mybatis.mapper.mapperhelper.SqlHelper;
+import tk.mybatis.mapper.util.MetaObjectUtil;
 
 /**
  * ExampleProvider实现类，基础方法实现类
@@ -75,7 +77,15 @@ public class ExampleProvider extends MapperTemplate {
         if (getConfig().isSafeDelete()) {
             sql.append(SqlHelper.exampleHasAtLeastOneCriteriaCheck("_parameter"));
         }
-        sql.append(SqlHelper.deleteFromTable(entityClass, tableName(entityClass)));
+        if (SqlHelper.hasLogicDeleteAndCheckRepeated(entityClass)) {
+            sql.append(SqlHelper.updateTable(entityClass, tableName(entityClass)));
+            sql.append("<set>");
+            sql.append(SqlHelper.logicDeleteColumnEqualsValue(entityClass, true));
+            sql.append("</set>");
+            MetaObjectUtil.forObject(ms).setValue("sqlCommandType", SqlCommandType.UPDATE);
+        } else {
+            sql.append(SqlHelper.deleteFromTable(entityClass, tableName(entityClass)));
+        }
         sql.append(SqlHelper.exampleWhereClause());
         return sql.toString();
     }
