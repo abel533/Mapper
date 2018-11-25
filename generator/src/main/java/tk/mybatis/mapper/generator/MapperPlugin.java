@@ -26,11 +26,7 @@ package tk.mybatis.mapper.generator;
 
 import org.mybatis.generator.api.IntrospectedColumn;
 import org.mybatis.generator.api.IntrospectedTable;
-import org.mybatis.generator.api.Plugin;
-import org.mybatis.generator.api.dom.java.FullyQualifiedJavaType;
-import org.mybatis.generator.api.dom.java.Interface;
-import org.mybatis.generator.api.dom.java.Method;
-import org.mybatis.generator.api.dom.java.TopLevelClass;
+import org.mybatis.generator.api.dom.java.*;
 import org.mybatis.generator.config.CommentGeneratorConfiguration;
 import org.mybatis.generator.config.Context;
 import org.mybatis.generator.internal.util.StringUtility;
@@ -45,20 +41,20 @@ import java.util.Set;
  * @author liuzh
  */
 public class MapperPlugin extends FalseMethodPlugin {
-    private Set<String> mappers                   = new HashSet<String>();
-    private boolean     caseSensitive             = false;
-    private boolean     useMapperCommentGenerator = true;
+    private Set<String> mappers = new HashSet<String>();
+    private boolean caseSensitive = false;
+    private boolean useMapperCommentGenerator = true;
     //开始的分隔符，例如mysql为`，sqlserver为[
-    private String      beginningDelimiter        = "";
+    private String beginningDelimiter = "";
     //结束的分隔符，例如mysql为`，sqlserver为]
-    private String      endingDelimiter           = "";
+    private String endingDelimiter = "";
     //数据库模式
-    private String                        schema;
+    private String schema;
     //注释生成器
     private CommentGeneratorConfiguration commentCfg;
     //强制生成注解
-    private boolean                       forceAnnotation;
-    
+    private boolean forceAnnotation;
+
     //是否需要生成Getter注解
     private boolean needsGetter = false;
     //是否需要生成Setter注解
@@ -67,6 +63,8 @@ public class MapperPlugin extends FalseMethodPlugin {
     private boolean needsToString = false;
     //是否需要生成Accessors(chain = true)注解
     private boolean needsAccessors = false;
+    //是否生成字段名常量
+    private boolean generateColumnConsts = false;
 
     public String getDelimiterName(String name) {
         StringBuilder nameBuilder = new StringBuilder();
@@ -137,8 +135,8 @@ public class MapperPlugin extends FalseMethodPlugin {
         //如果包含空格，或者需要分隔符，需要完善
         if (StringUtility.stringContainsSpace(tableName)) {
             tableName = context.getBeginningDelimiter()
-                    + tableName
-                    + context.getEndingDelimiter();
+                + tableName
+                + context.getEndingDelimiter();
         }
         //是否忽略大小写，对于区分大小写的数据库，会有用
         if (caseSensitive && !topLevelClass.getType().getShortName().equals(tableName)) {
@@ -146,14 +144,27 @@ public class MapperPlugin extends FalseMethodPlugin {
         } else if (!topLevelClass.getType().getShortName().equalsIgnoreCase(tableName)) {
             topLevelClass.addAnnotation("@Table(name = \"" + getDelimiterName(tableName) + "\")");
         } else if (StringUtility.stringHasValue(schema)
-                || StringUtility.stringHasValue(beginningDelimiter)
-                || StringUtility.stringHasValue(endingDelimiter)) {
+            || StringUtility.stringHasValue(beginningDelimiter)
+            || StringUtility.stringHasValue(endingDelimiter)) {
             topLevelClass.addAnnotation("@Table(name = \"" + getDelimiterName(tableName) + "\")");
         } else if (forceAnnotation) {
             topLevelClass.addAnnotation("@Table(name = \"" + getDelimiterName(tableName) + "\")");
         }
+        if (generateColumnConsts) {
+            for (IntrospectedColumn introspectedColumn : introspectedTable.getAllColumns()) {
+                Field field = new Field();
+                field.setVisibility(JavaVisibility.PUBLIC);
+                field.setStatic(true);
+                field.setFinal(true);
+                field.setName(introspectedColumn.getActualColumnName().toUpperCase()); //$NON-NLS-1$
+                field.setType(new FullyQualifiedJavaType(String.class.getName())); //$NON-NLS-1$
+                field.setInitializationString("\"" + introspectedColumn.getJavaProperty() + "\"");
+                context.getCommentGenerator().addClassComment(topLevelClass, introspectedTable);
+                topLevelClass.addField(field);
+            }
+        }
     }
-    
+
     /**
      * 如果需要生成Getter注解，就不需要生成get相关代码了
      */
@@ -161,7 +172,7 @@ public class MapperPlugin extends FalseMethodPlugin {
     public boolean modelGetterMethodGenerated(Method method,
                                               TopLevelClass topLevelClass, IntrospectedColumn introspectedColumn,
                                               IntrospectedTable introspectedTable,
-                                              Plugin.ModelClassType modelClassType) {
+                                              ModelClassType modelClassType) {
 
         return !this.needsGetter;
     }
@@ -173,7 +184,7 @@ public class MapperPlugin extends FalseMethodPlugin {
     public boolean modelSetterMethodGenerated(Method method,
                                               TopLevelClass topLevelClass, IntrospectedColumn introspectedColumn,
                                               IntrospectedTable introspectedTable,
-                                              Plugin.ModelClassType modelClassType) {
+                                              ModelClassType modelClassType) {
         return !this.needsSetter;
     }
 
@@ -234,7 +245,7 @@ public class MapperPlugin extends FalseMethodPlugin {
     @Override
     public void setProperties(Properties properties) {
         super.setProperties(properties);
-        String mappers = this.properties.getProperty("mappers");
+        String mappers = getProperty("mappers");
         if (StringUtility.stringHasValue(mappers)) {
             for (String mapper : mappers.split(",")) {
                 this.mappers.add(mapper);
@@ -242,50 +253,40 @@ public class MapperPlugin extends FalseMethodPlugin {
         } else {
             throw new RuntimeException("Mapper插件缺少必要的mappers属性!");
         }
-        String caseSensitive = this.properties.getProperty("caseSensitive");
-        if (StringUtility.stringHasValue(caseSensitive)) {
-            this.caseSensitive = "TRUE".equalsIgnoreCase(caseSensitive);
-        }
-        String forceAnnotation = this.properties.getProperty("forceAnnotation");
-        if (StringUtility.stringHasValue(forceAnnotation)) {
-            if (useMapperCommentGenerator) {
-                commentCfg.addProperty("forceAnnotation", forceAnnotation);
-            }
-            this.forceAnnotation = "TRUE".equalsIgnoreCase(forceAnnotation);
-        }
-        String beginningDelimiter = this.properties.getProperty("beginningDelimiter");
-        if (StringUtility.stringHasValue(beginningDelimiter)) {
-            this.beginningDelimiter = beginningDelimiter;
-        }
-        String endingDelimiter = this.properties.getProperty("endingDelimiter");
-        if (StringUtility.stringHasValue(endingDelimiter)) {
-            this.endingDelimiter = endingDelimiter;
-        }
-        String schema = this.properties.getProperty("schema");
-        if (StringUtility.stringHasValue(schema)) {
-            this.schema = schema;
-        }
-        
+        this.caseSensitive = Boolean.parseBoolean(this.properties.getProperty("caseSensitive"));
+        this.forceAnnotation = getPropertyAsBoolean("forceAnnotation");
+        this.beginningDelimiter = getProperty("beginningDelimiter", "");
+        this.endingDelimiter = getProperty("endingDelimiter", "");
+        this.schema = getProperty("schema");
         //lombok扩展
-        String lombok = this.properties.getProperty("lombok");
+        String lombok = getProperty("lombok");
         if (lombok != null && !"".equals(lombok)) {
-            if (lombok.contains("Getter")) {
-                this.needsGetter = true;
-            }
-            if (lombok.contains("Setter")) {
-                this.needsSetter = true;
-            }
-            if (lombok.contains("ToString")) {
-                this.needsToString = true;
-            }
-            if (lombok.contains("Accessors")) {
-                this.needsAccessors = true;
-            }
+            this.needsGetter = lombok.contains("Getter");
+            this.needsSetter = lombok.contains("Setter");
+            this.needsToString = lombok.contains("ToString");
+            this.needsAccessors = lombok.contains("Accessors");
         }
-        
         if (useMapperCommentGenerator) {
             commentCfg.addProperty("beginningDelimiter", this.beginningDelimiter);
             commentCfg.addProperty("endingDelimiter", this.endingDelimiter);
+            String forceAnnotation = getProperty("forceAnnotation");
+            if (StringUtility.stringHasValue(forceAnnotation)) {
+                commentCfg.addProperty("forceAnnotation", forceAnnotation);
+            }
         }
+        this.generateColumnConsts = getPropertyAsBoolean("generateColumnConsts");
     }
+
+    protected String getProperty(String key) {
+        return this.properties.getProperty(key);
+    }
+
+    protected String getProperty(String key, String defaultValue) {
+        return this.properties.getProperty(key, defaultValue);
+    }
+
+    protected Boolean getPropertyAsBoolean(String key) {
+        return Boolean.parseBoolean(getProperty(key));
+    }
+
 }
