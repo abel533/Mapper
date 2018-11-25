@@ -7,7 +7,7 @@ import tk.mybatis.mapper.annotation.RegisterMapper;
 import java.util.List;
 
 /**
- * @Description:  通用Mapper接口,更新,强制
+ * @Description:  通用Mapper接口, 非空字段强制更新
  * @author qrqhuangcy
  * @date 2018-06-26
  */

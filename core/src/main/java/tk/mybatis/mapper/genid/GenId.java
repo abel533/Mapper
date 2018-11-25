@@ -22,6 +22,9 @@ package tk.mybatis.mapper.genid;
  * @author liuzh
  */
 public interface GenId<T> {
+
+    T genId(String table, String column);
+
     class NULL implements GenId {
         @Override
         public Object genId(String table, String column) {
@@ -29,6 +32,5 @@ public interface GenId<T> {
         }
     }
 
-    T genId(String table, String column);
 
 }
