@@ -26,12 +26,10 @@ package tk.mybatis.mapper.provider;
 
 import org.apache.ibatis.mapping.MappedStatement;
 import org.apache.ibatis.mapping.SqlCommandType;
-import tk.mybatis.mapper.LogicDeleteException;
 import tk.mybatis.mapper.mapperhelper.MapperHelper;
 import tk.mybatis.mapper.mapperhelper.MapperTemplate;
 import tk.mybatis.mapper.mapperhelper.SqlHelper;
-
-import java.lang.reflect.Field;
+import tk.mybatis.mapper.util.MetaObjectUtil;
 
 /**
  * ExampleProvider实现类，基础方法实现类
@@ -84,15 +82,7 @@ public class ExampleProvider extends MapperTemplate {
             sql.append("<set>");
             sql.append(SqlHelper.logicDeleteColumnEqualsValue(entityClass, true));
             sql.append("</set>");
-
-            try {
-                Field sqlCommandTypeField = ms.getClass().getDeclaredField("sqlCommandType");
-
-                sqlCommandTypeField.setAccessible(true);
-                sqlCommandTypeField.set(ms, SqlCommandType.UPDATE);
-            } catch (Exception e) {
-                throw new LogicDeleteException("逻辑删除无法将SqlCommandType设置为update！", e);
-            }
+            MetaObjectUtil.forObject(ms).setValue("sqlCommandType", SqlCommandType.UPDATE);
         } else {
             sql.append(SqlHelper.deleteFromTable(entityClass, tableName(entityClass)));
         }
