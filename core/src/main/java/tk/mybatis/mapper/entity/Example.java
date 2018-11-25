@@ -295,7 +295,6 @@ public class Example implements IDynamicTableName {
         }
 
         public Map<String, EntityColumn> getPropertyMap() {
-
             return propertyMap;
         }
 

@@ -17,7 +17,6 @@ public class SqlHelperTest {
     public void beforeTest() {
         config = new Config();
         config.setStyle(Style.normal);
-
         EntityHelper.initEntityNameMap(User.class, config);
     }
 
@@ -37,7 +36,6 @@ public class SqlHelperTest {
 
         String updateSetColumns = SqlHelper.updateSetColumns(User.class, null, false, false);
         Assert.assertEquals("<set>id = id,username = #{username},is_valid = 1,</set>", updateSetColumns);
-
     }
 
 }
@@ -58,7 +56,6 @@ class User {
 
     @Override
     public String toString() {
-
         return "TbUser{" +
                 "id=" + id +
                 ", username='" + username + '\'' +
@@ -67,32 +64,26 @@ class User {
     }
 
     public Integer getId() {
-
         return id;
     }
 
     public void setId(Integer id) {
-
         this.id = id;
     }
 
     public String getUsername() {
-
         return username;
     }
 
     public void setUsername(String username) {
-
         this.username = username;
     }
 
     public Integer getIsValid() {
-
         return isValid;
     }
 
     public void setIsValid(Integer isValid) {
-
         this.isValid = isValid;
     }
 }
