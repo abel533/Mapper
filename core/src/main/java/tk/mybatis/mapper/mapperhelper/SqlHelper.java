@@ -663,7 +663,6 @@ public class SqlHelper {
      */
     public static String whereLogicDelete(Class<?> entityClass, boolean isDeleted) {
         String value = logicDeleteColumnEqualsValue(entityClass, isDeleted);
-
         return "".equals(value) ? "" : " AND " + value;
     }
 
@@ -685,12 +684,10 @@ public class SqlHelper {
         String result = "";
         for (EntityColumn column : columnSet) {
             hasLogicDelete = isLogicDeleteColumn(entityClass, column, hasLogicDelete);
-
             if (hasLogicDelete) {
                 result = logicDeleteColumnEqualsValue(column, isDeleted);
             }
         }
-
         return result;
     }
 
@@ -711,7 +708,6 @@ public class SqlHelper {
         if (column.getEntityField().isAnnotationPresent(LogicDelete.class)) {
             result = column.getColumn() + " = " + getLogicDeletedValue(column, isDeleted);
         }
-
         return result;
     }
 
@@ -725,13 +721,10 @@ public class SqlHelper {
         if (!column.getEntityField().isAnnotationPresent(LogicDelete.class)) {
             throw new LogicDeleteException(column.getColumn() + " 没有 @LogicDelete 注解!");
         }
-
         LogicDelete logicDelete = column.getEntityField().getAnnotation(LogicDelete.class);
-
         if (isDeleted) {
             return logicDelete.isDeletedValue();
         }
-
         return logicDelete.notDeletedValue();
     }
 
@@ -753,15 +746,12 @@ public class SqlHelper {
         EntityColumn logicDeleteColumn = null;
         Set<EntityColumn> columnSet = EntityHelper.getColumns(entityClass);
         boolean hasLogicDelete = false;
-
         for (EntityColumn column: columnSet) {
             hasLogicDelete = isLogicDeleteColumn(entityClass, column, hasLogicDelete);
-
             if (hasLogicDelete) {
                 logicDeleteColumn = column;
             }
         }
-
         return logicDeleteColumn;
     }
 
@@ -779,7 +769,6 @@ public class SqlHelper {
             }
             hasLogicDelete = true;
         }
-
         return hasLogicDelete;
     }
 
@@ -910,7 +899,7 @@ public class SqlHelper {
     public static String exampleWhereClause() {
         return "<if test=\"_parameter != null\">" +
                 "<where>\n" +
-                " ${@tk.mybatis.mapper.util.OGNL@andNotLogicDelete(oredCriteria)}" +
+                " ${@tk.mybatis.mapper.util.OGNL@andNotLogicDelete(_parameter)}" +
                 " <trim prefix=\"(\" prefixOverrides=\"and |or \" suffix=\")\">\n" +
                 "  <foreach collection=\"oredCriteria\" item=\"criteria\">\n" +
                 "    <if test=\"criteria.valid\">\n" +
@@ -950,7 +939,7 @@ public class SqlHelper {
      */
     public static String updateByExampleWhereClause() {
         return "<where>\n" +
-                " ${@tk.mybatis.mapper.util.OGNL@andNotLogicDelete(example.oredCriteria)}" +
+                " ${@tk.mybatis.mapper.util.OGNL@andNotLogicDelete(example)}" +
                 " <trim prefix=\"(\" prefixOverrides=\"and |or \" suffix=\")\">\n" +
                 "  <foreach collection=\"example.oredCriteria\" item=\"criteria\">\n" +
                 "    <if test=\"criteria.valid\">\n" +

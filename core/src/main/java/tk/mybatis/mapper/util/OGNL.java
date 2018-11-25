@@ -229,39 +229,30 @@ public abstract class OGNL {
 
     /**
      * 拼接逻辑删除字段的未删除查询条件
-     * @param criteriaList
+     *
+     * @param parameter
      * @return
      */
     public static String andNotLogicDelete(Object parameter) {
-
-        if (parameter instanceof List) {
+        if (parameter instanceof Example) {
             try {
-                // 自定义的example暂时没想到合适的处理方法
-                List<Example.Criteria> criteriaList = (List<Example.Criteria>) parameter;
-
+                List<Example.Criteria> criteriaList = ((Example)parameter).getOredCriteria();
                 if (criteriaList != null && criteriaList.size() != 0) {
                     // 随便拿一个得到propertyMap，判断是否有逻辑删除注解的字段
                     Example.Criteria tempCriteria = criteriaList.get(0);
-
                     Map<String, EntityColumn> propertyMap = tempCriteria.getPropertyMap();
-
                     for (Map.Entry<String, EntityColumn> entry: propertyMap.entrySet()) {
                         EntityColumn column = entry.getValue();
-
                         if (column.getEntityField().isAnnotationPresent(LogicDelete.class)) {
-
                             // 未逻辑删除的条件
                             return column.getColumn() + " = " + SqlHelper.getLogicDeletedValue(column, false) + " and ";
                         }
                     }
-
                 }
             } catch (ClassCastException e) {
                 return "";
             }
-
         }
-
         return "";
     }
 
