@@ -77,7 +77,7 @@ public class ExampleProvider extends MapperTemplate {
         if (getConfig().isSafeDelete()) {
             sql.append(SqlHelper.exampleHasAtLeastOneCriteriaCheck("_parameter"));
         }
-        if (SqlHelper.hasLogicDeleteAndCheckRepeated(entityClass)) {
+        if (SqlHelper.hasLogicDeleteColumn(entityClass)) {
             sql.append(SqlHelper.updateTable(entityClass, tableName(entityClass)));
             sql.append("<set>");
             sql.append(SqlHelper.logicDeleteColumnEqualsValue(entityClass, true));

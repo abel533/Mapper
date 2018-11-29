@@ -562,7 +562,7 @@ public class SqlHelper {
      */
     public static String wherePKColumns(Class<?> entityClass,String entityName, boolean useVersion) {
         StringBuilder sql = new StringBuilder();
-        boolean hasLogicDelete = hasLogicDeleteAndCheckRepeated(entityClass);
+        boolean hasLogicDelete = hasLogicDeleteColumn(entityClass);
 
         sql.append("<where>");
         //获取全部列
@@ -609,12 +609,13 @@ public class SqlHelper {
         sql.append("<where>");
         //获取全部列
         Set<EntityColumn> columnSet = EntityHelper.getColumns(entityClass);
+        EntityColumn logicDeleteColumn = SqlHelper.getLogicDeleteColumn(entityClass);
         //当某个列有主键策略时，不需要考虑他的属性是否为空，因为如果为空，一定会根据主键策略给他生成一个值
         for (EntityColumn column : columnSet) {
-            hasLogicDelete = isLogicDeleteColumn(entityClass, column, hasLogicDelete);
             if (!useVersion || !column.getEntityField().isAnnotationPresent(Version.class)) {
                 // 逻辑删除，后面拼接逻辑删除字段的未删除条件
-                if (hasLogicDelete) {
+                if (logicDeleteColumn != null && logicDeleteColumn == column) {
+                    hasLogicDelete = true;
                     continue;
                 }
                 sql.append(getIfNotNull(column, " AND " + column.getColumnEqualsHolder(), empty));
@@ -679,16 +680,13 @@ public class SqlHelper {
      * @param isDeleted true 已经逻辑删除  false 未逻辑删除
      */
     public static String logicDeleteColumnEqualsValue(Class<?> entityClass, boolean isDeleted) {
-        Set<EntityColumn> columnSet = EntityHelper.getColumns(entityClass);
-        boolean hasLogicDelete = false;
-        String result = "";
-        for (EntityColumn column : columnSet) {
-            hasLogicDelete = isLogicDeleteColumn(entityClass, column, hasLogicDelete);
-            if (hasLogicDelete) {
-                result = logicDeleteColumnEqualsValue(column, isDeleted);
-            }
+        EntityColumn logicDeleteColumn = SqlHelper.getLogicDeleteColumn(entityClass);
+
+        if (logicDeleteColumn != null) {
+            return logicDeleteColumnEqualsValue(logicDeleteColumn, isDeleted);
         }
-        return result;
+
+        return "";
     }
 
     /**
@@ -729,11 +727,11 @@ public class SqlHelper {
     }
 
     /**
-     * 是否有逻辑删除的注解，并且检查重复注解
+     * 是否有逻辑删除的注解
      * @param entityClass
      * @return
      */
-    public static boolean hasLogicDeleteAndCheckRepeated(Class<?> entityClass) {
+    public static boolean hasLogicDeleteColumn(Class<?> entityClass) {
         return getLogicDeleteColumn(entityClass) != null;
     }
 
@@ -747,29 +745,15 @@ public class SqlHelper {
         Set<EntityColumn> columnSet = EntityHelper.getColumns(entityClass);
         boolean hasLogicDelete = false;
         for (EntityColumn column: columnSet) {
-            hasLogicDelete = isLogicDeleteColumn(entityClass, column, hasLogicDelete);
-            if (hasLogicDelete) {
+            if (column.getEntityField().isAnnotationPresent(LogicDelete.class)) {
+                if (hasLogicDelete) {
+                    throw new LogicDeleteException(entityClass.getCanonicalName() + " 中包含多个带有 @LogicDelete 注解的字段，一个类中只能存在一个带有 @LogicDelete 注解的字段!");
+                }
+                hasLogicDelete = true;
                 logicDeleteColumn = column;
             }
         }
         return logicDeleteColumn;
-    }
-
-    /**
-     * column是否为逻辑删除注解的列
-     * @param entityClass
-     * @param column
-     * @param hasLogicDelete 当前是否已经有逻辑删除的列，主要用来在循环column中判断重复抛异常，直接调用传false即可
-     * @return
-     */
-    public static boolean isLogicDeleteColumn(Class<?> entityClass, EntityColumn column, boolean hasLogicDelete) {
-        if (column.getEntityField().isAnnotationPresent(LogicDelete.class)) {
-            if (hasLogicDelete) {
-                throw new LogicDeleteException(entityClass.getCanonicalName() + " 中包含多个带有 @LogicDelete 注解的字段，一个类中只能存在一个带有 @LogicDelete 注解的字段!");
-            }
-            hasLogicDelete = true;
-        }
-        return hasLogicDelete;
     }
 
     /**
