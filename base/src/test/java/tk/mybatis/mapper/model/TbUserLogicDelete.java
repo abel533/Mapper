@@ -1,25 +1,16 @@
 package tk.mybatis.mapper.model;
 
-import tk.mybatis.mapper.annotation.LogicDelete;
-
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Table;
 
 @Table(name = "tb_user")
-public class TbUserLogicDelete {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+public class TbUserLogicDelete extends BaseLogicDelete {
 
     @Column(name = "username")
     private String username;
 
     @Column(name = "password")
     private String password;
-
-    @LogicDelete(isDeletedValue = 0, notDeletedValue = 1)
-    @Column(name = "is_valid")
-    private Integer isValid;
 
     @Override
     public String toString() {
@@ -29,14 +20,6 @@ public class TbUserLogicDelete {
                 ", password='" + password + '\'' +
                 ", isValid=" + isValid +
                 '}';
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
     }
 
     public String getUsername() {
@@ -55,11 +38,4 @@ public class TbUserLogicDelete {
         this.password = password;
     }
 
-    public Integer getIsValid() {
-        return isValid;
-    }
-
-    public void setIsValid(Integer isValid) {
-        this.isValid = isValid;
-    }
 }

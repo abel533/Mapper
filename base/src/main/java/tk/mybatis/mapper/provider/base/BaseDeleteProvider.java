@@ -57,7 +57,7 @@ public class BaseDeleteProvider extends MapperTemplate {
             sql.append(SqlHelper.notAllNullParameterCheck("_parameter", EntityHelper.getColumns(entityClass)));
         }
         // 如果是逻辑删除，则修改为更新表，修改逻辑删除字段的值
-        if (SqlHelper.hasLogicDeleteAndCheckRepeated(entityClass)) {
+        if (SqlHelper.hasLogicDeleteColumn(entityClass)) {
             sql.append(SqlHelper.updateTable(entityClass, tableName(entityClass)));
             sql.append("<set>");
             sql.append(SqlHelper.logicDeleteColumnEqualsValue(entityClass, true));
@@ -78,7 +78,7 @@ public class BaseDeleteProvider extends MapperTemplate {
     public String deleteByPrimaryKey(MappedStatement ms) {
         final Class<?> entityClass = getEntityClass(ms);
         StringBuilder sql = new StringBuilder();
-        if (SqlHelper.hasLogicDeleteAndCheckRepeated(entityClass)) {
+        if (SqlHelper.hasLogicDeleteColumn(entityClass)) {
             sql.append(SqlHelper.updateTable(entityClass, tableName(entityClass)));
             sql.append("<set>");
             sql.append(SqlHelper.logicDeleteColumnEqualsValue(entityClass, true));
