@@ -1,4 +1,4 @@
-package tk.mybatis.mapper.additional.dialact.oracle;
+package tk.mybatis.mapper.additional.dialect.oracle;
 
 /**
  * @description: Oracle独有方法
