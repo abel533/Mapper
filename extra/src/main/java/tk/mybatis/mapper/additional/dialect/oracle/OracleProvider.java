@@ -1,4 +1,4 @@
-package tk.mybatis.mapper.additional.dialact.oracle;
+package tk.mybatis.mapper.additional.dialect.oracle;
 
 import org.apache.ibatis.mapping.MappedStatement;
 import tk.mybatis.mapper.entity.EntityColumn;

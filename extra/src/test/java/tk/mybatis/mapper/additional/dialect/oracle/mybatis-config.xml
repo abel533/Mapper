@@ -30,6 +30,7 @@
 <configuration>
     <settings>
         <setting name="logImpl" value="LOG4J"/>
+        <setting name="jdbcTypeForNull" value="NULL" />
     </settings>
 
     <environments default="development">
