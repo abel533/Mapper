@@ -221,6 +221,10 @@ public class Example implements IDynamicTableName {
         distinct = false;
     }
 
+    public Map<String, EntityColumn> getPropertyMap() {
+        return propertyMap;
+    }
+
     public static class OrderBy {
         //属性和列对应
         protected Map<String, EntityColumn> propertyMap;
@@ -292,10 +296,6 @@ public class Example implements IDynamicTableName {
             this.notNull = notNull;
             criteria = new ArrayList<Criterion>();
             this.propertyMap = propertyMap;
-        }
-
-        public Map<String, EntityColumn> getPropertyMap() {
-            return propertyMap;
         }
 
         private String column(String property) {
