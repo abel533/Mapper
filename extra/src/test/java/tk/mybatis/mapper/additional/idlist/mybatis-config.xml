@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8" ?>
 <!--
   ~ The MIT License (MIT)
   ~
@@ -22,32 +23,29 @@
   ~ THE SOFTWARE.
   -->
 
-<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-    <parent>
-        <groupId>tk.mybatis</groupId>
-        <artifactId>mapper-modules</artifactId>
-        <version>1.1.0</version>
-    </parent>
-    <artifactId>mapper-core</artifactId>
-    <packaging>jar</packaging>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
 
-    <name>mapper-core</name>
-    <description>Mybatis 通用 Mapper</description>
-    <url>http://www.mybatis.tk</url>
+<configuration>
+    <settings>
+        <setting name="logImpl" value="LOG4J"/>
+    </settings>
 
-    <dependencies>
-        <!--必须依赖-->
-        <dependency>
-            <groupId>javax.persistence</groupId>
-            <artifactId>persistence-api</artifactId>
-        </dependency>
+    <environments default="development">
+        <environment id="development">
+            <transactionManager type="JDBC">
+            </transactionManager>
+            <dataSource type="UNPOOLED">
+                <property name="driver" value="org.hsqldb.jdbcDriver" />
+                <property name="url" value="jdbc:hsqldb:mem:basetest" />
+                <property name="username" value="sa" />
+            </dataSource>
+        </environment>
+    </environments>
 
-        <!--可选依赖-->
-        <dependency>
-            <groupId>org.mybatis</groupId>
-            <artifactId>mybatis</artifactId>
-        </dependency>
-    </dependencies>
-</project>
+    <mappers>
+        <mapper class="tk.mybatis.mapper.additional.idlist.CountryMapper"/>
+    </mappers>
+
+</configuration>

@@ -90,17 +90,14 @@ public class UpdateByPrimaryKeySelectiveForceProvider extends MapperTemplate {
                     String versionClass = version.nextVersion().getCanonicalName();
                     //version = ${@tk.mybatis.mapper.version@nextVersionClass("versionClass", version)}
                     sql.append(column.getColumn())
-                            .append(" = ${@tk.mybatis.mapper.version.VersionUtil@nextVersion(")
-                            .append("@").append(versionClass).append("@class, ")
-                            .append(column.getProperty()).append(")},");
+                        .append(" = ${@tk.mybatis.mapper.version.VersionUtil@nextVersion(")
+                        .append("@").append(versionClass).append("@class, ")
+                        .append(column.getProperty()).append(")},");
                 } else if (notNull) {
                     sql.append(this.getIfNotNull(entityName, column, column.getColumnEqualsHolder(entityName) + ",", notEmpty));
                 } else {
                     sql.append(column.getColumnEqualsHolder(entityName) + ",");
                 }
-            } else if(column.isId() && column.isUpdatable()){
-                //set id = id,
-                sql.append(column.getColumn()).append(" = ").append(column.getColumn()).append(",");
             }
         }
         sql.append("</set>");
