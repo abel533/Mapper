@@ -24,6 +24,7 @@
 
 package tk.mybatis.mapper.test.country;
 
+import org.apache.ibatis.exceptions.PersistenceException;
 import org.apache.ibatis.session.SqlSession;
 import org.junit.Assert;
 import org.junit.Test;
@@ -38,7 +39,7 @@ import tk.mybatis.mapper.model.Country;
  */
 public class TestUpdateByPrimaryKeySelective {
 
-    @Test
+    @Test(expected = PersistenceException.class)
     public void testDynamicUpdateByPrimaryKeySelectiveAll() {
         SqlSession sqlSession = MybatisHelper.getSqlSession();
         try {
@@ -49,7 +50,7 @@ public class TestUpdateByPrimaryKeySelective {
         }
     }
 
-    @Test
+    @Test(expected = PersistenceException.class)
     public void testDynamicUpdateByPrimaryKeySelectiveAllByNull() {
         SqlSession sqlSession = MybatisHelper.getSqlSession();
         try {

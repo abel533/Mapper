@@ -37,8 +37,10 @@
             <property name="mappers" value="tk.mybatis.mapper.common.Mapper"/>
             <property name="caseSensitive" value="true"/>
             <property name="forceAnnotation" value="true"/>
+            <property name="generateColumnConsts" value="true"/>
             <property name="beginningDelimiter" value="`"/>
             <property name="endingDelimiter" value="`"/>
+            <property name="lombok" value="Getter,Setter,ToString,Accessors"/>
         </plugin>
 
         <!--通用代码生成器插件-->
