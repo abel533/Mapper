@@ -234,26 +234,26 @@ public abstract class OGNL {
      * @return
      */
     public static String andNotLogicDelete(Object parameter) {
+        String result = "";
         if (parameter instanceof Example) {
-            try {
-                List<Example.Criteria> criteriaList = ((Example)parameter).getOredCriteria();
-                if (criteriaList != null && criteriaList.size() != 0) {
-                    // 随便拿一个得到propertyMap，判断是否有逻辑删除注解的字段
-                    Example.Criteria tempCriteria = criteriaList.get(0);
-                    Map<String, EntityColumn> propertyMap = tempCriteria.getPropertyMap();
-                    for (Map.Entry<String, EntityColumn> entry: propertyMap.entrySet()) {
-                        EntityColumn column = entry.getValue();
-                        if (column.getEntityField().isAnnotationPresent(LogicDelete.class)) {
-                            // 未逻辑删除的条件
-                            return column.getColumn() + " = " + SqlHelper.getLogicDeletedValue(column, false) + " and ";
-                        }
+            Example example = (Example) parameter;
+            Map<String, EntityColumn> propertyMap = example.getPropertyMap();
+
+            for (Map.Entry<String, EntityColumn> entry: propertyMap.entrySet()) {
+                EntityColumn column = entry.getValue();
+                if (column.getEntityField().isAnnotationPresent(LogicDelete.class)) {
+                    // 未逻辑删除的条件
+                    result = column.getColumn() + " = " + SqlHelper.getLogicDeletedValue(column, false);
+
+                    // 如果Example中有条件，则拼接" and "，
+                    // 如果是空的oredCriteria，则where中只有逻辑删除注解的未删除条件
+                    if (example.getOredCriteria() != null && example.getOredCriteria().size() != 0) {
+                        result += " and ";
                     }
                 }
-            } catch (ClassCastException e) {
-                return "";
             }
         }
-        return "";
+        return result;
     }
 
 }

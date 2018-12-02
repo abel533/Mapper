@@ -388,5 +388,27 @@ public class TestLogicDelete {
         }
     }
 
+    @Test
+    // Example中没有条件的非正常情况，where条件应只有逻辑删除注解的未删除条件
+    public void testExampleWithNoCriteria() {
+        SqlSession sqlSession = MybatisHelper.getSqlSession();
+        try {
+            TbUserLogicDeleteMapper logicDeleteMapper = sqlSession.getMapper(TbUserLogicDeleteMapper.class);
 
+            Example example = new Example(TbUserLogicDelete.class);
+
+            TbUserLogicDelete tbUserLogicDelete = new TbUserLogicDelete();
+            tbUserLogicDelete.setUsername("123");
+
+            Assert.assertEquals(5, logicDeleteMapper.updateByExample(tbUserLogicDelete, example));
+
+            Assert.assertEquals(5, logicDeleteMapper.updateByExampleSelective(tbUserLogicDelete, example));
+
+            List<TbUserLogicDelete> list = logicDeleteMapper.selectByExample(example);
+            Assert.assertEquals(5, list.size());
+        } finally {
+            sqlSession.rollback();
+            sqlSession.close();
+        }
+    }
 }
