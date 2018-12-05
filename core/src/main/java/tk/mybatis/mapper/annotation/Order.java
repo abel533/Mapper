@@ -10,7 +10,7 @@ import java.lang.annotation.Target;
  * @author: qrqhuangcy
  * @date: 2018-11-11
  **/
-@Target(ElementType.FIELD)
+@Target({ElementType.FIELD, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Order {
     /**

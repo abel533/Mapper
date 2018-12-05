@@ -39,7 +39,7 @@ import java.lang.annotation.Target;
  * @author liuzh
  * @since 2015-10-29 22:00
  */
-@Target({ElementType.FIELD})
+@Target({ElementType.FIELD, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ColumnType {
     String column() default "";
