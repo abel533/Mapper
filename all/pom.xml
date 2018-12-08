@@ -31,7 +31,7 @@
         <version>3</version>
     </parent>
     <artifactId>mapper-all</artifactId>
-    <version>4.1.0</version>
+    <version>4.1.1</version>
     <packaging>pom</packaging>
 
     <name>mapper-all</name>
@@ -43,8 +43,8 @@
     </modules>
 
     <properties>
-        <mapper-module.version>1.1.0</mapper-module.version>
-        <mapper-weekend.version>1.1.4.2</mapper-weekend.version>
+        <mapper-module.version>1.1.1</mapper-module.version>
+        <mapper-weekend.version>1.1.4.3</mapper-weekend.version>
     </properties>
 
 	<dependencyManagement>
