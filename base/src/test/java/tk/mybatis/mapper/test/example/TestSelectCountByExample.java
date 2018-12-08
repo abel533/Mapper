@@ -44,6 +44,7 @@ public class TestSelectCountByExample {
         try {
             CountryMapper mapper = sqlSession.getMapper(CountryMapper.class);
             Example example = new Example(Country.class);
+            example.setCountProperty("id");
             example.createCriteria().andGreaterThan("id", 100);
             int count = mapper.selectCountByExample(example);
             //查询总数
