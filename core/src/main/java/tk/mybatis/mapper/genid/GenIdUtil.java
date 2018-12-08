@@ -68,10 +68,11 @@ public class GenIdUtil {
                     LOCK.unlock();
                 }
             }
-            Object id = genId.genId(table, column);
-            //赋值
             MetaObject metaObject = MetaObjectUtil.forObject(target);
-            metaObject.setValue(property, id);
+            if (metaObject.getValue(property) == null) {
+                Object id = genId.genId(table, column);
+                metaObject.setValue(property, id);
+            }
         } catch (Exception e) {
             throw new MapperException("生成 ID 失败!", e);
         }

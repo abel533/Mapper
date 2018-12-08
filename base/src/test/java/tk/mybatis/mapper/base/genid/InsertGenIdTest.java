@@ -87,6 +87,22 @@ public class InsertGenIdTest extends BaseTest {
         }
     }
 
+    @Test
+    public void testGenIdWithExistsId(){
+        SqlSession sqlSession = getSqlSession();
+        try {
+            CountryMapper mapper = sqlSession.getMapper(CountryMapper.class);
+            Country country = new Country("test", "T");
+            country.setId(9999L);
+            Assert.assertEquals(1, mapper.insert(country));
+            Assert.assertNotNull(country.getId());
+            Assert.assertEquals(new Long(9999), country.getId());
+            System.out.println(country.getId());
+        } finally {
+            sqlSession.close();
+        }
+    }
+
 
     @Test
     public void testUUID(){
