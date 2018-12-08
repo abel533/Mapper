@@ -495,6 +495,9 @@ public class Example implements IDynamicTableName {
          * @Date 2015年7月17日 下午12:48:08
          */
         public Criteria andEqualTo(Object param) {
+            if(param == null){
+                return (Criteria) this;
+            }
             MetaObject metaObject = MetaObjectUtil.forObject(param);
             String[] properties = metaObject.getGetterNames();
             for (String property : properties) {
