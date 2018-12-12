@@ -52,7 +52,7 @@ public class InsertListProvider extends MapperTemplate {
         //开始拼sql
         StringBuilder sql = new StringBuilder();
         sql.append("<bind name=\"listNotEmptyCheck\" value=\"@tk.mybatis.mapper.util.OGNL@notEmptyCollectionCheck(list, '" + ms.getId() + " 方法参数为空')\"/>");
-        sql.append(SqlHelper.insertIntoTable(entityClass, tableName(entityClass)));
+        sql.append(SqlHelper.insertIntoTable(entityClass, tableName(entityClass), "list[0]"));
         sql.append(SqlHelper.insertColumns(entityClass, false, false, false));
         sql.append(" VALUES ");
         sql.append("<foreach collection=\"list\" item=\"record\" separator=\",\" >");

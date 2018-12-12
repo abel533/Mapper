@@ -375,6 +375,22 @@ public class SqlHelper {
     }
 
     /**
+     * insert into tableName - 动态表名
+     *
+     * @param entityClass
+     * @param defaultTableName
+     * @param parameterName 动态表名的参数名
+     * @return
+     */
+    public static String insertIntoTable(Class<?> entityClass, String defaultTableName, String parameterName) {
+        StringBuilder sql = new StringBuilder();
+        sql.append("INSERT INTO ");
+        sql.append(getDynamicTableName(entityClass, defaultTableName, parameterName));
+        sql.append(" ");
+        return sql.toString();
+    }
+
+    /**
      * insert table()列
      *
      * @param entityClass
@@ -476,9 +492,9 @@ public class SqlHelper {
                     String versionClass = version.nextVersion().getCanonicalName();
                     //version = ${@tk.mybatis.mapper.version@nextVersionClass("versionClass", version)}
                     sql.append(column.getColumn())
-                        .append(" = ${@tk.mybatis.mapper.version.VersionUtil@nextVersion(")
-                        .append("@").append(versionClass).append("@class, ")
-                        .append(column.getProperty()).append(")},");
+                            .append(" = ${@tk.mybatis.mapper.version.VersionUtil@nextVersion(")
+                            .append("@").append(versionClass).append("@class, ")
+                            .append(column.getProperty()).append(")},");
                 } else if (column == logicDeleteColumn) {
                     sql.append(logicDeleteColumnEqualsValue(column, false)).append(",");
                 } else if (notNull) {
@@ -883,38 +899,38 @@ public class SqlHelper {
      */
     public static String exampleWhereClause() {
         return "<if test=\"_parameter != null\">" +
-            "<where>\n" +
-            " ${@tk.mybatis.mapper.util.OGNL@andNotLogicDelete(_parameter)}" +
-            " <trim prefix=\"(\" prefixOverrides=\"and |or \" suffix=\")\">\n" +
-            "  <foreach collection=\"oredCriteria\" item=\"criteria\">\n" +
-            "    <if test=\"criteria.valid\">\n" +
-            "      ${@tk.mybatis.mapper.util.OGNL@andOr(criteria)}" +
-            "      <trim prefix=\"(\" prefixOverrides=\"and |or \" suffix=\")\">\n" +
-            "        <foreach collection=\"criteria.criteria\" item=\"criterion\">\n" +
-            "          <choose>\n" +
-            "            <when test=\"criterion.noValue\">\n" +
-            "              ${@tk.mybatis.mapper.util.OGNL@andOr(criterion)} ${criterion.condition}\n" +
-            "            </when>\n" +
-            "            <when test=\"criterion.singleValue\">\n" +
-            "              ${@tk.mybatis.mapper.util.OGNL@andOr(criterion)} ${criterion.condition} #{criterion.value}\n" +
-            "            </when>\n" +
-            "            <when test=\"criterion.betweenValue\">\n" +
-            "              ${@tk.mybatis.mapper.util.OGNL@andOr(criterion)} ${criterion.condition} #{criterion.value} and #{criterion.secondValue}\n" +
-            "            </when>\n" +
-            "            <when test=\"criterion.listValue\">\n" +
-            "              ${@tk.mybatis.mapper.util.OGNL@andOr(criterion)} ${criterion.condition}\n" +
-            "              <foreach close=\")\" collection=\"criterion.value\" item=\"listItem\" open=\"(\" separator=\",\">\n" +
-            "                #{listItem}\n" +
-            "              </foreach>\n" +
-            "            </when>\n" +
-            "          </choose>\n" +
-            "        </foreach>\n" +
-            "      </trim>\n" +
-            "    </if>\n" +
-            "  </foreach>\n" +
-            " </trim>\n" +
-            "</where>" +
-            "</if>";
+                "<where>\n" +
+                " ${@tk.mybatis.mapper.util.OGNL@andNotLogicDelete(_parameter)}" +
+                " <trim prefix=\"(\" prefixOverrides=\"and |or \" suffix=\")\">\n" +
+                "  <foreach collection=\"oredCriteria\" item=\"criteria\">\n" +
+                "    <if test=\"criteria.valid\">\n" +
+                "      ${@tk.mybatis.mapper.util.OGNL@andOr(criteria)}" +
+                "      <trim prefix=\"(\" prefixOverrides=\"and |or \" suffix=\")\">\n" +
+                "        <foreach collection=\"criteria.criteria\" item=\"criterion\">\n" +
+                "          <choose>\n" +
+                "            <when test=\"criterion.noValue\">\n" +
+                "              ${@tk.mybatis.mapper.util.OGNL@andOr(criterion)} ${criterion.condition}\n" +
+                "            </when>\n" +
+                "            <when test=\"criterion.singleValue\">\n" +
+                "              ${@tk.mybatis.mapper.util.OGNL@andOr(criterion)} ${criterion.condition} #{criterion.value}\n" +
+                "            </when>\n" +
+                "            <when test=\"criterion.betweenValue\">\n" +
+                "              ${@tk.mybatis.mapper.util.OGNL@andOr(criterion)} ${criterion.condition} #{criterion.value} and #{criterion.secondValue}\n" +
+                "            </when>\n" +
+                "            <when test=\"criterion.listValue\">\n" +
+                "              ${@tk.mybatis.mapper.util.OGNL@andOr(criterion)} ${criterion.condition}\n" +
+                "              <foreach close=\")\" collection=\"criterion.value\" item=\"listItem\" open=\"(\" separator=\",\">\n" +
+                "                #{listItem}\n" +
+                "              </foreach>\n" +
+                "            </when>\n" +
+                "          </choose>\n" +
+                "        </foreach>\n" +
+                "      </trim>\n" +
+                "    </if>\n" +
+                "  </foreach>\n" +
+                " </trim>\n" +
+                "</where>" +
+                "</if>";
     }
 
     /**
@@ -924,36 +940,36 @@ public class SqlHelper {
      */
     public static String updateByExampleWhereClause() {
         return "<where>\n" +
-            " ${@tk.mybatis.mapper.util.OGNL@andNotLogicDelete(example)}" +
-            " <trim prefix=\"(\" prefixOverrides=\"and |or \" suffix=\")\">\n" +
-            "  <foreach collection=\"example.oredCriteria\" item=\"criteria\">\n" +
-            "    <if test=\"criteria.valid\">\n" +
-            "      ${@tk.mybatis.mapper.util.OGNL@andOr(criteria)}" +
-            "      <trim prefix=\"(\" prefixOverrides=\"and |or \" suffix=\")\">\n" +
-            "        <foreach collection=\"criteria.criteria\" item=\"criterion\">\n" +
-            "          <choose>\n" +
-            "            <when test=\"criterion.noValue\">\n" +
-            "              ${@tk.mybatis.mapper.util.OGNL@andOr(criterion)} ${criterion.condition}\n" +
-            "            </when>\n" +
-            "            <when test=\"criterion.singleValue\">\n" +
-            "              ${@tk.mybatis.mapper.util.OGNL@andOr(criterion)} ${criterion.condition} #{criterion.value}\n" +
-            "            </when>\n" +
-            "            <when test=\"criterion.betweenValue\">\n" +
-            "              ${@tk.mybatis.mapper.util.OGNL@andOr(criterion)} ${criterion.condition} #{criterion.value} and #{criterion.secondValue}\n" +
-            "            </when>\n" +
-            "            <when test=\"criterion.listValue\">\n" +
-            "              ${@tk.mybatis.mapper.util.OGNL@andOr(criterion)} ${criterion.condition}\n" +
-            "              <foreach close=\")\" collection=\"criterion.value\" item=\"listItem\" open=\"(\" separator=\",\">\n" +
-            "                #{listItem}\n" +
-            "              </foreach>\n" +
-            "            </when>\n" +
-            "          </choose>\n" +
-            "        </foreach>\n" +
-            "      </trim>\n" +
-            "    </if>\n" +
-            "  </foreach>\n" +
-            " </trim>\n" +
-            "</where>";
+                " ${@tk.mybatis.mapper.util.OGNL@andNotLogicDelete(example)}" +
+                " <trim prefix=\"(\" prefixOverrides=\"and |or \" suffix=\")\">\n" +
+                "  <foreach collection=\"example.oredCriteria\" item=\"criteria\">\n" +
+                "    <if test=\"criteria.valid\">\n" +
+                "      ${@tk.mybatis.mapper.util.OGNL@andOr(criteria)}" +
+                "      <trim prefix=\"(\" prefixOverrides=\"and |or \" suffix=\")\">\n" +
+                "        <foreach collection=\"criteria.criteria\" item=\"criterion\">\n" +
+                "          <choose>\n" +
+                "            <when test=\"criterion.noValue\">\n" +
+                "              ${@tk.mybatis.mapper.util.OGNL@andOr(criterion)} ${criterion.condition}\n" +
+                "            </when>\n" +
+                "            <when test=\"criterion.singleValue\">\n" +
+                "              ${@tk.mybatis.mapper.util.OGNL@andOr(criterion)} ${criterion.condition} #{criterion.value}\n" +
+                "            </when>\n" +
+                "            <when test=\"criterion.betweenValue\">\n" +
+                "              ${@tk.mybatis.mapper.util.OGNL@andOr(criterion)} ${criterion.condition} #{criterion.value} and #{criterion.secondValue}\n" +
+                "            </when>\n" +
+                "            <when test=\"criterion.listValue\">\n" +
+                "              ${@tk.mybatis.mapper.util.OGNL@andOr(criterion)} ${criterion.condition}\n" +
+                "              <foreach close=\")\" collection=\"criterion.value\" item=\"listItem\" open=\"(\" separator=\",\">\n" +
+                "                #{listItem}\n" +
+                "              </foreach>\n" +
+                "            </when>\n" +
+                "          </choose>\n" +
+                "        </foreach>\n" +
+                "      </trim>\n" +
+                "    </if>\n" +
+                "  </foreach>\n" +
+                " </trim>\n" +
+                "</where>";
     }
 
 }
