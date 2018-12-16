@@ -23,7 +23,6 @@ import org.apache.ibatis.session.ExecutorType;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.SqlSessionTemplate;
-import org.mybatis.spring.mapper.MapperFactoryBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
@@ -54,10 +53,14 @@ import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
+import tk.mybatis.spring.annotation.BaseProperties;
 import tk.mybatis.spring.mapper.ClassPathMapperScanner;
+import tk.mybatis.spring.mapper.MapperFactoryBean;
+import tk.mybatis.spring.mapper.SpringBootBindUtil;
 
 import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -194,15 +197,20 @@ public class MapperAutoConfiguration {
                 if (this.resourceLoader != null) {
                     scanner.setResourceLoader(this.resourceLoader);
                 }
-
                 List<String> packages = AutoConfigurationPackages.get(this.beanFactory);
                 if (logger.isDebugEnabled()) {
                     for (String pkg : packages) {
                         logger.debug("Using auto-configuration base package '{}'", pkg);
                     }
                 }
-
-                scanner.setAnnotationClass(Mapper.class);
+                BaseProperties properties = SpringBootBindUtil.bind(environment, BaseProperties.class, BaseProperties.MYBATIS_PREFIX);
+                String[] basePackages = properties.getBasePackages();
+                if(basePackages != null && basePackages.length > 0){
+                    packages.addAll(Arrays.asList(basePackages));
+                } else {
+                    //设置了包名的情况下，不需要指定该注解
+                    scanner.setAnnotationClass(Mapper.class);
+                }
                 scanner.registerFilters();
                 scanner.doScan(StringUtils.toStringArray(packages));
             } catch (IllegalStateException ex) {
