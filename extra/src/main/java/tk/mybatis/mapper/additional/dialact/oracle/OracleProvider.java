@@ -46,7 +46,7 @@ public class OracleProvider extends MapperTemplate {
         sql.append("INSERT ALL\n");
         sql.append("<foreach collection=\"list\" item=\"record\">\n");
 
-        String tableName = SqlHelper.getDynamicTableName(entityClass, tableName(entityClass));
+        String tableName = SqlHelper.getDynamicTableName(entityClass, tableName(entityClass),"list[0]");
         String columns = SqlHelper.insertColumns(entityClass, false, false, false);
         sql.append(" INTO ").append(tableName).append(" ").append(columns).append("\n");
         sql.append(" VALUES ");
