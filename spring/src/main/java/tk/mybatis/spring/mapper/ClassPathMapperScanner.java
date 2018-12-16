@@ -34,7 +34,6 @@ import org.springframework.core.type.filter.AssignableTypeFilter;
 import org.springframework.core.type.filter.TypeFilter;
 import org.springframework.util.StringUtils;
 import tk.mybatis.mapper.MapperException;
-import tk.mybatis.mapper.annotation.RegisterMapper;
 import tk.mybatis.mapper.entity.Config;
 import tk.mybatis.mapper.mapperhelper.MapperHelper;
 
@@ -125,7 +124,11 @@ public class ClassPathMapperScanner extends ClassPathBeanDefinitionScanner {
             @Override
             public boolean match(MetadataReader metadataReader, MetadataReaderFactory metadataReaderFactory) throws IOException {
                 String className = metadataReader.getClassMetadata().getClassName();
-                return className.endsWith("package-info");
+                if(className.endsWith("package-info")){
+                    return true;
+                }
+                return metadataReader.getAnnotationMetadata()
+                    .hasAnnotation("tk.mybatis.mapper.annotation.RegisterMapper");
             }
         });
     }
@@ -221,14 +224,6 @@ public class ClassPathMapperScanner extends ClassPathBeanDefinitionScanner {
     @Override
     protected boolean checkCandidate(String beanName, BeanDefinition beanDefinition) {
         if (super.checkCandidate(beanName, beanDefinition)) {
-            String beanClassName = beanDefinition.getBeanClassName();
-            if(beanClassName != null && !beanClassName.isEmpty()){
-                try {
-                    return Class.forName(beanClassName).getAnnotation(RegisterMapper.class) == null;
-                } catch (Throwable t){
-                    logger.warn("Check XXXMapper Annotation error <[" + beanClassName + "]>", t);
-                }
-            }
             return true;
         } else {
             logger.warn("Skipping MapperFactoryBean with name '" + beanName
