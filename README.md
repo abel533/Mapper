@@ -2,7 +2,6 @@
 
 [![Build Status](https://travis-ci.org/abel533/Mapper.svg?branch=master)](https://travis-ci.org/abel533/Mapper)
 [![Maven central](https://maven-badges.herokuapp.com/maven-central/tk.mybatis/mapper/badge.svg)](https://maven-badges.herokuapp.com/maven-central/tk.mybatis/mapper)
-[![Dependency Status](https://www.versioneye.com/user/projects/593212c722f278006540a1d1/badge.svg?style=flat)](https://www.versioneye.com/user/projects/593212c722f278006540a1d1)
 
 通用Mapper都可以极大的方便开发人员。可以随意的按照自己的需要选择通用方法，还可以很方便的开发自己的通用方法。
 
