@@ -24,12 +24,14 @@
 
 package tk.mybatis.sample.mapper;
 
+import tk.mybatis.mapper.annotation.RegisterMapper;
 import tk.mybatis.mapper.common.Mapper;
 
 /**
  * @author liuzh
  * @since 2017/1/2.
  */
+@RegisterMapper
 public interface BaseMapper<T> extends Mapper<T> {
 
 }
