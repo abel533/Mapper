@@ -32,11 +32,9 @@ import org.springframework.util.ClassUtils;
 import org.springframework.util.StringUtils;
 import tk.mybatis.spring.mapper.ClassPathMapperScanner;
 import tk.mybatis.spring.mapper.MapperFactoryBean;
-import tk.mybatis.spring.mapper.SpringBootBindUtil;
 
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class MapperScannerRegistrar implements ImportBeanDefinitionRegistrar, ResourceLoaderAware, EnvironmentAware {
@@ -93,11 +91,6 @@ public class MapperScannerRegistrar implements ImportBeanDefinitionRegistrar, Re
         for (Class<?> clazz : annoAttrs.getClassArray("basePackageClasses")) {
             basePackages.add(ClassUtils.getPackageName(clazz));
         }
-        //支持和 MapperAutoConfiguration#registerBeanDefinitions 中相同的参数 mybatis.basePackages
-        BaseProperties baseProperties = SpringBootBindUtil.bind(environment, BaseProperties.class, BaseProperties.MYBATIS_PREFIX);
-        if(baseProperties != null && baseProperties.getBasePackages() != null && baseProperties.getBasePackages().length > 0){
-            basePackages.addAll(Arrays.asList(baseProperties.getBasePackages()));
-        }
         //优先级 mapperHelperRef > properties > springboot
         String mapperHelperRef = annoAttrs.getString("mapperHelperRef");
         String[] properties = annoAttrs.getStringArray("properties");
@@ -110,8 +103,8 @@ public class MapperScannerRegistrar implements ImportBeanDefinitionRegistrar, Re
                 scanner.setMapperProperties(this.environment);
             } catch (Exception e) {
                 LOGGER.warn("只有 Spring Boot 环境中可以通过 Environment(配置文件,环境变量,运行参数等方式) 配置通用 Mapper，" +
-                        "其他环境请通过 @MapperScan 注解中的 mapperHelperRef 或 properties 参数进行配置!" +
-                        "如果你使用 tk.mybatis.mapper.session.Configuration 配置的通用 Mapper，你可以忽略该错误!", e);
+                    "其他环境请通过 @MapperScan 注解中的 mapperHelperRef 或 properties 参数进行配置!" +
+                    "如果你使用 tk.mybatis.mapper.session.Configuration 配置的通用 Mapper，你可以忽略该错误!", e);
             }
         }
         scanner.registerFilters();
