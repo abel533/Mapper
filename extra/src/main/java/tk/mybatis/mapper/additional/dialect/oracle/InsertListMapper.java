@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package tk.mybatis.mapper.additional.dialact.oracle;
+package tk.mybatis.mapper.additional.dialect.oracle;
 
 import org.apache.ibatis.annotations.InsertProvider;
 import tk.mybatis.mapper.annotation.KeySql;

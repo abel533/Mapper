@@ -25,6 +25,7 @@
 package tk.mybatis.mapper.additional.dialect.oracle;
 
 import org.apache.ibatis.session.SqlSession;
+import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 import tk.mybatis.mapper.additional.BaseTest;
@@ -76,7 +77,8 @@ public class OracleTest extends BaseTest {
             countryList.add(new DemoCountry("20", "Zimbabwe","ZW"));
             countryList.add(new DemoCountry("21", "Zaire","ZR"));
             countryList.add(new DemoCountry("22", "Zambia","ZM"));
-            mapper.insertList(countryList);
+            int updates = mapper.insertList(countryList);
+            Assert.assertEquals(3, updates);
         } finally {
             //sqlSession.commit();
             sqlSession.close();

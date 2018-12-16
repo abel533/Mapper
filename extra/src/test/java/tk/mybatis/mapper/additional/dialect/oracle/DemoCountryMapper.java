@@ -1,6 +1,5 @@
 package tk.mybatis.mapper.additional.dialect.oracle;
 
-import tk.mybatis.mapper.additional.dialact.oracle.OracleMapper;
 import tk.mybatis.mapper.common.base.BaseSelectMapper;
 
 /**
