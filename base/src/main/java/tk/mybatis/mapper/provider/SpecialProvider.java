@@ -30,6 +30,7 @@ import tk.mybatis.mapper.mapperhelper.EntityHelper;
 import tk.mybatis.mapper.mapperhelper.MapperHelper;
 import tk.mybatis.mapper.mapperhelper.MapperTemplate;
 import tk.mybatis.mapper.mapperhelper.SqlHelper;
+import tk.mybatis.mapper.util.StringUtil;
 
 import java.util.Set;
 
@@ -54,7 +55,7 @@ public class SpecialProvider extends MapperTemplate {
         //开始拼sql
         StringBuilder sql = new StringBuilder();
         sql.append("<bind name=\"listNotEmptyCheck\" value=\"@tk.mybatis.mapper.util.OGNL@notEmptyCollectionCheck(list, '" + ms.getId() + " 方法参数为空')\"/>");
-        sql.append(SqlHelper.insertIntoTable(entityClass, tableName(entityClass)));
+        sql.append(SqlHelper.insertIntoTable(entityClass, tableName(entityClass), "list[0]"));
         sql.append(SqlHelper.insertColumns(entityClass, true, false, false));
         sql.append(" VALUES ");
         sql.append("<foreach collection=\"list\" item=\"record\" separator=\",\" >");
