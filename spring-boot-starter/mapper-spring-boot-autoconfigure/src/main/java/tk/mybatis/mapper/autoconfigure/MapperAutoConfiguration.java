@@ -204,9 +204,8 @@ public class MapperAutoConfiguration {
                     }
                 }
                 BaseProperties properties = SpringBootBindUtil.bind(environment, BaseProperties.class, BaseProperties.MYBATIS_PREFIX);
-                String[] basePackages = properties.getBasePackages();
-                if(basePackages != null && basePackages.length > 0){
-                    packages.addAll(Arrays.asList(basePackages));
+                if(properties != null && properties.getBasePackages() != null && properties.getBasePackages().length > 0){
+                    packages.addAll(Arrays.asList(properties.getBasePackages()));
                 } else {
                     //设置了包名的情况下，不需要指定该注解
                     scanner.setAnnotationClass(Mapper.class);

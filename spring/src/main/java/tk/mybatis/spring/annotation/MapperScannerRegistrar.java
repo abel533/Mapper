@@ -95,9 +95,8 @@ public class MapperScannerRegistrar implements ImportBeanDefinitionRegistrar, Re
         }
         //支持和 MapperAutoConfiguration#registerBeanDefinitions 中相同的参数 mybatis.basePackages
         BaseProperties baseProperties = SpringBootBindUtil.bind(environment, BaseProperties.class, BaseProperties.MYBATIS_PREFIX);
-        String[] packages = baseProperties.getBasePackages();
-        if(packages != null && packages.length > 0){
-            basePackages.addAll(Arrays.asList(packages));
+        if(baseProperties != null && baseProperties.getBasePackages() != null && baseProperties.getBasePackages().length > 0){
+            basePackages.addAll(Arrays.asList(baseProperties.getBasePackages()));
         }
         //优先级 mapperHelperRef > properties > springboot
         String mapperHelperRef = annoAttrs.getString("mapperHelperRef");
