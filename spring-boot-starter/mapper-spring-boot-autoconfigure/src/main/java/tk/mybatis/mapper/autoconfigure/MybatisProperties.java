@@ -22,6 +22,7 @@ import org.springframework.boot.context.properties.NestedConfigurationProperty;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternResolver;
+import tk.mybatis.spring.annotation.BaseProperties;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -35,10 +36,8 @@ import java.util.Properties;
  * @author Eddú Meléndez
  * @author Kazuki Shimizu
  */
-@ConfigurationProperties(prefix = MybatisProperties.MYBATIS_PREFIX)
-public class MybatisProperties {
-
-  public static final String MYBATIS_PREFIX = "mybatis";
+@ConfigurationProperties(prefix = BaseProperties.MYBATIS_PREFIX)
+public class MybatisProperties extends BaseProperties {
 
   /**
    * Location of MyBatis xml config file.
