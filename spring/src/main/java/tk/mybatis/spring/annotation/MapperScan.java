@@ -15,22 +15,18 @@
  */
 
 package tk.mybatis.spring.annotation;
-import java.lang.annotation.Annotation;
-import java.lang.annotation.Documented;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
 
 import org.springframework.beans.factory.support.BeanNameGenerator;
 import org.springframework.context.annotation.Import;
 import tk.mybatis.spring.mapper.MapperFactoryBean;
 import tk.mybatis.spring.mapper.MapperScannerConfigurer;
 
+import java.lang.annotation.*;
+
 /**
  * Use this annotation to register MyBatis mapper interfaces when using Java
  * Config. It performs when same work as {@link MapperScannerConfigurer} via
- * {@link org.mybatis.spring.annotation.MapperScannerRegistrar}.
+ * {@link tk.mybatis.spring.annotation.MapperScannerRegistrar}.
  *
  * <p>Configuration example:</p>
  * <pre class="code">
@@ -63,7 +59,7 @@ import tk.mybatis.spring.mapper.MapperScannerConfigurer;
  * @author Eduardo Macarron
  *
  * @since 1.2.0
- * @see org.mybatis.spring.annotation.MapperScannerRegistrar
+ * @see tk.mybatis.spring.annotation.MapperScannerRegistrar
  * @see MapperFactoryBean
  */
 @Retention(RetentionPolicy.RUNTIME)
