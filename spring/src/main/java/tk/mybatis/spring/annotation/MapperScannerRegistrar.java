@@ -32,9 +32,11 @@ import org.springframework.util.ClassUtils;
 import org.springframework.util.StringUtils;
 import tk.mybatis.spring.mapper.ClassPathMapperScanner;
 import tk.mybatis.spring.mapper.MapperFactoryBean;
+import tk.mybatis.spring.mapper.SpringBootBindUtil;
 
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class MapperScannerRegistrar implements ImportBeanDefinitionRegistrar, ResourceLoaderAware, EnvironmentAware {
@@ -90,6 +92,12 @@ public class MapperScannerRegistrar implements ImportBeanDefinitionRegistrar, Re
         }
         for (Class<?> clazz : annoAttrs.getClassArray("basePackageClasses")) {
             basePackages.add(ClassUtils.getPackageName(clazz));
+        }
+        //支持和 MapperAutoConfiguration#registerBeanDefinitions 中相同的参数 mybatis.basePackages
+        BaseProperties baseProperties = SpringBootBindUtil.bind(environment, BaseProperties.class, BaseProperties.MYBATIS_PREFIX);
+        String[] packages = baseProperties.getBasePackages();
+        if(packages != null && packages.length > 0){
+            basePackages.addAll(Arrays.asList(packages));
         }
         //优先级 mapperHelperRef > properties > springboot
         String mapperHelperRef = annoAttrs.getString("mapperHelperRef");
