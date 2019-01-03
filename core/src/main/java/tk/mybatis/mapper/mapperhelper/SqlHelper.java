@@ -493,8 +493,11 @@ public class SqlHelper {
                     //version = ${@tk.mybatis.mapper.version@nextVersionClass("versionClass", version)}
                     sql.append(column.getColumn())
                             .append(" = ${@tk.mybatis.mapper.version.VersionUtil@nextVersion(")
-                            .append("@").append(versionClass).append("@class, ")
-                            .append(column.getProperty()).append(")},");
+                            .append("@").append(versionClass).append("@class, ");
+					if (StringUtil.isNotEmpty(entityName)) {
+						sql.append(entityName).append(".");
+					}
+                    sql.append(column.getProperty()).append(")},");
                 } else if (column == logicDeleteColumn) {
                     sql.append(logicDeleteColumnEqualsValue(column, false)).append(",");
                 } else if (notNull) {
