@@ -605,12 +605,13 @@ Blob列：
  
 后续会在 https://github.com/abel533/Mybatis-Spring 项目中提供一套模板做为示例。
 
->自从 http://mybatis.tk 改版后，捐赠列表好久都没更新过了，如果你觉得这个插件和本文有用，可以小小的捐赠一笔。
+>项目的发展离不开你的支持，请作者喝杯咖啡吧！
 >
->支付宝：
+>支付宝
 >
->![alipay](http://mybatis.tk/images/alipay.png)
+><img width="360" src="https://camo.githubusercontent.com/4af3ab81f88d87abfb9c67f9c6bba84047b079e1/68747470733a2f2f6d7962617469732e746b2f696d672f616c695f7061792e706e67" alt="支付宝" data-canonical-src="https://mybatis.tk/img/ali_pay.png">
 >
->微信：
+>微信
 >
->![weixinpay](http://mybatis.tk/images/weixinpay.png)
+><img width="360" src="https://camo.githubusercontent.com/56a0b0aa0c09116cb0ef2f3ebe7f6d7103705a98/68747470733a2f2f6d7962617469732e746b2f696d672f77785f7061792e706e67" alt="微信" data-canonical-src="https://mybatis.tk/img/wx_pay.png">
+
