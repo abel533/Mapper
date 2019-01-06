@@ -55,6 +55,8 @@ public class MapperPlugin extends FalseMethodPlugin {
     //强制生成注解
     private boolean forceAnnotation;
 
+    //是否需要生成Data注解
+    private boolean needsData = false;
     //是否需要生成Getter注解
     private boolean needsGetter = false;
     //是否需要生成Setter注解
@@ -63,6 +65,8 @@ public class MapperPlugin extends FalseMethodPlugin {
     private boolean needsToString = false;
     //是否需要生成Accessors(chain = true)注解
     private boolean needsAccessors = false;
+    //是否需要生成EqualsAndHashCode注解
+    private boolean needsEqualsAndHashCode = false;
     //是否生成字段名常量
     private boolean generateColumnConsts = false;
 
@@ -110,6 +114,11 @@ public class MapperPlugin extends FalseMethodPlugin {
         //引入JPA注解
         topLevelClass.addImportedType("javax.persistence.*");
         //lombok扩展开始
+        //如果需要Data，引入包，代码增加注解
+        if (this.needsData) {
+            topLevelClass.addImportedType("lombok.Data");
+            topLevelClass.addAnnotation("@Data");
+        }
         //如果需要Getter，引入包，代码增加注解
         if (this.needsGetter) {
             topLevelClass.addImportedType("lombok.Getter");
@@ -129,6 +138,11 @@ public class MapperPlugin extends FalseMethodPlugin {
         if (this.needsAccessors) {
             topLevelClass.addImportedType("lombok.experimental.Accessors");
             topLevelClass.addAnnotation("@Accessors(chain = true)");
+        }
+        //如果需要Getter，引入包，代码增加注解
+        if (this.needsEqualsAndHashCode) {
+            topLevelClass.addImportedType("lombok.EqualsAndHashCode");
+            topLevelClass.addAnnotation("@EqualsAndHashCode");
         }
         //lombok扩展结束
         String tableName = introspectedTable.getFullyQualifiedTableNameAtRuntime();
@@ -174,7 +188,7 @@ public class MapperPlugin extends FalseMethodPlugin {
                                               IntrospectedTable introspectedTable,
                                               ModelClassType modelClassType) {
 
-        return !this.needsGetter;
+        return !(this.needsData || this.needsGetter);
     }
 
     /**
@@ -185,7 +199,7 @@ public class MapperPlugin extends FalseMethodPlugin {
                                               TopLevelClass topLevelClass, IntrospectedColumn introspectedColumn,
                                               IntrospectedTable introspectedTable,
                                               ModelClassType modelClassType) {
-        return !this.needsSetter;
+        return !(this.needsData || this.needsSetter);
     }
 
     /**
@@ -261,9 +275,12 @@ public class MapperPlugin extends FalseMethodPlugin {
         //lombok扩展
         String lombok = getProperty("lombok");
         if (lombok != null && !"".equals(lombok)) {
-            this.needsGetter = lombok.contains("Getter");
-            this.needsSetter = lombok.contains("Setter");
-            this.needsToString = lombok.contains("ToString");
+            this.needsData = lombok.contains("Data");
+            //@Data 优先级高于 @Getter @Setter @RequiredArgsConstructor @ToString @EqualsAndHashCode
+            this.needsGetter = !this.needsData && lombok.contains("Getter");
+            this.needsSetter = !this.needsData && lombok.contains("Setter");
+            this.needsToString = !this.needsData && lombok.contains("ToString");
+            this.needsEqualsAndHashCode = !this.needsData && lombok.contains("EqualsAndHashCode");
             this.needsAccessors = lombok.contains("Accessors");
         }
         if (useMapperCommentGenerator) {
