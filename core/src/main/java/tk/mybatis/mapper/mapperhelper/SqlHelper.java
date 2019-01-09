@@ -512,6 +512,44 @@ public class SqlHelper {
     }
 
     /**
+     * update set列，不考虑乐观锁注解 @Version
+     *
+     * @param entityClass
+     * @param entityName  实体映射名
+     * @param notNull     是否判断!=null
+     * @param notEmpty    是否判断String类型!=''
+     * @return
+     */
+    public static String updateSetColumnsIgnoreVersion(Class<?> entityClass, String entityName, boolean notNull, boolean notEmpty) {
+        StringBuilder sql = new StringBuilder();
+        sql.append("<set>");
+        //获取全部列
+        Set<EntityColumn> columnSet = EntityHelper.getColumns(entityClass);
+        // 逻辑删除列
+        EntityColumn logicDeleteColumn = null;
+        //当某个列有主键策略时，不需要考虑他的属性是否为空，因为如果为空，一定会根据主键策略给他生成一个值
+        for (EntityColumn column : columnSet) {
+            if (column.getEntityField().isAnnotationPresent(LogicDelete.class)) {
+                if (logicDeleteColumn != null) {
+                    throw new LogicDeleteException(entityClass.getCanonicalName() + " 中包含多个带有 @LogicDelete 注解的字段，一个类中只能存在一个带有 @LogicDelete 注解的字段!");
+                }
+                logicDeleteColumn = column;
+            }
+            if (!column.isId() && column.isUpdatable()) {
+                if (column == logicDeleteColumn) {
+                    sql.append(logicDeleteColumnEqualsValue(column, false)).append(",");
+                } else if (notNull) {
+                    sql.append(SqlHelper.getIfNotNull(entityName, column, column.getColumnEqualsHolder(entityName) + ",", notEmpty));
+                } else {
+                    sql.append(column.getColumnEqualsHolder(entityName) + ",");
+                }
+            }
+        }
+        sql.append("</set>");
+        return sql.toString();
+    }
+
+    /**
      * 不是所有参数都是 null 的检查
      *
      * @param parameterName 参数名

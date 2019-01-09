@@ -142,7 +142,7 @@ public class ExampleProvider extends MapperTemplate {
             sql.append(SqlHelper.exampleHasAtLeastOneCriteriaCheck("example"));
         }
         sql.append(SqlHelper.updateTable(entityClass, tableName(entityClass), "example"));
-        sql.append(SqlHelper.updateSetColumns(entityClass, "record", true, isNotEmpty()));
+        sql.append(SqlHelper.updateSetColumnsIgnoreVersion(entityClass, "record", true, isNotEmpty()));
         sql.append(SqlHelper.updateByExampleWhereClause());
         return sql.toString();
     }
@@ -164,7 +164,7 @@ public class ExampleProvider extends MapperTemplate {
             sql.append(SqlHelper.exampleHasAtLeastOneCriteriaCheck("example"));
         }
         sql.append(SqlHelper.updateTable(entityClass, tableName(entityClass), "example"));
-        sql.append(SqlHelper.updateSetColumns(entityClass, "record", false, false));
+        sql.append(SqlHelper.updateSetColumnsIgnoreVersion(entityClass, "record", false, false));
         sql.append(SqlHelper.updateByExampleWhereClause());
         return sql.toString();
     }
