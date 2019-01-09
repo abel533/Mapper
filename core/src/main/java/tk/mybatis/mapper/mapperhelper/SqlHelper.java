@@ -490,14 +490,15 @@ public class SqlHelper {
                 if (column == versionColumn) {
                     Version version = versionColumn.getEntityField().getAnnotation(Version.class);
                     String versionClass = version.nextVersion().getCanonicalName();
+                    sql.append("<bind name=\"").append(column.getProperty()).append("Version\" value=\"");
                     //version = ${@tk.mybatis.mapper.version@nextVersionClass("versionClass", version)}
-                    sql.append(column.getColumn())
-                            .append(" = ${@tk.mybatis.mapper.version.VersionUtil@nextVersion(")
-                            .append("@").append(versionClass).append("@class, ");
-					if (StringUtil.isNotEmpty(entityName)) {
-						sql.append(entityName).append(".");
-					}
-                    sql.append(column.getProperty()).append(")},");
+                    sql.append("@tk.mybatis.mapper.version.VersionUtil@nextVersion(")
+                        .append("@").append(versionClass).append("@class, ");
+                    if (StringUtil.isNotEmpty(entityName)) {
+                        sql.append(entityName).append(".");
+                    }
+                    sql.append(column.getProperty()).append(")\"/>");
+                    sql.append(column.getColumn()).append(" = #{").append(column.getProperty()).append("Version},");
                 } else if (column == logicDeleteColumn) {
                     sql.append(logicDeleteColumnEqualsValue(column, false)).append(",");
                 } else if (notNull) {
