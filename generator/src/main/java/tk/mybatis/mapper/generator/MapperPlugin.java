@@ -190,6 +190,15 @@ public class MapperPlugin extends FalseMethodPlugin {
                 field.setInitializationString("\"" + introspectedColumn.getJavaProperty() + "\"");
                 context.getCommentGenerator().addClassComment(topLevelClass, introspectedTable);
                 topLevelClass.addField(field);
+                //增加字段名常量,用于pageHelper
+                Field columnField = new Field();
+                columnField.setVisibility(JavaVisibility.PUBLIC);
+                columnField.setStatic(true);
+                columnField.setFinal(true);
+                columnField.setName("DB_" + introspectedColumn.getActualColumnName().toUpperCase()); //$NON-NLS-1$
+                columnField.setType(new FullyQualifiedJavaType(String.class.getName())); //$NON-NLS-1$
+                columnField.setInitializationString("\"" + introspectedColumn.getActualColumnName() + "\"");
+                topLevelClass.addField(columnField);
             }
         }
     }
