@@ -69,6 +69,8 @@ public class MapperPlugin extends FalseMethodPlugin {
     private boolean needsEqualsAndHashCode = false;
     //是否生成字段名常量
     private boolean generateColumnConsts = false;
+    //是否生成swagger注解,包括 @ApiModel和@ApiModelProperty
+    private boolean needsSwagger = false;
 
     public String getDelimiterName(String name) {
         StringBuilder nameBuilder = new StringBuilder();
@@ -145,12 +147,25 @@ public class MapperPlugin extends FalseMethodPlugin {
             topLevelClass.addAnnotation("@EqualsAndHashCode");
         }
         //lombok扩展结束
+        // region swagger扩展
+        if (this.needsSwagger) {
+            //导包
+            topLevelClass.addImportedType("io.swagger.annotations.ApiModel");
+            topLevelClass.addImportedType("io.swagger.annotations.ApiModelProperty");
+            //增加注解(去除注释中的转换符)
+            String remarks = introspectedTable.getRemarks();
+            if (remarks == null) {
+                remarks = "";
+            }
+            topLevelClass.addAnnotation("@ApiModel(\"" + remarks.replaceAll("\r", "").replaceAll("\n", "") + "\")");
+        }
+        // endregion swagger扩展
         String tableName = introspectedTable.getFullyQualifiedTableNameAtRuntime();
         //如果包含空格，或者需要分隔符，需要完善
         if (StringUtility.stringContainsSpace(tableName)) {
             tableName = context.getBeginningDelimiter()
-                + tableName
-                + context.getEndingDelimiter();
+                    + tableName
+                    + context.getEndingDelimiter();
         }
         //是否忽略大小写，对于区分大小写的数据库，会有用
         if (caseSensitive && !topLevelClass.getType().getShortName().equals(tableName)) {
@@ -158,8 +173,8 @@ public class MapperPlugin extends FalseMethodPlugin {
         } else if (!topLevelClass.getType().getShortName().equalsIgnoreCase(tableName)) {
             topLevelClass.addAnnotation("@Table(name = \"" + getDelimiterName(tableName) + "\")");
         } else if (StringUtility.stringHasValue(schema)
-            || StringUtility.stringHasValue(beginningDelimiter)
-            || StringUtility.stringHasValue(endingDelimiter)) {
+                || StringUtility.stringHasValue(beginningDelimiter)
+                || StringUtility.stringHasValue(endingDelimiter)) {
             topLevelClass.addAnnotation("@Table(name = \"" + getDelimiterName(tableName) + "\")");
         } else if (forceAnnotation) {
             topLevelClass.addAnnotation("@Table(name = \"" + getDelimiterName(tableName) + "\")");
@@ -254,6 +269,8 @@ public class MapperPlugin extends FalseMethodPlugin {
         }
         //支持oracle获取注释#114
         context.getJdbcConnectionConfiguration().addProperty("remarksReporting", "true");
+        //支持mysql获取注释
+        context.getJdbcConnectionConfiguration().addProperty("useInformationSchema", "true");
     }
 
     @Override
@@ -283,6 +300,11 @@ public class MapperPlugin extends FalseMethodPlugin {
             this.needsEqualsAndHashCode = !this.needsData && lombok.contains("EqualsAndHashCode");
             this.needsAccessors = lombok.contains("Accessors");
         }
+        //swagger扩展
+        String swagger = getProperty("swagger", "false");
+        if ("true".equalsIgnoreCase(swagger)) {
+            this.needsSwagger = true;
+        }
         if (useMapperCommentGenerator) {
             commentCfg.addProperty("beginningDelimiter", this.beginningDelimiter);
             commentCfg.addProperty("endingDelimiter", this.endingDelimiter);
@@ -290,6 +312,7 @@ public class MapperPlugin extends FalseMethodPlugin {
             if (StringUtility.stringHasValue(forceAnnotation)) {
                 commentCfg.addProperty("forceAnnotation", forceAnnotation);
             }
+            commentCfg.addProperty("needsSwagger", this.needsSwagger + "");
         }
         this.generateColumnConsts = getPropertyAsBoolean("generateColumnConsts");
     }

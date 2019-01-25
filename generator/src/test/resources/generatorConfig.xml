@@ -42,6 +42,7 @@
             <property name="endingDelimiter" value="`"/>
             <!--使用 Data 时，Getter,Setter 无效-->
             <property name="lombok" value="Getter,Setter,Data,ToString,Accessors,EqualsAndHashCode"/>
+            <property name="swagger" value="true"/>
         </plugin>
 
         <!--通用代码生成器插件-->
