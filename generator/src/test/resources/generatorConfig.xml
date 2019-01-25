@@ -38,6 +38,7 @@
             <property name="caseSensitive" value="true"/>
             <property name="forceAnnotation" value="true"/>
             <property name="generateColumnConsts" value="true"/>
+            <property name="generateDefaultInstanceMethod" value="true"/>
             <property name="beginningDelimiter" value="`"/>
             <property name="endingDelimiter" value="`"/>
             <!--使用 Data 时，Getter,Setter 无效-->

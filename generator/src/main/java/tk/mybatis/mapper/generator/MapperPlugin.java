@@ -31,9 +31,7 @@ import org.mybatis.generator.config.CommentGeneratorConfiguration;
 import org.mybatis.generator.config.Context;
 import org.mybatis.generator.internal.util.StringUtility;
 
-import java.util.HashSet;
-import java.util.Properties;
-import java.util.Set;
+import java.util.*;
 
 /**
  * 通用Mapper生成器插件
@@ -69,6 +67,8 @@ public class MapperPlugin extends FalseMethodPlugin {
     private boolean needsEqualsAndHashCode = false;
     //是否生成字段名常量
     private boolean generateColumnConsts = false;
+    //是否生成默认的属性的静态方法
+    private boolean generateDefaultInstanceMethod = false;
     //是否生成swagger注解,包括 @ApiModel和@ApiModelProperty
     private boolean needsSwagger = false;
 
@@ -201,6 +201,45 @@ public class MapperPlugin extends FalseMethodPlugin {
                 topLevelClass.addField(columnField);
             }
         }
+        if (generateDefaultInstanceMethod) {
+            Method defaultMethod = new Method();
+            defaultMethod.setStatic(true);
+            defaultMethod.setName("defaultInstance");
+            defaultMethod.setVisibility(JavaVisibility.PUBLIC);
+            defaultMethod.setReturnType(topLevelClass.getType());
+            defaultMethod.addBodyLine(String.format("%s instance = new %s();", topLevelClass.getType().getShortName(), topLevelClass.getType().getShortName()));
+            for (IntrospectedColumn introspectedColumn : introspectedTable.getAllColumns()) {
+                String shortName = introspectedColumn.getFullyQualifiedJavaType().getShortName();
+                List<String> supportType = Arrays.asList("Byte", "Short", "Character", "Integer", "Long", "Float", "Double", "String", "BigDecimal", "BigInteger");
+                if (!supportType.contains(shortName)) {
+                    continue;
+                }
+                if (introspectedColumn.getDefaultValue() != null) {
+                    String defaultValue = introspectedColumn.getDefaultValue();
+                    //去除前后'',如 '123456' -> 123456
+                    if (defaultValue.startsWith("'") && defaultValue.endsWith("'")) {
+                        if (defaultValue.length() == 2) {
+                            defaultValue = "";
+                        } else {
+                            defaultValue = defaultValue.substring(1, defaultValue.length() - 1);
+                        }
+                    }
+                    //暂不支持时间类型默认值识别,不同数据库表达式不同
+                    if ("Boolean".equals(shortName)) {
+                        if ("0".equals(defaultValue)) {
+                            defaultValue = "false";
+                        } else if ("1".equals(defaultValue)) {
+                            defaultValue = "true";
+                        }
+                    }
+                    //通过 new 方法转换
+                    defaultMethod.addBodyLine(String.format("instance.%s = new %s(\"%s\");", introspectedColumn.getJavaProperty(), shortName, defaultValue));
+                }
+
+            }
+            defaultMethod.addBodyLine("return instance;");
+            topLevelClass.addMethod(defaultMethod);
+        }
     }
 
     /**
@@ -324,6 +363,7 @@ public class MapperPlugin extends FalseMethodPlugin {
             commentCfg.addProperty("needsSwagger", this.needsSwagger + "");
         }
         this.generateColumnConsts = getPropertyAsBoolean("generateColumnConsts");
+        this.generateDefaultInstanceMethod = getPropertyAsBoolean("generateDefaultInstanceMethod");
     }
 
     protected String getProperty(String key) {

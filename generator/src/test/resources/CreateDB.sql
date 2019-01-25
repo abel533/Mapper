@@ -4,6 +4,7 @@ create table country (
   id          integer NOT NULL PRIMARY KEY,
   countryname varchar(32),
   countrycode VARCHAR(2) DEFAULT 'HH',
+  decimal_num decimal (10,5) DEFAULT 0.1,
   version     INTEGER DEFAULT 1 NOT NULL
 );
 
