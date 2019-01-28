@@ -28,7 +28,7 @@
     <parent>
         <groupId>tk.mybatis</groupId>
         <artifactId>mapper-modules</artifactId>
-        <version>1.1.4</version>
+        <version>1.1.5</version>
     </parent>
     <artifactId>mapper-generator</artifactId>
     <packaging>jar</packaging>
@@ -37,7 +37,7 @@
     <description>Mybatis 通用 Mapper 代码生成器</description>
 
     <properties>
-        <mapper-module.version>1.1.4</mapper-module.version>
+        <mapper-module.version>1.1.5</mapper-module.version>
         <freemarker.version>2.3.28</freemarker.version>
         <generator.version>1.3.7</generator.version>
     </properties>
