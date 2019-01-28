@@ -537,7 +537,9 @@ public class SqlHelper {
                 logicDeleteColumn = column;
             }
             if (!column.isId() && column.isUpdatable()) {
-                if (column == logicDeleteColumn) {
+                if(column.getEntityField().isAnnotationPresent(Version.class)){
+                    //ignore
+                } else if (column == logicDeleteColumn) {
                     sql.append(logicDeleteColumnEqualsValue(column, false)).append(",");
                 } else if (notNull) {
                     sql.append(SqlHelper.getIfNotNull(entityName, column, column.getColumnEqualsHolder(entityName) + ",", notEmpty));
