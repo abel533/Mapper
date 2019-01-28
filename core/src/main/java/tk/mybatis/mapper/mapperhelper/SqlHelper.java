@@ -536,8 +536,11 @@ public class SqlHelper {
                 }
                 logicDeleteColumn = column;
             }
-            if (!column.isId() && column.isUpdatable()) {
-                if (column == logicDeleteColumn) {
+            if (column.isUpdatable()) {
+                //不更新乐@Version字段
+                if(column.getEntityField().isAnnotationPresent(Version.class)){
+                    continue;
+                }else if (column == logicDeleteColumn) {
                     sql.append(logicDeleteColumnEqualsValue(column, false)).append(",");
                 } else if (notNull) {
                     sql.append(SqlHelper.getIfNotNull(entityName, column, column.getColumnEqualsHolder(entityName) + ",", notEmpty));
