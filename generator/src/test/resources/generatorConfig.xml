@@ -40,7 +40,8 @@
             <property name="generateColumnConsts" value="true"/>
             <property name="beginningDelimiter" value="`"/>
             <property name="endingDelimiter" value="`"/>
-            <property name="lombok" value="Getter,Setter,ToString,Accessors"/>
+            <!--使用 Data 时，Getter,Setter 无效-->
+            <property name="lombok" value="Getter,Setter,Data,ToString,Accessors,EqualsAndHashCode"/>
         </plugin>
 
         <!--通用代码生成器插件-->
