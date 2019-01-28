@@ -41,9 +41,11 @@ public class MapperCommentGenerator implements CommentGenerator {
     //开始的分隔符，例如mysql为`，sqlserver为[
     private String beginningDelimiter = "";
     //结束的分隔符，例如mysql为`，sqlserver为]
-    private String endingDelimiter    = "";
+    private String endingDelimiter = "";
     //强制生成注解
     private boolean forceAnnotation;
+    //是否生成swagger注解
+    private boolean needsSwagger;
 
     public MapperCommentGenerator() {
         super();
@@ -87,6 +89,10 @@ public class MapperCommentGenerator implements CommentGenerator {
         String forceAnnotation = properties.getProperty("forceAnnotation");
         if (StringUtility.stringHasValue(forceAnnotation)) {
             this.forceAnnotation = "TRUE".equalsIgnoreCase(forceAnnotation);
+        }
+        String needsSwagger = properties.getProperty("needsSwagger");
+        if (StringUtility.stringHasValue(needsSwagger)) {
+            this.needsSwagger = "TRUE".equalsIgnoreCase(needsSwagger);
         }
     }
 
@@ -182,6 +188,16 @@ public class MapperCommentGenerator implements CommentGenerator {
             String sql = MessageFormat.format(introspectedTable.getTableConfiguration().getGeneratedKey().getRuntimeSqlStatement(), tableName, tableName.toUpperCase());
             field.addAnnotation("@GeneratedValue(strategy = GenerationType.IDENTITY, generator = \"" + sql + "\")");
         }
+        // region swagger注解
+        if (this.needsSwagger) {
+            String remarks = introspectedColumn.getRemarks();
+            if (remarks == null) {
+                remarks = "";
+            }
+            String swaggerAnnotation = "@ApiModelProperty(value = \"%s\" da )";
+            field.addAnnotation("@ApiModelProperty(\"" + remarks.replaceAll("\r", "").replaceAll("\n", "") + "\")");
+        }
+        // endregion
     }
 
     /**
