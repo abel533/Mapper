@@ -149,7 +149,7 @@ public class MapperPlugin extends FalseMethodPlugin {
                 topLevelClass.addAnnotation("@EqualsAndHashCode");
             }
         }
-        // 如果需要Getter，引入包，代码增加注解
+        // 如果需要Accessors，引入包，代码增加注解
         if (this.needsAccessors) {
             topLevelClass.addImportedType("lombok.experimental.Accessors");
             topLevelClass.addAnnotation("@Accessors(chain = true)");
