@@ -22,28 +22,30 @@
  * THE SOFTWARE.
  */
 
-package tk.mybatis.mapper.common.base;
+package tk.mybatis.mapper.common.base.select;
 
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.SelectProvider;
 import tk.mybatis.mapper.annotation.RegisterMapper;
-import tk.mybatis.mapper.common.base.select.*;
+import tk.mybatis.mapper.provider.base.BaseSelectProvider;
 
 /**
- * 通用Mapper接口,基础查询
+ * 通用Mapper接口,查询
  *
  * @param <T> 不能为空
- * @author liuzh
+ * @author jingkaihui
  */
 @RegisterMapper
-public interface BaseSelectMapper<T> extends
-        SelectOneMapper<T>,
-        SelectMapper<T>,
-        SelectAllMapper<T>,
-        SelectCountMapper<T>,
-        SelectByPrimaryKeyMapper<T>,
-        ExistsWithPrimaryKeyMapper<T>,
-        SelectByPropertyMapper<T>,
-        SelectOneByPropertyMapper<T>,
-        ExistsWithPropertyMapper<T>,
-        SelectCountByPropertyMapper<T> {
+public interface SelectOneByPropertyMapper<T> {
+
+    /**
+     * 根据实体中的属性进行查询，只能有一个返回值，有多个结果是抛出异常，查询条件使用等号
+     *
+     * @param property 查询属性
+     * @param value 属性值
+     * @return
+     */
+    @SelectProvider(type = BaseSelectProvider.class, method = "dynamicSQL")
+    T selectOneByProperty(@Param("property") String property, @Param("value") Object value);
 
 }

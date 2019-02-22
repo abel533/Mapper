@@ -25,9 +25,13 @@
 package tk.mybatis.mapper.provider.base;
 
 import org.apache.ibatis.mapping.MappedStatement;
+import tk.mybatis.mapper.entity.EntityColumn;
+import tk.mybatis.mapper.mapperhelper.EntityHelper;
 import tk.mybatis.mapper.mapperhelper.MapperHelper;
 import tk.mybatis.mapper.mapperhelper.MapperTemplate;
 import tk.mybatis.mapper.mapperhelper.SqlHelper;
+
+import java.util.Set;
 
 /**
  * BaseSelectProvider实现类，基础方法实现类
@@ -151,6 +155,104 @@ public class BaseSelectProvider extends MapperTemplate {
         sql.append("</where>");
 
         sql.append(SqlHelper.orderByDefault(entityClass));
+        return sql.toString();
+    }
+
+    /**
+     * 根据属性查询，只能有一个返回值，有多个结果时抛出异常，查询条件使用等号
+     *
+     * @param ms
+     * @return
+     */
+    public String selectOneByProperty(MappedStatement ms) {
+        Class<?> entityClass = getEntityClass(ms);
+        //修改返回值类型为实体类型
+        setResultType(ms, entityClass);
+        StringBuilder sql = new StringBuilder();
+        sql.append(SqlHelper.selectAllColumns(entityClass));
+        sql.append(SqlHelper.fromTable(entityClass, tableName(entityClass)));
+        sql.append("<where>\n");
+        //获取全部列
+        Set<EntityColumn> columnSet = EntityHelper.getColumns(entityClass);
+        for (EntityColumn column : columnSet) {
+            sql.append("<if test=\"property == '" + column.getProperty() + "'\">\n");
+            sql.append(column.getColumn() + " = #{value,javaType=" + column.getJavaType().getSimpleName() + "}\n");
+            sql.append("</if>\n");
+        }
+        sql.append("</where>");
+        return sql.toString();
+    }
+
+    /**
+     * 根据属性查询，查询条件使用等号
+     *
+     * @param ms
+     * @return
+     */
+    public String selectByProperty(MappedStatement ms) {
+        Class<?> entityClass = getEntityClass(ms);
+        //修改返回值类型为实体类型
+        setResultType(ms, entityClass);
+        StringBuilder sql = new StringBuilder();
+        sql.append(SqlHelper.selectAllColumns(entityClass));
+        sql.append(SqlHelper.fromTable(entityClass, tableName(entityClass)));
+        sql.append("<where>\n");
+        //获取全部列
+        Set<EntityColumn> columnSet = EntityHelper.getColumns(entityClass);
+        for (EntityColumn column : columnSet) {
+            sql.append("<if test=\"property == '" + column.getProperty() + "'\">\n");
+            sql.append(column.getColumn() + " = #{value,javaType=" + column.getJavaType().getSimpleName() + "}\n");
+            sql.append("</if>\n");
+        }
+        sql.append("</where>");
+        return sql.toString();
+    }
+
+    /**
+     * 根据属性查询总数，查询条件使用等号
+     *
+     * @param ms
+     * @return
+     */
+    public String existsWithProperty(MappedStatement ms) {
+        Class<?> entityClass = getEntityClass(ms);
+
+        StringBuilder sql = new StringBuilder();
+        sql.append(SqlHelper.selectCountExists(entityClass));
+        sql.append(SqlHelper.fromTable(entityClass, tableName(entityClass)));
+        sql.append("<where>\n");
+        //获取全部列
+        Set<EntityColumn> columnSet = EntityHelper.getColumns(entityClass);
+        for (EntityColumn column : columnSet) {
+            sql.append("<if test=\"property == '" + column.getProperty() + "'\">\n");
+            sql.append(column.getColumn() + " = #{value,javaType=" + column.getJavaType().getSimpleName() + "}\n");
+            sql.append("</if>\n");
+        }
+        sql.append("</where>");
+        return sql.toString();
+    }
+
+    /**
+     * 根据属性查询总数，查询条件使用等号
+     *
+     * @param ms
+     * @return
+     */
+    public String selectCountByProperty(MappedStatement ms) {
+        Class<?> entityClass = getEntityClass(ms);
+
+        StringBuilder sql = new StringBuilder();
+        sql.append(SqlHelper.selectCount(entityClass));
+        sql.append(SqlHelper.fromTable(entityClass, tableName(entityClass)));
+        sql.append("<where>\n");
+        //获取全部列
+        Set<EntityColumn> columnSet = EntityHelper.getColumns(entityClass);
+        for (EntityColumn column : columnSet) {
+            sql.append("<if test=\"property == '" + column.getProperty() + "'\">\n");
+            sql.append(column.getColumn() + " = #{value,javaType=" + column.getJavaType().getSimpleName() + "}\n");
+            sql.append("</if>\n");
+        }
+        sql.append("</where>");
         return sql.toString();
     }
 }
