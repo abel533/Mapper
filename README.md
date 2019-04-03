@@ -31,13 +31,13 @@
 
 ## 作者信息
    
-   MyBatis 工具网站:[http://mybatis.tk](http://www.mybatis.tk)
+   MyBatis 工具网站:[https://mybatis3.github.io](https://mybatis3.github.io)
    
    作者博客：http://blog.csdn.net/isea533
    
    作者邮箱： abel533@gmail.com
    
-   如需加群，请通过 http://mybatis.tk 首页按钮加群。
+   如需加群，请通过 https://mybatis3.github.io 首页按钮加群。
    
    推荐使用Mybatis分页插件:[PageHelper分页插件](https://github.com/pagehelper/Mybatis-PageHelper)
    
