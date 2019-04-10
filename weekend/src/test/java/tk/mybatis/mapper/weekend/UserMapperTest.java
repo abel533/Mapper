@@ -56,6 +56,7 @@ public class UserMapperTest {
                 .andBetween(User::getId,0,10)
                 .andIn(User::getUserName, Arrays.asList("a","b","c"));
 
+        weekend.orderBy(User::getUserName).desc();
         List<User> users = userMapper.selectByExample(weekend);
         for (User user : users) {
             System.out.println(user.getUserName());

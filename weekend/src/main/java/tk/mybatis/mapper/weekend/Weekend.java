@@ -25,6 +25,8 @@
 
 package tk.mybatis.mapper.weekend;
 
+import tk.mybatis.mapper.weekend.reflection.Reflections;
+
 /**
  * @author Frank
  */
@@ -69,4 +71,8 @@ public class Weekend<T> extends tk.mybatis.mapper.entity.Example {
         return (WeekendCriteria<T, Object>) this.createCriteria();
     }
 
+
+    public OrderBy orderBy(Fn<T, Object> fn) {
+        return super.orderBy(Reflections.fnToFieldName(fn));
+    }
 }
