@@ -6,5 +6,3 @@ dist: precise
 
 jdk:
   - oraclejdk8
-  - oraclejdk7
-  - openjdk6
