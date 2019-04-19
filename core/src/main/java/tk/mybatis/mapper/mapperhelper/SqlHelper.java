@@ -632,9 +632,11 @@ public class SqlHelper {
             sql.append(whereVersion(entityClass));
         }
 
+        /*
         if (hasLogicDelete) {
             sql.append(whereLogicDelete(entityClass, false));
         }
+        */
 
         sql.append("</where>");
         return sql.toString();
