@@ -71,6 +71,8 @@ public class MapperPlugin extends FalseMethodPlugin {
     private boolean generateDefaultInstanceMethod = false;
     //是否生成swagger注解,包括 @ApiModel和@ApiModelProperty
     private boolean needsSwagger = false;
+    //是否生成Builder注解
+    private boolean needsBuilder = false;
 
     public String getDelimiterName(String name) {
         StringBuilder nameBuilder = new StringBuilder();
@@ -145,6 +147,11 @@ public class MapperPlugin extends FalseMethodPlugin {
         if (this.needsEqualsAndHashCode) {
             topLevelClass.addImportedType("lombok.EqualsAndHashCode");
             topLevelClass.addAnnotation("@EqualsAndHashCode");
+        }
+        //如果需要Builder，引入包，代码增加注解
+        if(this.needsBuilder) {
+            topLevelClass.addImportedType("lombok.Builder");
+            topLevelClass.addAnnotation("@Builder");
         }
         //lombok扩展结束
         // region swagger扩展
@@ -347,6 +354,7 @@ public class MapperPlugin extends FalseMethodPlugin {
             this.needsToString = !this.needsData && lombok.contains("ToString");
             this.needsEqualsAndHashCode = !this.needsData && lombok.contains("EqualsAndHashCode");
             this.needsAccessors = lombok.contains("Accessors");
+            this.needsBuilder = lombok.contains("Builder");
         }
         //swagger扩展
         String swagger = getProperty("swagger", "false");
