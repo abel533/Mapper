@@ -28,13 +28,13 @@ package tk.mybatis.mapper.weekend;
 /**
  * {@link WeekendSqls} 的工具类，提供一系列静态方法，减少泛型参数的指定，使代码更简洁、清晰
  *
- * 直接使用WeekSqls，以下的查询需要指定两次泛型参数：
+ * 直接使用WeekSqls，以下的查询需要指定两次Country类：
  *  List<Country> selectByWeekendSql = mapper.selectByExample(new Example.Builder(Country.class)
  *         .where(WeekendSqls.<Country>custom().andLike(Country::getCountryname, "%a%")
  *                 .andGreaterThan(Country::getCountrycode, "123"))
  *         .build());
  *
- * 使用 WeekendSqlsUtils，只需指定一次泛型参数：
+ * 使用 WeekendSqlsUtils，只需指定一次Country类：
  *  List<Country> selectByWeekendSql = mapper.selectByExample(new Example.Builder(Country.class)
  *                     .where(WeekendSqlsUtils.andLike(Country::getCountryname, "%a%")
  *                             .andGreaterThan(Country::getCountrycode, "123"))
