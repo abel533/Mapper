@@ -42,9 +42,9 @@
             <property name="forceAnnotation" value="true"/>
             <property name="beginningDelimiter" value="`"/>
             <property name="endingDelimiter" value="`"/>
-            <!--配置是否启用lombok, 支持如下6种注解-->
+            <!--配置是否启用lombok, 支持如下7种注解-->
             <!--当配置 Data 后，Getter Setter ToString EqualsAndHashCode 会被忽略-->
-            <property name="lombok" value="Getter,Setter,Data,ToString,Accessors,EqualsAndHashCode"/>
+            <property name="lombok" value="Getter,Setter,Data,ToString,Accessors,EqualsAndHashCode,Builder"/>
         </plugin>
 
         <!--通用代码生成器插件-->
