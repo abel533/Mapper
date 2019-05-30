@@ -75,6 +75,9 @@ public class UserMapperTest {
         weekend2.selectProperties(Country::getId);
         //查看日志执行的sql
         countryMapper.selectByExample(weekend2);
+      //count 查询
+      weekend2.withCountProperty(Country::getCountryname);
+      countryMapper.selectCountByExample(weekend2);
 
     }
 }
