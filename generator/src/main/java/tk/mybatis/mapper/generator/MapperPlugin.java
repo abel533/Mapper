@@ -65,6 +65,8 @@ public class MapperPlugin extends FalseMethodPlugin {
     private boolean needsAccessors = false;
     //是否需要生成EqualsAndHashCode注解
     private boolean needsEqualsAndHashCode = false;
+    //是否需要生成EqualsAndHashCode注解，并且“callSuper = true”
+    private boolean needsEqualsAndHashCodeAndCallSuper = false;
     //是否生成字段名常量
     private boolean generateColumnConsts = false;
     //是否生成默认的属性的静态方法
@@ -136,17 +138,23 @@ public class MapperPlugin extends FalseMethodPlugin {
             topLevelClass.addImportedType("lombok.ToString");
             topLevelClass.addAnnotation("@ToString");
         }
-        //如果需要Getter，引入包，代码增加注解
+        // 如果需要EqualsAndHashCode，并且“callSuper = true”，引入包，代码增加注解
+        if (this.needsEqualsAndHashCodeAndCallSuper) {
+            topLevelClass.addImportedType("lombok.EqualsAndHashCode");
+            topLevelClass.addAnnotation("@EqualsAndHashCode(callSuper = true)");
+        } else {
+            // 如果需要EqualsAndHashCode，引入包，代码增加注解
+            if (this.needsEqualsAndHashCode) {
+                topLevelClass.addImportedType("lombok.EqualsAndHashCode");
+                topLevelClass.addAnnotation("@EqualsAndHashCode");
+            }
+        }
+        // 如果需要Accessors，引入包，代码增加注解
         if (this.needsAccessors) {
             topLevelClass.addImportedType("lombok.experimental.Accessors");
             topLevelClass.addAnnotation("@Accessors(chain = true)");
         }
-        //如果需要Getter，引入包，代码增加注解
-        if (this.needsEqualsAndHashCode) {
-            topLevelClass.addImportedType("lombok.EqualsAndHashCode");
-            topLevelClass.addAnnotation("@EqualsAndHashCode");
-        }
-        //lombok扩展结束
+        // lombok扩展结束
         // region swagger扩展
         if (this.needsSwagger) {
             //导包
@@ -391,11 +399,14 @@ public class MapperPlugin extends FalseMethodPlugin {
             this.needsSetter = !this.needsData && lombok.contains("Setter");
             this.needsToString = !this.needsData && lombok.contains("ToString");
             this.needsEqualsAndHashCode = !this.needsData && lombok.contains("EqualsAndHashCode");
+            // 配置lombok扩展EqualsAndHashCode注解是否添加“callSuper = true”
+            String lombokEqualsAndHashCodeCallSuper = getProperty("lombokEqualsAndHashCodeCallSuper", "false");
+            this.needsEqualsAndHashCodeAndCallSuper = this.needsEqualsAndHashCode && "TRUE".equalsIgnoreCase(lombokEqualsAndHashCodeCallSuper);
             this.needsAccessors = lombok.contains("Accessors");
         }
         //swagger扩展
         String swagger = getProperty("swagger", "false");
-        if ("true".equalsIgnoreCase(swagger)) {
+        if ("TRUE".equalsIgnoreCase(swagger)) {
             this.needsSwagger = true;
         }
         if (useMapperCommentGenerator) {
