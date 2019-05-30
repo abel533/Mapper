@@ -223,7 +223,15 @@ public class MapperPlugin extends FalseMethodPlugin {
             }
         }
         if (generateDefaultInstanceMethod) {
+            //注意基本类型和包装的index要一致,方便后面使用
+            List<String> baseClassName = Arrays.asList("byte", "short", "char", "int", "long", "float", "double", "boolean");
+            List<String> wrapperClassName = Arrays.asList("Byte", "Short", "Character", "Integer", "Long", "Float", "Double", "Boolean");
+            List<String> otherClassName = Arrays.asList("String", "BigDecimal", "BigInteger");
             Method defaultMethod = new Method();
+            //增加方法注释
+            defaultMethod.addJavaDocLine("/**");
+            defaultMethod.addJavaDocLine(" * 带默认值的实例");
+            defaultMethod.addJavaDocLine("*/");
             defaultMethod.setStatic(true);
             defaultMethod.setName("defaultInstance");
             defaultMethod.setVisibility(JavaVisibility.PUBLIC);
@@ -231,12 +239,16 @@ public class MapperPlugin extends FalseMethodPlugin {
             defaultMethod.addBodyLine(String.format("%s instance = new %s();", topLevelClass.getType().getShortName(), topLevelClass.getType().getShortName()));
             for (IntrospectedColumn introspectedColumn : introspectedTable.getAllColumns()) {
                 String shortName = introspectedColumn.getFullyQualifiedJavaType().getShortName();
-                List<String> supportType = Arrays.asList("Byte", "Short", "Character", "Integer", "Long", "Float", "Double", "String", "BigDecimal", "BigInteger");
-                if (!supportType.contains(shortName)) {
+                if (!baseClassName.contains(shortName) && !wrapperClassName.contains(shortName) && !otherClassName.contains(shortName)) {
                     continue;
                 }
                 if (introspectedColumn.getDefaultValue() != null) {
                     String defaultValue = introspectedColumn.getDefaultValue();
+                    //处理备注中带有类型描述情况，如 postgresql中存在 ''::character varying
+                    if (defaultValue.matches("'\\.*'::\\w+(\\s\\w+)?")) {
+                        //
+                        defaultValue = defaultValue.substring(0, defaultValue.lastIndexOf("::"));
+                    }
                     //去除前后'',如 '123456' -> 123456
                     if (defaultValue.startsWith("'") && defaultValue.endsWith("'")) {
                         if (defaultValue.length() == 2) {
@@ -246,15 +258,27 @@ public class MapperPlugin extends FalseMethodPlugin {
                         }
                     }
                     //暂不支持时间类型默认值识别,不同数据库表达式不同
-                    if ("Boolean".equals(shortName)) {
+                    if ("Boolean".equals(shortName) || "boolean".equals(shortName)) {
                         if ("0".equals(defaultValue)) {
                             defaultValue = "false";
                         } else if ("1".equals(defaultValue)) {
                             defaultValue = "true";
                         }
                     }
-                    //通过 new 方法转换
-                    defaultMethod.addBodyLine(String.format("instance.%s = new %s(\"%s\");", introspectedColumn.getJavaProperty(), shortName, defaultValue));
+
+                    if ("String".equals(shortName)) {
+                        //字符串,不通过new String 创建
+                        // 其实通过new String 没有任何问题,不过强迫症,idea会提示,所以改了
+                        defaultMethod.addBodyLine(String.format("instance.%s = \"%s\";", introspectedColumn.getJavaProperty(), defaultValue));
+                    } else {
+                        String javaProperty = introspectedColumn.getJavaProperty();
+                        if (baseClassName.contains(shortName)) {
+                            //基本类型,转成包装类的new 创建
+                            javaProperty = wrapperClassName.get(baseClassName.indexOf(shortName));
+                        }
+                        //通过 new 方法转换
+                        defaultMethod.addBodyLine(String.format("instance.%s = new %s(\"%s\");", javaProperty, shortName, defaultValue));
+                    }
                 }
 
             }
