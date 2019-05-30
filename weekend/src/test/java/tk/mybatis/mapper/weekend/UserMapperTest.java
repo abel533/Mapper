@@ -29,7 +29,9 @@ import org.apache.ibatis.session.SqlSession;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TestRule;
+import tk.mybatis.mapper.weekend.entity.Country;
 import tk.mybatis.mapper.weekend.entity.User;
+import tk.mybatis.mapper.weekend.mapper.CountryMapper;
 import tk.mybatis.mapper.weekend.mapper.UserMapper;
 
 import java.util.Arrays;
@@ -60,5 +62,19 @@ public class UserMapperTest {
         for (User user : users) {
             System.out.println(user.getUserName());
         }
+    }
+    @Test
+    public void testExcludeAndSelectProperties(){
+        SqlSession    sqlSession = MybatisHelper.getSqlSession();
+        CountryMapper countryMapper = sqlSession.getMapper(CountryMapper.class);
+        Weekend<Country> weekend1 = Weekend.of(Country.class);
+        weekend1.excludeProperties(Country::getId,Country::getCountryname);
+        //查看日志执行的sql
+        countryMapper.selectByExample(weekend1);
+        Weekend<Country> weekend2 = Weekend.of(Country.class);
+        weekend2.selectProperties(Country::getId);
+        //查看日志执行的sql
+        countryMapper.selectByExample(weekend2);
+
     }
 }
