@@ -161,6 +161,27 @@ public class MapperPlugin extends FalseMethodPlugin {
         }
         // endregion swagger扩展
         String tableName = introspectedTable.getFullyQualifiedTableNameAtRuntime();
+
+        //region 文档注释
+        String remarks = introspectedTable.getRemarks();
+        topLevelClass.addJavaDocLine("/**");
+        topLevelClass.addJavaDocLine(" * 表名：" + tableName);
+        if (remarks != null) {
+            remarks = remarks.trim();
+        }
+        if (remarks != null && remarks.trim().length() > 0) {
+            String[] lines = remarks.split("\\r?\\n");
+            for (int i = 0; i < lines.length; i++) {
+                String line = lines[i];
+                if (i == 0) {
+                    topLevelClass.addJavaDocLine(" * 表注释：" + line);
+                } else {
+                    topLevelClass.addJavaDocLine(" *         " + line);
+                }
+            }
+        }
+        topLevelClass.addJavaDocLine("*/");
+        //endregion
         //如果包含空格，或者需要分隔符，需要完善
         if (StringUtility.stringContainsSpace(tableName)) {
             tableName = context.getBeginningDelimiter()
