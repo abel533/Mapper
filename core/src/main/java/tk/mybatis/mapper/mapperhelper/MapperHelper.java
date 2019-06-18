@@ -29,6 +29,8 @@ import org.apache.ibatis.annotations.InsertProvider;
 import org.apache.ibatis.annotations.SelectProvider;
 import org.apache.ibatis.annotations.UpdateProvider;
 import org.apache.ibatis.builder.annotation.ProviderSqlSource;
+import org.apache.ibatis.logging.Log;
+import org.apache.ibatis.logging.LogFactory;
 import org.apache.ibatis.mapping.MappedStatement;
 import org.apache.ibatis.session.Configuration;
 import tk.mybatis.mapper.MapperException;
@@ -52,6 +54,8 @@ import static tk.mybatis.mapper.util.MsUtil.getMapperClass;
  * @author liuzh
  */
 public class MapperHelper {
+
+    private static final Log log = LogFactory.getLog(MapperHelper.class);
 
     /**
      * 注册的接口
@@ -117,6 +121,7 @@ public class MapperHelper {
             if (templateClass == null) {
                 templateClass = tempClass;
             } else if (templateClass != tempClass) {
+                log.error("一个通用Mapper中只允许存在一个MapperTemplate子类!");
                 throw new MapperException("一个通用Mapper中只允许存在一个MapperTemplate子类!");
             }
         }
@@ -127,6 +132,7 @@ public class MapperHelper {
         try {
             mapperTemplate = (MapperTemplate) templateClass.getConstructor(Class.class, MapperHelper.class).newInstance(mapperClass, this);
         } catch (Exception e) {
+            log.error("实例化MapperTemplate对象失败:" + e, e);
             throw new MapperException("实例化MapperTemplate对象失败:" + e.getMessage());
         }
         //注册方法
@@ -134,6 +140,7 @@ public class MapperHelper {
             try {
                 mapperTemplate.addMethodMap(methodName, templateClass.getMethod(methodName, MappedStatement.class));
             } catch (NoSuchMethodException e) {
+                log.error(templateClass.getCanonicalName() + "中缺少" + methodName + "方法!", e);
                 throw new MapperException(templateClass.getCanonicalName() + "中缺少" + methodName + "方法!");
             }
         }
@@ -168,6 +175,7 @@ public class MapperHelper {
         try {
             registerMapper(Class.forName(mapperClass));
         } catch (ClassNotFoundException e) {
+            log.error("注册通用Mapper[" + mapperClass + "]失败，找不到该通用Mapper!", e);
             throw new MapperException("注册通用Mapper[" + mapperClass + "]失败，找不到该通用Mapper!");
         }
     }
@@ -188,6 +196,7 @@ public class MapperHelper {
                     mapperTemplate = getMapperTemplateByMsId(msId);
                 }
             } catch (Exception e){
+                log.warn("特殊情况: " + e);
             }
         }
         return mapperTemplate;
@@ -318,6 +327,8 @@ public class MapperHelper {
             try {
                 EntityHelper.setResolve(config.getResolveClass().newInstance());
             } catch (Exception e) {
+                log.error("创建 " + config.getResolveClass().getCanonicalName()
+                    + " 实例失败，请保证该类有默认的构造方法!", e);
                 throw new MapperException("创建 " + config.getResolveClass().getCanonicalName()
                         + " 实例失败，请保证该类有默认的构造方法!", e);
             }
@@ -343,6 +354,7 @@ public class MapperHelper {
                 try {
                     EntityHelper.setResolve((EntityResolve) Class.forName(resolveClass).newInstance());
                 } catch (Exception e) {
+                    log.error("创建 " + resolveClass + " 实例失败!", e);
                     throw new MapperException("创建 " + resolveClass + " 实例失败!", e);
                 }
             }
