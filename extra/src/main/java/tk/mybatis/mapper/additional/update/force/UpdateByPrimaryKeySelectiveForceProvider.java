@@ -51,7 +51,7 @@ public class UpdateByPrimaryKeySelectiveForceProvider extends MapperTemplate {
 
 
     public String updateByPrimaryKeySelectiveForce(MappedStatement ms) {
-        Class entityClass = getEntityClass(ms);
+        Class<?> entityClass = getEntityClass(ms);
         StringBuilder sql = new StringBuilder();
         sql.append(SqlHelper.updateTable(entityClass, tableName(entityClass), "record"));
         sql.append(this.updateSetColumnsForce(entityClass, "record", true, isNotEmpty()));
@@ -59,7 +59,17 @@ public class UpdateByPrimaryKeySelectiveForceProvider extends MapperTemplate {
 
         return sql.toString();
     }
+    
+    public String updateByPrimaryKeyForce(MappedStatement ms) {
+        Class<?> entityClass = getEntityClass(ms);
+        StringBuilder sql = new StringBuilder();
+        sql.append(SqlHelper.updateTable(entityClass, tableName(entityClass), "record"));
+        sql.append(this.updateSetColumnsForce(entityClass, "record", false, false));
+        sql.append(SqlHelper.wherePKColumns(entityClass, "record", true));
 
+        return sql.toString();
+    }
+    
     /**
      * update set列
      *
@@ -93,10 +103,8 @@ public class UpdateByPrimaryKeySelectiveForceProvider extends MapperTemplate {
                         .append(" = ${@tk.mybatis.mapper.version.VersionUtil@nextVersion(")
                         .append("@").append(versionClass).append("@class, ")
                         .append(column.getProperty()).append(")},");
-                } else if (notNull) {
-                    sql.append(this.getIfNotNull(entityName, column, column.getColumnEqualsHolder(entityName) + ",", notEmpty));
                 } else {
-                    sql.append(column.getColumnEqualsHolder(entityName) + ",");
+                	sql.append(this.getIf(entityName, column, column.getColumnEqualsHolder(entityName) + ",", notNull, notEmpty));
                 }
             }
         }
@@ -105,32 +113,34 @@ public class UpdateByPrimaryKeySelectiveForceProvider extends MapperTemplate {
     }
 
     /**
-     * 判断自动!=null的条件结构
-     *
+     * 判断条件结构
      * @param entityName
      * @param column
      * @param contents
+     * @param notNull
      * @param empty
      * @return
      */
-    public String getIfNotNull(String entityName, EntityColumn column, String contents, boolean empty) {
+    public String getIf(String entityName, EntityColumn column, String contents, boolean notNull, boolean empty) {
         StringBuilder sql = new StringBuilder();
         sql.append("<choose>");
-        sql.append("<when test=\"");
-        if (StringUtil.isNotEmpty(entityName)) {
-            sql.append(entityName).append(".");
+        if (notNull) {
+        	sql.append("<when test=\"");
+        	if (StringUtil.isNotEmpty(entityName)) {
+        		sql.append(entityName).append(".");
+        	}
+        	sql.append(column.getProperty()).append(" != null");
+        	if (empty && column.getJavaType().equals(String.class)) {
+        		sql.append(" and ");
+        		if (StringUtil.isNotEmpty(entityName)) {
+        			sql.append(entityName).append(".");
+        		}
+        		sql.append(column.getProperty()).append(" != '' ");
+        	}
+        	sql.append("\">");
+        	sql.append(contents);
+        	sql.append("</when>");
         }
-        sql.append(column.getProperty()).append(" != null");
-        if (empty && column.getJavaType().equals(String.class)) {
-            sql.append(" and ");
-            if (StringUtil.isNotEmpty(entityName)) {
-                sql.append(entityName).append(".");
-            }
-            sql.append(column.getProperty()).append(" != '' ");
-        }
-        sql.append("\">");
-        sql.append(contents);
-        sql.append("</when>");
 
         //指定的字段会被强制更新
         sql.append("<when test=\"");
