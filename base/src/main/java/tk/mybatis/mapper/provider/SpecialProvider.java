@@ -30,7 +30,6 @@ import tk.mybatis.mapper.mapperhelper.EntityHelper;
 import tk.mybatis.mapper.mapperhelper.MapperHelper;
 import tk.mybatis.mapper.mapperhelper.MapperTemplate;
 import tk.mybatis.mapper.mapperhelper.SqlHelper;
-import tk.mybatis.mapper.util.StringUtil;
 
 import java.util.Set;
 
@@ -93,6 +92,41 @@ public class SpecialProvider extends MapperTemplate {
         // 反射把MappedStatement中的设置主键名
         EntityHelper.setKeyProperties(EntityHelper.getPKColumns(entityClass), ms);
 
+        return sql.toString();
+    }
+
+    /**
+     * 批量插入
+     * 如果插入实体的属性值为null，则使用数据库的默认值
+     * 避免数据列设置了非空约束时，插入数据失败！
+     *
+     * @param ms
+     * @return
+     */
+    public String insertListSelective(MappedStatement ms) {
+        final Class<?> entityClass = getEntityClass(ms);
+        StringBuilder sql = new StringBuilder();
+        sql.append("<bind name=\"listNotEmptyCheck\" value=\"@tk.mybatis.mapper.util.OGNL@notEmptyCollectionCheck(list, '" + ms.getId() + " 方法参数为空')\"/>");
+        sql.append(SqlHelper.insertIntoTable(entityClass, tableName(entityClass)));
+        sql.append(SqlHelper.insertColumns(entityClass, true, false, isNotEmpty()));
+        sql.append("VALUES  ");
+        sql.append("<foreach collection=\"collection\" item=\"record\" separator=\",\" > ");
+        sql.append("<trim prefix=\"(\" suffix=\")\" suffixOverrides=\",\">");
+        //获取全部列
+        Set<EntityColumn> columnList = EntityHelper.getColumns(entityClass);
+        //当某个列有主键策略时，不需要考虑他的属性是否为空，因为如果为空，一定会根据主键策略给他生成一个值
+        for (EntityColumn column : columnList) {
+            if (!column.isId() && column.isInsertable()) {
+                // 如果插入字段值为null，使用数据库默认值
+                sql.append("IFNULL(");
+                sql.append(column.getColumnHolder("record") + ",");
+                sql.append("DEFAULT(" + column.getColumn() + ")),");
+            }
+        }
+        sql.append("</trim>");
+        sql.append(" </foreach>");
+        // 反射把MappedStatement中的设置主键名
+        EntityHelper.setKeyProperties(EntityHelper.getPKColumns(entityClass), ms);
         return sql.toString();
     }
 }

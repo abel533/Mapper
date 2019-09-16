@@ -49,4 +49,15 @@ public interface InsertListMapper<T> {
     @InsertProvider(type = SpecialProvider.class, method = "dynamicSQL")
     int insertList(List<? extends T> recordList);
 
+    /**
+     * 批量插入，支持批量插入的数据库可以使用，例如MySQL,H2等，另外该接口限制实体包含`id`属性并且必须为自增列
+     * 如果插入实体的属性值为null，则使用数据库的默认值
+     * 避免数据列设置了非空约束时，插入数据失败！
+     *
+     * @param iterable
+     */
+    @Options(useGeneratedKeys = true)
+    @InsertProvider(type = SpecialProvider.class, method = "dynamicSQL")
+    void insertListSelective(Iterable<T> iterable);
+
 }
