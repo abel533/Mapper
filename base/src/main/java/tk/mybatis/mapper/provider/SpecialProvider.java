@@ -97,7 +97,7 @@ public class SpecialProvider extends MapperTemplate {
 
     /**
      * 批量插入
-     * 如果插入实体的属性值为null，则使用数据库的默认值
+     * 如果插入集合里面的实体中的属性值为null，则使用数据库的默认值
      * 避免数据列设置了非空约束时，插入数据失败！
      *
      * @param ms
