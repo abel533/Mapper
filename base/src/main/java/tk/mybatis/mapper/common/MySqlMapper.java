@@ -25,6 +25,7 @@
 package tk.mybatis.mapper.common;
 
 import tk.mybatis.mapper.common.special.InsertListMapper;
+import tk.mybatis.mapper.common.special.InsertListSelectiveMapper;
 import tk.mybatis.mapper.common.special.InsertUseGeneratedKeysMapper;
 
 /**
@@ -36,6 +37,7 @@ import tk.mybatis.mapper.common.special.InsertUseGeneratedKeysMapper;
 @tk.mybatis.mapper.annotation.RegisterMapper
 public interface MySqlMapper<T> extends
         InsertListMapper<T>,
+        InsertListSelectiveMapper<T>,
         InsertUseGeneratedKeysMapper<T> {
 
 }
