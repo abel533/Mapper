@@ -155,6 +155,7 @@ public class FieldHelper {
         @Override
         public List<EntityField> getFields(Class<?> entityClass) {
             List<EntityField> fields = _getFields(entityClass, null, null);
+            fields = new ArrayList<EntityField>(new LinkedHashSet<EntityField>(fields));
             List<EntityField> properties = getProperties(entityClass);
             Set<EntityField> usedSet = new HashSet<EntityField>();
             for (EntityField field : fields) {
@@ -251,7 +252,7 @@ public class FieldHelper {
         public List<EntityField> getFields(Class<?> entityClass) {
             List<EntityField> fieldList = new ArrayList<EntityField>();
             _getFields(entityClass, fieldList, _getGenericTypeMap(entityClass), null);
-            return fieldList;
+            return new ArrayList<EntityField>(new LinkedHashSet<EntityField>(fieldList));
         }
 
         /**
