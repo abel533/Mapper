@@ -35,7 +35,7 @@ public class SqlHelperTest {
         Assert.assertEquals(" AND is_valid = 1", notLogicDeletedColumn);
 
         String updateSetColumns = SqlHelper.updateSetColumns(User.class, null, false, false);
-        Assert.assertEquals("<set>username = #{username},is_valid = 1,</set>", updateSetColumns);
+        Assert.assertEquals("<set>is_valid = 1,username = #{username},</set>", updateSetColumns);
     }
 
 }
