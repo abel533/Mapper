@@ -38,7 +38,7 @@ package tk.mybatis.mapper.common;
 public interface Mapper<T> extends
         BaseMapper<T>,
         ExampleMapper<T>,
-        RowBoundsMapper<T>,
+        PagableMapper<T>,
         Marker {
 
 }
