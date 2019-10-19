@@ -36,6 +36,11 @@
     <name>mapper-extra</name>
     <description>Mybatis 通用 Mapper 扩展方法</description>
 
+    <properties>
+        <jdk.version>1.8</jdk.version>
+        <mapper-module.version>1.1.5</mapper-module.version>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>org.mybatis</groupId>
@@ -44,6 +49,12 @@
         <dependency>
             <groupId>tk.mybatis</groupId>
             <artifactId>mapper-core</artifactId>
+            <version>${project.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>tk.mybatis</groupId>
+            <artifactId>mapper-weekend</artifactId>
             <version>${project.version}</version>
             <scope>provided</scope>
         </dependency>
