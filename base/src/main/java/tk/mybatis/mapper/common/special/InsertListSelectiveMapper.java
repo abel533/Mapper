@@ -6,7 +6,7 @@ import tk.mybatis.mapper.annotation.RegisterMapper;
 import tk.mybatis.mapper.provider.SpecialProvider;
 
 /**
- * 通用Mapper接口,特殊方法，批量插入，支持批量插入的数据库都可以使用，例如mysql,h2等
+ * 通用Mapper接口,特殊方法，批量插入，支持批量插入的数据库都可以使用，例如mysql等
  * @author 陈添明
  * @date 2019/9/16
  */
@@ -14,9 +14,10 @@ import tk.mybatis.mapper.provider.SpecialProvider;
 public interface InsertListSelectiveMapper<T> {
 
     /**
-     * 批量插入，支持批量插入的数据库可以使用，例如MySQL,H2等，另外该接口限制实体包含`id`属性并且必须为自增列
+     * 批量插入，支持批量插入的数据库可以使用，例如MySQL等，另外该接口限制实体包含`id`属性并且必须为自增列
      * 如果插入集合里面的实体中的属性值为null，则使用数据库的默认值
      * 避免数据列设置了非空约束时，插入数据失败！
+     * 注意：使用该方式，为null值的字段在数据库必须设置默认值。允许插入null值请使用 {@link InsertListMapper#insertList}
      *
      * @param iterable
      */

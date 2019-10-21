@@ -49,13 +49,13 @@
                 <property name="url" value="jdbc:jtds:sqlserver://192.168.1.211:1433/master"/>
                 <property name="username" value="sa"/>
                 <property name="password" value="jj"/>-->
-                <property name="driver" value="org.hsqldb.jdbcDriver" />
+                <!--<property name="driver" value="org.hsqldb.jdbcDriver" />
                 <property name="url" value="jdbc:hsqldb:mem:basetest" />
-                <property name="username" value="sa" />
-                <!--<property name="driver" value="com.mysql.jdbc.Driver" />
-                <property name="url" value="jdbc:mysql://192.168.16.137:3306/test" />
+                <property name="username" value="sa" />-->
+                <property name="driver" value="com.mysql.jdbc.Driver" />
+                <property name="url" value="jdbc:mysql://127.0.0.1:3306/test" />
                 <property name="username" value="root" />
-                <property name="password" value="" />-->
+                <property name="password" value="123456" />
             </dataSource>
         </environment>
     </environments>
@@ -76,6 +76,7 @@
         <mapper class="tk.mybatis.mapper.mapper.CountryVersionMapper"/>
         <mapper class="tk.mybatis.mapper.mapper.TbUserMapper"/>
         <mapper class="tk.mybatis.mapper.mapper.TbUserLogicDeleteMapper"/>
+        <mapper class="tk.mybatis.mapper.mapper.PersonMapper"/>
 
     </mappers>
 

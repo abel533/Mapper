@@ -294,3 +294,16 @@ insert into tb_user (id,username,password,is_valid) values (6,'test6','eeee',0);
 insert into tb_user (id,username,password,is_valid) values (7,'test7','ffff',0);
 insert into tb_user (id,username,password,is_valid) values (8,'test','gggg',1);
 insert into tb_user (id,username,password,is_valid) values (9,'test','gggg',0);
+
+
+-- person测试表
+drop table person;
+CREATE TABLE person (
+  id bigint NOT NULL AUTO_INCREMENT,
+  name varchar(50) NOT NULL DEFAULT '',
+  age INT NOT NULL DEFAULT 0,
+  time datetime NOT NULL DEFAULT '2019-10-10 10:00:00',
+  ctime datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ,
+  ctimestamp TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

@@ -31,6 +31,7 @@ import tk.mybatis.mapper.mapperhelper.MapperHelper;
 import tk.mybatis.mapper.mapperhelper.MapperTemplate;
 import tk.mybatis.mapper.mapperhelper.SqlHelper;
 
+import java.util.Date;
 import java.util.Set;
 
 /**
@@ -39,6 +40,16 @@ import java.util.Set;
  * @author liuzh
  */
 public class SpecialProvider extends MapperTemplate {
+
+    private Class<?> LocalDateTimeClass;
+
+    {
+        try {
+            LocalDateTimeClass = Class.forName("java.time.LocalDateTime");
+        } catch (ClassNotFoundException e) {
+            // do nothing
+        }
+    }
 
     public SpecialProvider(Class<?> mapperClass, MapperHelper mapperHelper) {
         super(mapperClass, mapperHelper);
@@ -104,6 +115,7 @@ public class SpecialProvider extends MapperTemplate {
      * @return
      */
     public String insertListSelective(MappedStatement ms) {
+
         final Class<?> entityClass = getEntityClass(ms);
         StringBuilder sql = new StringBuilder();
         sql.append("<bind name=\"listNotEmptyCheck\" value=\"@tk.mybatis.mapper.util.OGNL@notEmptyCollectionCheck(list, '" + ms.getId() + " 方法参数为空')\"/>");
@@ -120,7 +132,18 @@ public class SpecialProvider extends MapperTemplate {
                 // 如果插入字段值为null，使用数据库默认值
                 sql.append("IFNULL(");
                 sql.append(column.getColumnHolder("record") + ",");
-                sql.append("DEFAULT(" + column.getColumn() + ")),");
+                // Date
+                if (isDate(column)) {
+                    sql.append("IF(DEFAULT(")
+                            .append(column.getColumn())
+                            .append(")='0000-00-00 00:00:00',CURRENT_TIMESTAMP,DEFAULT(")
+                            .append(column.getColumn()).append("))");
+                } else {
+                    sql.append("DEFAULT(")
+                            .append(column.getColumn())
+                            .append(")");
+                }
+                sql.append("),");
             }
         }
         sql.append("</trim>");
@@ -128,5 +151,18 @@ public class SpecialProvider extends MapperTemplate {
         // 反射把MappedStatement中的设置主键名
         EntityHelper.setKeyProperties(EntityHelper.getPKColumns(entityClass), ms);
         return sql.toString();
+    }
+
+
+    private boolean isDate(EntityColumn column) {
+        Class<?> javaType = column.getJavaType();
+        if (Date.class.isAssignableFrom(javaType)) {
+            return true;
+        }
+        // 兼容java8
+        if (LocalDateTimeClass != null && LocalDateTimeClass.isAssignableFrom(column.getJavaType())) {
+            return true;
+        }
+        return false;
     }
 }

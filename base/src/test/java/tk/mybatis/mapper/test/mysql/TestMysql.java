@@ -26,11 +26,15 @@ package tk.mybatis.mapper.test.mysql;
 
 import org.apache.ibatis.session.SqlSession;
 import org.junit.Assert;
+import org.junit.Test;
 import tk.mybatis.mapper.mapper.CountryMapper;
 import tk.mybatis.mapper.mapper.MybatisHelper;
+import tk.mybatis.mapper.mapper.PersonMapper;
 import tk.mybatis.mapper.model.Country;
+import tk.mybatis.mapper.model.Person;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -82,6 +86,34 @@ public class TestMysql {
             int count = mapper.insertUseGeneratedKeys(country);
             Assert.assertEquals(1, count);
             Assert.assertNotNull(country.getId());
+        } finally {
+            sqlSession.rollback();
+            sqlSession.close();
+        }
+    }
+
+
+    /**
+     * 插入完整数据
+     */
+    //该方法测试需要mysql数据库，所以这里注释掉
+    @Test
+    public void testInsertListSelective() {
+        SqlSession sqlSession = MybatisHelper.getSqlSession();
+        try {
+            PersonMapper personMapper = sqlSession.getMapper(PersonMapper.class);
+            List<Person> personList = new ArrayList<Person>();
+            personList.add(new Person());
+            personList.add(new Person().setName("test").setCtime(new Date()));
+            personMapper.insertListSelective(personList);
+            List<Person> list = personMapper.selectAll();
+            System.out.println(list);
+            Assert.assertEquals(list.size(), 2);
+            Person person0 = list.get(0);
+            Assert.assertEquals(person0.getName(), "");
+            Assert.assertNotNull(person0.getCtime());
+            Person person1 = list.get(1);
+            Assert.assertEquals(person1.getName(), "test");
         } finally {
             sqlSession.rollback();
             sqlSession.close();
