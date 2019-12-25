@@ -59,6 +59,8 @@ public class InsertListProvider extends MapperTemplate {
         sql.append("<trim prefix=\"(\" suffix=\")\" suffixOverrides=\",\">");
         //获取全部列
         Set<EntityColumn> columnList = EntityHelper.getColumns(entityClass);
+        //获取逻辑删除列
+        EntityColumn logicDeleteColumn = SqlHelper.getLogicDeleteColumn(entityClass);
         //单独增加对 genId 方式的支持
         for (EntityColumn column : columnList) {
             if (column.getGenIdClass() != null) {
@@ -72,9 +74,14 @@ public class InsertListProvider extends MapperTemplate {
         }
         //当某个列有主键策略时，不需要考虑他的属性是否为空，因为如果为空，一定会根据主键策略给他生成一个值
         for (EntityColumn column : columnList) {
-            if (column.isInsertable()) {
-                sql.append(column.getColumnHolder("record") + ",");
+            if (!column.isInsertable()) {
+                continue;
             }
+            if (logicDeleteColumn != null && logicDeleteColumn == column) {
+                sql.append(SqlHelper.getLogicDeletedValue(column, false)).append(",");
+                continue;
+            }
+            sql.append(column.getColumnHolder("record") + ",");
         }
         sql.append("</trim>");
         sql.append("</foreach>");
