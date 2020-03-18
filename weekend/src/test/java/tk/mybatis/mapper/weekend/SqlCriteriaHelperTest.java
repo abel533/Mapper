@@ -7,6 +7,7 @@ import tk.mybatis.mapper.entity.Example;
 import tk.mybatis.mapper.weekend.entity.Country;
 import tk.mybatis.mapper.weekend.mapper.CountryMapper;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -77,6 +78,31 @@ public class SqlCriteriaHelperTest {
             List<Country> selectByWeekendSqls = mapper.selectByExample(new Example.Builder(Country.class)
                     .where(WeekendSqls.<Country>custom()
                             .andLike(Country::getCountryname, "Chin")
+                            .orLike(Country::getCountryname, "A")).build());
+            //判断两个结果数组内容是否相同
+            Assert.assertArrayEquals(selectBySqlCriteriaHelper.toArray(), selectByWeekendSqls.toArray());
+        } finally {
+            sqlSession.close();
+        }
+    }
+
+    /**
+     * in查询 空集合问题
+     */
+    @Test
+    public void list() {
+        SqlSession sqlSession = MybatisHelper.getSqlSession();
+        try {
+            CountryMapper mapper = sqlSession.getMapper(CountryMapper.class);
+
+            List<Country> selectBySqlCriteriaHelper= mapper.selectByExample(new Example.Builder(Country.class)
+                    .where(SqlCriteriaHelper.custom(Country.class)
+                            .andIn(Country::getCountryname, new ArrayList())
+                            .orLike(Country::getCountryname, "A")).build());
+
+            List<Country> selectByWeekendSqls = mapper.selectByExample(new Example.Builder(Country.class)
+                    .where(WeekendSqls.<Country>custom()
+                            .andIn(Country::getCountryname, new ArrayList())
                             .orLike(Country::getCountryname, "A")).build());
             //判断两个结果数组内容是否相同
             Assert.assertArrayEquals(selectBySqlCriteriaHelper.toArray(), selectByWeekendSqls.toArray());
