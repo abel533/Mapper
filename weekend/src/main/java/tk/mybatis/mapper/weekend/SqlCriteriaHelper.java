@@ -586,7 +586,7 @@ public class SqlCriteriaHelper<T> implements tk.mybatis.mapper.entity.SqlsCriter
      */
     public SqlCriteriaHelper<T> orNotLikeLeft(Fn<T, Object> fn, String value) {
         if(Optional.ofNullable(value).isPresent()){
-            value = "%"+value+"%";
+            value = "%"+value;
             this.criteria.getCriterions().add(new Sqls.Criterion(Reflections.fnToFieldName(fn), value, "not like", "or"));
         }
         return this;
