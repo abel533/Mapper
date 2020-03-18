@@ -17,12 +17,8 @@ public class SqlCriteriaHelper<T> implements tk.mybatis.mapper.entity.SqlsCriter
         this.criteria = new Sqls.Criteria();
     }
 
-    private SqlCriteriaHelper(Class<T> clazz) {
-        this.criteria = new Sqls.Criteria();
-    }
-
     public static <T> SqlCriteriaHelper<T> custom(Class<T> clazz) {
-        return new SqlCriteriaHelper<T>(clazz);
+        return new SqlCriteriaHelper<T>();
     }
 
     /**
@@ -173,7 +169,7 @@ public class SqlCriteriaHelper<T> implements tk.mybatis.mapper.entity.SqlsCriter
      * @return
      */
     public SqlCriteriaHelper<T> andIn(Fn<T, Object> fn, Iterable values) {
-        if(Optional.ofNullable(values).isPresent()){
+        if(Optional.ofNullable(values).isPresent() && values.iterator().hasNext()){
             this.criteria.getCriterions().add(new Sqls.Criterion(Reflections.fnToFieldName(fn), values, "in", "and"));
         }
         return this;
@@ -187,7 +183,7 @@ public class SqlCriteriaHelper<T> implements tk.mybatis.mapper.entity.SqlsCriter
      * @return
      */
     public SqlCriteriaHelper<T> andNotIn(Fn<T, Object> fn, Iterable values) {
-        if(Optional.ofNullable(values).isPresent()){
+        if(Optional.ofNullable(values).isPresent() && values.iterator().hasNext()){
             this.criteria.getCriterions().add(new Sqls.Criterion(Reflections.fnToFieldName(fn), values, "not in", "and"));
         }
         return this;
@@ -463,7 +459,7 @@ public class SqlCriteriaHelper<T> implements tk.mybatis.mapper.entity.SqlsCriter
      * @return
      */
     public SqlCriteriaHelper<T> orIn(Fn<T, Object> fn, Iterable values) {
-        if(Optional.ofNullable(values).isPresent()){
+        if(Optional.ofNullable(values).isPresent() && values.iterator().hasNext()){
             this.criteria.getCriterions().add(new Sqls.Criterion(Reflections.fnToFieldName(fn), values, "in", "or"));
         }
         return this;
@@ -477,7 +473,7 @@ public class SqlCriteriaHelper<T> implements tk.mybatis.mapper.entity.SqlsCriter
      * @return
      */
     public SqlCriteriaHelper<T> orNotIn(Fn<T, Object> fn, Iterable values) {
-        if(Optional.ofNullable(values).isPresent()){
+        if(Optional.ofNullable(values).isPresent() && values.iterator().hasNext()){
             this.criteria.getCriterions().add(new Sqls.Criterion(Reflections.fnToFieldName(fn), values, "not in", "or"));
         }
         return this;
@@ -523,10 +519,46 @@ public class SqlCriteriaHelper<T> implements tk.mybatis.mapper.entity.SqlsCriter
      */
     public SqlCriteriaHelper<T> orLike(Fn<T, Object> fn, String value) {
         if(Optional.ofNullable(value).isPresent()){
+            value = "%"+value+"%";
             this.criteria.getCriterions().add(new Sqls.Criterion(Reflections.fnToFieldName(fn), value, "like", "or"));
         }
         return this;
     }
+
+
+    /**
+     * OR column LIKE %value
+     * 当 value = null 则当前属性不参与查询
+     * @param fn
+     * @param value
+     * @return
+     */
+    public SqlCriteriaHelper<T> orLikeLeft(Fn<T, Object> fn, String value) {
+        if(Optional.ofNullable(value).isPresent()){
+            value = "%"+value;
+            this.criteria.getCriterions().add(new Sqls.Criterion(Reflections.fnToFieldName(fn), value, "like", "or"));
+        }
+        return this;
+    }
+
+
+
+
+    /**
+     * OR column LIKE value%
+     * 当 value = null 则当前属性不参与查询
+     * @param fn
+     * @param value
+     * @return
+     */
+    public SqlCriteriaHelper<T> orLikeRight(Fn<T, Object> fn, String value) {
+        if(Optional.ofNullable(value).isPresent()){
+            value = value+"%";
+            this.criteria.getCriterions().add(new Sqls.Criterion(Reflections.fnToFieldName(fn), value, "like", "or"));
+        }
+        return this;
+    }
+
 
     /**
      * OR column NOT LIKE value
@@ -537,10 +569,44 @@ public class SqlCriteriaHelper<T> implements tk.mybatis.mapper.entity.SqlsCriter
      */
     public SqlCriteriaHelper<T> orNotLike(Fn<T, Object> fn, String value) {
         if(Optional.ofNullable(value).isPresent()){
+            value = "%"+value+"%";
             this.criteria.getCriterions().add(new Sqls.Criterion(Reflections.fnToFieldName(fn), value, "not like", "or"));
         }
         return this;
     }
+
+
+
+    /**
+     * OR column NOT LIKE %value
+     * 当 value = null 则当前属性不参与查询
+     * @param fn
+     * @param value
+     * @return
+     */
+    public SqlCriteriaHelper<T> orNotLikeLeft(Fn<T, Object> fn, String value) {
+        if(Optional.ofNullable(value).isPresent()){
+            value = "%"+value+"%";
+            this.criteria.getCriterions().add(new Sqls.Criterion(Reflections.fnToFieldName(fn), value, "not like", "or"));
+        }
+        return this;
+    }
+
+    /**
+     * OR column NOT LIKE value%
+     * 当 value = null 则当前属性不参与查询
+     * @param fn
+     * @param value
+     * @return
+     */
+    public SqlCriteriaHelper<T> orNotLikeRight(Fn<T, Object> fn, String value) {
+        if(Optional.ofNullable(value).isPresent()){
+            value = value+"%";
+            this.criteria.getCriterions().add(new Sqls.Criterion(Reflections.fnToFieldName(fn), value, "not like", "or"));
+        }
+        return this;
+    }
+
 
     @Override
     public Sqls.Criteria getCriteria() {
