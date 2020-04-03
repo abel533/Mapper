@@ -36,7 +36,7 @@ public class User implements Serializable {
     @Id
     private Long              id;
     private String            name;
-    private String            role;
+    private String            roLe;
     //存储聚合函数值
     @Transient
     private Long aggregation;
@@ -57,12 +57,12 @@ public class User implements Serializable {
         this.name = name;
     }
 
-    public String getRole() {
-        return role;
+    public String getRoLe() {
+        return roLe;
     }
 
-    public void setRole(String role) {
-        this.role = role;
+    public void setRoLe(String roLe) {
+        this.roLe = roLe;
     }
 
     public Long getAggregation() {
