@@ -60,7 +60,7 @@ public class BatchUpdatePropertyByPrimaryKeyProvider extends MapperTemplate {
         Set<EntityColumn> columnList = EntityHelper.getPKColumns(entityClass);
         if (columnList.size() == 1) {
             EntityColumn column = columnList.iterator().next();
-            sql.append("<bind name=\"notEmptyListCheck\" value=\"@tk.mybatis.mapper.additional.update.batch.BatchUpdatePropertyByPrimaryKeyProviderr@notEmpty(");
+            sql.append("<bind name=\"notEmptyListCheck\" value=\"@tk.mybatis.mapper.additional.update.batch.BatchUpdatePropertyByPrimaryKeyProvider@notEmpty(");
             sql.append("idList, 'idList 不能为空')\"/>");
             sql.append("<where>");
             sql.append("<foreach collection=\"idList\" item=\"id\" separator=\",\" open=\"");
