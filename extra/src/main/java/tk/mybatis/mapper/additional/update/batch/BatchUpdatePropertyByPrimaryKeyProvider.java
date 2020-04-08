@@ -74,7 +74,7 @@ public class BatchUpdatePropertyByPrimaryKeyProvider extends MapperTemplate {
             }
             sql.append("</where>");
         } else {
-            throw new MapperException("继承 ByIdList 方法的实体类[" + entityClass.getCanonicalName() + "]中必须只有一个带有 @Id 注解的字段");
+            throw new MapperException("继承 BatchUpdatePropertyByPrimaryKeyMapper 方法的实体类[" + entityClass.getCanonicalName() + "]中必须只有一个带有 @Id 注解的字段");
         }
     }
 
