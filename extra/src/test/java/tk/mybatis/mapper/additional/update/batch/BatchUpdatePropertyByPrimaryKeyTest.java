@@ -58,6 +58,17 @@ public class BatchUpdatePropertyByPrimaryKeyTest extends BaseTest {
         }
     }
 
+    @Test(expected = Exception.class)
+    public void testBatchUpdateFieldByEmptyIdList() {
+        SqlSession sqlSession = getSqlSession();
+        try {
+            tk.mybatis.mapper.additional.update.batch.CountryMapper mapper = sqlSession.getMapper(CountryMapper.class);
+            mapper.batchUpdateFieldByIdList(Country::getCountryname, "Gold", new ArrayList<>());
+        } finally {
+            sqlSession.close();
+        }
+    }
+
     @Test
     public void batchUpdateFieldListByIdList() {
         SqlSession sqlSession = getSqlSession();

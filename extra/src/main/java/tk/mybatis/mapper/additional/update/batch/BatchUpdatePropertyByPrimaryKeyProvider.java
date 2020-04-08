@@ -11,6 +11,7 @@ import tk.mybatis.mapper.mapperhelper.MapperHelper;
 import tk.mybatis.mapper.mapperhelper.MapperTemplate;
 import tk.mybatis.mapper.mapperhelper.SqlHelper;
 
+import java.util.List;
 import java.util.Set;
 
 public class BatchUpdatePropertyByPrimaryKeyProvider extends MapperTemplate {
@@ -59,6 +60,8 @@ public class BatchUpdatePropertyByPrimaryKeyProvider extends MapperTemplate {
         Set<EntityColumn> columnList = EntityHelper.getPKColumns(entityClass);
         if (columnList.size() == 1) {
             EntityColumn column = columnList.iterator().next();
+            sql.append("<bind name=\"notEmptyListCheck\" value=\"@tk.mybatis.mapper.additional.update.batch.BatchUpdatePropertyByPrimaryKeyProviderr@notEmpty(");
+            sql.append("idList, 'idList 不能为空')\"/>");
             sql.append("<where>");
             sql.append("<foreach collection=\"idList\" item=\"id\" separator=\",\" open=\"");
             sql.append(column.getColumn());
@@ -106,4 +109,18 @@ public class BatchUpdatePropertyByPrimaryKeyProvider extends MapperTemplate {
         EntityColumn entityColumn = entityTable.getPropertyMap().get(property);
         return entityColumn.getColumn();
     }
+
+    /**
+     * 保证 idList 不能为空
+     *
+     * @param list
+     * @param errorMsg
+     */
+    public static void notEmpty(List<?> list, String errorMsg){
+        if(list == null || list.size() == 0){
+            throw new MapperException(errorMsg);
+        }
+    }
+
+
 }
