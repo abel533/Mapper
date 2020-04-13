@@ -1,7 +1,5 @@
 package tk.mybatis.mapper.additional.update.batch;
 
-import org.apache.ibatis.logging.Log;
-import org.apache.ibatis.logging.LogFactory;
 import org.apache.ibatis.mapping.MappedStatement;
 import tk.mybatis.mapper.MapperException;
 import tk.mybatis.mapper.entity.EntityColumn;
@@ -16,8 +14,6 @@ import java.util.Set;
 
 public class BatchUpdatePropertyByPrimaryKeyProvider extends MapperTemplate {
 
-    private static final Log log = LogFactory.getLog(BatchUpdatePropertyByPrimaryKeyProvider.class);
-
     public BatchUpdatePropertyByPrimaryKeyProvider(Class<?> mapperClass, MapperHelper mapperHelper) {
         super(mapperClass, mapperHelper);
     }
@@ -26,9 +22,7 @@ public class BatchUpdatePropertyByPrimaryKeyProvider extends MapperTemplate {
         Class<?> entityClass = getEntityClass(ms);
         StringBuilder sql = new StringBuilder();
         sql.append(SqlHelper.updateTable(entityClass, tableName(entityClass)));
-        // set
         appendSet(sql, entityClass);
-        // where
         appendWhereIdList(sql, entityClass, true);
         return sql.toString();
     }
@@ -37,9 +31,7 @@ public class BatchUpdatePropertyByPrimaryKeyProvider extends MapperTemplate {
         Class<?> entityClass = getEntityClass(ms);
         StringBuilder sql = new StringBuilder();
         sql.append(SqlHelper.updateTable(entityClass, tableName(entityClass)));
-        // set
         appendFileListSet(sql, entityClass);
-        // where
         appendWhereIdList(sql, entityClass, true);
         return sql.toString();
     }
