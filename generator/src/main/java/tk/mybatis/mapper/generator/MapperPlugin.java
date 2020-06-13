@@ -55,6 +55,10 @@ public class MapperPlugin extends FalseMethodPlugin {
 
     //是否需要生成Data注解
     private boolean needsData = false;
+    //是否需要生成Builder注解
+    private boolean needsBuilder = false;
+    //是否需要生成NoArgsConstructor注解
+    private boolean needsNoArgsConstructor = false;
     //是否需要生成Getter注解
     private boolean needsGetter = false;
     //是否需要生成Setter注解
@@ -122,6 +126,16 @@ public class MapperPlugin extends FalseMethodPlugin {
         if (this.needsData) {
             topLevelClass.addImportedType("lombok.Data");
             topLevelClass.addAnnotation("@Data");
+        }
+        //如果需要Builder，引入包，代码增加注解
+        if (this.needsBuilder) {
+            topLevelClass.addImportedType("lombok.Builder");
+            topLevelClass.addAnnotation("@Builder");
+        }
+        //如果需要NoArgsConstructor，引入包，代码增加注解
+        if (this.needsNoArgsConstructor) {
+            topLevelClass.addImportedType("lombok.NoArgsConstructor");
+            topLevelClass.addAnnotation("@NoArgsConstructor");
         }
         //如果需要Getter，引入包，代码增加注解
         if (this.needsGetter) {
@@ -403,6 +417,8 @@ public class MapperPlugin extends FalseMethodPlugin {
             String lombokEqualsAndHashCodeCallSuper = getProperty("lombokEqualsAndHashCodeCallSuper", "false");
             this.needsEqualsAndHashCodeAndCallSuper = this.needsEqualsAndHashCode && "TRUE".equalsIgnoreCase(lombokEqualsAndHashCodeCallSuper);
             this.needsAccessors = lombok.contains("Accessors");
+            this.needsBuilder = lombok.contains("Builder");
+            this.needsNoArgsConstructor = lombok.contains("NoArgsConstructor");
         }
         //swagger扩展
         String swagger = getProperty("swagger", "false");
