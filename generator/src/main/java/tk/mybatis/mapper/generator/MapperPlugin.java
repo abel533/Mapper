@@ -59,6 +59,8 @@ public class MapperPlugin extends FalseMethodPlugin {
     private boolean needsBuilder = false;
     //是否需要生成NoArgsConstructor注解
     private boolean needsNoArgsConstructor = false;
+    //是否需要生成AllArgsConstructor注解
+    private boolean needsAllArgsConstructor = false;
     //是否需要生成Getter注解
     private boolean needsGetter = false;
     //是否需要生成Setter注解
@@ -136,6 +138,11 @@ public class MapperPlugin extends FalseMethodPlugin {
         if (this.needsNoArgsConstructor) {
             topLevelClass.addImportedType("lombok.NoArgsConstructor");
             topLevelClass.addAnnotation("@NoArgsConstructor");
+        }
+        //如果需要AllArgsConstructor，引入包，代码增加注解
+        if (this.needsAllArgsConstructor) {
+            topLevelClass.addImportedType("lombok.AllArgsConstructor");
+            topLevelClass.addAnnotation("@AllArgsConstructor");
         }
         //如果需要Getter，引入包，代码增加注解
         if (this.needsGetter) {
@@ -419,6 +426,7 @@ public class MapperPlugin extends FalseMethodPlugin {
             this.needsAccessors = lombok.contains("Accessors");
             this.needsBuilder = lombok.contains("Builder");
             this.needsNoArgsConstructor = lombok.contains("NoArgsConstructor");
+            this.needsAllArgsConstructor = lombok.contains("AllArgsConstructor");
         }
         //swagger扩展
         String swagger = getProperty("swagger", "false");
