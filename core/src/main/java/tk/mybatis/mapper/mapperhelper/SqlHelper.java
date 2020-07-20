@@ -944,7 +944,6 @@ public class SqlHelper {
     public static String exampleWhereClause() {
         return "<if test=\"_parameter != null\">" +
                 "<where>\n" +
-                " ${@tk.mybatis.mapper.util.OGNL@andNotLogicDelete(_parameter)}" +
                 " <trim prefix=\"(\" prefixOverrides=\"and |or \" suffix=\")\">\n" +
                 "  <foreach collection=\"oredCriteria\" item=\"criteria\">\n" +
                 "    <if test=\"criteria.valid\">\n" +
@@ -973,6 +972,7 @@ public class SqlHelper {
                 "    </if>\n" +
                 "  </foreach>\n" +
                 " </trim>\n" +
+                " ${@tk.mybatis.mapper.util.OGNL@andNotLogicDelete(_parameter)}" +
                 "</where>" +
                 "</if>";
     }
@@ -984,7 +984,6 @@ public class SqlHelper {
      */
     public static String updateByExampleWhereClause() {
         return "<where>\n" +
-                " ${@tk.mybatis.mapper.util.OGNL@andNotLogicDelete(example)}" +
                 " <trim prefix=\"(\" prefixOverrides=\"and |or \" suffix=\")\">\n" +
                 "  <foreach collection=\"example.oredCriteria\" item=\"criteria\">\n" +
                 "    <if test=\"criteria.valid\">\n" +
@@ -1013,6 +1012,7 @@ public class SqlHelper {
                 "    </if>\n" +
                 "  </foreach>\n" +
                 " </trim>\n" +
+                " ${@tk.mybatis.mapper.util.OGNL@andNotLogicDelete(example)}" +
                 "</where>";
     }
 

@@ -243,13 +243,7 @@ public abstract class OGNL {
                 EntityColumn column = entry.getValue();
                 if (column.getEntityField().isAnnotationPresent(LogicDelete.class)) {
                     // 未逻辑删除的条件
-                    result = column.getColumn() + " = " + SqlHelper.getLogicDeletedValue(column, false);
-
-                    // 如果Example中有条件，则拼接" and "，
-                    // 如果是空的oredCriteria，则where中只有逻辑删除注解的未删除条件
-                    if (example.getOredCriteria() != null && example.getOredCriteria().size() != 0) {
-                        result += " and ";
-                    }
+                    result = "and " + column.getColumn() + " = " + SqlHelper.getLogicDeletedValue(column, false);
                 }
             }
         }
