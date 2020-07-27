@@ -36,7 +36,7 @@
 
     <name>mapper-parent</name>
     <description>Mybatis 通用 Mapper 聚合模块</description>
-    <url>http://www.mybatis.tk</url>
+    <url>https://mybatis.io</url>
 
     <licenses>
         <license>

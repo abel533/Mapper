@@ -35,7 +35,7 @@
 
     <name>mapper-base</name>
     <description>Mybatis 通用 Mapper 基础方法实现</description>
-    <url>http://www.mybatis.tk</url>
+    <url>https://mybatis.io</url>
 
     <dependencies>
         <!--必须依赖-->

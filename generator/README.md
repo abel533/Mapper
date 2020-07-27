@@ -610,9 +610,9 @@ Blob列：
 >
 >支付宝
 >
-><img width="360" src="https://camo.githubusercontent.com/4af3ab81f88d87abfb9c67f9c6bba84047b079e1/68747470733a2f2f6d7962617469732e746b2f696d672f616c695f7061792e706e67" alt="支付宝" data-canonical-src="https://mybatis.tk/img/ali_pay.png">
+><img width="360" src="https://camo.githubusercontent.com/4af3ab81f88d87abfb9c67f9c6bba84047b079e1/68747470733a2f2f6d7962617469732e746b2f696d672f616c695f7061792e706e67" alt="支付宝" data-canonical-src="https://mybatis.io/img/ali_pay.png">
 >
 >微信
 >
-><img width="360" src="https://camo.githubusercontent.com/56a0b0aa0c09116cb0ef2f3ebe7f6d7103705a98/68747470733a2f2f6d7962617469732e746b2f696d672f77785f7061792e706e67" alt="微信" data-canonical-src="https://mybatis.tk/img/wx_pay.png">
+><img width="360" src="https://camo.githubusercontent.com/56a0b0aa0c09116cb0ef2f3ebe7f6d7103705a98/68747470733a2f2f6d7962617469732e746b2f696d672f77785f7061792e706e67" alt="微信" data-canonical-src="https://mybatis.io/img/wx_pay.png">
 
