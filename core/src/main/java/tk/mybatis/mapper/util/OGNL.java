@@ -247,13 +247,31 @@ public abstract class OGNL {
 
                     // 如果Example中有条件，则拼接" and "，
                     // 如果是空的oredCriteria，则where中只有逻辑删除注解的未删除条件
-                    if (example.getOredCriteria() != null && example.getOredCriteria().size() != 0) {
+                    if (hasWhereCause(example)) {
                         result += " and ";
                     }
                 }
             }
         }
         return result;
+    }
+
+    /**
+     * 检查是否存在where条件，存在返回true，不存在返回false.
+     *
+     * @param example
+     * @return
+     */
+    private static boolean hasWhereCause(Example example) {
+        if (example.getOredCriteria() == null || example.getOredCriteria().size() == 0) {
+            return false;
+        }
+        for (Example.Criteria oredCriterion : example.getOredCriteria()) {
+            if (oredCriterion.getAllCriteria().size() != 0) {
+                return true;
+            }
+        }
+        return false;
     }
 
 }
