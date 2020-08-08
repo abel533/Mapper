@@ -39,9 +39,9 @@ public class SelectByPropertyMapperTest extends BaseTest {
         SqlSession sqlSession = getSqlSession();
         try {
             BookMapper mapper = sqlSession.getMapper(BookMapper.class);
-            Book book = mapper.selectOneByProperty(Book::getName, "Java入门1");
+            Book book = mapper.selectOneByProperty(Book::getName, "JavaStarter1");
             Assert.assertNotNull(book);
-            Assert.assertEquals("Java入门1", book.getName());
+            Assert.assertEquals("JavaStarter1", book.getName());
         } finally {
             sqlSession.close();
         }
