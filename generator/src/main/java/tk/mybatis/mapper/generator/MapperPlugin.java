@@ -39,6 +39,7 @@ import java.util.*;
  * @author liuzh
  */
 public class MapperPlugin extends FalseMethodPlugin {
+
     private Set<String> mappers = new HashSet<String>();
     private boolean caseSensitive = false;
     private boolean useMapperCommentGenerator = true;
@@ -63,6 +64,11 @@ public class MapperPlugin extends FalseMethodPlugin {
     private boolean needsToString = false;
     //是否需要生成Accessors(chain = true)注解
     private boolean needsAccessors = false;
+    private boolean needsBuilder = false;
+    private boolean needsSuperBuilder = false;
+    private boolean needsNoArgsConstructor = false;
+    private boolean needsAllArgsConstructor = false;
+
     //是否需要生成EqualsAndHashCode注解
     private boolean needsEqualsAndHashCode = false;
     //是否需要生成EqualsAndHashCode注解，并且“callSuper = true”
@@ -153,6 +159,22 @@ public class MapperPlugin extends FalseMethodPlugin {
         if (this.needsAccessors) {
             topLevelClass.addImportedType("lombok.experimental.Accessors");
             topLevelClass.addAnnotation("@Accessors(chain = true)");
+        }
+        if (this.needsSuperBuilder) {
+            topLevelClass.addImportedType("lombok.experimental.SuperBuilder");
+            topLevelClass.addAnnotation("@SuperBuilder");
+        }
+        if (this.needsBuilder) {
+            topLevelClass.addImportedType("lombok.Builder");
+            topLevelClass.addAnnotation("@Builder");
+        }
+        if (this.needsNoArgsConstructor) {
+            topLevelClass.addImportedType("lombok.NoArgsConstructor");
+            topLevelClass.addAnnotation("@NoArgsConstructor");
+        }
+        if (this.needsAllArgsConstructor) {
+            topLevelClass.addImportedType("lombok.AllArgsConstructor");
+            topLevelClass.addAnnotation("@AllArgsConstructor");
         }
         // lombok扩展结束
         // region swagger扩展
@@ -403,6 +425,10 @@ public class MapperPlugin extends FalseMethodPlugin {
             String lombokEqualsAndHashCodeCallSuper = getProperty("lombokEqualsAndHashCodeCallSuper", "false");
             this.needsEqualsAndHashCodeAndCallSuper = this.needsEqualsAndHashCode && "TRUE".equalsIgnoreCase(lombokEqualsAndHashCodeCallSuper);
             this.needsAccessors = lombok.contains("Accessors");
+            this.needsSuperBuilder = lombok.contains("SuperBuilder");
+            this.needsBuilder = !this.needsSuperBuilder && lombok.contains("Builder");
+            this.needsNoArgsConstructor = lombok.contains("NoArgsConstructor");
+            this.needsAllArgsConstructor = lombok.contains("AllArgsConstructor");
         }
         //swagger扩展
         String swagger = getProperty("swagger", "false");
