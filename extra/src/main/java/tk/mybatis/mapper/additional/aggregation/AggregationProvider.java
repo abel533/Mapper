@@ -37,13 +37,13 @@ public class AggregationProvider extends MapperTemplate {
         if (StringUtil.isNotEmpty(condition.getAggregateAliasName())) {
             selectBuilder.append(condition.getAggregateAliasName());
         } else {
-            selectBuilder.append(wrapKeyword(wrapKeyword, columnName));
+            selectBuilder.append(wrapKeyword(wrapKeyword, condition.getAggregateProperty()));
         }
         if (condition.getGroupByProperties() != null && condition.getGroupByProperties().size() > 0) {
             for (String property : condition.getGroupByProperties()) {
                 selectBuilder.append(", ");
                 columnName = propertyMap.get(property).getColumn();
-                selectBuilder.append(columnName).append(" AS ").append(wrapKeyword(wrapKeyword, columnName));
+                selectBuilder.append(columnName).append(" AS ").append(wrapKeyword(wrapKeyword, property));
             }
         }
         return selectBuilder.toString();

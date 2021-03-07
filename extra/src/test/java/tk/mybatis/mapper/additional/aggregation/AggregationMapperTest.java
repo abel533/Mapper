@@ -39,7 +39,7 @@ public class AggregationMapperTest extends BaseTest {
         try {
             UserMapper mapper = sqlSession.getMapper(UserMapper.class);
             AggregateCondition aggregateCondition = AggregateCondition.builder().
-                    aggregateBy("id").aliasName("total").aggregateType(AggregateType.COUNT).groupBy("role");
+                    aggregateBy("id").aliasName("total").aggregateType(AggregateType.COUNT).groupBy("roLe");
             Example example = new Example(User.class);
             List<User> m = mapper.selectAggregationByExample(example, aggregateCondition);
             Assert.assertEquals(2, m.size());
@@ -86,9 +86,9 @@ public class AggregationMapperTest extends BaseTest {
         try {
             UserMapper mapper = sqlSession.getMapper(UserMapper.class);
             AggregateCondition aggregateCondition = AggregateCondition.builder().
-                    aggregateBy("id").aliasName("aggregation").aggregateType(AggregateType.MAX).groupBy("role");
+                    aggregateBy("id").aliasName("aggregation").aggregateType(AggregateType.MAX).groupBy("roLe");
             Example example = new Example(User.class);
-            example.setOrderByClause("role desc");
+            example.setOrderByClause("ro_le desc");
             List<User> m = mapper.selectAggregationByExample(example, aggregateCondition);
             Assert.assertEquals(2, m.size());
             Assert.assertEquals(new Long(6), m.get(0).getAggregation());
