@@ -152,7 +152,7 @@ public class ComplexEntityTest {
         sqlBuilder.append(SqlHelper.fromTable(entityClass, entityTable.getName()));
         sqlBuilder.append(SqlHelper.whereAllIfColumns(entityClass, config.isNotEmpty()));
         final String sql = sqlBuilder.toString();
-        Assert.assertEquals("SELECT id,user_name,address,state  FROM user " +
+        Assert.assertEquals("SELECT id AS id,user_name AS userName,address AS address,state AS state  FROM user " +
                 "<where>" +
                 "<if test=\"id != null\"> AND id = #{id}</if>" +
                 "<if test=\"userName != null\"> AND user_name = #{userName}</if>" +
@@ -170,7 +170,7 @@ public class ComplexEntityTest {
         Assert.assertEquals("id", idMapping.getProperty());
         Assert.assertTrue(idMapping.getFlags().contains(ResultFlag.ID));
 
-        Assert.assertEquals("user_name", userNameMapping.getColumn());
+        Assert.assertEquals("userName", userNameMapping.getColumn());
         Assert.assertEquals("userName", userNameMapping.getProperty());
 
         Assert.assertEquals("address", addressMapping.getColumn());
