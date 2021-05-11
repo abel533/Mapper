@@ -972,10 +972,10 @@ public class Example implements IDynamicTableName {
             for (String property : properties) {
                 String column;
                 if ((column = propertyforOderBy(property)) != null) {
-                    columns.append(",").append(column);
+                    columns.append(",").append(column).append(order);
                 }
             }
-            columns.append(order);
+           ;
             if (columns.length() > 0) {
                 orderByClause.append(columns);
             }
