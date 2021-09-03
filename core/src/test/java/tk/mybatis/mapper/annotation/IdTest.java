@@ -15,6 +15,10 @@ import tk.mybatis.mapper.mapperhelper.SqlHelper;
 
 import javax.persistence.Id;
 import java.util.Set;
+import java.util.Arrays;
+import java.util.List;
+
+import java.io.*;
 
 /**
  * @author liuzh
@@ -84,8 +88,15 @@ public class IdTest {
         Assert.assertEquals(2, resultMap.getResultMappings().size());
         Assert.assertTrue(resultMap.getResultMappings().get(0).getFlags().contains(ResultFlag.ID));
         Assert.assertTrue(resultMap.getResultMappings().get(1).getFlags().contains(ResultFlag.ID));
+        System.out.println(SqlHelper.wherePKColumns(UserCompositeKeys.class));
+        // Assert.assertEquals("<where> AND name = #{name} AND orgId = #{orgId}</where>", SqlHelper.wherePKColumns(UserCompositeKeys.class));
+        String expectedColumns[] = {
+            "<where> AND name = #{name} AND orgId = #{orgId}</where>", 
+            "<where> AND orgId = #{orgId} AND name = #{name}</where>"
+        };
+        Assert.assertTrue(Arrays.asList(expectedColumns).
+            contains(SqlHelper.wherePKColumns(UserCompositeKeys.class)));
 
-        Assert.assertEquals("<where> AND name = #{name} AND orgId = #{orgId}</where>", SqlHelper.wherePKColumns(UserCompositeKeys.class));
     }
 
 }
