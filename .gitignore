@@ -9,3 +9,6 @@ target/
 .settings/
 .classpath
 .project
+
+# nondex #
+core/.nondex/
