@@ -1,0 +1,330 @@
+[INFO] Scanning for projects...
+[WARNING] 
+[WARNING] Some problems were encountered while building the effective model for tk.mybatis:mapper:jar:4.1.5
+[WARNING] 'build.plugins.plugin.version' for org.apache.maven.plugins:maven-compiler-plugin is missing. @ tk.mybatis:mapper-parent:3, /Users/suxianghan/.m2/repository/tk/mybatis/mapper-parent/3/mapper-parent-3.pom, line 141, column 21
+[WARNING] 'build.plugins.plugin.version' for org.apache.maven.plugins:maven-shade-plugin is missing. @ line 79, column 21
+[WARNING] 'build.plugins.plugin.version' for org.apache.maven.plugins:maven-source-plugin is missing. @ tk.mybatis:mapper-parent:3, /Users/suxianghan/.m2/repository/tk/mybatis/mapper-parent/3/mapper-parent-3.pom, line 149, column 21
+[WARNING] 
+[WARNING] Some problems were encountered while building the effective model for tk.mybatis:mapper-all-dependencies:jar:4.1.5
+[WARNING] 'build.plugins.plugin.version' for org.apache.maven.plugins:maven-compiler-plugin is missing. @ tk.mybatis:mapper-parent:3, /Users/suxianghan/.m2/repository/tk/mybatis/mapper-parent/3/mapper-parent-3.pom, line 141, column 21
+[WARNING] 'build.plugins.plugin.version' for org.apache.maven.plugins:maven-source-plugin is missing. @ tk.mybatis:mapper-parent:3, /Users/suxianghan/.m2/repository/tk/mybatis/mapper-parent/3/mapper-parent-3.pom, line 149, column 21
+[WARNING] 
+[WARNING] Some problems were encountered while building the effective model for tk.mybatis:mapper-all:pom:4.1.5
+[WARNING] 'build.plugins.plugin.version' for org.apache.maven.plugins:maven-compiler-plugin is missing. @ tk.mybatis:mapper-parent:3, /Users/suxianghan/.m2/repository/tk/mybatis/mapper-parent/3/mapper-parent-3.pom, line 141, column 21
+[WARNING] 'build.plugins.plugin.version' for org.apache.maven.plugins:maven-source-plugin is missing. @ tk.mybatis:mapper-parent:3, /Users/suxianghan/.m2/repository/tk/mybatis/mapper-parent/3/mapper-parent-3.pom, line 149, column 21
+[WARNING] 
+[WARNING] Some problems were encountered while building the effective model for tk.mybatis:mapper-base:jar:1.1.5
+[WARNING] 'build.plugins.plugin.version' for org.apache.maven.plugins:maven-compiler-plugin is missing. @ tk.mybatis:mapper-parent:3, /Users/suxianghan/.m2/repository/tk/mybatis/mapper-parent/3/mapper-parent-3.pom, line 141, column 21
+[WARNING] 'build.plugins.plugin.version' for org.apache.maven.plugins:maven-source-plugin is missing. @ tk.mybatis:mapper-parent:3, /Users/suxianghan/.m2/repository/tk/mybatis/mapper-parent/3/mapper-parent-3.pom, line 149, column 21
+[WARNING] 
+[WARNING] Some problems were encountered while building the effective model for tk.mybatis:mapper-core:jar:1.1.5
+[WARNING] 'build.plugins.plugin.version' for org.apache.maven.plugins:maven-compiler-plugin is missing. @ tk.mybatis:mapper-parent:3, /Users/suxianghan/.m2/repository/tk/mybatis/mapper-parent/3/mapper-parent-3.pom, line 141, column 21
+[WARNING] 'build.plugins.plugin.version' for org.apache.maven.plugins:maven-source-plugin is missing. @ tk.mybatis:mapper-parent:3, /Users/suxianghan/.m2/repository/tk/mybatis/mapper-parent/3/mapper-parent-3.pom, line 149, column 21
+[WARNING] 
+[WARNING] Some problems were encountered while building the effective model for tk.mybatis:mapper-extra:jar:1.1.5
+[WARNING] 'build.plugins.plugin.version' for org.apache.maven.plugins:maven-compiler-plugin is missing. @ tk.mybatis:mapper-parent:3, /Users/suxianghan/.m2/repository/tk/mybatis/mapper-parent/3/mapper-parent-3.pom, line 141, column 21
+[WARNING] 'build.plugins.plugin.version' for org.apache.maven.plugins:maven-source-plugin is missing. @ tk.mybatis:mapper-parent:3, /Users/suxianghan/.m2/repository/tk/mybatis/mapper-parent/3/mapper-parent-3.pom, line 149, column 21
+[WARNING] 
+[WARNING] Some problems were encountered while building the effective model for tk.mybatis:mapper-spring:jar:1.1.5
+[WARNING] 'build.plugins.plugin.version' for org.apache.maven.plugins:maven-compiler-plugin is missing. @ tk.mybatis:mapper-parent:3, /Users/suxianghan/.m2/repository/tk/mybatis/mapper-parent/3/mapper-parent-3.pom, line 141, column 21
+[WARNING] 'build.plugins.plugin.version' for org.apache.maven.plugins:maven-source-plugin is missing. @ tk.mybatis:mapper-parent:3, /Users/suxianghan/.m2/repository/tk/mybatis/mapper-parent/3/mapper-parent-3.pom, line 149, column 21
+[WARNING] 
+[WARNING] Some problems were encountered while building the effective model for tk.mybatis:mapper-weekend:jar:1.1.5
+[WARNING] 'build.plugins.plugin.version' for org.apache.maven.plugins:maven-compiler-plugin is missing. @ tk.mybatis:mapper-parent:3, /Users/suxianghan/.m2/repository/tk/mybatis/mapper-parent/3/mapper-parent-3.pom, line 141, column 21
+[WARNING] 'build.plugins.plugin.version' for org.apache.maven.plugins:maven-source-plugin is missing. @ tk.mybatis:mapper-parent:3, /Users/suxianghan/.m2/repository/tk/mybatis/mapper-parent/3/mapper-parent-3.pom, line 149, column 21
+[WARNING] 
+[WARNING] Some problems were encountered while building the effective model for tk.mybatis:mapper-generator:jar:1.1.5
+[WARNING] 'build.plugins.plugin.version' for org.apache.maven.plugins:maven-compiler-plugin is missing. @ tk.mybatis:mapper-parent:3, /Users/suxianghan/.m2/repository/tk/mybatis/mapper-parent/3/mapper-parent-3.pom, line 141, column 21
+[WARNING] 'build.plugins.plugin.version' for org.apache.maven.plugins:maven-source-plugin is missing. @ tk.mybatis:mapper-parent:3, /Users/suxianghan/.m2/repository/tk/mybatis/mapper-parent/3/mapper-parent-3.pom, line 149, column 21
+[WARNING] 
+[WARNING] Some problems were encountered while building the effective model for tk.mybatis:mapper-spring-boot-autoconfigure:jar:2.1.5
+[WARNING] 'build.plugins.plugin.version' for org.apache.maven.plugins:maven-compiler-plugin is missing. @ tk.mybatis:mapper-parent:3, /Users/suxianghan/.m2/repository/tk/mybatis/mapper-parent/3/mapper-parent-3.pom, line 141, column 21
+[WARNING] 'build.plugins.plugin.version' for org.apache.maven.plugins:maven-source-plugin is missing. @ tk.mybatis:mapper-parent:3, /Users/suxianghan/.m2/repository/tk/mybatis/mapper-parent/3/mapper-parent-3.pom, line 149, column 21
+[WARNING] 
+[WARNING] Some problems were encountered while building the effective model for tk.mybatis:mapper-spring-boot-starter:jar:2.1.5
+[WARNING] 'build.plugins.plugin.version' for org.apache.maven.plugins:maven-compiler-plugin is missing. @ tk.mybatis:mapper-parent:3, /Users/suxianghan/.m2/repository/tk/mybatis/mapper-parent/3/mapper-parent-3.pom, line 141, column 21
+[WARNING] 'build.plugins.plugin.version' for org.apache.maven.plugins:maven-source-plugin is missing. @ tk.mybatis:mapper-parent:3, /Users/suxianghan/.m2/repository/tk/mybatis/mapper-parent/3/mapper-parent-3.pom, line 149, column 21
+[WARNING] 
+[WARNING] Some problems were encountered while building the effective model for tk.mybatis:mapper-spring-boot-sample-annotation:jar:2.1.5
+[WARNING] 'build.plugins.plugin.version' for org.apache.maven.plugins:maven-compiler-plugin is missing. @ tk.mybatis:mapper-parent:3, /Users/suxianghan/.m2/repository/tk/mybatis/mapper-parent/3/mapper-parent-3.pom, line 141, column 21
+[WARNING] 'build.plugins.plugin.version' for org.apache.maven.plugins:maven-source-plugin is missing. @ tk.mybatis:mapper-parent:3, /Users/suxianghan/.m2/repository/tk/mybatis/mapper-parent/3/mapper-parent-3.pom, line 149, column 21
+[WARNING] 
+[WARNING] Some problems were encountered while building the effective model for tk.mybatis:mapper-spring-boot-sample-xml:jar:2.1.5
+[WARNING] 'build.plugins.plugin.version' for org.apache.maven.plugins:maven-compiler-plugin is missing. @ tk.mybatis:mapper-parent:3, /Users/suxianghan/.m2/repository/tk/mybatis/mapper-parent/3/mapper-parent-3.pom, line 141, column 21
+[WARNING] 'build.plugins.plugin.version' for org.apache.maven.plugins:maven-source-plugin is missing. @ tk.mybatis:mapper-parent:3, /Users/suxianghan/.m2/repository/tk/mybatis/mapper-parent/3/mapper-parent-3.pom, line 149, column 21
+[WARNING] 
+[WARNING] Some problems were encountered while building the effective model for tk.mybatis:mapper-spring-boot-samples:pom:2.1.5
+[WARNING] 'build.plugins.plugin.version' for org.apache.maven.plugins:maven-compiler-plugin is missing. @ tk.mybatis:mapper-parent:3, /Users/suxianghan/.m2/repository/tk/mybatis/mapper-parent/3/mapper-parent-3.pom, line 141, column 21
+[WARNING] 'build.plugins.plugin.version' for org.apache.maven.plugins:maven-source-plugin is missing. @ tk.mybatis:mapper-parent:3, /Users/suxianghan/.m2/repository/tk/mybatis/mapper-parent/3/mapper-parent-3.pom, line 149, column 21
+[WARNING] 
+[WARNING] Some problems were encountered while building the effective model for tk.mybatis:mapper-spring-boot:pom:2.1.5
+[WARNING] 'build.plugins.plugin.version' for org.apache.maven.plugins:maven-compiler-plugin is missing. @ tk.mybatis:mapper-parent:3, /Users/suxianghan/.m2/repository/tk/mybatis/mapper-parent/3/mapper-parent-3.pom, line 141, column 21
+[WARNING] 'build.plugins.plugin.version' for org.apache.maven.plugins:maven-source-plugin is missing. @ tk.mybatis:mapper-parent:3, /Users/suxianghan/.m2/repository/tk/mybatis/mapper-parent/3/mapper-parent-3.pom, line 149, column 21
+[WARNING] 
+[WARNING] Some problems were encountered while building the effective model for tk.mybatis:mapper-modules:pom:1.1.5
+[WARNING] 'build.plugins.plugin.version' for org.apache.maven.plugins:maven-compiler-plugin is missing. @ tk.mybatis:mapper-parent:3, /Users/suxianghan/.m2/repository/tk/mybatis/mapper-parent/3/mapper-parent-3.pom, line 141, column 21
+[WARNING] 'build.plugins.plugin.version' for org.apache.maven.plugins:maven-source-plugin is missing. @ tk.mybatis:mapper-parent:3, /Users/suxianghan/.m2/repository/tk/mybatis/mapper-parent/3/mapper-parent-3.pom, line 149, column 21
+[WARNING] 
+[WARNING] It is highly recommended to fix these problems because they threaten the stability of your build.
+[WARNING] 
+[WARNING] For this reason, future Maven versions might no longer support building such malformed projects.
+[WARNING] 
+[INFO] 
+[INFO] -----------------------< tk.mybatis:mapper-core >-----------------------
+[INFO] Building mapper-core 1.1.5
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] >>> nondex-maven-plugin:1.1.2:nondex (default-cli) > test-compile @ mapper-core >>>
+[INFO] 
+[INFO] --- maven-resources-plugin:2.6:resources (default-resources) @ mapper-core ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] skip non existing resourceDirectory /Users/suxianghan/Desktop/fla/Mapper/core/src/main/resources
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.1:compile (default-compile) @ mapper-core ---
+[INFO] Nothing to compile - all classes are up to date
+[INFO] 
+[INFO] --- maven-resources-plugin:2.6:testResources (default-testResources) @ mapper-core ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] skip non existing resourceDirectory /Users/suxianghan/Desktop/fla/Mapper/core/src/test/resources
+[INFO] Copying 11 resources
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.1:testCompile (default-testCompile) @ mapper-core ---
+[INFO] Nothing to compile - all classes are up to date
+[INFO] 
+[INFO] <<< nondex-maven-plugin:1.1.2:nondex (default-cli) < test-compile @ mapper-core <<<
+[INFO] 
+[INFO] 
+[INFO] --- nondex-maven-plugin:1.1.2:nondex (default-cli) @ mapper-core ---
+INFO: The original argline is: 
+INFO: Creating new argline for Surefire
+CONFIG: nondexFilter=.*
+nondexMode=FULL
+nondexSeed=933178
+nondexStart=0
+nondexEnd=9223372036854775807
+nondexPrintstack=false
+nondexDir=/Users/suxianghan/Desktop/fla/Mapper/core/.nondex
+nondexJarDir=.nondex
+nondexExecid=clean_epM4h0O7zryUcZrd1gnjhDsSMudJW7RLuYsH+U63ylU=
+nondexLogging=CONFIG
+test=
+[INFO] Surefire report directory: /Users/suxianghan/Desktop/fla/Mapper/core/.nondex/clean_epM4h0O7zryUcZrd1gnjhDsSMudJW7RLuYsH+U63ylU=
+
+-------------------------------------------------------
+ T E S T S
+-------------------------------------------------------
+Running tk.mybatis.mapper.annotation.IdTest
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.18 sec
+
+Results :
+
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0
+
+INFO: Adding excluded groups to newly created one
+INFO: Creating new argline for Surefire
+CONFIG: nondexFilter=.*
+nondexMode=FULL
+nondexSeed=933178
+nondexStart=0
+nondexEnd=9223372036854775807
+nondexPrintstack=false
+nondexDir=/Users/suxianghan/Desktop/fla/Mapper/core/.nondex
+nondexJarDir=/Users/suxianghan/Desktop/fla/Mapper/core/.nondex
+nondexExecid=vSpFncc0P92Q4UX48PG+YvUys++WQHEaQXsx3HsCFU=
+nondexLogging=CONFIG
+test=
+[INFO] Surefire report directory: /Users/suxianghan/Desktop/fla/Mapper/core/.nondex/vSpFncc0P92Q4UX48PG+YvUys++WQHEaQXsx3HsCFU=
+
+-------------------------------------------------------
+ T E S T S
+-------------------------------------------------------
+Concurrency config is parallel='none', perCoreThreadCount=true, threadCount=2, useUnlimitedThreads=false
+Running tk.mybatis.mapper.annotation.IdTest
+Tests run: 1, Failures: 1, Errors: 0, Skipped: 0, Time elapsed: 0.118 sec <<< FAILURE!
+testCompositeKeys(tk.mybatis.mapper.annotation.IdTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<<where> AND [name = #{name} AND orgId = #{orgId]}</where>> but was:<<where> AND [orgId = #{orgId} AND name = #{name]}</where>>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at tk.mybatis.mapper.annotation.IdTest.testCompositeKeys(IdTest.java:88)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:50)
+	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)
+	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:47)
+	at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)
+	at org.junit.internal.runners.statements.RunBefores.evaluate(RunBefores.java:26)
+	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:325)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:78)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:57)
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)
+	at org.junit.runners.Suite.runChild(Suite.java:128)
+	at org.junit.runners.Suite.runChild(Suite.java:27)
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)
+	at org.junit.runner.JUnitCore.run(JUnitCore.java:137)
+	at org.junit.runner.JUnitCore.run(JUnitCore.java:115)
+	at org.apache.maven.surefire.junitcore.JUnitCoreWrapper.execute(JUnitCoreWrapper.java:62)
+	at org.apache.maven.surefire.junitcore.JUnitCoreProvider.invoke(JUnitCoreProvider.java:139)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.apache.maven.surefire.util.ReflectionUtils.invokeMethodWithArray(ReflectionUtils.java:189)
+	at org.apache.maven.surefire.booter.ProviderFactory$ProviderProxy.invoke(ProviderFactory.java:165)
+	at org.apache.maven.surefire.booter.ProviderFactory.invokeProvider(ProviderFactory.java:85)
+	at org.apache.maven.surefire.booter.ForkedBooter.runSuitesInProcess(ForkedBooter.java:115)
+	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:75)
+
+
+Results :
+
+Failed tests:   testCompositeKeys(tk.mybatis.mapper.annotation.IdTest): expected:<<where> AND [name = #{name} AND orgId = #{orgId]}</where>> but was:<<where> AND [orgId = #{orgId} AND name = #{name]}</where>>
+
+Tests run: 1, Failures: 1, Errors: 0, Skipped: 0
+
+INFO: Surefire failed when running tests for vSpFncc0P92Q4UX48PG+YvUys++WQHEaQXsx3HsCFU=
+INFO: Adding excluded groups to newly created one
+INFO: Creating new argline for Surefire
+CONFIG: nondexFilter=.*
+nondexMode=FULL
+nondexSeed=974622
+nondexStart=0
+nondexEnd=9223372036854775807
+nondexPrintstack=false
+nondexDir=/Users/suxianghan/Desktop/fla/Mapper/core/.nondex
+nondexJarDir=/Users/suxianghan/Desktop/fla/Mapper/core/.nondex
+nondexExecid=802GUlcdV1JwuJyK6YxxUk9c2r4ExfqXqCH1ujbz4M=
+nondexLogging=CONFIG
+test=
+[INFO] Surefire report directory: /Users/suxianghan/Desktop/fla/Mapper/core/.nondex/802GUlcdV1JwuJyK6YxxUk9c2r4ExfqXqCH1ujbz4M=
+
+-------------------------------------------------------
+ T E S T S
+-------------------------------------------------------
+Concurrency config is parallel='none', perCoreThreadCount=true, threadCount=2, useUnlimitedThreads=false
+Running tk.mybatis.mapper.annotation.IdTest
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.122 sec
+
+Results :
+
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0
+
+INFO: Adding excluded groups to newly created one
+INFO: Creating new argline for Surefire
+CONFIG: nondexFilter=.*
+nondexMode=FULL
+nondexSeed=1016066
+nondexStart=0
+nondexEnd=9223372036854775807
+nondexPrintstack=false
+nondexDir=/Users/suxianghan/Desktop/fla/Mapper/core/.nondex
+nondexJarDir=/Users/suxianghan/Desktop/fla/Mapper/core/.nondex
+nondexExecid=4lfsvgdWwtcx6fB8giKfkOTltNnTZBcnhvRfBLNGiA=
+nondexLogging=CONFIG
+test=
+[INFO] Surefire report directory: /Users/suxianghan/Desktop/fla/Mapper/core/.nondex/4lfsvgdWwtcx6fB8giKfkOTltNnTZBcnhvRfBLNGiA=
+
+-------------------------------------------------------
+ T E S T S
+-------------------------------------------------------
+Concurrency config is parallel='none', perCoreThreadCount=true, threadCount=2, useUnlimitedThreads=false
+Running tk.mybatis.mapper.annotation.IdTest
+Tests run: 1, Failures: 1, Errors: 0, Skipped: 0, Time elapsed: 0.119 sec <<< FAILURE!
+testCompositeKeys(tk.mybatis.mapper.annotation.IdTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<<where> AND [name = #{name} AND orgId = #{orgId]}</where>> but was:<<where> AND [orgId = #{orgId} AND name = #{name]}</where>>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at tk.mybatis.mapper.annotation.IdTest.testCompositeKeys(IdTest.java:88)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:50)
+	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)
+	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:47)
+	at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)
+	at org.junit.internal.runners.statements.RunBefores.evaluate(RunBefores.java:26)
+	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:325)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:78)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:57)
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)
+	at org.junit.runners.Suite.runChild(Suite.java:128)
+	at org.junit.runners.Suite.runChild(Suite.java:27)
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)
+	at org.junit.runner.JUnitCore.run(JUnitCore.java:137)
+	at org.junit.runner.JUnitCore.run(JUnitCore.java:115)
+	at org.apache.maven.surefire.junitcore.JUnitCoreWrapper.execute(JUnitCoreWrapper.java:62)
+	at org.apache.maven.surefire.junitcore.JUnitCoreProvider.invoke(JUnitCoreProvider.java:139)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.apache.maven.surefire.util.ReflectionUtils.invokeMethodWithArray(ReflectionUtils.java:189)
+	at org.apache.maven.surefire.booter.ProviderFactory$ProviderProxy.invoke(ProviderFactory.java:165)
+	at org.apache.maven.surefire.booter.ProviderFactory.invokeProvider(ProviderFactory.java:85)
+	at org.apache.maven.surefire.booter.ForkedBooter.runSuitesInProcess(ForkedBooter.java:115)
+	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:75)
+
+
+Results :
+
+Failed tests:   testCompositeKeys(tk.mybatis.mapper.annotation.IdTest): expected:<<where> AND [name = #{name} AND orgId = #{orgId]}</where>> but was:<<where> AND [orgId = #{orgId} AND name = #{name]}</where>>
+
+Tests run: 1, Failures: 1, Errors: 0, Skipped: 0
+
+INFO: Surefire failed when running tests for 4lfsvgdWwtcx6fB8giKfkOTltNnTZBcnhvRfBLNGiA=
+[INFO] NonDex SUMMARY:
+[INFO] *********
+[INFO] mvn nondex:nondex  -DnondexFilter='.*' -DnondexMode=FULL -DnondexSeed=933178 -DnondexStart=0 -DnondexEnd=9223372036854775807 -DnondexPrintstack=false -DnondexDir="/Users/suxianghan/Desktop/fla/Mapper/core/.nondex" -DnondexJarDir="/Users/suxianghan/Desktop/fla/Mapper/core/.nondex" -DnondexExecid=vSpFncc0P92Q4UX48PG+YvUys++WQHEaQXsx3HsCFU= -DnondexLogging=CONFIG
+[WARNING] tk.mybatis.mapper.annotation.IdTest#testCompositeKeys
+[INFO] *********
+[INFO] *********
+[INFO] mvn nondex:nondex  -DnondexFilter='.*' -DnondexMode=FULL -DnondexSeed=974622 -DnondexStart=0 -DnondexEnd=9223372036854775807 -DnondexPrintstack=false -DnondexDir="/Users/suxianghan/Desktop/fla/Mapper/core/.nondex" -DnondexJarDir="/Users/suxianghan/Desktop/fla/Mapper/core/.nondex" -DnondexExecid=802GUlcdV1JwuJyK6YxxUk9c2r4ExfqXqCH1ujbz4M= -DnondexLogging=CONFIG
+[INFO] No Test Failed with this configuration.
+[INFO] *********
+[INFO] *********
+[INFO] mvn nondex:nondex  -DnondexFilter='.*' -DnondexMode=FULL -DnondexSeed=1016066 -DnondexStart=0 -DnondexEnd=9223372036854775807 -DnondexPrintstack=false -DnondexDir="/Users/suxianghan/Desktop/fla/Mapper/core/.nondex" -DnondexJarDir="/Users/suxianghan/Desktop/fla/Mapper/core/.nondex" -DnondexExecid=4lfsvgdWwtcx6fB8giKfkOTltNnTZBcnhvRfBLNGiA= -DnondexLogging=CONFIG
+[WARNING] tk.mybatis.mapper.annotation.IdTest#testCompositeKeys
+[INFO] *********
+[INFO] Across all seeds:
+[INFO] tk.mybatis.mapper.annotation.IdTest#testCompositeKeys
+[INFO] Test results can be found at: 
+[INFO] file:///Users/suxianghan/Desktop/fla/Mapper/core/.nondex/vSpFncc0P92Q4UX48PG+YvUys++WQHEaQXsx3HsCFU=/test_results.html
+[INFO] [NonDex] The id of this run is: vSpFncc0P92Q4UX48PG+YvUys++WQHEaQXsx3HsCFU=
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD FAILURE
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  2.833 s
+[INFO] Finished at: 2021-09-03T16:11:17-05:00
+[INFO] ------------------------------------------------------------------------
+[ERROR] Failed to execute goal edu.illinois:nondex-maven-plugin:1.1.2:nondex (default-cli) on project mapper-core: Unable to execute mojo: There are test failures.
+[ERROR] 
+[ERROR] Please refer to /Users/suxianghan/Desktop/fla/Mapper/core/.nondex/vSpFncc0P92Q4UX48PG+YvUys++WQHEaQXsx3HsCFU= for the individual test results.
+[ERROR] -> [Help 1]
+[ERROR] 
+[ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
+[ERROR] Re-run Maven using the -X switch to enable full debug logging.
+[ERROR] 
+[ERROR] For more information about the errors and possible solutions, please read the following articles:
+[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/MojoExecutionException
