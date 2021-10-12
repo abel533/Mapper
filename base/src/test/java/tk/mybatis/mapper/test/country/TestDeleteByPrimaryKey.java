@@ -33,6 +33,7 @@ import org.junit.Test;
 import tk.mybatis.mapper.mapper.CountryMapper;
 import tk.mybatis.mapper.mapper.MybatisHelper;
 import tk.mybatis.mapper.model.Country;
+
 import java.io.IOException;
 import java.io.Reader;
 import java.sql.Connection;
@@ -45,8 +46,9 @@ import java.util.Map;
  * @author liuzh
  */
 public class TestDeleteByPrimaryKey {
-	@Before
-	public void setupDB() {
+
+    @Before
+    public void setupDB() {
         SqlSession sqlSession = MybatisHelper.getSqlSession();
         try {
             Connection conn = sqlSession.getConnection();
@@ -55,11 +57,11 @@ public class TestDeleteByPrimaryKey {
             runner.setLogWriter(null);
             runner.runScript(reader);
             reader.close();
-        } catch (IOException e) {} 
+        } catch (IOException e) {}
         finally {
             sqlSession.close();
         }
-	}
+    }
 	
     /**
      * 主要测试删除
