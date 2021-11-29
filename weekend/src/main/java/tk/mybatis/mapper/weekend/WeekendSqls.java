@@ -193,7 +193,7 @@ public class WeekendSqls<T> implements tk.mybatis.mapper.entity.SqlsCriteria {
         return this;
     }
 
-    public WeekendSqls<T> orEqualTo(Fn<T, Object> fn, String value) {
+    public WeekendSqls<T> orEqualTo(Fn<T, Object> fn, Object value) {
         return this.orEqualTo(Reflections.fnToFieldName(fn), value);
     }
 
@@ -202,7 +202,7 @@ public class WeekendSqls<T> implements tk.mybatis.mapper.entity.SqlsCriteria {
         return this;
     }
 
-    public WeekendSqls<T> orNotEqualTo(Fn<T, Object> fn, String value) {
+    public WeekendSqls<T> orNotEqualTo(Fn<T, Object> fn, Object value) {
         return this.orNotEqualTo(Reflections.fnToFieldName(fn), value);
     }
 
@@ -211,7 +211,7 @@ public class WeekendSqls<T> implements tk.mybatis.mapper.entity.SqlsCriteria {
         return this;
     }
 
-    public WeekendSqls<T> orGreaterThan(Fn<T, Object> fn, String value) {
+    public WeekendSqls<T> orGreaterThan(Fn<T, Object> fn, Object value) {
         return this.orGreaterThan(Reflections.fnToFieldName(fn), value);
     }
 
@@ -220,7 +220,7 @@ public class WeekendSqls<T> implements tk.mybatis.mapper.entity.SqlsCriteria {
         return this;
     }
 
-    public WeekendSqls<T> orGreaterThanOrEqualTo(Fn<T, Object> fn, String value) {
+    public WeekendSqls<T> orGreaterThanOrEqualTo(Fn<T, Object> fn, Object value) {
         return this.orGreaterThanOrEqualTo(Reflections.fnToFieldName(fn), value);
     }
 
@@ -229,7 +229,7 @@ public class WeekendSqls<T> implements tk.mybatis.mapper.entity.SqlsCriteria {
         return this;
     }
 
-    public WeekendSqls<T> orLessThan(Fn<T, Object> fn, String value) {
+    public WeekendSqls<T> orLessThan(Fn<T, Object> fn, Object value) {
         return this.orLessThan(Reflections.fnToFieldName(fn), value);
     }
 
@@ -238,7 +238,7 @@ public class WeekendSqls<T> implements tk.mybatis.mapper.entity.SqlsCriteria {
         return this;
     }
 
-    public WeekendSqls<T> orLessThanOrEqualTo(Fn<T, Object> fn, String value) {
+    public WeekendSqls<T> orLessThanOrEqualTo(Fn<T, Object> fn, Object value) {
         return this.orLessThanOrEqualTo(Reflections.fnToFieldName(fn), value);
     }
 
