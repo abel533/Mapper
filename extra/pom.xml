@@ -39,6 +39,7 @@
     <properties>
         <jdk.version>1.8</jdk.version>
         <mapper-module.version>1.1.5</mapper-module.version>
+		<argLine>-Dfile.encoding=UTF-8</argLine>
     </properties>
 
     <dependencies>
