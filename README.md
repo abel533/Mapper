@@ -11,6 +11,55 @@
 
 **通用 Mapper 支持 Mybatis-3.2.4 及以上版本。**
 
+## 4.2.0 - 2022-2-26 发布
+
+本次更新最大改动就是统一了所有模块的版本，所有版本都升级为 4.2.0，在之前本项目一共有3个版本号，本次升级前后的版本如下：
+
+- mapper, mapper-all, mapper-all-dependencies 从 4.1.5 升级为 4.2.0
+- mapper-core, mapper-base, mapper-extra, mapper-generator, mapper-spring, mapper-weekend 从 1.1.5 升级为 4.2.0
+- mapper-spring-boot-starter 相关模块从 2.1.5 升级为 4.2.0
+
+本次更新是 2019年1月28日发布 4.1.5 之后的首次发布，此次更新的内容基本上都来自所有热心开发人员的PR，大部分PR都是功能增强或新功能。
+
+- `WeekendSqls` or部分方法参数 String->Object taiyi* 2021/11/29 19:39 1aa5eff6
+- 改进对null的查询 改进对空集合的查询 改进对like的查询 Cheng.Wei* 2020/3/19 0:24 1523d57f
+- 改进查询对null值的处理策略 Cheng.Wei* 2020/3/19 0:07 afb6ffc8
+- Update FieldHelper.java kong-ly* 2020/3/17 16:06 4a5675d6
+- 修复一个错误，该错误可能导致 `EntityHelper.entityTableMap` 被错误清空 glacier* 2020/4/1 18:29 8c57af04
+- 扩展一些根据属性及条件值删除的通用方法 jingkaihui* 2020/7/20 17:25 3bf2e1a0
+- 修复 `Example.Criteria` 未设置 `where` 条件查询时，带有逻辑删除注解的表报错问题，fixed #722 jingkaihui* 2020/7/20 15:31 570ef154
+- 修改生成的getter方法注释中@return 列名为@return 属性名 wanglei* 2018/1/24 11:04 b08258bc
+- 更新地址 https://mybatis.io abel533 2020/7/27 21:52 ba417dc3
+- 扩展一些根据属性及条件值查询的通用方法 jingkaihui* 2019/10/19 22:14 bd101038
+- 添加日志输出异常和警告信息，fixed #IXNLU isea533 2019/6/18 22:03 1764748e
+- 合并 pr #17 isea533 2019/5/30 21:53 8d7819e3
+- [新增] `Weekend`对象增加`excludeProperties、selectProperties、orderBy、withCountProperty` 支持lambda表达式写属性名
+  使用withXXXXX的命名方式链式设置属性 wugh 2019/5/30 14:41 3e25bb9b
+- [bug修复] 修复`generateDefaultInstanceMethod`参数,生成的实体类的`defaultInstance`静态方式. 1.存在默认值为''::character varying问题 2.支持基本类型
+  wugh 2019/5/30 13:58 cf3e40aa
+- [新增] 生成实体类的时候,使用表注释创建类的注释 wugh 2019/5/30 11:28 b4acbf48
+- 增加`lombokEqualsAndHashCodeCallSuper`配置，当使用lombok扩展的`EqualsAndHashCode`注解时，可通过此配置（true）为此注解添加`“callSuper = true”`
+  ，这对于有继承父类的实体类，如增加支持动态表名时，有用。 calvinit 2019/2/14 13:52 ae901608
+
+## 还会有 MyBatis 通用 Mapper5 吗？
+
+通用 Mapper 每次大的版本，基本上都是底层上的大变化，在使用通用 Mapper 的过程中，有很多人遇到过配置的问题，因为底层实现的方式，所以无法避免配置，而且随着功能的增加，配置也增加了不少。
+
+为了从根本上简化通用方法的实现，从2018年就开始思考如何让实现和MyBatis的兼容性更好，让实现变的更简单，为了从 MyBatis 根本解决问题，给官方提过好几个 PR，在 2019年3月份给 MyBatis 提交的
+[pr#1391](https://github.com/mybatis/mybatis-3/pull/1391) 合并后（对应 3.5.1 版本，最低要求版本），终于能以更简单的方式来实现通用 Mapper 了。
+
+由于此次变动太大，因此不打算对 **通用Mapper4** 进行任何改动，从头实现了一个新的项目，名字仍然没有新意的使用了 `mybatis-mapper`，这个项目也发布很久了，由于工作太忙，没精力像以前那样频繁更新， 所以一直没推广新版
+mybatis-mapper，如果你动手能力强，喜欢看源码，你也可以试试这个项目：
+
+- [GitHub](https://github.com/mybatis-mapper/mapper)
+- [Gitee](https://gitee.com/mybatis-mapper/mapper)
+- [文档: https://mapper.mybatis.io](https://mapper.mybatis.io/)
+- [开发过程](https://mapper.mybatis.io/releases/1.0.0.html)
+- [快速上手](https://mapper.mybatis.io/docs/1.getting-started.html#%E4%BB%8B%E7%BB%8D)
+
+另外，通用 Mapper 中的大量 PR 都是增加的新方法和代码生成器相关的注解，这些和核心无关，因此 mybaits-mapper 会提供独立的项目接收所有新增的通用方法， 和代码生成器相关的 lombok
+注解完全不需要了，使用新版本中提供的代码生成器可以更方便的进行定制。
+
 ## [**快速入门 - MyBatis 为什么需要通用 Mapper ?**](https://blog.csdn.net/isea533/article/details/83045335)
 
 简介: 在早期项目文档中有过类似主题的内容，但是最近我自己看文档的时候发现一个问题，文档虽然很详细，但是并不适合初次接触的人。为了方便第一次听说，第一次尝试的开发人员了解通用 Mapper，补充此文档。
