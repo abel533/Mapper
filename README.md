@@ -40,6 +40,8 @@
 - [新增] 生成实体类的时候,使用表注释创建类的注释 wugh 2019/5/30 11:28 b4acbf48
 - 增加`lombokEqualsAndHashCodeCallSuper`配置，当使用lombok扩展的`EqualsAndHashCode`注解时，可通过此配置（true）为此注解添加`“callSuper = true”`
   ，这对于有继承父类的实体类，如增加支持动态表名时，有用。 calvinit 2019/2/14 13:52 ae901608
+- `orderByDesc`只有最后一个字段是倒序，改为所有参与`orderby`的字段都倒序 Mr 轩少/V1.1.5-orderByDesc-fix
+- 增加Lombok 的`@SuperBuilder、@NoArgsConstructor、@AllArgsConstructor` 注解 tingwen 2020/12/26 18:29 8c816794
 
 ## 还会有 MyBatis 通用 Mapper5 吗？
 
