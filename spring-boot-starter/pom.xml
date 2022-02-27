@@ -32,7 +32,7 @@
         <version>3</version>
     </parent>
     <artifactId>mapper-spring-boot</artifactId>
-    <version>4.2.0</version>
+    <version>4.2.1</version>
     <packaging>pom</packaging>
 
     <name>mapper-spring-boot</name>
@@ -46,8 +46,8 @@
     </modules>
 
   <properties>
-    <mapper-module.version>4.2.0</mapper-module.version>
-    <mapper-weekend.version>4.2.0</mapper-weekend.version>
+    <mapper-module.version>4.2.1</mapper-module.version>
+    <mapper-weekend.version>4.2.1</mapper-weekend.version>
     <mybatis.version>3.5.9</mybatis.version>
     <mybatis-spring.version>2.0.7</mybatis-spring.version>
     <spring-boot.version>2.6.4</spring-boot.version>

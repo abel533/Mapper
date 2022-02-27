@@ -11,7 +11,14 @@
 
 **通用 Mapper 支持 Mybatis-3.2.4 及以上版本。**
 
-## 4.2.0 - 2022-2-26 发布
+## 4.2.1 - 2022-2-27
+
+4.2.0 版本中缺少了 gitee 仓库中的两个合并请求，针对这部分代码，再次发布 4.2.1 版本。
+
+- `orderByDesc`只有最后一个字段是倒序，改为所有参与`orderby`的字段都倒序 Mr 轩少/V1.1.5-orderByDesc-fix
+- 增加Lombok 的`@SuperBuilder、@NoArgsConstructor、@AllArgsConstructor` 注解 tingwen 2020/12/26 18:29 8c816794
+
+## 4.2.0 - 2022-2-26
 
 本次更新最大改动就是统一了所有模块的版本，所有版本都升级为 4.2.0，在之前本项目一共有3个版本号，本次升级前后的版本如下：
 
@@ -40,8 +47,6 @@
 - [新增] 生成实体类的时候,使用表注释创建类的注释 wugh 2019/5/30 11:28 b4acbf48
 - 增加`lombokEqualsAndHashCodeCallSuper`配置，当使用lombok扩展的`EqualsAndHashCode`注解时，可通过此配置（true）为此注解添加`“callSuper = true”`
   ，这对于有继承父类的实体类，如增加支持动态表名时，有用。 calvinit 2019/2/14 13:52 ae901608
-- `orderByDesc`只有最后一个字段是倒序，改为所有参与`orderby`的字段都倒序 Mr 轩少/V1.1.5-orderByDesc-fix
-- 增加Lombok 的`@SuperBuilder、@NoArgsConstructor、@AllArgsConstructor` 注解 tingwen 2020/12/26 18:29 8c816794
 
 ## 还会有 MyBatis 通用 Mapper5 吗？
 
