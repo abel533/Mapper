@@ -22,4 +22,13 @@ public interface UpdateByPrimaryKeySelectiveForceMapper<T> {
      */
     @UpdateProvider(type = UpdateByPrimaryKeySelectiveForceProvider.class, method = "dynamicSQL")
     int updateByPrimaryKeySelectiveForce(@Param("record") T record, @Param("forceUpdateProperties") List<String> forceUpdateProperties);
+    
+    /**
+     * 根据主键更新属性的值, 指定的属性(null值)会被强制更新
+     * @param record
+     * @param forceUpdateProperties
+     * @return
+     */
+    @UpdateProvider(type = UpdateByPrimaryKeySelectiveForceProvider.class, method = "dynamicSQL")
+    int updateByPrimaryKeyForce(@Param("record") T record, @Param("forceUpdateProperties") List<String> forceUpdateProperties);
 }
