@@ -39,7 +39,7 @@
     <properties>
         <mapper-module.version>4.2.1</mapper-module.version>
         <freemarker.version>2.3.28</freemarker.version>
-        <generator.version>1.3.7</generator.version>
+        <generator.version>1.4.1</generator.version>
     </properties>
 
     <dependencies>

@@ -177,7 +177,7 @@ public class MapperCommentGenerator implements CommentGenerator {
             field.addAnnotation("@Column(name = \"" + getDelimiterName(column) + "\")");
         }
         if (introspectedColumn.isIdentity()) {
-            if ("JDBC".equals(introspectedTable.getTableConfiguration().getGeneratedKey().getRuntimeSqlStatement())) {
+            if ("JDBC".equals(introspectedTable.getTableConfiguration().getGeneratedKey().get().getRuntimeSqlStatement())) {
                 field.addAnnotation("@GeneratedValue(generator = \"JDBC\")");
             } else {
                 field.addAnnotation("@GeneratedValue(strategy = GenerationType.IDENTITY)");
@@ -185,7 +185,7 @@ public class MapperCommentGenerator implements CommentGenerator {
         } else if (introspectedColumn.isSequenceColumn()) {
             //在 Oracle 中，如果需要是 SEQ_TABLENAME，那么可以配置为 select SEQ_{1} from dual
             String tableName = introspectedTable.getFullyQualifiedTableNameAtRuntime();
-            String sql = MessageFormat.format(introspectedTable.getTableConfiguration().getGeneratedKey().getRuntimeSqlStatement(), tableName, tableName.toUpperCase());
+            String sql = MessageFormat.format(introspectedTable.getTableConfiguration().getGeneratedKey().get().getRuntimeSqlStatement(), tableName, tableName.toUpperCase());
             field.addAnnotation("@GeneratedValue(strategy = GenerationType.IDENTITY, generator = \"" + sql + "\")");
         }
         // region swagger注解
