@@ -24,9 +24,9 @@ public class SqlCriteriaHelperTest {
             CountryMapper mapper = sqlSession.getMapper(CountryMapper.class);
 
             List<Country> selectBySqlCriteriaHelper = mapper.selectByExample(new Example.Builder(Country.class)
-                .where(SqlCriteriaHelper.custom(Country.class)
-                    .andEqualTo(Country::getCountryname, null)
-                    .andLike(Country::getCountryname, "China")).build());
+                    .where(SqlCriteriaHelper.custom(Country.class)
+                            .andEqualTo(Country::getCountryname, null)
+                            .andLike(Country::getCountryname, "China")).build());
             Assert.assertNotNull(selectBySqlCriteriaHelper);
             Assert.assertEquals(1, selectBySqlCriteriaHelper.size());
             /* 不支持忽略 null
@@ -52,9 +52,9 @@ public class SqlCriteriaHelperTest {
             CountryMapper mapper = sqlSession.getMapper(CountryMapper.class);
 
             List<Country> selectBySqlCriteriaHelper = mapper.selectByExample(new Example.Builder(Country.class)
-                .where(SqlCriteriaHelper.custom(Country.class)
-                    // required = true 则继续查询
-                    .andEqualTo(Country::getCountryname, null, true)).build());
+                    .where(SqlCriteriaHelper.custom(Country.class)
+                            // required = true 则继续查询
+                            .andEqualTo(Country::getCountryname, null, true)).build());
             Assert.assertEquals(0, selectBySqlCriteriaHelper.size());
             /*List<Country> selectByWeekendSqls = mapper.selectByExample(new Example.Builder(Country.class)
                     .where(WeekendSqls.<Country>custom()
@@ -74,9 +74,9 @@ public class SqlCriteriaHelperTest {
             CountryMapper mapper = sqlSession.getMapper(CountryMapper.class);
 
             List<Country> selectBySqlCriteriaHelper = mapper.selectByExample(new Example.Builder(Country.class)
-                .where(SqlCriteriaHelper.custom(Country.class)
-                    .andLike(Country::getCountryname, "Chin")
-                    .orLike(Country::getCountryname, "A")).build());
+                    .where(SqlCriteriaHelper.custom(Country.class)
+                            .andLike(Country::getCountryname, "Chin")
+                            .orLike(Country::getCountryname, "A")).build());
             Assert.assertEquals(18, selectBySqlCriteriaHelper.size());
             /* 不支持自动带 %
             List<Country> selectByWeekendSqls = mapper.selectByExample(new Example.Builder(Country.class)
@@ -100,9 +100,9 @@ public class SqlCriteriaHelperTest {
             CountryMapper mapper = sqlSession.getMapper(CountryMapper.class);
 
             List<Country> selectBySqlCriteriaHelper = mapper.selectByExample(new Example.Builder(Country.class)
-                .where(SqlCriteriaHelper.custom(Country.class)
-                    .andIn(Country::getCountryname, new ArrayList())
-                    .orLike(Country::getCountryname, "A")).build());
+                    .where(SqlCriteriaHelper.custom(Country.class)
+                            .andIn(Country::getCountryname, new ArrayList())
+                            .orLike(Country::getCountryname, "A")).build());
             Assert.assertNotNull(selectBySqlCriteriaHelper);
             Assert.assertEquals(17, selectBySqlCriteriaHelper.size());
             //WeekendSqls 不支持空集合

@@ -3,7 +3,6 @@ package tk.mybatis.mapper.additional.delete;
 import org.apache.ibatis.mapping.MappedStatement;
 import org.apache.ibatis.mapping.SqlCommandType;
 import tk.mybatis.mapper.MapperException;
-import tk.mybatis.mapper.additional.select.SelectPropertyProvider;
 import tk.mybatis.mapper.entity.EntityColumn;
 import tk.mybatis.mapper.entity.EntityTable;
 import tk.mybatis.mapper.mapperhelper.EntityHelper;
@@ -63,7 +62,7 @@ public class DeletePropertyProvider extends MapperTemplate {
         return sql.toString();
     }
 
-     /**
+    /**
      * 根据属性删除，条件使用等号
      *
      * @param ms
@@ -87,10 +86,10 @@ public class DeletePropertyProvider extends MapperTemplate {
         String entityClassName = entityClass.getName();
         String sqlSegment =
                 "${@" + propertyHelper + "@getColumnByProperty(@java.lang.Class@forName(\"" + entityClassName + "\"),"
-                        +   "@tk.mybatis.mapper.weekend.reflection.Reflections@fnToFieldName(fn))} in"
-                        +   "<foreach open=\"(\" close=\")\" separator=\",\" collection=\"values\" item=\"obj\">\n"
-                        +      "#{obj}\n"
-                        +   "</foreach>\n";
+                        + "@tk.mybatis.mapper.weekend.reflection.Reflections@fnToFieldName(fn))} in"
+                        + "<foreach open=\"(\" close=\")\" separator=\",\" collection=\"values\" item=\"obj\">\n"
+                        + "#{obj}\n"
+                        + "</foreach>\n";
         sql.append(sqlSegment);
         // 逻辑删除的未删除查询条件
         sql.append(SqlHelper.whereLogicDelete(entityClass, false));
@@ -133,8 +132,9 @@ public class DeletePropertyProvider extends MapperTemplate {
 
     /**
      * 根据实体Class和属性名获取对应的表字段名
+     *
      * @param entityClass 实体Class对象
-     * @param property 属性名
+     * @param property    属性名
      * @return
      */
     public static String getColumnByProperty(Class<?> entityClass, String property) {

@@ -41,10 +41,10 @@
             <property name="generateDefaultInstanceMethod" value="true"/>
             <property name="beginningDelimiter" value="`"/>
             <property name="endingDelimiter" value="`"/>
-          <!--使用Data注解时，Getter,Setter,ToString,EqualsAndHashCode注解无效-->
-          <!--<property name="lombok" value="Data,Accessors"/>-->
-          <property name="lombok" value="Getter,Setter,ToString,Accessors,EqualsAndHashCode"/>
-          <property name="lombokEqualsAndHashCodeCallSuper" value="true"/>
+            <!--使用Data注解时，Getter,Setter,ToString,EqualsAndHashCode注解无效-->
+            <!--<property name="lombok" value="Data,Accessors"/>-->
+            <property name="lombok" value="Getter,Setter,ToString,Accessors,EqualsAndHashCode"/>
+            <property name="lombokEqualsAndHashCodeCallSuper" value="true"/>
             <property name="swagger" value="true"/>
         </plugin>
 

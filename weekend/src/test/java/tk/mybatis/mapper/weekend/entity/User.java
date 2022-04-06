@@ -32,7 +32,7 @@ import javax.persistence.Table;
  */
 @Table(name = "user")
 public class User {
-    private Long   id;
+    private Long id;
     private String userName;
 
     public Long getId() {

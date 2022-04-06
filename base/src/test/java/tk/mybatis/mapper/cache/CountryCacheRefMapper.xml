@@ -31,6 +31,8 @@
     <!--这个例子是在 XML 中定义缓存，在接口中引用 XML 中配置的缓存-->
     <cache/>
     <select id="selectById" resultType="tk.mybatis.mapper.base.Country">
-        select * from country where id = #{id}
+        select *
+        from country
+        where id = #{id}
     </select>
 </mapper>

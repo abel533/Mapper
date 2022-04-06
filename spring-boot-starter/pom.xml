@@ -29,10 +29,11 @@
     <parent>
         <groupId>tk.mybatis</groupId>
         <artifactId>mapper-parent</artifactId>
-        <version>3</version>
+        <version>8</version>
+        <relativePath/>
     </parent>
     <artifactId>mapper-spring-boot</artifactId>
-    <version>4.2.1</version>
+    <version>4.2.2-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>mapper-spring-boot</name>
@@ -45,13 +46,13 @@
         <module>mapper-spring-boot-samples</module>
     </modules>
 
-  <properties>
-    <mapper-module.version>4.2.1</mapper-module.version>
-    <mapper-weekend.version>4.2.1</mapper-weekend.version>
-    <mybatis.version>3.5.9</mybatis.version>
-    <mybatis-spring.version>2.0.7</mybatis-spring.version>
-    <spring-boot.version>2.6.4</spring-boot.version>
-  </properties>
+    <properties>
+        <mapper-module.version>4.2.2-SNAPSHOT</mapper-module.version>
+        <mapper-weekend.version>4.2.2-SNAPSHOT</mapper-weekend.version>
+        <mybatis.version>3.5.9</mybatis.version>
+        <mybatis-spring.version>2.0.7</mybatis-spring.version>
+        <spring-boot.version>2.6.4</spring-boot.version>
+    </properties>
 
     <repositories>
         <repository>

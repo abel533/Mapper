@@ -58,11 +58,11 @@ import static tk.mybatis.mapper.util.MsUtil.getMethodName;
  * @author liuzh
  */
 public abstract class MapperTemplate {
-    private static final XMLLanguageDriver     languageDriver = new XMLLanguageDriver();
-    protected            Map<String, Method>   methodMap      = new ConcurrentHashMap<String, Method>();
-    protected            Map<String, Class<?>> entityClassMap = new ConcurrentHashMap<String, Class<?>>();
-    protected            Class<?>              mapperClass;
-    protected            MapperHelper          mapperHelper;
+    private static final XMLLanguageDriver languageDriver = new XMLLanguageDriver();
+    protected Map<String, Method> methodMap = new ConcurrentHashMap<String, Method>();
+    protected Map<String, Class<?>> entityClassMap = new ConcurrentHashMap<String, Class<?>>();
+    protected Class<?> mapperClass;
+    protected MapperHelper mapperHelper;
 
     public MapperTemplate(Class<?> mapperClass, MapperHelper mapperHelper) {
         this.mapperClass = mapperClass;

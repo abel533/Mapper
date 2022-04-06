@@ -24,17 +24,17 @@ public class DateTimeTest extends BaseTest {
         return toReader(DateTimeTest.class.getResource("CreateDB.sql"));
     }
 
-    private String toDate(Date date){
+    private String toDate(Date date) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         return sdf.format(date);
     }
 
-    private String toTime(Date date){
+    private String toTime(Date date) {
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
         return sdf.format(date);
     }
 
-    private String toDatetime(Date date){
+    private String toDatetime(Date date) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         return sdf.format(date);
     }

@@ -28,10 +28,11 @@
     <parent>
         <groupId>tk.mybatis</groupId>
         <artifactId>mapper-parent</artifactId>
-        <version>3</version>
+        <version>8</version>
+        <relativePath/>
     </parent>
     <artifactId>mapper-modules</artifactId>
-    <version>4.2.1</version>
+    <version>4.2.2-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>mapper-parent</name>
@@ -57,8 +58,8 @@
         <developerConnection>scm:git@github.com:abel533/mapper.git</developerConnection>
         <url>git@github.com:abel533/mapper.git</url>
     </scm>
-	
-	<modules>
+
+    <modules>
         <module>all</module>
         <module>base</module>
         <module>core</module>

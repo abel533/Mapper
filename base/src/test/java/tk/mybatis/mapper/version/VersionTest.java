@@ -3,7 +3,6 @@ package tk.mybatis.mapper.version;
 import org.apache.ibatis.session.SqlSession;
 import org.junit.Test;
 import tk.mybatis.mapper.base.BaseTest;
-import tk.mybatis.mapper.entity.Example;
 
 import java.io.IOException;
 import java.io.Reader;

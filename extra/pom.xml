@@ -28,7 +28,7 @@
     <parent>
         <groupId>tk.mybatis</groupId>
         <artifactId>mapper-modules</artifactId>
-        <version>4.2.1</version>
+        <version>4.2.2-SNAPSHOT</version>
     </parent>
     <artifactId>mapper-extra</artifactId>
     <packaging>jar</packaging>
@@ -38,7 +38,8 @@
 
     <properties>
         <jdk.version>1.8</jdk.version>
-      <mapper-module.version>4.2.1</mapper-module.version>
+        <mapper-module.version>4.2.2-SNAPSHOT</mapper-module.version>
+        <hsqldb.version>2.5.2</hsqldb.version>
     </properties>
 
     <dependencies>

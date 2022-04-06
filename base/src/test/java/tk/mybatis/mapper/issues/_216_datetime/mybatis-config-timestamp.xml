@@ -30,7 +30,7 @@
 <configuration>
     <settings>
         <setting name="cacheEnabled" value="true"/>
-        <setting name="logImpl" value="LOG4J"/>
+        <setting name="logImpl" value="SLF4J"/>
     </settings>
 
     <environments default="development">
@@ -38,9 +38,9 @@
             <transactionManager type="JDBC">
             </transactionManager>
             <dataSource type="UNPOOLED">
-                <property name="driver" value="org.hsqldb.jdbcDriver" />
-                <property name="url" value="jdbc:hsqldb:mem:timestamp" />
-                <property name="username" value="sa" />
+                <property name="driver" value="org.hsqldb.jdbcDriver"/>
+                <property name="url" value="jdbc:hsqldb:mem:timestamp"/>
+                <property name="username" value="sa"/>
             </dataSource>
         </environment>
     </environments>

@@ -85,7 +85,7 @@ public class TestUpdateByPrimaryKey {
             country = mapper.selectByPrimaryKey(174);
             Assert.assertNotNull(country);
             Assert.assertEquals(174, (int) country.getId());
-            Assert.assertEquals("美国",country.getCountryname());
+            Assert.assertEquals("美国", country.getCountryname());
             Assert.assertNull(country.getCountrycode());
         } finally {
             sqlSession.close();
@@ -101,7 +101,7 @@ public class TestUpdateByPrimaryKey {
         try {
             CountryMapper mapper = sqlSession.getMapper(CountryMapper.class);
 
-           Assert.assertEquals(0, mapper.updateByPrimaryKey(new Key()));
+            Assert.assertEquals(0, mapper.updateByPrimaryKey(new Key()));
 
             Key key = new Key();
             key.setId(174);

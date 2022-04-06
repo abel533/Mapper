@@ -19,7 +19,7 @@ public class FieldHelperTest {
     }
 
     @Test
-    public void testUser(){
+    public void testUser() {
         List<EntityField> fieldList = FieldHelper.getFields(User.class);
         Assert.assertEquals(2, fieldList.size());
         Assert.assertEquals("id", fieldList.get(0).getName());
@@ -32,7 +32,7 @@ public class FieldHelperTest {
     }
 
     @Test
-    public void testComplex(){
+    public void testComplex() {
         List<EntityField> fieldList = FieldHelper.getFields(Admin.class);
         Assert.assertEquals(2, fieldList.size());
         Assert.assertEquals("admin", fieldList.get(0).getName());

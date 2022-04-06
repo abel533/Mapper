@@ -24,7 +24,7 @@ public class Course {
     @LogicDelete
     @Column(name = "is_deleted")
     private Boolean isDeleted;
-    
+
     public Integer getId() {
         return id;
     }

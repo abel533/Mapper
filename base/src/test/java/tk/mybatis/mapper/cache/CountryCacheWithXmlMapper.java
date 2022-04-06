@@ -6,7 +6,7 @@ import tk.mybatis.mapper.common.Mapper;
 
 /**
  * 这个例子中，接口定义了缓存，对应的 XML 中引用这里的缓存
- *
+ * <p>
  * TODO MyBatis 有 Bug，这种方式目前行不通
  */
 @CacheNamespace

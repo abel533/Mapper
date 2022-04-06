@@ -20,7 +20,9 @@ public class UpdateByDifferMapperTest extends BaseTest {
     protected Reader getConfigFileAsReader() throws IOException {
         URL url = getClass().getResource("mybatis-config.xml");
         return toReader(url);
-    };
+    }
+
+    ;
 
 
     @Test

@@ -54,8 +54,8 @@ public class IdListProvider extends MapperTemplate {
      * @param list
      * @param errorMsg
      */
-    public static void notEmpty(List<?> list, String errorMsg){
-        if(list == null || list.size() == 0){
+    public static void notEmpty(List<?> list, String errorMsg) {
+        if (list == null || list.size() == 0) {
             throw new MapperException(errorMsg);
         }
     }
@@ -97,11 +97,11 @@ public class IdListProvider extends MapperTemplate {
      * @param sql
      * @param entityClass
      */
-    private void appendWhereIdList(StringBuilder sql, Class<?> entityClass, boolean notEmpty){
+    private void appendWhereIdList(StringBuilder sql, Class<?> entityClass, boolean notEmpty) {
         Set<EntityColumn> columnList = EntityHelper.getPKColumns(entityClass);
         if (columnList.size() == 1) {
             EntityColumn column = columnList.iterator().next();
-            if(notEmpty){
+            if (notEmpty) {
                 sql.append("<bind name=\"notEmptyListCheck\" value=\"@tk.mybatis.mapper.additional.idlist.IdListProvider@notEmpty(");
                 sql.append("idList, 'idList 不能为空')\"/>");
             }

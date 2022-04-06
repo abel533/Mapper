@@ -47,7 +47,7 @@ public abstract class BaseTest {
     private SqlSessionFactory sqlSessionFactory;
 
     @Before
-    public final void init(){
+    public final void init() {
         try {
             Reader reader = getConfigFileAsReader();
             sqlSessionFactory = new SqlSessionFactoryBuilder().build(reader);
@@ -64,7 +64,7 @@ public abstract class BaseTest {
     /**
      * 配置通用 Mapper
      */
-    protected void configMapperHelper(){
+    protected void configMapperHelper() {
         SqlSession session = getSqlSession();
         try {
             //创建一个MapperHelper
@@ -84,7 +84,7 @@ public abstract class BaseTest {
      * @param reader
      */
     protected void runSql(Reader reader) {
-        if(reader == null){
+        if (reader == null) {
             return;
         }
         SqlSession sqlSession = getSqlSession();
@@ -95,7 +95,8 @@ public abstract class BaseTest {
             runner.runScript(reader);
             try {
                 reader.close();
-            } catch (IOException e) {}
+            } catch (IOException e) {
+            }
         } finally {
             sqlSession.close();
         }
@@ -106,7 +107,7 @@ public abstract class BaseTest {
      *
      * @return
      */
-    protected Config getConfig(){
+    protected Config getConfig() {
         return new Config();
     }
 
@@ -118,7 +119,9 @@ public abstract class BaseTest {
     protected Reader getConfigFileAsReader() throws IOException {
         URL url = BaseTest.class.getResource("mybatis-config.xml");
         return toReader(url);
-    };
+    }
+
+    ;
 
     /**
      * 获取初始化 sql
@@ -128,7 +131,9 @@ public abstract class BaseTest {
     protected Reader getSqlFileAsReader() throws IOException {
         URL url = BaseTest.class.getResource("CreateDB.sql");
         return toReader(url);
-    };
+    }
+
+    ;
 
     /**
      * 转为 Reader

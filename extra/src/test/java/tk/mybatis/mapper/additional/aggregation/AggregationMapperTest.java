@@ -21,7 +21,9 @@ public class AggregationMapperTest extends BaseTest {
     protected Reader getConfigFileAsReader() throws IOException {
         URL url = getClass().getResource("mybatis-config.xml");
         return toReader(url);
-    };
+    }
+
+    ;
 
     /**
      * 获取初始化 sql
@@ -31,7 +33,9 @@ public class AggregationMapperTest extends BaseTest {
     protected Reader getSqlFileAsReader() throws IOException {
         URL url = getClass().getResource("CreateDB.sql");
         return toReader(url);
-    };
+    }
+
+    ;
 
     @Test
     public void testCount() {

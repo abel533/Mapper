@@ -24,7 +24,7 @@ public class VersionTest {
     private Configuration configuration;
 
     @Before
-    public void beforeTest(){
+    public void beforeTest() {
         config = new Config();
         config.setStyle(Style.normal);
 
@@ -37,7 +37,7 @@ public class VersionTest {
     }
 
     @Test
-    public void testVersion(){
+    public void testVersion() {
         EntityHelper.initEntityNameMap(UserVersion.class, config);
         EntityTable entityTable = EntityHelper.getEntityTable(UserVersion.class);
         Assert.assertNotNull(entityTable);
@@ -62,7 +62,7 @@ public class VersionTest {
     }
 
     @Test(expected = VersionException.class)
-    public void testVersionError(){
+    public void testVersionError() {
         EntityHelper.initEntityNameMap(UserVersionError.class, config);
         EntityTable entityTable = EntityHelper.getEntityTable(UserVersionError.class);
         Assert.assertNotNull(entityTable);

@@ -45,6 +45,7 @@ public class HsqldbProvider extends MapperTemplate {
 
     /**
      * 分页查询
+     *
      * @param ms
      * @return
      */
@@ -68,19 +69,19 @@ public class HsqldbProvider extends MapperTemplate {
             StaticTextSqlNode columnNode
                     = new StaticTextSqlNode((first ? "" : " AND ") + column.getColumn() + " = #{entity." + column.getProperty() + "} ");
             if (column.getJavaType().equals(String.class)) {
-                ifNodes.add(new IfSqlNode(columnNode, "entity."+column.getProperty() + " != null and " + "entity."+column.getProperty() + " != '' "));
+                ifNodes.add(new IfSqlNode(columnNode, "entity." + column.getProperty() + " != null and " + "entity." + column.getProperty() + " != '' "));
             } else {
-                ifNodes.add(new IfSqlNode(columnNode, "entity."+column.getProperty() + " != null "));
+                ifNodes.add(new IfSqlNode(columnNode, "entity." + column.getProperty() + " != null "));
             }
             first = false;
         }
         //增加entity判断
-        IfSqlNode ifSqlNode = new IfSqlNode(new MixedSqlNode(ifNodes),"entity!=null");
+        IfSqlNode ifSqlNode = new IfSqlNode(new MixedSqlNode(ifNodes), "entity!=null");
         //将if添加到<where>
         sqlNodes.add(new WhereSqlNode(ms.getConfiguration(), ifSqlNode));
         //处理分页
-        sqlNodes.add(new IfSqlNode(new StaticTextSqlNode(" LIMIT #{limit}"),"offset==0"));
-        sqlNodes.add(new IfSqlNode(new StaticTextSqlNode(" LIMIT #{limit} OFFSET #{offset} "),"offset>0"));
+        sqlNodes.add(new IfSqlNode(new StaticTextSqlNode(" LIMIT #{limit}"), "offset==0"));
+        sqlNodes.add(new IfSqlNode(new StaticTextSqlNode(" LIMIT #{limit} OFFSET #{offset} "), "offset>0"));
         return new MixedSqlNode(sqlNodes);
     }
 }

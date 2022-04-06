@@ -14,7 +14,7 @@ import java.sql.SQLException;
 public class DictTypeHandler extends BaseTypeHandler<Dict> {
 
     private final Class<? extends Dict> type;
-    private final Dict[]                enums;
+    private final Dict[] enums;
 
     public DictTypeHandler(Class<? extends Dict> type) {
         if (type == null) {

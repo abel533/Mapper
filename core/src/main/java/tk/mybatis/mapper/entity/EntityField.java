@@ -128,7 +128,7 @@ public class EntityField {
         if (getter != null) {
             result = getter.invoke(object);
         } else if (field != null) {
-            if(!field.isAccessible()){
+            if (!field.isAccessible()) {
                 field.setAccessible(true);
             }
             result = field.get(object);

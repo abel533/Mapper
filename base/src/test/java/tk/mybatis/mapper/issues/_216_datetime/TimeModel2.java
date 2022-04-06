@@ -13,9 +13,9 @@ import java.util.Date;
 public class TimeModel2 implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
-    private Integer   id;
-    private Date      testDate;
-    private Date      testTime;
+    private Integer id;
+    private Date testDate;
+    private Date testTime;
     private Timestamp testDatetime;
 
     public Integer getId() {

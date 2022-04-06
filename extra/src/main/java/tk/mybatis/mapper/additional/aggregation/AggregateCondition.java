@@ -15,14 +15,14 @@ import java.util.List;
  * @author liuzh
  */
 public class AggregateCondition implements Serializable {
-    private static final long          serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
     // 聚合属性
-    private              String        aggregateProperty;
-    private              String        aggregateAliasName;
+    private String aggregateProperty;
+    private String aggregateAliasName;
     // groupBy 查询列
-    private              List<String>  groupByProperties;
+    private List<String> groupByProperties;
     // 聚合函数
-    private              AggregateType aggregateType;
+    private AggregateType aggregateType;
 
     public AggregateCondition() {
         this(null, AggregateType.COUNT, null);

@@ -168,6 +168,7 @@ public class Sqls {
     public static class Criteria {
         private String andOr;
         private List<Criterion> criterions;
+
         public Criteria() {
             this.criterions = new ArrayList<Criterion>(2);
         }
@@ -227,16 +228,17 @@ public class Sqls {
         }
 
         public Object[] getValues() {
-            if (value !=null) {
+            if (value != null) {
                 if (secondValue != null) {
                     return new Object[]{value, secondValue};
                 } else {
-                    return new Object[] {value};
+                    return new Object[]{value};
                 }
             } else {
                 return new Object[]{};
             }
         }
+
         public String getCondition() {
             return condition;
         }

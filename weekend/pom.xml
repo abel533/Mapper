@@ -29,10 +29,11 @@
     <parent>
         <groupId>tk.mybatis</groupId>
         <artifactId>mapper-parent</artifactId>
-        <version>3</version>
+        <version>8</version>
+        <relativePath/>
     </parent>
     <artifactId>mapper-weekend</artifactId>
-    <version>4.2.1</version>
+    <version>4.2.2-SNAPSHOT</version>
 
     <name>weekend</name>
     <description>Mybatis通用Mapper扩展 - weekend</description>
@@ -54,7 +55,7 @@
 
     <properties>
         <jdk.version>1.8</jdk.version>
-      <mapper-module.version>4.2.1</mapper-module.version>
+        <mapper-module.version>4.2.2-SNAPSHOT</mapper-module.version>
     </properties>
 
     <dependencies>

@@ -25,7 +25,8 @@ public class SelectPropertyProvider extends MapperTemplate {
         super(mapperClass, mapperHelper);
     }
 
-    /**Ba
+    /**
+     * Ba
      * 根据属性查询，只能有一个返回值，有多个结果时抛出异常，查询条件使用等号
      *
      * @param ms
@@ -115,10 +116,10 @@ public class SelectPropertyProvider extends MapperTemplate {
         String propertyHelper = SelectPropertyProvider.class.getName();
         String sqlSegment =
                 "${@" + propertyHelper + "@getColumnByProperty(@java.lang.Class@forName(\"" + entityClassName + "\"),"
-                        +   "@tk.mybatis.mapper.weekend.reflection.Reflections@fnToFieldName(fn))} in"
-                        +   "<foreach open=\"(\" close=\")\" separator=\",\" collection=\"values\" item=\"obj\">\n"
-                        +      "#{obj}\n"
-                        +   "</foreach>\n";
+                        + "@tk.mybatis.mapper.weekend.reflection.Reflections@fnToFieldName(fn))} in"
+                        + "<foreach open=\"(\" close=\")\" separator=\",\" collection=\"values\" item=\"obj\">\n"
+                        + "#{obj}\n"
+                        + "</foreach>\n";
         sql.append(sqlSegment);
         // 逻辑删除的未删除查询条件
         sql.append(SqlHelper.whereLogicDelete(entityClass, false));
@@ -225,8 +226,9 @@ public class SelectPropertyProvider extends MapperTemplate {
 
     /**
      * 根据实体Class和属性名获取对应的表字段名
+     *
      * @param entityClass 实体Class对象
-     * @param property 属性名
+     * @param property    属性名
      * @return
      */
     public static String getColumnByProperty(Class<?> entityClass, String property) {
@@ -237,6 +239,7 @@ public class SelectPropertyProvider extends MapperTemplate {
 
     /**
      * 判断是否需要拼接 where 条件
+     *
      * @param value
      * @param notEmpty
      * @return

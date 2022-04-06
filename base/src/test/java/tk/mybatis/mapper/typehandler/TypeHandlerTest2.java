@@ -13,7 +13,7 @@ import java.util.List;
 /**
  * @author liuzh
  */
-public class TypeHandlerTest2 extends BaseTest{
+public class TypeHandlerTest2 extends BaseTest {
 
     @Override
     protected Config getConfig() {
@@ -33,7 +33,7 @@ public class TypeHandlerTest2 extends BaseTest{
     }
 
     @Test
-    public void testSelect(){
+    public void testSelect() {
         SqlSession sqlSession = getSqlSession();
         try {
             User2Mapper userMapper = sqlSession.getMapper(User2Mapper.class);
@@ -61,7 +61,7 @@ public class TypeHandlerTest2 extends BaseTest{
     }
 
     @Test
-    public void testInsert(){
+    public void testInsert() {
         SqlSession sqlSession = getSqlSession();
         try {
             User2Mapper userMapper = sqlSession.getMapper(User2Mapper.class);
@@ -88,7 +88,7 @@ public class TypeHandlerTest2 extends BaseTest{
     }
 
     @Test
-    public void testUpdate(){
+    public void testUpdate() {
         SqlSession sqlSession = getSqlSession();
         try {
             User2Mapper userMapper = sqlSession.getMapper(User2Mapper.class);
@@ -113,7 +113,7 @@ public class TypeHandlerTest2 extends BaseTest{
     }
 
     @Test
-    public void testDelete(){
+    public void testDelete() {
         SqlSession sqlSession = getSqlSession();
         try {
             User2Mapper userMapper = sqlSession.getMapper(User2Mapper.class);

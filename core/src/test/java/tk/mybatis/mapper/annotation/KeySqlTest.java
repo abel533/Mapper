@@ -24,7 +24,7 @@ public class KeySqlTest {
     private Configuration configuration;
 
     @Before
-    public void beforeTest(){
+    public void beforeTest() {
         config = new Config();
         config.setStyle(Style.normal);
 
@@ -37,7 +37,7 @@ public class KeySqlTest {
     }
 
     @Test
-    public void testUseGeneratedKeys(){
+    public void testUseGeneratedKeys() {
         EntityHelper.initEntityNameMap(UserJDBC.class, config);
         EntityTable entityTable = EntityHelper.getEntityTable(UserJDBC.class);
         Assert.assertNotNull(entityTable);
@@ -57,7 +57,7 @@ public class KeySqlTest {
     }
 
     @Test
-    public void testDialect(){
+    public void testDialect() {
         EntityHelper.initEntityNameMap(UserDialect.class, config);
         EntityTable entityTable = EntityHelper.getEntityTable(UserDialect.class);
         Assert.assertNotNull(entityTable);
@@ -78,7 +78,7 @@ public class KeySqlTest {
     }
 
     @Test
-    public void testSql(){
+    public void testSql() {
         EntityHelper.initEntityNameMap(UserSql.class, config);
         EntityTable entityTable = EntityHelper.getEntityTable(UserSql.class);
         Assert.assertNotNull(entityTable);
@@ -99,7 +99,7 @@ public class KeySqlTest {
     }
 
     @Test
-    public void testAll(){
+    public void testAll() {
         EntityHelper.initEntityNameMap(UserAll.class, config);
         EntityTable entityTable = EntityHelper.getEntityTable(UserAll.class);
         Assert.assertNotNull(entityTable);
@@ -119,7 +119,7 @@ public class KeySqlTest {
     }
 
     @Test
-    public void testAll2(){
+    public void testAll2() {
         EntityHelper.initEntityNameMap(UserAll2.class, config);
         EntityTable entityTable = EntityHelper.getEntityTable(UserAll2.class);
         Assert.assertNotNull(entityTable);

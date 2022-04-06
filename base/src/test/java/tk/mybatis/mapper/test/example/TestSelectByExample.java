@@ -48,13 +48,14 @@ import java.util.Set;
 public class TestSelectByExample {
     @Rule
     public ExpectedException exception = ExpectedException.none();
+
     @Test
     public void testSelectByExample() {
         SqlSession sqlSession = MybatisHelper.getSqlSession();
         try {
             CountryMapper mapper = sqlSession.getMapper(CountryMapper.class);
             Example example = new Example(Country.class);
-            example.createCriteria().andGreaterThan("id", 100).andLessThan("id",151);
+            example.createCriteria().andGreaterThan("id", 100).andLessThan("id", 151);
             example.or().andLessThan("id", 41);
             List<Country> countries = mapper.selectByExample(example);
             //查询总数
@@ -84,7 +85,7 @@ public class TestSelectByExample {
             CountryMapper mapper = sqlSession.getMapper(CountryMapper.class);
             Example example = new Example(Country.class);
             example.setForUpdate(true);
-            example.createCriteria().andGreaterThan("id", 100).andLessThan("id",151);
+            example.createCriteria().andGreaterThan("id", 100).andLessThan("id", 151);
             example.or().andLessThan("id", 41);
             List<Country> countries = mapper.selectByExample(example);
             //查询总数
@@ -153,7 +154,7 @@ public class TestSelectByExample {
             Example example = new Example(Country.class);
             example.createCriteria().andLike("countryname", "A%");
             example.or().andGreaterThan("id", 100);
-            example.            setDistinct(true);
+            example.setDistinct(true);
             List<Country> countries = mapper.selectByExample(example);
             //查询总数
             Assert.assertEquals(true, countries.size() > 83);
@@ -287,7 +288,7 @@ public class TestSelectByExample {
             Example example = new Example(Country.class);
             example.selectProperties(new String[]{"countryname"});
             example.createCriteria().andEqualTo("id", 35);
-            List<Country> country1= mapper.selectByExample(example);
+            List<Country> country1 = mapper.selectByExample(example);
             Assert.assertEquals(null, country1.get(0).getId());
             Assert.assertEquals("China", country1.get(0).getCountryname());
             Assert.assertEquals(null, country1.get(0).getCountrycode());

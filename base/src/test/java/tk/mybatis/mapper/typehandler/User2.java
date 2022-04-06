@@ -12,10 +12,10 @@ import java.io.Serializable;
 public class User2 implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
-    private Integer   id;
-    private String    name;
+    private Integer id;
+    private String name;
     @Column
-    private Address   address;
+    private Address address;
     private StateEnum state;
 
     public Address getAddress() {

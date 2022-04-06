@@ -132,9 +132,9 @@ public class UpdateByDifferProvider extends MapperTemplate {
                     String versionClass = version.nextVersion().getCanonicalName();
                     //version = ${@tk.mybatis.mapper.version@nextVersionClass("versionClass", version)}
                     sql.append(column.getColumn())
-                        .append(" = ${@tk.mybatis.mapper.version.VersionUtil@nextVersion(")
-                        .append("@").append(versionClass).append("@class, ")
-                        .append(column.getProperty()).append(")},");
+                            .append(" = ${@tk.mybatis.mapper.version.VersionUtil@nextVersion(")
+                            .append("@").append(versionClass).append("@class, ")
+                            .append(column.getProperty()).append(")},");
                 } else {
                     //if old.xx != newer.xx
                     sql.append(getIfNotEqual(column, column.getColumnEqualsHolder(NEWER) + ","));

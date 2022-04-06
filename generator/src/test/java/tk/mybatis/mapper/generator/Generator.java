@@ -33,7 +33,8 @@ import org.mybatis.generator.internal.DefaultShellCallback;
 import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,7 +43,7 @@ import java.util.List;
  */
 public class Generator {
 
-    public static void startDB(){
+    public static void startDB() {
         try {
             Class.forName("org.hsqldb.jdbcDriver");
         } catch (ClassNotFoundException e) {
@@ -65,7 +66,7 @@ public class Generator {
         }
     }
 
-    public static InputStream getResourceAsStream(String path){
+    public static InputStream getResourceAsStream(String path) {
         return Thread.currentThread().getContextClassLoader().getResourceAsStream(path);
     }
 

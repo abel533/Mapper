@@ -9,7 +9,7 @@ public enum StateDictEnum implements Dict {
 
     private int value;
 
-    private StateDictEnum(int value){
+    private StateDictEnum(int value) {
         this.value = value;
     }
 

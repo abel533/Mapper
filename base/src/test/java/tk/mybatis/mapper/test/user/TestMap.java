@@ -56,9 +56,9 @@ public class TestMap {
             Assert.assertEquals(1, mapper.insert(userInfoMap));
 
             Assert.assertNotNull(userInfoMap.getId());
-            Assert.assertEquals(6, (int)userInfoMap.getId());
+            Assert.assertEquals(6, (int) userInfoMap.getId());
 
-            Assert.assertEquals(1,mapper.deleteByPrimaryKey(userInfoMap));
+            Assert.assertEquals(1, mapper.deleteByPrimaryKey(userInfoMap));
         } finally {
             sqlSession.close();
         }
@@ -124,7 +124,7 @@ public class TestMap {
 
             userInfoMap = mapper.selectByPrimaryKey(userInfoMap);
             Assert.assertNull(userInfoMap.getUserType());
-            Assert.assertEquals("liuzh",userInfoMap.getRealName());
+            Assert.assertEquals("liuzh", userInfoMap.getRealName());
         } finally {
             sqlSession.close();
         }
@@ -147,7 +147,7 @@ public class TestMap {
 
             userInfoMap = mapper.selectByPrimaryKey(1);
             Assert.assertEquals("1", userInfoMap.getUserType());
-            Assert.assertEquals("liuzh",userInfoMap.getRealName());
+            Assert.assertEquals("liuzh", userInfoMap.getRealName());
         } finally {
             sqlSession.close();
         }

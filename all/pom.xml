@@ -28,63 +28,64 @@
     <parent>
         <groupId>tk.mybatis</groupId>
         <artifactId>mapper-parent</artifactId>
-        <version>3</version>
+        <version>8</version>
+        <relativePath/>
     </parent>
     <artifactId>mapper-all</artifactId>
-    <version>4.2.1</version>
+    <version>4.2.2-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>mapper-all</name>
     <description>Mybatis 通用 Mapper3 适配</description>
-		
-	<modules>
+
+    <modules>
         <module>mapper</module>
         <module>dependencies</module>
     </modules>
 
-  <properties>
-    <mapper-module.version>4.2.1</mapper-module.version>
-    <mapper-weekend.version>4.2.1</mapper-weekend.version>
-  </properties>
+    <properties>
+        <mapper-module.version>4.2.2-SNAPSHOT</mapper-module.version>
+        <mapper-weekend.version>4.2.2-SNAPSHOT</mapper-weekend.version>
+    </properties>
 
-	<dependencyManagement>
-		<dependencies>
-			<dependency>
-				<groupId>tk.mybatis</groupId>
-				<artifactId>mapper-core</artifactId>
-				<version>${mapper-module.version}</version>
-				<scope>compile</scope>
-			</dependency>
-			<dependency>
-				<groupId>tk.mybatis</groupId>
-				<artifactId>mapper-base</artifactId>
-				<version>${mapper-module.version}</version>
-				<scope>compile</scope>
-			</dependency>
-			<dependency>
-				<groupId>tk.mybatis</groupId>
-				<artifactId>mapper-extra</artifactId>
-				<version>${mapper-module.version}</version>
-				<scope>compile</scope>
-			</dependency>
-			<dependency>
-				<groupId>tk.mybatis</groupId>
-				<artifactId>mapper-spring</artifactId>
-				<version>${mapper-module.version}</version>
-				<scope>compile</scope>
-			</dependency>
-			<dependency>
-				<groupId>tk.mybatis</groupId>
-				<artifactId>mapper-weekend</artifactId>
-				<version>${mapper-weekend.version}</version>
-				<scope>compile</scope>
-			</dependency>
-			<dependency>
-				<groupId>tk.mybatis</groupId>
-				<artifactId>mapper-generator</artifactId>
-				<version>${mapper-module.version}</version>
-				<scope>compile</scope>
-			</dependency>
-		</dependencies>
-	</dependencyManagement>
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>tk.mybatis</groupId>
+                <artifactId>mapper-core</artifactId>
+                <version>${mapper-module.version}</version>
+                <scope>compile</scope>
+            </dependency>
+            <dependency>
+                <groupId>tk.mybatis</groupId>
+                <artifactId>mapper-base</artifactId>
+                <version>${mapper-module.version}</version>
+                <scope>compile</scope>
+            </dependency>
+            <dependency>
+                <groupId>tk.mybatis</groupId>
+                <artifactId>mapper-extra</artifactId>
+                <version>${mapper-module.version}</version>
+                <scope>compile</scope>
+            </dependency>
+            <dependency>
+                <groupId>tk.mybatis</groupId>
+                <artifactId>mapper-spring</artifactId>
+                <version>${mapper-module.version}</version>
+                <scope>compile</scope>
+            </dependency>
+            <dependency>
+                <groupId>tk.mybatis</groupId>
+                <artifactId>mapper-weekend</artifactId>
+                <version>${mapper-weekend.version}</version>
+                <scope>compile</scope>
+            </dependency>
+            <dependency>
+                <groupId>tk.mybatis</groupId>
+                <artifactId>mapper-generator</artifactId>
+                <version>${mapper-module.version}</version>
+                <scope>compile</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 </project>
