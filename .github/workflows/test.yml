@@ -1,4 +1,4 @@
-name: Maven verify
+name: Maven test
 on:
   pull_request:
     types: [ opened, reopened, edited ]
@@ -15,4 +15,4 @@ jobs:
           java-version: '8'
           distribution: 'adopt'
       - name: Run the Maven verify phase
-        run: mvn --batch-mode --update-snapshots -P dev verify
+        run: mvn --batch-mode --update-snapshots -P dev test
