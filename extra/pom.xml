@@ -28,19 +28,13 @@
     <parent>
         <groupId>tk.mybatis</groupId>
         <artifactId>mapper-modules</artifactId>
-        <version>4.2.2-SNAPSHOT</version>
+        <version>${revision}</version>
     </parent>
     <artifactId>mapper-extra</artifactId>
     <packaging>jar</packaging>
 
     <name>mapper-extra</name>
     <description>Mybatis 通用 Mapper 扩展方法</description>
-
-    <properties>
-        <jdk.version>1.8</jdk.version>
-        <mapper-module.version>4.2.2-SNAPSHOT</mapper-module.version>
-        <hsqldb.version>2.5.2</hsqldb.version>
-    </properties>
 
     <dependencies>
         <dependency>
@@ -65,12 +59,5 @@
             <version>${project.version}</version>
             <scope>test</scope>
         </dependency>
-
-        <!--<dependency>
-            <groupId>com.oracle</groupId>
-            <artifactId>ojdbc6</artifactId>
-            <version>11.2.0.4.0</version>
-            <scope>test</scope>
-        </dependency>-->
     </dependencies>
 </project>
