@@ -29,6 +29,7 @@ import org.mybatis.generator.api.IntrospectedTable;
 import org.mybatis.generator.api.dom.java.*;
 import org.mybatis.generator.config.CommentGeneratorConfiguration;
 import org.mybatis.generator.config.Context;
+import org.mybatis.generator.config.JDBCConnectionConfiguration;
 import org.mybatis.generator.internal.util.StringUtility;
 
 import java.util.*;
@@ -96,12 +97,11 @@ public class MapperPlugin extends FalseMethodPlugin {
      * 生成的Mapper接口
      *
      * @param interfaze
-     * @param topLevelClass
      * @param introspectedTable
      * @return
      */
     @Override
-    public boolean clientGenerated(Interface interfaze, TopLevelClass topLevelClass, IntrospectedTable introspectedTable) {
+    public boolean clientGenerated(Interface interfaze, IntrospectedTable introspectedTable) {
         //获取实体类
         FullyQualifiedJavaType entityType = new FullyQualifiedJavaType(introspectedTable.getBaseRecordType());
         //import接口
@@ -232,22 +232,22 @@ public class MapperPlugin extends FalseMethodPlugin {
         }
         if (generateColumnConsts) {
             for (IntrospectedColumn introspectedColumn : introspectedTable.getAllColumns()) {
-                Field field = new Field();
+                String fieldName = introspectedColumn.getActualColumnName().toUpperCase(); //$NON-NLS-1$
+                FullyQualifiedJavaType fieldType = new FullyQualifiedJavaType(String.class.getName()); //$NON-NLS-1$
+                Field field = new Field(fieldName, fieldType);
                 field.setVisibility(JavaVisibility.PUBLIC);
                 field.setStatic(true);
                 field.setFinal(true);
-                field.setName(introspectedColumn.getActualColumnName().toUpperCase()); //$NON-NLS-1$
-                field.setType(new FullyQualifiedJavaType(String.class.getName())); //$NON-NLS-1$
                 field.setInitializationString("\"" + introspectedColumn.getJavaProperty() + "\"");
                 context.getCommentGenerator().addClassComment(topLevelClass, introspectedTable);
                 topLevelClass.addField(field);
                 //增加字段名常量,用于pageHelper
-                Field columnField = new Field();
+                String  columnFieldName = "DB_" + introspectedColumn.getActualColumnName().toUpperCase(); //$NON-NLS-1$
+                FullyQualifiedJavaType columnFieldType = new FullyQualifiedJavaType(String.class.getName()); //$NON-NLS-1$
+                Field columnField = new Field(columnFieldName, columnFieldType);
                 columnField.setVisibility(JavaVisibility.PUBLIC);
                 columnField.setStatic(true);
                 columnField.setFinal(true);
-                columnField.setName("DB_" + introspectedColumn.getActualColumnName().toUpperCase()); //$NON-NLS-1$
-                columnField.setType(new FullyQualifiedJavaType(String.class.getName())); //$NON-NLS-1$
                 columnField.setInitializationString("\"" + introspectedColumn.getActualColumnName() + "\"");
                 topLevelClass.addField(columnField);
             }
@@ -257,13 +257,12 @@ public class MapperPlugin extends FalseMethodPlugin {
             List<String> baseClassName = Arrays.asList("byte", "short", "char", "int", "long", "float", "double", "boolean");
             List<String> wrapperClassName = Arrays.asList("Byte", "Short", "Character", "Integer", "Long", "Float", "Double", "Boolean");
             List<String> otherClassName = Arrays.asList("String", "BigDecimal", "BigInteger");
-            Method defaultMethod = new Method();
+            Method defaultMethod = new Method("defaultInstance");
             //增加方法注释
             defaultMethod.addJavaDocLine("/**");
             defaultMethod.addJavaDocLine(" * 带默认值的实例");
             defaultMethod.addJavaDocLine("*/");
             defaultMethod.setStatic(true);
-            defaultMethod.setName("defaultInstance");
             defaultMethod.setVisibility(JavaVisibility.PUBLIC);
             defaultMethod.setReturnType(topLevelClass.getType());
             defaultMethod.addBodyLine(String.format("%s instance = new %s();", topLevelClass.getType().getShortName(), topLevelClass.getType().getShortName()));
@@ -390,10 +389,20 @@ public class MapperPlugin extends FalseMethodPlugin {
             commentCfg.setConfigurationType(MapperCommentGenerator.class.getCanonicalName());
             context.setCommentGeneratorConfiguration(commentCfg);
         }
+
+        JDBCConnectionConfiguration jdbcConnectionConfiguration = null;
+        try {
+            java.lang.reflect.Field jdbcConnectionConfigurationField = Context.class.getDeclaredField("jdbcConnectionConfiguration");
+            jdbcConnectionConfigurationField.setAccessible(true);
+            jdbcConnectionConfiguration = (JDBCConnectionConfiguration) jdbcConnectionConfigurationField.get(context);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         //支持oracle获取注释#114
-        context.getJdbcConnectionConfiguration().addProperty("remarksReporting", "true");
+        jdbcConnectionConfiguration.addProperty("remarksReporting", "true");
         //支持mysql获取注释
-        context.getJdbcConnectionConfiguration().addProperty("useInformationSchema", "true");
+        jdbcConnectionConfiguration.addProperty("useInformationSchema", "true");
     }
 
     @Override

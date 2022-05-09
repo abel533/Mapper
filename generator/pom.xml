@@ -38,7 +38,7 @@
 
     <properties>
         <freemarker.version>2.3.28</freemarker.version>
-        <generator.version>1.3.7</generator.version>
+        <generator.version>1.4.1</generator.version>
     </properties>
 
     <dependencies>
