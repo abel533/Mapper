@@ -80,6 +80,9 @@ public class MapperPlugin extends FalseMethodPlugin {
     private boolean generateDefaultInstanceMethod = false;
     //是否生成swagger注解,包括 @ApiModel和@ApiModelProperty
     private boolean needsSwagger = false;
+    //是否逻辑删除
+    private boolean logicDelete = false;
+
 
     public String getDelimiterName(String name) {
         StringBuilder nameBuilder = new StringBuilder();
@@ -252,6 +255,13 @@ public class MapperPlugin extends FalseMethodPlugin {
                 topLevelClass.addField(columnField);
             }
         }
+
+        if(this.logicDelete)
+        {
+            topLevelClass.addImportedType("tk.mybatis.mapper.annotation.LogicDelete");
+        }
+
+
         if (generateDefaultInstanceMethod) {
             //注意基本类型和包装的index要一致,方便后面使用
             List<String> baseClassName = Arrays.asList("byte", "short", "char", "int", "long", "float", "double", "boolean");
@@ -455,6 +465,8 @@ public class MapperPlugin extends FalseMethodPlugin {
         }
         this.generateColumnConsts = getPropertyAsBoolean("generateColumnConsts");
         this.generateDefaultInstanceMethod = getPropertyAsBoolean("generateDefaultInstanceMethod");
+
+        this.logicDelete = Boolean.parseBoolean(this.properties.getProperty("logicDelete"));
     }
 
     protected String getProperty(String key) {
