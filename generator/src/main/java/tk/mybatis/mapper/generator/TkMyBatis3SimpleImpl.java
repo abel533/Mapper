@@ -71,20 +71,6 @@ public class TkMyBatis3SimpleImpl extends IntrospectedTableMyBatis3SimpleImpl {
         }
 
         StringBuilder sb = new StringBuilder();
-        sb.append(calculateJavaClientImplementationPackage());
-        sb.append('.');
-        sb.append(fullyQualifiedTable.getDomainObjectName());
-        sb.append("DAOImpl"); //$NON-NLS-1$
-        setDAOImplementationType(sb.toString());
-
-        sb.setLength(0);
-        sb.append(calculateJavaClientInterfacePackage());
-        sb.append('.');
-        sb.append(fullyQualifiedTable.getDomainObjectName());
-        sb.append("DAO"); //$NON-NLS-1$
-        setDAOInterfaceType(sb.toString());
-
-        sb.setLength(0);
         sb.append(calculateJavaClientInterfacePackage());
         sb.append('.');
         if (stringHasValue(tableConfiguration.getMapperName())) {
