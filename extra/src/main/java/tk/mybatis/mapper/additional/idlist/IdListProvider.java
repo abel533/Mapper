@@ -87,7 +87,7 @@ public class IdListProvider extends MapperTemplate {
         StringBuilder sql = new StringBuilder();
         sql.append(SqlHelper.selectAllColumns(entityClass));
         sql.append(SqlHelper.fromTable(entityClass, tableName(entityClass)));
-        appendWhereIdList(sql, entityClass, false);
+        appendWhereIdList(sql, entityClass, isNotEmpty());
         return sql.toString();
     }
 
