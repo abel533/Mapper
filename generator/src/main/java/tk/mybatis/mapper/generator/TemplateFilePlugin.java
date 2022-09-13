@@ -113,10 +113,8 @@ public class TemplateFilePlugin extends PluginAdapter {
     public static Field convertToJavaBeansField(IntrospectedColumn introspectedColumn) {
         FullyQualifiedJavaType fqjt = introspectedColumn.getFullyQualifiedJavaType();
         String property = introspectedColumn.getJavaProperty();
-        Field field = new Field();
+        Field field = new Field(property, fqjt);
         field.setVisibility(JavaVisibility.PRIVATE);
-        field.setType(fqjt);
-        field.setName(property);
         return field;
     }
 
