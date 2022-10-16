@@ -36,15 +36,15 @@
 
     <properties>
         <revision>4.2.2-SNAPSHOT</revision>
-        <maven.compiler.source>8</maven.compiler.source>
-        <maven.compiler.target>8</maven.compiler.target>
+        <maven.compiler.source>1.6</maven.compiler.source>
+        <maven.compiler.target>1.6</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <argLine>-Dfile.encoding=UTF-8</argLine>
 
         <jpa.version>2.2</jpa.version>
         <slf4j.version>1.7.26</slf4j.version>
-        <mybatis.version>3.5.9</mybatis.version>
+        <mybatis.version>3.5.11</mybatis.version>
         <!--test-->
         <junit.version>4.13.2</junit.version>
         <hsqldb.version>2.5.2</hsqldb.version>
