@@ -286,7 +286,7 @@ public class DefaultEntityResolve implements EntityResolve {
             entityColumn.setIdentity(false);
             entityColumn.setGenIdClass(keySql.genId());
         } else {
-            throw new MapperException(entityTable.getEntityClass().getCanonicalName()
+            throw new MapperException(entityTable.getEntityClass().getName()
                     + " 类中的 @KeySql 注解配置无效!");
         }
     }

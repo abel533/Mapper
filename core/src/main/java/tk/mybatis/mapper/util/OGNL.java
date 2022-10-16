@@ -55,9 +55,9 @@ public abstract class OGNL {
         if (parameter != null && parameter instanceof Example && StringUtil.isNotEmpty(entityFullName)) {
             Example example = (Example) parameter;
             Class<?> entityClass = example.getEntityClass();
-            if (!entityClass.getCanonicalName().equals(entityFullName)) {
+            if (!entityClass.getName().equals(entityFullName)) {
                 throw new MapperException("当前 Example 方法对应实体为:" + entityFullName
-                        + ", 但是参数 Example 中的 entityClass 为:" + entityClass.getCanonicalName());
+                        + ", 但是参数 Example 中的 entityClass 为:" + entityClass.getName());
             }
         }
         return true;
@@ -220,7 +220,7 @@ public abstract class OGNL {
             return ((Example.Criteria) parameter).getAndOr();
         } else if (parameter instanceof Example.Criterion) {
             return ((Example.Criterion) parameter).getAndOr();
-        } else if (parameter.getClass().getCanonicalName().endsWith("Criteria")) {
+        } else if (parameter.getClass().getName().endsWith("Criteria")) {
             return "or";
         } else {
             return "and";

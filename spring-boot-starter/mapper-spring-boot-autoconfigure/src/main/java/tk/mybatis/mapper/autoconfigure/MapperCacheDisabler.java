@@ -57,10 +57,10 @@ public class MapperCacheDisabler implements InitializingBean {
                     throw new UnsupportedOperationException("cache field must be a java.util.Map " +
                             "or org.apache.ibatis.cache.Cache instance");
                 }
-                logger.info("Clear " + utilClass.getCanonicalName() + " " + fieldName + " cache.");
+                logger.info("Clear " + utilClass.getName() + " " + fieldName + " cache.");
             }
         } catch (Exception ex) {
-            logger.warn("Failed to disable " + utilClass.getCanonicalName() + " "
+            logger.warn("Failed to disable " + utilClass.getName() + " "
                     + fieldName + " cache. ClassCastExceptions may occur", ex);
         }
     }

@@ -140,13 +140,13 @@ public class EntityColumn {
         //为了以后定制类型处理方式，你也可以指定一个特殊的类型处理器类，例如枚举
         if (this.typeHandler != null) {
             sb.append(", typeHandler=");
-            sb.append(this.typeHandler.getCanonicalName());
+            sb.append(this.typeHandler.getName());
         }
         //3.4.0 以前的 mybatis 无法获取父类中泛型的 javaType，所以如果使用低版本，就需要设置 useJavaType = true
         //useJavaType 默认 false,没有 javaType 限制时，对 ByPrimaryKey 方法的参数校验就放宽了，会自动转型
         if (useJavaType && !this.javaType.isArray()) {//当类型为数组时，不设置javaType#103
             sb.append(", javaType=");
-            sb.append(javaType.getCanonicalName());
+            sb.append(javaType.getName());
         }
         sb.append("}");
         if (StringUtil.isNotEmpty(separator)) {

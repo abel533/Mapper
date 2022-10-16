@@ -59,7 +59,7 @@ public class OracleProvider extends MapperTemplate {
             if (column.getGenIdClass() != null) {
                 sql.append("<bind name=\"").append(column.getColumn()).append("GenIdBind\" value=\"@tk.mybatis.mapper.genid.GenIdUtil@genId(");
                 sql.append("record").append(", '").append(column.getProperty()).append("'");
-                sql.append(", @").append(column.getGenIdClass().getCanonicalName()).append("@class");
+                sql.append(", @").append(column.getGenIdClass().getName()).append("@class");
                 sql.append(", '").append(tableName(entityClass)).append("'");
                 sql.append(", '").append(column.getColumn()).append("')");
                 sql.append("\"/>");

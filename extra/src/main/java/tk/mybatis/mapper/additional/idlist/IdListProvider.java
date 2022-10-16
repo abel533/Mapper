@@ -114,7 +114,7 @@ public class IdListProvider extends MapperTemplate {
             sql.append("</foreach>");
             sql.append("</where>");
         } else {
-            throw new MapperException("继承 ByIdList 方法的实体类[" + entityClass.getCanonicalName() + "]中必须只有一个带有 @Id 注解的字段");
+            throw new MapperException("继承 ByIdList 方法的实体类[" + entityClass.getName() + "]中必须只有一个带有 @Id 注解的字段");
         }
     }
 }

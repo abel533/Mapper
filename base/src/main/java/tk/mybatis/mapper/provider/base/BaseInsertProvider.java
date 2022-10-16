@@ -148,7 +148,7 @@ public class BaseInsertProvider extends MapperTemplate {
                     if (column.getGenerator() != null && "JDBC".equals(column.getGenerator())) {
                         continue;
                     }
-                    throw new MapperException(ms.getId() + "对应的实体类" + entityClass.getCanonicalName() + "中包含多个MySql的自动增长列,最多只能有一个!");
+                    throw new MapperException(ms.getId() + "对应的实体类" + entityClass.getName() + "中包含多个MySql的自动增长列,最多只能有一个!");
                 }
                 //插入selectKey
                 SelectKeyHelper.newSelectKeyMappedStatement(ms, column, entityClass, isBEFORE(), getIDENTITY(column));
@@ -156,7 +156,7 @@ public class BaseInsertProvider extends MapperTemplate {
             } else if (column.getGenIdClass() != null) {
                 sql.append("<bind name=\"").append(column.getColumn()).append("GenIdBind\" value=\"@tk.mybatis.mapper.genid.GenIdUtil@genId(");
                 sql.append("_parameter").append(", '").append(column.getProperty()).append("'");
-                sql.append(", @").append(column.getGenIdClass().getCanonicalName()).append("@class");
+                sql.append(", @").append(column.getGenIdClass().getName()).append("@class");
                 sql.append(", '").append(tableName(entityClass)).append("'");
                 sql.append(", '").append(column.getColumn()).append("')");
                 sql.append("\"/>");

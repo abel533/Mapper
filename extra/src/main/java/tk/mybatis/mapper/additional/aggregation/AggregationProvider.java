@@ -87,14 +87,14 @@ public class AggregationProvider extends MapperTemplate {
             sql.append(SqlHelper.exampleCheck(entityClass));
         }
         sql.append("SELECT ${@tk.mybatis.mapper.additional.aggregation.AggregationProvider@aggregationSelectClause(");
-        sql.append("@").append(entityClass.getCanonicalName()).append("@class");
+        sql.append("@").append(entityClass.getName()).append("@class");
         sql.append(", '").append(getConfig().getWrapKeyword()).append("'");
         sql.append(", aggregateCondition");
         sql.append(")} ");
         sql.append(SqlHelper.fromTable(entityClass, tableName(entityClass)));
         sql.append(SqlHelper.updateByExampleWhereClause());
         sql.append(" ${@tk.mybatis.mapper.additional.aggregation.AggregationProvider@aggregationGroupBy(");
-        sql.append("@").append(entityClass.getCanonicalName()).append("@class");
+        sql.append("@").append(entityClass.getName()).append("@class");
         sql.append(", '").append(getConfig().getWrapKeyword()).append("'");
         sql.append(", aggregateCondition");
         sql.append(")} ");

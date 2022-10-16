@@ -396,7 +396,7 @@ public class MapperPlugin extends FalseMethodPlugin {
         useMapperCommentGenerator = !"FALSE".equalsIgnoreCase(context.getProperty("useMapperCommentGenerator"));
         if (useMapperCommentGenerator) {
             commentCfg = new CommentGeneratorConfiguration();
-            commentCfg.setConfigurationType(MapperCommentGenerator.class.getCanonicalName());
+            commentCfg.setConfigurationType(MapperCommentGenerator.class.getName());
             context.setCommentGeneratorConfiguration(commentCfg);
         }
 

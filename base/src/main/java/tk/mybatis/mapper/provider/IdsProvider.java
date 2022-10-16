@@ -64,7 +64,7 @@ public class IdsProvider extends MapperTemplate {
             sql.append(column.getColumn());
             sql.append(" in (${_parameter})");
         } else {
-            throw new MapperException("继承 deleteByIds 方法的实体类[" + entityClass.getCanonicalName() + "]中必须只有一个带有 @Id 注解的字段");
+            throw new MapperException("继承 deleteByIds 方法的实体类[" + entityClass.getName() + "]中必须只有一个带有 @Id 注解的字段");
         }
         return sql.toString();
     }
@@ -89,7 +89,7 @@ public class IdsProvider extends MapperTemplate {
             sql.append(column.getColumn());
             sql.append(" in (${_parameter})");
         } else {
-            throw new MapperException("继承 selectByIds 方法的实体类[" + entityClass.getCanonicalName() + "]中必须只有一个带有 @Id 注解的字段");
+            throw new MapperException("继承 selectByIds 方法的实体类[" + entityClass.getName() + "]中必须只有一个带有 @Id 注解的字段");
         }
         return sql.toString();
     }
