@@ -27,64 +27,88 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>tk.mybatis</groupId>
-        <artifactId>mapper-parent</artifactId>
-        <version>2</version>
+        <artifactId>mapper-modules</artifactId>
+        <version>${revision}</version>
     </parent>
     <artifactId>mapper-all</artifactId>
-    <version>4.0.4-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>mapper-all</name>
     <description>Mybatis 通用 Mapper3 适配</description>
-		
-	<modules>
+
+    <modules>
         <module>mapper</module>
         <module>dependencies</module>
     </modules>
 
-    <properties>
-        <mapper-module.version>1.0.5-SNAPSHOT</mapper-module.version>
-        <mapper-weekend.version>1.1.4.1-SNAPSHOT</mapper-weekend.version>
-    </properties>
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>tk.mybatis</groupId>
+                <artifactId>mapper-core</artifactId>
+                <version>${project.version}</version>
+                <scope>compile</scope>
+            </dependency>
+            <dependency>
+                <groupId>tk.mybatis</groupId>
+                <artifactId>mapper-base</artifactId>
+                <version>${project.version}</version>
+                <scope>compile</scope>
+            </dependency>
+            <dependency>
+                <groupId>tk.mybatis</groupId>
+                <artifactId>mapper-extra</artifactId>
+                <version>${project.version}</version>
+                <scope>compile</scope>
+            </dependency>
+            <dependency>
+                <groupId>tk.mybatis</groupId>
+                <artifactId>mapper-spring</artifactId>
+                <version>${project.version}</version>
+                <scope>compile</scope>
+            </dependency>
+            <dependency>
+                <groupId>tk.mybatis</groupId>
+                <artifactId>mapper-weekend</artifactId>
+                <version>${project.version}</version>
+                <scope>compile</scope>
+            </dependency>
+            <dependency>
+                <groupId>tk.mybatis</groupId>
+                <artifactId>mapper-generator</artifactId>
+                <version>${project.version}</version>
+                <scope>compile</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
-	<dependencyManagement>
-		<dependencies>
-			<dependency>
-				<groupId>tk.mybatis</groupId>
-				<artifactId>mapper-core</artifactId>
-				<version>${mapper-module.version}</version>
-				<scope>compile</scope>
-			</dependency>
-			<dependency>
-				<groupId>tk.mybatis</groupId>
-				<artifactId>mapper-base</artifactId>
-				<version>${mapper-module.version}</version>
-				<scope>compile</scope>
-			</dependency>
-			<dependency>
-				<groupId>tk.mybatis</groupId>
-				<artifactId>mapper-extra</artifactId>
-				<version>${mapper-module.version}</version>
-				<scope>compile</scope>
-			</dependency>
-			<dependency>
-				<groupId>tk.mybatis</groupId>
-				<artifactId>mapper-spring</artifactId>
-				<version>${mapper-module.version}</version>
-				<scope>compile</scope>
-			</dependency>
-			<dependency>
-				<groupId>tk.mybatis</groupId>
-				<artifactId>mapper-weekend</artifactId>
-				<version>${mapper-weekend.version}</version>
-				<scope>compile</scope>
-			</dependency>
-			<dependency>
-				<groupId>tk.mybatis</groupId>
-				<artifactId>mapper-generator</artifactId>
-				<version>${mapper-module.version}</version>
-				<scope>compile</scope>
-			</dependency>
-		</dependencies>
-	</dependencyManagement>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>flatten-maven-plugin</artifactId>
+                <version>1.1.0</version>
+                <configuration>
+                    <updatePomFile>true</updatePomFile>
+                    <flattenMode>bom</flattenMode>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>flatten</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>flatten</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>flatten.clean</id>
+                        <phase>clean</phase>
+                        <goals>
+                            <goal>clean</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 </project>

@@ -25,6 +25,10 @@
 
 package tk.mybatis.mapper.weekend;
 
+import tk.mybatis.mapper.weekend.reflection.Reflections;
+
+import java.util.stream.Stream;
+
 /**
  * @author Frank
  */
@@ -69,4 +73,51 @@ public class Weekend<T> extends tk.mybatis.mapper.entity.Example {
         return (WeekendCriteria<T, Object>) this.createCriteria();
     }
 
+    /**
+     * 排除查询字段，优先级低于 selectProperties
+     *
+     * @param fns 属性名的可变参数
+     * @return
+     */
+    public Weekend<T> excludeProperties(Fn<T, ?>... fns) {
+        String[] properties = Stream.of(fns).map(Reflections::fnToFieldName).toArray(String[]::new);
+        this.excludeProperties(properties);
+        return this;
+    }
+
+    /**
+     * 指定要查询的属性列 - 这里会自动映射到表字段
+     *
+     * @param fns
+     * @return
+     */
+    public Weekend<T> selectProperties(Fn<T, ?>... fns) {
+        String[] properties = Stream.of(fns).map(Reflections::fnToFieldName).toArray(String[]::new);
+        this.selectProperties(properties);
+        return this;
+    }
+
+    public OrderBy orderBy(Fn<T, ?> fn) {
+        return this.orderBy(Reflections.fnToFieldName(fn));
+    }
+
+    public Weekend<T> withDistinct(boolean distinct) {
+        this.setDistinct(distinct);
+        return this;
+    }
+
+    public Weekend<T> withForUpdate(boolean forUpdate) {
+        this.setForUpdate(forUpdate);
+        return this;
+    }
+
+    public Weekend<T> withCountProperty(Fn<T, ?> fn) {
+        this.setCountProperty(Reflections.fnToFieldName(fn));
+        return this;
+    }
+
+    public Weekend<T> withTableName(String tableName) {
+        this.setTableName(tableName);
+        return this;
+    }
 }

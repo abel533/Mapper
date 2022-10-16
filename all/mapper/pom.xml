@@ -28,7 +28,7 @@
     <parent>
         <groupId>tk.mybatis</groupId>
         <artifactId>mapper-all</artifactId>
-        <version>4.0.4-SNAPSHOT</version>
+        <version>${revision}</version>
     </parent>
     <artifactId>mapper</artifactId>
     <packaging>jar</packaging>
@@ -40,7 +40,7 @@
         <!--必须依赖-->
         <dependency>
             <groupId>javax.persistence</groupId>
-            <artifactId>persistence-api</artifactId>
+            <artifactId>javax.persistence-api</artifactId>
         </dependency>
         <dependency>
             <groupId>tk.mybatis</groupId>
@@ -79,6 +79,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
+                <version>3.3.0</version>
                 <executions>
                     <execution>
                         <phase>package</phase>

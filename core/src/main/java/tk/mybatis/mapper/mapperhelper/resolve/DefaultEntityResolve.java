@@ -8,6 +8,7 @@ import tk.mybatis.mapper.MapperException;
 import tk.mybatis.mapper.annotation.ColumnType;
 import tk.mybatis.mapper.annotation.KeySql;
 import tk.mybatis.mapper.annotation.NameStyle;
+import tk.mybatis.mapper.annotation.Order;
 import tk.mybatis.mapper.code.IdentityDialect;
 import tk.mybatis.mapper.code.ORDER;
 import tk.mybatis.mapper.code.Style;
@@ -16,6 +17,7 @@ import tk.mybatis.mapper.entity.EntityColumn;
 import tk.mybatis.mapper.entity.EntityField;
 import tk.mybatis.mapper.entity.EntityTable;
 import tk.mybatis.mapper.genid.GenId;
+import tk.mybatis.mapper.gensql.GenSql;
 import tk.mybatis.mapper.mapperhelper.FieldHelper;
 import tk.mybatis.mapper.util.SimpleTypeUtil;
 import tk.mybatis.mapper.util.SqlReservedWords;
@@ -73,15 +75,13 @@ public class DefaultEntityResolve implements EntityResolve {
             //如果启用了简单类型，就做简单类型校验，如果不是简单类型，直接跳过
             //3.5.0 如果启用了枚举作为简单类型，就不会自动忽略枚举类型
             //4.0 如果标记了 Column 或 ColumnType 注解，也不忽略
-            if (config.isUseSimpleType()
-                    && !field.isAnnotationPresent(Column.class)
-                    && !field.isAnnotationPresent(ColumnType.class)
-                    && !(SimpleTypeUtil.isSimpleType(field.getJavaType())
-                    ||
-                    (config.isEnumAsSimpleType() && Enum.class.isAssignableFrom(field.getJavaType())))) {
-                continue;
+            if (!config.isUseSimpleType() //关闭简单类型限制时，所有字段都处理
+                    || (config.isUseSimpleType() && SimpleTypeUtil.isSimpleType(field.getJavaType())) //开启简单类型时只处理包含的简单类型
+                    || field.isAnnotationPresent(Column.class) //有注解的处理，不考虑类型
+                    || field.isAnnotationPresent(ColumnType.class) //有注解的处理，不考虑类型
+                    || (config.isEnumAsSimpleType() && Enum.class.isAssignableFrom(field.getJavaType()))) { //开启枚举作为简单类型时处理
+                processField(entityTable, field, config, style);
             }
-            processField(entityTable, field, config, style);
         }
         //当pk.size=0的时候使用所有列作为主键
         if (entityTable.getEntityClassPKColumns().size() == 0) {
@@ -169,13 +169,25 @@ public class DefaultEntityResolve implements EntityResolve {
      * @param entityColumn
      */
     protected void processOrderBy(EntityTable entityTable, EntityField field, EntityColumn entityColumn) {
+        String orderBy = "";
         if (field.isAnnotationPresent(OrderBy.class)) {
-            OrderBy orderBy = field.getAnnotation(OrderBy.class);
-            if ("".equals(orderBy.value())) {
-                entityColumn.setOrderBy("ASC");
-            } else {
-                entityColumn.setOrderBy(orderBy.value());
+            orderBy = field.getAnnotation(OrderBy.class).value();
+            if ("".equals(orderBy)) {
+                orderBy = "ASC";
             }
+            log.warn(OrderBy.class + " is outdated, use " + Order.class + " instead!");
+        }
+        if (field.isAnnotationPresent(Order.class)) {
+            Order order = field.getAnnotation(Order.class);
+            if ("".equals(order.value()) && "".equals(orderBy)) {
+                orderBy = "ASC";
+            } else {
+                orderBy = order.value();
+            }
+            entityColumn.setOrderPriority(order.priority());
+        }
+        if (StringUtil.isNotEmpty(orderBy)) {
+            entityColumn.setOrderBy(orderBy);
         }
     }
 
@@ -250,16 +262,27 @@ public class DefaultEntityResolve implements EntityResolve {
         } else if (keySql.dialect() == IdentityDialect.DEFAULT) {
             entityColumn.setIdentity(true);
             entityColumn.setOrder(ORDER.AFTER);
-        }  else if (keySql.dialect() != IdentityDialect.NULL) {
+        } else if (keySql.dialect() != IdentityDialect.NULL) {
             //自动增长
             entityColumn.setIdentity(true);
             entityColumn.setOrder(ORDER.AFTER);
             entityColumn.setGenerator(keySql.dialect().getIdentityRetrievalStatement());
-        } else if (StringUtil.isNotEmpty(keySql.sql())){
+        } else if (StringUtil.isNotEmpty(keySql.sql())) {
+
             entityColumn.setIdentity(true);
             entityColumn.setOrder(keySql.order());
             entityColumn.setGenerator(keySql.sql());
-        } else if(keySql.genId() != GenId.NULL.class){
+        } else if (keySql.genSql() != GenSql.NULL.class) {
+            entityColumn.setIdentity(true);
+            entityColumn.setOrder(keySql.order());
+            try {
+                GenSql genSql = keySql.genSql().newInstance();
+                entityColumn.setGenerator(genSql.genSql(entityTable, entityColumn));
+            } catch (Exception e) {
+                log.error("实例化 GenSql 失败: " + e, e);
+                throw new MapperException("实例化 GenSql 失败: " + e, e);
+            }
+        } else if (keySql.genId() != GenId.NULL.class) {
             entityColumn.setIdentity(false);
             entityColumn.setGenIdClass(keySql.genId());
         } else {

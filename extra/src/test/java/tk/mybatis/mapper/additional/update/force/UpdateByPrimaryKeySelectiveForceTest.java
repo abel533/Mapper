@@ -35,8 +35,8 @@ import java.net.URL;
 import java.util.Arrays;
 
 /**
- * @Description:  验证数值空值强制更新
  * @author qrqhuangcy
+ * @Description: 验证数值空值强制更新
  * @date 2018-06-25
  */
 public class UpdateByPrimaryKeySelectiveForceTest extends BaseTest {
@@ -49,7 +49,9 @@ public class UpdateByPrimaryKeySelectiveForceTest extends BaseTest {
     protected Reader getConfigFileAsReader() throws IOException {
         URL url = getClass().getResource("mybatis-config.xml");
         return toReader(url);
-    };
+    }
+
+    ;
 
     /**
      * 获取初始化 sql
@@ -94,4 +96,4 @@ public class UpdateByPrimaryKeySelectiveForceTest extends BaseTest {
             sqlSession.close();
         }
     }
-  }
+}

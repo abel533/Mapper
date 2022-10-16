@@ -39,7 +39,7 @@ public class Country implements Serializable {
     private static final long serialVersionUID = 6569081236403751407L;
     @Id
     @ColumnType(jdbcType = JdbcType.BIGINT)
-    private Long   id;
+    private Long id;
     private String countryname;
     private String countrycode;
 

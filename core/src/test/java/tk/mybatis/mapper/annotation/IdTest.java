@@ -26,7 +26,7 @@ public class IdTest {
     private Configuration configuration;
 
     @Before
-    public void beforeTest(){
+    public void beforeTest() {
         config = new Config();
         config.setStyle(Style.normal);
 
@@ -39,7 +39,7 @@ public class IdTest {
     }
 
     @Test
-    public void testSingleId(){
+    public void testSingleId() {
         EntityHelper.initEntityNameMap(UserSingleId.class, config);
         EntityTable entityTable = EntityHelper.getEntityTable(UserSingleId.class);
         Assert.assertNotNull(entityTable);
@@ -58,7 +58,7 @@ public class IdTest {
         Assert.assertEquals("<where> AND name = #{name}</where>", SqlHelper.wherePKColumns(UserSingleId.class));
     }
 
-    class UserCompositeKeys  {
+    class UserCompositeKeys {
         @Id
         private String name;
 
@@ -67,7 +67,7 @@ public class IdTest {
     }
 
     @Test
-    public void testCompositeKeys(){
+    public void testCompositeKeys() {
         EntityHelper.initEntityNameMap(UserCompositeKeys.class, config);
         EntityTable entityTable = EntityHelper.getEntityTable(UserCompositeKeys.class);
         Assert.assertNotNull(entityTable);

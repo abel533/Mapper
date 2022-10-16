@@ -58,7 +58,7 @@ public class TestBasic {
             userInfo.setEmail("abel533@gmail.com");
             Collection collection = sqlSession.getConfiguration().getMappedStatements();
             for (Object o : collection) {
-                if(o instanceof MappedStatement){
+                if (o instanceof MappedStatement) {
                     MappedStatement ms = (MappedStatement) o;
                     if (ms.getId().contains("UserInfoMapper.insert")) {
                         System.out.println(ms.getId());
@@ -71,7 +71,7 @@ public class TestBasic {
             Assert.assertNotNull(userInfo.getId());
             Assert.assertTrue((int) userInfo.getId() >= 6);
 
-            Assert.assertEquals(1,mapper.deleteByPrimaryKey(userInfo));
+            Assert.assertEquals(1, mapper.deleteByPrimaryKey(userInfo));
         } finally {
             sqlSession.rollback();
             sqlSession.close();

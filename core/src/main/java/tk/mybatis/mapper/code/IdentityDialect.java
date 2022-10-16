@@ -66,7 +66,7 @@ public enum IdentityDialect {
             returnValue = DB2_MF;
         } else if ("Informix".equalsIgnoreCase(database)) {
             returnValue = INFORMIX;
-        } else if("".equals(database)){
+        } else if ("".equals(database)) {
             return DEFAULT;
         }
         return returnValue;

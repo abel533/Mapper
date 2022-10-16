@@ -144,6 +144,12 @@ public class BaseSelectProvider extends MapperTemplate {
         StringBuilder sql = new StringBuilder();
         sql.append(SqlHelper.selectAllColumns(entityClass));
         sql.append(SqlHelper.fromTable(entityClass, tableName(entityClass)));
+
+        // 逻辑删除的未删除查询条件
+        sql.append("<where>");
+        sql.append(SqlHelper.whereLogicDelete(entityClass, false));
+        sql.append("</where>");
+
         sql.append(SqlHelper.orderByDefault(entityClass));
         return sql.toString();
     }

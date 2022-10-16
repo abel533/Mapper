@@ -29,10 +29,10 @@ public class Address implements Serializable {
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
-        if(province != null && province.length() > 0){
+        if (province != null && province.length() > 0) {
             builder.append(province);
         }
-        if(city != null && city.length() > 0){
+        if (city != null && city.length() > 0) {
             builder.append("/").append(city);
         }
         return builder.toString();

@@ -52,7 +52,6 @@ public class GenerateByTemplateFile extends GeneratedJavaFile {
 
     public GenerateByTemplateFile(TableClass tableClass, TemplateFormatter templateFormatter, Properties properties, String targetProject, String targetPackage, String fileName, String templateContent) {
         super(null, targetProject, ENCODING, null);
-        this.targetProject = targetProject;
         this.targetPackage = targetPackage;
         this.fileName = fileName;
         this.templateContent = templateContent;

@@ -18,11 +18,5 @@
 
     <bean class="tk.mybatis.spring.mapper.MapperScannerConfigurer">
         <property name="basePackage" value="tk.mybatis.mapper.xml"/>
-        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
-        <property name="properties">
-            <value>
-                mappers=tk.mybatis.mapper.common.Mapper
-            </value>
-        </property>
     </bean>
 </beans>

@@ -29,11 +29,12 @@
 
 <configuration>
     <settings>
-        <setting name="logImpl" value="LOG4J"/>
+        <setting name="logImpl" value="SLF4J"/>
     </settings>
 
     <typeHandlers>
-        <typeHandler handler="org.apache.ibatis.type.EnumOrdinalTypeHandler" javaType="tk.mybatis.mapper.typehandler.StateEnum"/>
+        <typeHandler handler="org.apache.ibatis.type.EnumOrdinalTypeHandler"
+                     javaType="tk.mybatis.mapper.typehandler.StateEnum"/>
     </typeHandlers>
 
     <environments default="development">
@@ -41,10 +42,10 @@
             <transactionManager type="JDBC">
             </transactionManager>
             <dataSource type="UNPOOLED">
-                <property name="driver" value="com.mysql.jdbc.Driver" />
-                <property name="url" value="jdbc:mysql://localhost:3306/test" />
-                <property name="username" value="root" />
-                <property name="password" value="" />
+                <property name="driver" value="com.mysql.jdbc.Driver"/>
+                <property name="url" value="jdbc:mysql://localhost:3306/test"/>
+                <property name="username" value="root"/>
+                <property name="password" value=""/>
             </dataSource>
         </environment>
     </environments>

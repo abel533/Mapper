@@ -39,7 +39,7 @@ import java.util.Set;
  * @author liuzh
  */
 public class UpdateByDifferProvider extends MapperTemplate {
-    public static final String OLD   = "old";
+    public static final String OLD = "old";
     public static final String NEWER = "newer";
 
     public UpdateByDifferProvider(Class<?> mapperClass, MapperHelper mapperHelper) {
@@ -139,9 +139,6 @@ public class UpdateByDifferProvider extends MapperTemplate {
                     //if old.xx != newer.xx
                     sql.append(getIfNotEqual(column, column.getColumnEqualsHolder(NEWER) + ","));
                 }
-            } else if (column.isId() && column.isUpdatable()) {
-                //set id = id,
-                sql.append(column.getColumn()).append(" = ").append(column.getColumn()).append(",");
             }
         }
         sql.append("</set>");

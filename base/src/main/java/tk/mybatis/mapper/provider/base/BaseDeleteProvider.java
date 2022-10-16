@@ -25,10 +25,12 @@
 package tk.mybatis.mapper.provider.base;
 
 import org.apache.ibatis.mapping.MappedStatement;
+import org.apache.ibatis.mapping.SqlCommandType;
 import tk.mybatis.mapper.mapperhelper.EntityHelper;
 import tk.mybatis.mapper.mapperhelper.MapperHelper;
 import tk.mybatis.mapper.mapperhelper.MapperTemplate;
 import tk.mybatis.mapper.mapperhelper.SqlHelper;
+import tk.mybatis.mapper.util.MetaObjectUtil;
 
 /**
  * BaseDeleteMapper实现类，基础方法实现类
@@ -54,8 +56,17 @@ public class BaseDeleteProvider extends MapperTemplate {
         if (getConfig().isSafeDelete()) {
             sql.append(SqlHelper.notAllNullParameterCheck("_parameter", EntityHelper.getColumns(entityClass)));
         }
-        sql.append(SqlHelper.deleteFromTable(entityClass, tableName(entityClass)));
-        sql.append(SqlHelper.whereAllIfColumns(entityClass, isNotEmpty(), true));
+        // 如果是逻辑删除，则修改为更新表，修改逻辑删除字段的值
+        if (SqlHelper.hasLogicDeleteColumn(entityClass)) {
+            sql.append(SqlHelper.updateTable(entityClass, tableName(entityClass)));
+            sql.append("<set>");
+            sql.append(SqlHelper.logicDeleteColumnEqualsValue(entityClass, true));
+            sql.append("</set>");
+            MetaObjectUtil.forObject(ms).setValue("sqlCommandType", SqlCommandType.UPDATE);
+        } else {
+            sql.append(SqlHelper.deleteFromTable(entityClass, tableName(entityClass)));
+        }
+        sql.append(SqlHelper.whereAllIfColumns(entityClass, isNotEmpty()));
         return sql.toString();
     }
 
@@ -67,9 +78,16 @@ public class BaseDeleteProvider extends MapperTemplate {
     public String deleteByPrimaryKey(MappedStatement ms) {
         final Class<?> entityClass = getEntityClass(ms);
         StringBuilder sql = new StringBuilder();
-        sql.append(SqlHelper.deleteFromTable(entityClass, tableName(entityClass)));
-        //增加 @Version 乐观锁支持
-        sql.append(SqlHelper.wherePKColumns(entityClass, true));
+        if (SqlHelper.hasLogicDeleteColumn(entityClass)) {
+            sql.append(SqlHelper.updateTable(entityClass, tableName(entityClass)));
+            sql.append("<set>");
+            sql.append(SqlHelper.logicDeleteColumnEqualsValue(entityClass, true));
+            sql.append("</set>");
+            MetaObjectUtil.forObject(ms).setValue("sqlCommandType", SqlCommandType.UPDATE);
+        } else {
+            sql.append(SqlHelper.deleteFromTable(entityClass, tableName(entityClass)));
+        }
+        sql.append(SqlHelper.wherePKColumns(entityClass));
         return sql.toString();
     }
 }

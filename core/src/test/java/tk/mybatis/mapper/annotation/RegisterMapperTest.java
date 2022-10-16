@@ -18,7 +18,7 @@ public class RegisterMapperTest {
     private Configuration configuration;
 
     @Before
-    public void beforeTest(){
+    public void beforeTest() {
         config = new Config();
         config.setStyle(Style.normal);
 
@@ -35,7 +35,7 @@ public class RegisterMapperTest {
     }
 
     @Test
-    public void testHashRegisterMapper(){
+    public void testHashRegisterMapper() {
         MapperHelper mapperHelper = new MapperHelper();
         Assert.assertTrue(mapperHelper.isExtendCommonMapper(UserMapper.class));
     }
@@ -45,7 +45,7 @@ public class RegisterMapperTest {
     }
 
     @Test
-    public void testRoleMapper(){
+    public void testRoleMapper() {
         MapperHelper mapperHelper = new MapperHelper();
         Assert.assertFalse(mapperHelper.isExtendCommonMapper(RoleMapper.class));
     }
@@ -56,7 +56,7 @@ public class RegisterMapperTest {
     }
 
     @Test
-    public void testRoleMapper2(){
+    public void testRoleMapper2() {
         MapperHelper mapperHelper = new MapperHelper();
         Assert.assertFalse(mapperHelper.isExtendCommonMapper(RoleMapper2.class));
     }

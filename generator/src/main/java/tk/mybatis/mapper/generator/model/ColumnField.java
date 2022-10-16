@@ -35,25 +35,25 @@ import java.io.Serializable;
 public class ColumnField implements Serializable {
 
     private static final long serialVersionUID = -435113788623615260L;
-    private TableClass             tableClass;
-    private String                 columnName;
-    private String                 jdbcType;
-    private String                 fieldName;
-    private String                 remarks;
+    private TableClass tableClass;
+    private String columnName;
+    private String jdbcType;
+    private String fieldName;
+    private String remarks;
     private FullyQualifiedJavaType type;
-    private String                 typePackage;
-    private String                 shortTypeName;
-    private String                 fullTypeName;
-    private boolean                identity;
-    private boolean                nullable;
-    private boolean                blobColumn;
-    private boolean                stringColumn;
-    private boolean                jdbcCharacterColumn;
-    private boolean                jdbcDateColumn;
-    private boolean                jdbcTimeColumn;
-    private boolean                sequenceColumn;
-    private int                    length;
-    private int                    scale;
+    private String typePackage;
+    private String shortTypeName;
+    private String fullTypeName;
+    private boolean identity;
+    private boolean nullable;
+    private boolean blobColumn;
+    private boolean stringColumn;
+    private boolean jdbcCharacterColumn;
+    private boolean jdbcDateColumn;
+    private boolean jdbcTimeColumn;
+    private boolean sequenceColumn;
+    private int length;
+    private int scale;
 
     public String getColumnName() {
         return columnName;

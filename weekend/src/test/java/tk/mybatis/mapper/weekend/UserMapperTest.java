@@ -29,7 +29,9 @@ import org.apache.ibatis.session.SqlSession;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TestRule;
+import tk.mybatis.mapper.weekend.entity.Country;
 import tk.mybatis.mapper.weekend.entity.User;
+import tk.mybatis.mapper.weekend.mapper.CountryMapper;
 import tk.mybatis.mapper.weekend.mapper.UserMapper;
 
 import java.util.Arrays;
@@ -47,18 +49,36 @@ public class UserMapperTest {
      * 执行，然后看日志打出来的SQL
      */
     @Test
-    public void testSelectIdIsNull(){
-        SqlSession    sqlSession = MybatisHelper.getSqlSession();
+    public void testSelectIdIsNull() {
+        SqlSession sqlSession = MybatisHelper.getSqlSession();
         UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
         Weekend<User> weekend = Weekend.of(User.class);
         weekend.weekendCriteria()
                 .andIsNull(User::getId)
-                .andBetween(User::getId,0,10)
-                .andIn(User::getUserName, Arrays.asList("a","b","c"));
+                .andBetween(User::getId, 0, 10)
+                .andIn(User::getUserName, Arrays.asList("a", "b", "c"));
 
         List<User> users = userMapper.selectByExample(weekend);
         for (User user : users) {
             System.out.println(user.getUserName());
         }
+    }
+
+    @Test
+    public void testExcludeAndSelectProperties() {
+        SqlSession sqlSession = MybatisHelper.getSqlSession();
+        CountryMapper countryMapper = sqlSession.getMapper(CountryMapper.class);
+        Weekend<Country> weekend1 = Weekend.of(Country.class);
+        weekend1.excludeProperties(Country::getId, Country::getCountryname);
+        //查看日志执行的sql
+        countryMapper.selectByExample(weekend1);
+        Weekend<Country> weekend2 = Weekend.of(Country.class);
+        weekend2.selectProperties(Country::getId);
+        //查看日志执行的sql
+        countryMapper.selectByExample(weekend2);
+        //count 查询
+        weekend2.withCountProperty(Country::getCountryname);
+        countryMapper.selectCountByExample(weekend2);
+
     }
 }

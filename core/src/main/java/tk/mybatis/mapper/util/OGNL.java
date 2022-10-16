@@ -25,16 +25,15 @@
 package tk.mybatis.mapper.util;
 
 import tk.mybatis.mapper.MapperException;
+import tk.mybatis.mapper.annotation.LogicDelete;
 import tk.mybatis.mapper.entity.EntityColumn;
 import tk.mybatis.mapper.entity.Example;
 import tk.mybatis.mapper.entity.IDynamicTableName;
 import tk.mybatis.mapper.mapperhelper.EntityHelper;
+import tk.mybatis.mapper.mapperhelper.SqlHelper;
 
 import java.lang.reflect.Method;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * OGNL静态方法
@@ -92,6 +91,20 @@ public abstract class OGNL {
     }
 
     /**
+     * 校验集合类型参数不能为空
+     *
+     * @param parameter
+     * @param error
+     * @return
+     */
+    public static boolean notEmptyCollectionCheck(Object parameter, String error) {
+        if (parameter == null || (parameter instanceof Collection && ((Collection) parameter).size() == 0)) {
+            throw new IllegalArgumentException(error);
+        }
+        return true;
+    }
+
+    /**
      * 检查 paremeter 对象中指定的 fields 是否全是 null，如果是则抛出异常
      *
      * @param parameter
@@ -108,7 +121,7 @@ public abstract class OGNL {
                 } else {
                     Method getter = parameter.getClass().getDeclaredMethod("getOredCriteria");
                     Object list = getter.invoke(parameter);
-                    if(list != null && list instanceof List && ((List) list).size() > 0){
+                    if (list != null && list instanceof List && ((List) list).size() > 0) {
                         return true;
                     }
                 }
@@ -213,4 +226,52 @@ public abstract class OGNL {
             return "and";
         }
     }
+
+    /**
+     * 拼接逻辑删除字段的未删除查询条件
+     *
+     * @param parameter
+     * @return
+     */
+    public static String andNotLogicDelete(Object parameter) {
+        String result = "";
+        if (parameter instanceof Example) {
+            Example example = (Example) parameter;
+            Map<String, EntityColumn> propertyMap = example.getPropertyMap();
+
+            for (Map.Entry<String, EntityColumn> entry : propertyMap.entrySet()) {
+                EntityColumn column = entry.getValue();
+                if (column.getEntityField().isAnnotationPresent(LogicDelete.class)) {
+                    // 未逻辑删除的条件
+                    result = column.getColumn() + " = " + SqlHelper.getLogicDeletedValue(column, false);
+
+                    // 如果Example中有条件，则拼接" and "，
+                    // 如果是空的oredCriteria，则where中只有逻辑删除注解的未删除条件
+                    if (hasWhereCause(example)) {
+                        result += " and ";
+                    }
+                }
+            }
+        }
+        return result;
+    }
+
+    /**
+     * 检查是否存在where条件，存在返回true，不存在返回false.
+     *
+     * @param example
+     * @return
+     */
+    private static boolean hasWhereCause(Example example) {
+        if (example.getOredCriteria() == null || example.getOredCriteria().size() == 0) {
+            return false;
+        }
+        for (Example.Criteria oredCriterion : example.getOredCriteria()) {
+            if (oredCriterion.getAllCriteria().size() != 0) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 }

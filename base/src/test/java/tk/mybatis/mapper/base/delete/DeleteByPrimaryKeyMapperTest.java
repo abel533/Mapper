@@ -9,7 +9,7 @@ import tk.mybatis.mapper.base.CountryMapper;
 public class DeleteByPrimaryKeyMapperTest extends BaseTest {
 
     @Test
-    public void testDeleteByPrimaryKey(){
+    public void testDeleteByPrimaryKey() {
         SqlSession sqlSession = getSqlSession();
         try {
             CountryMapper mapper = sqlSession.getMapper(CountryMapper.class);

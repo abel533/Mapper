@@ -50,5 +50,5 @@ public interface InsertListMapper<T> {
      * @return
      */
     @InsertProvider(type = InsertListProvider.class, method = "dynamicSQL")
-    int insertList(List<T> recordList);
+    int insertList(List<? extends T> recordList);
 }

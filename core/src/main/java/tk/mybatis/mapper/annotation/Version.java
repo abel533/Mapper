@@ -36,7 +36,7 @@ import java.lang.annotation.Target;
  * @author liuzh
  * @since 3.5.0
  */
-@Target({ElementType.FIELD})
+@Target({ElementType.FIELD, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Version {
 

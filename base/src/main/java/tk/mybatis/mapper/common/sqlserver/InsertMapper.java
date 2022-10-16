@@ -43,7 +43,7 @@ public interface InsertMapper<T> {
      * @param record
      * @return
      */
-    @Options(useGeneratedKeys = true, keyProperty = "id")
+    @Options(useGeneratedKeys = true)
     @InsertProvider(type = SqlServerProvider.class, method = "dynamicSQL")
     int insert(T record);
 

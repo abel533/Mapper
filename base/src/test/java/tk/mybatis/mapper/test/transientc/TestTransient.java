@@ -83,7 +83,7 @@ public class TestTransient {
             country = mapper.selectByPrimaryKey(174);
             Assert.assertNotNull(country);
             Assert.assertEquals(174, (int) country.getId());
-            Assert.assertEquals("美国",country.getCountryname());
+            Assert.assertEquals("美国", country.getCountryname());
             Assert.assertNull(country.getCountrycode());
         } finally {
             sqlSession.close();

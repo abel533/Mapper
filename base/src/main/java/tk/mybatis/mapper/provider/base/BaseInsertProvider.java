@@ -47,12 +47,17 @@ public class BaseInsertProvider extends MapperTemplate {
         StringBuilder sql = new StringBuilder();
         //获取全部列
         Set<EntityColumn> columnList = EntityHelper.getColumns(entityClass);
+        EntityColumn logicDeleteColumn = SqlHelper.getLogicDeleteColumn(entityClass);
         processKey(sql, entityClass, ms, columnList);
         sql.append(SqlHelper.insertIntoTable(entityClass, tableName(entityClass)));
         sql.append(SqlHelper.insertColumns(entityClass, false, false, false));
         sql.append("<trim prefix=\"VALUES(\" suffix=\")\" suffixOverrides=\",\">");
         for (EntityColumn column : columnList) {
             if (!column.isInsertable()) {
+                continue;
+            }
+            if (logicDeleteColumn != null && logicDeleteColumn == column) {
+                sql.append(SqlHelper.getLogicDeletedValue(column, false)).append(",");
                 continue;
             }
             //优先使用传入的属性值,当原属性property!=null时，用原属性
@@ -80,6 +85,7 @@ public class BaseInsertProvider extends MapperTemplate {
         StringBuilder sql = new StringBuilder();
         //获取全部列
         Set<EntityColumn> columnList = EntityHelper.getColumns(entityClass);
+        EntityColumn logicDeleteColumn = SqlHelper.getLogicDeleteColumn(entityClass);
         processKey(sql, entityClass, ms, columnList);
         sql.append(SqlHelper.insertIntoTable(entityClass, tableName(entityClass)));
         sql.append("<trim prefix=\"(\" suffix=\")\" suffixOverrides=\",\">");
@@ -88,15 +94,24 @@ public class BaseInsertProvider extends MapperTemplate {
                 continue;
             }
             if (column.isIdentity()) {
-                sql.append(column.getColumn() + ",");
+                sql.append(column.getColumn()).append(",");
             } else {
+                if (logicDeleteColumn != null && logicDeleteColumn == column) {
+                    sql.append(column.getColumn()).append(",");
+                    continue;
+                }
                 sql.append(SqlHelper.getIfNotNull(column, column.getColumn() + ",", isNotEmpty()));
             }
         }
         sql.append("</trim>");
+
         sql.append("<trim prefix=\"VALUES(\" suffix=\")\" suffixOverrides=\",\">");
         for (EntityColumn column : columnList) {
             if (!column.isInsertable()) {
+                continue;
+            }
+            if (logicDeleteColumn != null && logicDeleteColumn == column) {
+                sql.append(SqlHelper.getLogicDeletedValue(column, false)).append(",");
                 continue;
             }
             //优先使用传入的属性值,当原属性property!=null时，用原属性
@@ -117,7 +132,7 @@ public class BaseInsertProvider extends MapperTemplate {
         return sql.toString();
     }
 
-    private void processKey(StringBuilder sql, Class<?> entityClass, MappedStatement ms, Set<EntityColumn> columnList){
+    private void processKey(StringBuilder sql, Class<?> entityClass, MappedStatement ms, Set<EntityColumn> columnList) {
         //Identity列只能有一个
         Boolean hasIdentityKey = false;
         //先处理cache或bind节点
@@ -130,7 +145,7 @@ public class BaseInsertProvider extends MapperTemplate {
                 //如果已经存在Identity列，抛出异常
                 if (hasIdentityKey) {
                     //jdbc类型只需要添加一次
-                    if (column.getGenerator() != null && column.getGenerator().equals("JDBC")) {
+                    if (column.getGenerator() != null && "JDBC".equals(column.getGenerator())) {
                         continue;
                     }
                     throw new MapperException(ms.getId() + "对应的实体类" + entityClass.getCanonicalName() + "中包含多个MySql的自动增长列,最多只能有一个!");
@@ -138,7 +153,7 @@ public class BaseInsertProvider extends MapperTemplate {
                 //插入selectKey
                 SelectKeyHelper.newSelectKeyMappedStatement(ms, column, entityClass, isBEFORE(), getIDENTITY(column));
                 hasIdentityKey = true;
-            } else if(column.getGenIdClass() != null){
+            } else if (column.getGenIdClass() != null) {
                 sql.append("<bind name=\"").append(column.getColumn()).append("GenIdBind\" value=\"@tk.mybatis.mapper.genid.GenIdUtil@genId(");
                 sql.append("_parameter").append(", '").append(column.getProperty()).append("'");
                 sql.append(", @").append(column.getGenIdClass().getCanonicalName()).append("@class");

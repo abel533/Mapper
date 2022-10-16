@@ -3,15 +3,15 @@ package tk.mybatis.mapper.additional.idlist;
 import org.apache.ibatis.session.SqlSession;
 import org.junit.Assert;
 import org.junit.Test;
-
 import tk.mybatis.mapper.additional.BaseTest;
 import tk.mybatis.mapper.additional.Country;
-import tk.mybatis.mapper.additional.CountryMapper;
 import tk.mybatis.mapper.entity.Config;
 
+import java.io.IOException;
+import java.io.Reader;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 public class IdListMapperTest extends BaseTest {
@@ -24,6 +24,16 @@ public class IdListMapperTest extends BaseTest {
         return config;
     }
 
+    /**
+     * 获取 mybatis 配置
+     *
+     * @return
+     */
+    protected Reader getConfigFileAsReader() throws IOException {
+        URL url = getClass().getResource("mybatis-config.xml");
+        return toReader(url);
+    }
+
     @Test
     public void testByIdList() {
         SqlSession sqlSession = getSqlSession();
@@ -32,9 +42,9 @@ public class IdListMapperTest extends BaseTest {
             List<Long> idList = Arrays.asList(1L, 2L, 3L);
             List<Country> countryList = mapper.selectByIdList(idList);
             Assert.assertEquals(3, countryList.size());
-            Assert.assertEquals(1L, (long)countryList.get(0).getId());
-            Assert.assertEquals(2L, (long)countryList.get(1).getId());
-            Assert.assertEquals(3L, (long)countryList.get(2).getId());
+            Assert.assertEquals(1L, (long) countryList.get(0).getId());
+            Assert.assertEquals(2L, (long) countryList.get(1).getId());
+            Assert.assertEquals(3L, (long) countryList.get(2).getId());
             //删除
             Assert.assertEquals(3, mapper.deleteByIdList(idList));
             //查询结果0

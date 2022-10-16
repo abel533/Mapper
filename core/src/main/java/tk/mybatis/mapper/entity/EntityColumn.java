@@ -50,6 +50,7 @@ public class EntityColumn {
     private String generator;
     //排序
     private String orderBy;
+    private int orderPriority;
     //可插入
     private boolean insertable = true;
     //可更新
@@ -343,6 +344,14 @@ public class EntityColumn {
         this.useJavaType = useJavaType;
     }
 
+    public int getOrderPriority() {
+        return orderPriority;
+    }
+
+    public void setOrderPriority(int orderPriority) {
+        this.orderPriority = orderPriority;
+    }
+
     @Override
     public String toString() {
         return "EntityColumn{" +
@@ -357,6 +366,7 @@ public class EntityColumn {
                 ", blob=" + blob +
                 ", generator='" + generator + '\'' +
                 ", orderBy='" + orderBy + '\'' +
+                ", orderPriority='" + orderPriority + '\'' +
                 ", insertable=" + insertable +
                 ", updatable=" + updatable +
                 ", order=" + order +

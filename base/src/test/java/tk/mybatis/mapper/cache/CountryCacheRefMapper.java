@@ -6,7 +6,7 @@ import tk.mybatis.mapper.common.Mapper;
 
 /**
  * 这个例子中，在 XML 配置了缓存，这里使用注解引用 XML 中的缓存配置
- *
+ * <p>
  * namespace 有两种配置方法，参考下面两行注解
  */
 @CacheNamespaceRef(CountryCacheRefMapper.class)

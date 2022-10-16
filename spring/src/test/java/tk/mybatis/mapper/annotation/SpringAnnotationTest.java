@@ -117,10 +117,10 @@ public class SpringAnnotationTest {
 
     @Configuration
     @MapperScan(value = "tk.mybatis.mapper.annotation",
-        properties = {
-                "mappers=tk.mybatis.mapper.common.Mapper",
-                "notEmpty=true"
-        }
+            properties = {
+                    "mappers=tk.mybatis.mapper.common.Mapper",
+                    "notEmpty=true"
+            }
     )
     public static class MyBatisConfigProperties {
         @Bean
@@ -145,11 +145,11 @@ public class SpringAnnotationTest {
 
     @Configuration
     @MapperScan(value = "tk.mybatis.mapper.annotation",
-        properties = {
-                //参数配置错误
-                "mapperstk.mybatis.mapper.common.Mapper",
-                "notEmpty=true"
-        }
+            properties = {
+                    //参数配置错误
+                    "mapperstk.mybatis.mapper.common.Mapper",
+                    "notEmpty=true"
+            }
     )
     public static class MyBatisConfigPropertiesError {
         @Bean

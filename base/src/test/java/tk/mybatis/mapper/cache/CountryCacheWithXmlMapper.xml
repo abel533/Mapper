@@ -32,6 +32,8 @@
     <cache-ref namespace="tk.mybatis.mapper.cache.CountryCacheWithXmlMapper"/>
 
     <select id="selectById" resultType="tk.mybatis.mapper.base.Country">
-        select * from country where id = #{id}
+        select *
+        from country
+        where id = #{id}
     </select>
 </mapper>

@@ -53,7 +53,6 @@ public class GenerateByListTemplateFile extends GeneratedJavaFile {
 
     public GenerateByListTemplateFile(Set<TableClass> tableClassSet, ListTemplateFormatter templateFormatter, Properties properties, String targetProject, String targetPackage, String fileNameTemplate, String templateContent) {
         super(null, targetProject, ENCODING, null);
-        this.targetProject = targetProject;
         this.targetPackage = targetPackage;
         this.fileNameTemplate = fileNameTemplate;
         this.templateContent = templateContent;

@@ -8,7 +8,7 @@ import tk.mybatis.mapper.genid.GenId;
  * @author liuzh
  */
 public class SimpleGenId implements GenId<Long> {
-    private Long    time;
+    private Long time;
     private Integer seq;
 
     @Override

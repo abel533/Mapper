@@ -26,7 +26,7 @@ public class ColumnTest {
     private Configuration configuration;
 
     @Before
-    public void beforeTest(){
+    public void beforeTest() {
         config = new Config();
         config.setStyle(Style.normal);
 
@@ -39,7 +39,7 @@ public class ColumnTest {
     }
 
     @Test
-    public void testColumn(){
+    public void testColumn() {
         EntityHelper.initEntityNameMap(UserColumn.class, config);
         EntityTable entityTable = EntityHelper.getEntityTable(UserColumn.class);
         Assert.assertNotNull(entityTable);

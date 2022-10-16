@@ -54,9 +54,9 @@ public class EntityTable {
     private String orderByClause;
     private String baseSelect;
     //实体类 => 全部列属性
-    private Set<EntityColumn> entityClassColumns;
+    private LinkedHashSet<EntityColumn> entityClassColumns;
     //实体类 => 主键信息
-    private Set<EntityColumn> entityClassPKColumns;
+    private LinkedHashSet<EntityColumn> entityClassPKColumns;
     //useGenerator包含多列的时候需要用到
     private List<String> keyProperties;
     private List<String> keyColumns;
@@ -87,7 +87,7 @@ public class EntityTable {
             String column = entityColumn.getColumn();
             //去掉可能存在的分隔符
             Matcher matcher = DELIMITER.matcher(column);
-            if(matcher.find()){
+            if (matcher.find()) {
                 column = matcher.group(1);
             }
             ResultMapping.Builder builder = new ResultMapping.Builder(configuration, entityColumn.getProperty(), column, entityColumn.getJavaType());
@@ -96,7 +96,7 @@ public class EntityTable {
             }
             if (entityColumn.getTypeHandler() != null) {
                 try {
-                    builder.typeHandler(getInstance(entityColumn.getJavaType(),entityColumn.getTypeHandler()));
+                    builder.typeHandler(getInstance(entityColumn.getJavaType(), entityColumn.getTypeHandler()));
                 } catch (Exception e) {
                     throw new MapperException(e);
                 }
@@ -125,6 +125,7 @@ public class EntityTable {
 
     /**
      * 实例化TypeHandler
+     *
      * @param javaTypeClass
      * @param typeHandlerClass
      * @return
@@ -132,22 +133,22 @@ public class EntityTable {
     @SuppressWarnings("unchecked")
     public <T> TypeHandler<T> getInstance(Class<?> javaTypeClass, Class<?> typeHandlerClass) {
         if (javaTypeClass != null) {
-          try {
-            Constructor<?> c = typeHandlerClass.getConstructor(Class.class);
-            return (TypeHandler<T>) c.newInstance(javaTypeClass);
-          } catch (NoSuchMethodException ignored) {
-            // ignored
-          } catch (Exception e) {
-            throw new TypeException("Failed invoking constructor for handler " + typeHandlerClass, e);
-          }
+            try {
+                Constructor<?> c = typeHandlerClass.getConstructor(Class.class);
+                return (TypeHandler<T>) c.newInstance(javaTypeClass);
+            } catch (NoSuchMethodException ignored) {
+                // ignored
+            } catch (Exception e) {
+                throw new TypeException("Failed invoking constructor for handler " + typeHandlerClass, e);
+            }
         }
         try {
-          Constructor<?> c = typeHandlerClass.getConstructor();
-          return (TypeHandler<T>) c.newInstance();
+            Constructor<?> c = typeHandlerClass.getConstructor();
+            return (TypeHandler<T>) c.newInstance();
         } catch (Exception e) {
-          throw new TypeException("Unable to find a usable constructor for " + typeHandlerClass, e);
+            throw new TypeException("Unable to find a usable constructor for " + typeHandlerClass, e);
         }
-      }
+    }
 
     public String getBaseSelect() {
         return baseSelect;
@@ -169,19 +170,19 @@ public class EntityTable {
         return entityClass;
     }
 
-    public Set<EntityColumn> getEntityClassColumns() {
+    public LinkedHashSet<EntityColumn> getEntityClassColumns() {
         return entityClassColumns;
     }
 
-    public void setEntityClassColumns(Set<EntityColumn> entityClassColumns) {
+    public void setEntityClassColumns(LinkedHashSet<EntityColumn> entityClassColumns) {
         this.entityClassColumns = entityClassColumns;
     }
 
-    public Set<EntityColumn> getEntityClassPKColumns() {
+    public LinkedHashSet<EntityColumn> getEntityClassPKColumns() {
         return entityClassPKColumns;
     }
 
-    public void setEntityClassPKColumns(Set<EntityColumn> entityClassPKColumns) {
+    public void setEntityClassPKColumns(LinkedHashSet<EntityColumn> entityClassPKColumns) {
         this.entityClassPKColumns = entityClassPKColumns;
     }
 

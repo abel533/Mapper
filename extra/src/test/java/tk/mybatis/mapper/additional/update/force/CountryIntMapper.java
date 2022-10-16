@@ -27,8 +27,8 @@ package tk.mybatis.mapper.additional.update.force;
 import tk.mybatis.mapper.common.base.BaseSelectMapper;
 
 /**
- * @Description:  验证数值空值强制更新
  * @author qrqhuangcy
+ * @Description: 验证数值空值强制更新
  * @date 2018-06-25
  */
 public interface CountryIntMapper extends BaseSelectMapper<CountryInt>, UpdateByPrimaryKeySelectiveForceMapper<CountryInt> {

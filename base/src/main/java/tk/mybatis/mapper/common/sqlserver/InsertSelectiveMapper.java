@@ -37,7 +37,7 @@ import tk.mybatis.mapper.provider.SqlServerProvider;
 @tk.mybatis.mapper.annotation.RegisterMapper
 public interface InsertSelectiveMapper<T> {
 
-    @Options(useGeneratedKeys = true, keyProperty = "id")
+    @Options(useGeneratedKeys = true)
     @InsertProvider(type = SqlServerProvider.class, method = "dynamicSQL")
     int insertSelective(T record);
 

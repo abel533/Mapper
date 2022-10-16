@@ -17,16 +17,16 @@ public class AddressTypeHandler extends BaseTypeHandler<Address> {
         ps.setString(i, parameter.toString());
     }
 
-    private Address convertToAddress(String addressStr){
-        if(addressStr == null || addressStr.length() == 0){
+    private Address convertToAddress(String addressStr) {
+        if (addressStr == null || addressStr.length() == 0) {
             return null;
         }
         String[] strings = addressStr.split("/");
         Address address = new Address();
-        if(strings.length > 0 && strings[0].length() > 0){
+        if (strings.length > 0 && strings[0].length() > 0) {
             address.setProvince(strings[0]);
         }
-        if(strings.length > 1 && strings[1].length() > 0){
+        if (strings.length > 1 && strings[1].length() > 0) {
             address.setCity(strings[1]);
         }
         return address;

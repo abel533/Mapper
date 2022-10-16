@@ -27,6 +27,7 @@ package tk.mybatis.mapper.annotation;
 import tk.mybatis.mapper.code.IdentityDialect;
 import tk.mybatis.mapper.code.ORDER;
 import tk.mybatis.mapper.genid.GenId;
+import tk.mybatis.mapper.gensql.GenSql;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -63,6 +64,13 @@ public @interface KeySql {
      * @return
      */
     String sql() default "";
+
+    /**
+     * 生成 SQL，初始化时执行，优先级低于 sql
+     *
+     * @return
+     */
+    Class<? extends GenSql> genSql() default GenSql.NULL.class;
 
     /**
      * 和 sql 可以配合使用，默认使用全局配置中的 ORDER

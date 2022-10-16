@@ -32,6 +32,6 @@ import tk.mybatis.mapper.model.Country;
  * Created by liuzh on 2014/11/19.
  */
 //@CacheNamespace
-public interface CachedCountryMapper extends Mapper<Country>,HsqldbMapper<Country> {
+public interface CachedCountryMapper extends Mapper<Country>, HsqldbMapper<Country> {
     int selectCache(int id);
 }

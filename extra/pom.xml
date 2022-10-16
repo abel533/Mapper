@@ -28,7 +28,7 @@
     <parent>
         <groupId>tk.mybatis</groupId>
         <artifactId>mapper-modules</artifactId>
-        <version>1.0.5-SNAPSHOT</version>
+        <version>${revision}</version>
     </parent>
     <artifactId>mapper-extra</artifactId>
     <packaging>jar</packaging>
@@ -44,6 +44,12 @@
         <dependency>
             <groupId>tk.mybatis</groupId>
             <artifactId>mapper-core</artifactId>
+            <version>${project.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>tk.mybatis</groupId>
+            <artifactId>mapper-weekend</artifactId>
             <version>${project.version}</version>
             <scope>provided</scope>
         </dependency>

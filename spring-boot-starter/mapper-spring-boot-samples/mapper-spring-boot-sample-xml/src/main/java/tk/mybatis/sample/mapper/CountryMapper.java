@@ -24,7 +24,6 @@
 
 package tk.mybatis.sample.mapper;
 
-import org.apache.ibatis.annotations.Mapper;
 import tk.mybatis.sample.domain.Country;
 
 import java.util.List;
@@ -32,7 +31,6 @@ import java.util.List;
 /**
  * @author Eduardo Macarron
  */
-@Mapper
 public interface CountryMapper extends BaseMapper<Country> {
 
     List<Country> findAll();

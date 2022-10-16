@@ -19,6 +19,7 @@
 可以在 `Example.Criteria` 的条件方法里传 lambada(再也不用担心改数据库了......)。
 
 栗子：
+
 ```java
 UserMapper    userMapper = sqlSession.getMapper(UserMapper.class);
 Weekend<User> weekend    = Weekend.of(User.class);
@@ -28,7 +29,7 @@ weekend.weekendCriteria()
       .andIn(User::getUserName, Arrays.asList("a","b","c"));
 ```
 
-和（作者： [XuYin](https://github.com/chinaerserver)） 
+和（作者： [XuYin](https://github.com/chinaerserver)）
 
 ```java
 CountryMapper mapper = sqlSession.getMapper(CountryMapper.class);
