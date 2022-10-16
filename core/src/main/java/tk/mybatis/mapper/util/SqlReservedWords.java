@@ -932,6 +932,7 @@ public class SqlReservedWords {
                 "VCAT", // DB2 //$NON-NLS-1$
                 "VERBOSE", //$NON-NLS-1$
                 "VIEW", // DB2 //$NON-NLS-1$
+                "VIRTUAL", //MySQL #272
                 "VOLATILE", //$NON-NLS-1$
                 "VOLUMES", // DB2 //$NON-NLS-1$
                 "WAITFOR", //$NON-NLS-1$
