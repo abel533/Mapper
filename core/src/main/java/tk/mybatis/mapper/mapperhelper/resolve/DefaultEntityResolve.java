@@ -75,15 +75,13 @@ public class DefaultEntityResolve implements EntityResolve {
             //如果启用了简单类型，就做简单类型校验，如果不是简单类型，直接跳过
             //3.5.0 如果启用了枚举作为简单类型，就不会自动忽略枚举类型
             //4.0 如果标记了 Column 或 ColumnType 注解，也不忽略
-            if (config.isUseSimpleType()
-                    && !field.isAnnotationPresent(Column.class)
-                    && !field.isAnnotationPresent(ColumnType.class)
-                    && !(SimpleTypeUtil.isSimpleType(field.getJavaType())
-                    ||
-                    (config.isEnumAsSimpleType() && Enum.class.isAssignableFrom(field.getJavaType())))) {
-                continue;
+            if (!config.isUseSimpleType() //关闭简单类型限制时，所有字段都处理
+                    || (config.isUseSimpleType() && SimpleTypeUtil.isSimpleType(field.getJavaType())) //开启简单类型时只处理包含的简单类型
+                    || field.isAnnotationPresent(Column.class) //有注解的处理，不考虑类型
+                    || field.isAnnotationPresent(ColumnType.class) //有注解的处理，不考虑类型
+                    || (config.isEnumAsSimpleType() && Enum.class.isAssignableFrom(field.getJavaType()))) { //开启枚举作为简单类型时处理
+                processField(entityTable, field, config, style);
             }
-            processField(entityTable, field, config, style);
         }
         //当pk.size=0的时候使用所有列作为主键
         if (entityTable.getEntityClassPKColumns().size() == 0) {
