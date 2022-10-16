@@ -156,7 +156,7 @@ public class ComplexEntityTest {
                 "<where>" +
                 "<if test=\"id != null\"> AND id = #{id}</if>" +
                 "<if test=\"userName != null\"> AND user_name = #{userName}</if>" +
-                "<if test=\"address != null\"> AND address = #{address, typeHandler=tk.mybatis.mapper.mapperhelper.ComplexEntityTest.AddressHandler}</if>" +
+                "<if test=\"address != null\"> AND address = #{address, typeHandler=tk.mybatis.mapper.mapperhelper.ComplexEntityTest$AddressHandler}</if>" +
                 "<if test=\"state != null\"> AND state = #{state}</if></where>", sql);
 
         final ResultMap resultMap = entityTable.getResultMap(configuration);
