@@ -188,12 +188,6 @@ public class FieldHelper {
                 return fieldList;
             }
             Field[] fields = entityClass.getDeclaredFields();
-            Arrays.sort(fields, new Comparator<Object>() {
-                @Override
-                public int compare(Object a, Object b) {
-                    return a.toString().compareTo(b.toString());
-                }
-            });
             int index = 0;
             for (int i = 0; i < fields.length; i++) {
                 Field field = fields[i];
