@@ -278,12 +278,12 @@ public class WeekendSqls<T> implements tk.mybatis.mapper.entity.SqlsCriteria {
         return this.orNotBetween(Reflections.fnToFieldName(fn), value1, value2);
     }
 
-    public WeekendSqls<T> orLike(String property, Object value) {
+    public WeekendSqls<T> orLike(String property, String value) {
         this.criteria.getCriterions().add(new Criterion(property, value, "like", "or"));
         return this;
     }
 
-    public WeekendSqls<T> orLike(Fn<T, Object> fn, Object value) {
+    public WeekendSqls<T> orLike(Fn<T, Object> fn, String value) {
         return this.orLike(Reflections.fnToFieldName(fn), value);
     }
 
