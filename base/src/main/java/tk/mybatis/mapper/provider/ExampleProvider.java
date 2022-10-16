@@ -144,11 +144,6 @@ public class ExampleProvider extends MapperTemplate {
         sql.append(SqlHelper.updateTable(entityClass, tableName(entityClass), "example"));
         sql.append(SqlHelper.updateSetColumnsIgnoreVersion(entityClass, "record", true, isNotEmpty()));
         sql.append(SqlHelper.updateByExampleWhereClause());
-        //TODO 加入乐观锁查询条件
-        //乐观锁条件，加在example后面，有两个问题
-        // 1.会和example的条件混在一起，导致or和and逻辑混乱
-        // 2.如果example为空，会缺少WHERE
-        //sql.append(SqlHelper.whereVersion(entityClass, "record"));
         return sql.toString();
     }
 
@@ -171,11 +166,6 @@ public class ExampleProvider extends MapperTemplate {
         sql.append(SqlHelper.updateTable(entityClass, tableName(entityClass), "example"));
         sql.append(SqlHelper.updateSetColumnsIgnoreVersion(entityClass, "record", false, false));
         sql.append(SqlHelper.updateByExampleWhereClause());
-        //TODO 加入乐观锁查询条件
-        //乐观锁条件，加在example后面，有两个问题
-        // 1.会和example的条件混在一起，导致or和and逻辑混乱
-        // 2.如果example为空，会缺少WHERE
-        //sql.append(SqlHelper.whereVersion(entityClass, "record"));
         return sql.toString();
     }
 
