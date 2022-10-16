@@ -457,11 +457,11 @@ public class SqlHelper {
     /**
      * update set列
      *
-     * @param entityClass
+     * @param entityClass 实体Class
      * @param entityName  实体映射名
      * @param notNull     是否判断!=null
      * @param notEmpty    是否判断String类型!=''
-     * @return
+     * @return XML中的SET语句块
      */
     public static String updateSetColumns(Class<?> entityClass, String entityName, boolean notNull, boolean notEmpty) {
         StringBuilder sql = new StringBuilder();
@@ -544,8 +544,11 @@ public class SqlHelper {
                 } else if (notNull) {
                     sql.append(SqlHelper.getIfNotNull(entityName, column, column.getColumnEqualsHolder(entityName) + ",", notEmpty));
                 } else {
-                    sql.append(column.getColumnEqualsHolder(entityName) + ",");
+                    sql.append(column.getColumnEqualsHolder(entityName)).append(",");
                 }
+            } else if (column.isId() && column.isUpdatable()) {
+                //set id = id,
+                sql.append(column.getColumn()).append(" = ").append(column.getColumn()).append(",");
             }
         }
         sql.append("</set>");
@@ -695,7 +698,18 @@ public class SqlHelper {
      * @param entityClass
      * @return
      */
-    public static String whereVersion(Class<?> entityClass) {
+    public static String whereVersion(Class<?> entityClass){
+        return whereVersion(entityClass,null);
+    }
+
+    /**
+     * 乐观锁字段条件
+     *
+     * @param entityClass
+     * @param entityName 实体名称
+     * @return
+     */
+    public static String whereVersion(Class<?> entityClass,String entityName) {
         Set<EntityColumn> columnSet = EntityHelper.getColumns(entityClass);
         boolean hasVersion = false;
         String result = "";
@@ -705,7 +719,7 @@ public class SqlHelper {
                     throw new VersionException(entityClass.getCanonicalName() + " 中包含多个带有 @Version 注解的字段，一个类中只能存在一个带有 @Version 注解的字段!");
                 }
                 hasVersion = true;
-                result = " AND " + column.getColumnEqualsHolder();
+                result = " AND " + column.getColumnEqualsHolder(entityName);
             }
         }
         return result;

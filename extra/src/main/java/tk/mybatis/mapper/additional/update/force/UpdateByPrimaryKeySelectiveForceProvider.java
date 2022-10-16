@@ -91,13 +91,20 @@ public class UpdateByPrimaryKeySelectiveForceProvider extends MapperTemplate {
                     //version = ${@tk.mybatis.mapper.version@nextVersionClass("versionClass", version)}
                     sql.append(column.getColumn())
                             .append(" = ${@tk.mybatis.mapper.version.VersionUtil@nextVersion(")
-                            .append("@").append(versionClass).append("@class, ")
-                            .append(column.getProperty()).append(")},");
+                            .append("@").append(versionClass).append("@class, ");
+                    //虽然从函数调用上来看entityName必为"record"，但还是判断一下
+                    if (StringUtil.isNotEmpty(entityName)) {
+                        sql.append(entityName).append('.');
+                    }
+                    sql.append(column.getProperty()).append(")},");
                 } else if (notNull) {
                     sql.append(this.getIfNotNull(entityName, column, column.getColumnEqualsHolder(entityName) + ",", notEmpty));
                 } else {
-                    sql.append(column.getColumnEqualsHolder(entityName) + ",");
+                    sql.append(column.getColumnEqualsHolder(entityName)).append(",");
                 }
+            } else if (column.isId() && column.isUpdatable()) {
+                //set id = id,
+                sql.append(column.getColumn()).append(" = ").append(column.getColumn()).append(",");
             }
         }
         sql.append("</set>");
