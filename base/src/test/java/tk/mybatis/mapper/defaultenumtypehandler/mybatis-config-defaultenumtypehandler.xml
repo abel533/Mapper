@@ -29,7 +29,7 @@
 
 <configuration>
     <settings>
-        <setting name="logImpl" value="LOG4J"/>
+        <setting name="logImpl" value="SLF4J"/>
         <setting name="defaultEnumTypeHandler" value="tk.mybatis.mapper.defaultenumtypehandler.DictTypeHandler"/>
     </settings>
 
@@ -38,9 +38,9 @@
             <transactionManager type="JDBC">
             </transactionManager>
             <dataSource type="UNPOOLED">
-                <property name="driver" value="org.hsqldb.jdbcDriver" />
-                <property name="url" value="jdbc:hsqldb:mem:defaultenumtypehandler" />
-                <property name="username" value="sa" />
+                <property name="driver" value="org.hsqldb.jdbcDriver"/>
+                <property name="url" value="jdbc:hsqldb:mem:defaultenumtypehandler"/>
+                <property name="username" value="sa"/>
             </dataSource>
         </environment>
     </environments>

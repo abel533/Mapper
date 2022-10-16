@@ -28,20 +28,20 @@
     <parent>
         <groupId>tk.mybatis</groupId>
         <artifactId>mapper-modules</artifactId>
-        <version>1.1.5</version>
+        <version>${revision}</version>
     </parent>
     <artifactId>mapper-core</artifactId>
     <packaging>jar</packaging>
 
     <name>mapper-core</name>
     <description>Mybatis 通用 Mapper</description>
-    <url>http://www.mybatis.tk</url>
+    <url>https://mybatis.io</url>
 
     <dependencies>
         <!--必须依赖-->
         <dependency>
             <groupId>javax.persistence</groupId>
-            <artifactId>persistence-api</artifactId>
+            <artifactId>javax.persistence-api</artifactId>
         </dependency>
 
         <!--可选依赖-->

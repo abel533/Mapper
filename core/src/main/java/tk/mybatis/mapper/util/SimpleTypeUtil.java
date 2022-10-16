@@ -37,7 +37,7 @@ import java.util.Set;
  * 参考 org.apache.ibatis.type.SimpleTypeRegistry
  */
 public class SimpleTypeUtil {
-    public static final  String[]      JAVA8_DATE_TIME = {
+    public static final String[] JAVA8_DATE_TIME = {
             "java.time.Instant",
             "java.time.LocalDateTime",
             "java.time.LocalDate",
@@ -81,14 +81,14 @@ public class SimpleTypeUtil {
      *
      * @param clazz
      */
-    public static void registerSimpleType(Class<?> clazz){
+    public static void registerSimpleType(Class<?> clazz) {
         SIMPLE_TYPE_SET.add(clazz);
     }
 
     /**
      * 注册 8 种基本类型
      */
-    public static void registerPrimitiveTypes(){
+    public static void registerPrimitiveTypes() {
         registerSimpleType(boolean.class);
         registerSimpleType(byte.class);
         registerSimpleType(short.class);
@@ -104,8 +104,8 @@ public class SimpleTypeUtil {
      *
      * @param classes
      */
-    public static void registerSimpleType(String classes){
-        if(StringUtil.isNotEmpty(classes)){
+    public static void registerSimpleType(String classes) {
+        if (StringUtil.isNotEmpty(classes)) {
             String[] cls = classes.split(",");
             for (String c : cls) {
                 try {

@@ -4,7 +4,6 @@ import tk.mybatis.mapper.annotation.Version;
 
 import javax.persistence.Id;
 import javax.persistence.Table;
-import java.sql.Timestamp;
 
 /**
  * @author liuzh

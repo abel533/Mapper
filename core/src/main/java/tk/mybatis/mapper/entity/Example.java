@@ -61,11 +61,11 @@ public class Example implements IDynamicTableName {
 
     protected Class<?> entityClass;
 
-    protected EntityTable               table;
+    protected EntityTable table;
     //属性和列对应
     protected Map<String, EntityColumn> propertyMap;
     //动态表名
-    protected String                    tableName;
+    protected String tableName;
 
     protected OrderBy ORDERBY;
 
@@ -228,8 +228,8 @@ public class Example implements IDynamicTableName {
     public static class OrderBy {
         //属性和列对应
         protected Map<String, EntityColumn> propertyMap;
-        private   Example                   example;
-        private   Boolean                   isProperty;
+        private Example example;
+        private Boolean isProperty;
 
         public OrderBy(Example example, Map<String, EntityColumn> propertyMap) {
             this.example = example;
@@ -280,13 +280,13 @@ public class Example implements IDynamicTableName {
     }
 
     protected abstract static class GeneratedCriteria {
-        protected List<Criterion>           criteria;
+        protected List<Criterion> criteria;
         //字段是否必须存在
-        protected boolean                   exists;
+        protected boolean exists;
         //值是否不能为空
-        protected boolean                   notNull;
+        protected boolean notNull;
         //连接条件
-        protected String                    andOr;
+        protected String andOr;
         //属性和列对应
         protected Map<String, EntityColumn> propertyMap;
 
@@ -495,7 +495,7 @@ public class Example implements IDynamicTableName {
          * @Date 2015年7月17日 下午12:48:08
          */
         public Criteria andEqualTo(Object param) {
-            if(param == null){
+            if (param == null) {
                 return (Criteria) this;
             }
             MetaObject metaObject = MetaObjectUtil.forObject(param);
@@ -823,25 +823,25 @@ public class Example implements IDynamicTableName {
     }
 
     public static class Builder {
-        private final Class<?>                  entityClass;
-        protected     EntityTable               table;
+        private final Class<?> entityClass;
+        protected EntityTable table;
         //属性和列对应
-        protected     Map<String, EntityColumn> propertyMap;
-        private       StringBuilder             orderByClause;
-        private       boolean                   distinct;
-        private       boolean                   exists;
-        private       boolean                   notNull;
-        private       boolean                   forUpdate;
+        protected Map<String, EntityColumn> propertyMap;
+        private StringBuilder orderByClause;
+        private boolean distinct;
+        private boolean exists;
+        private boolean notNull;
+        private boolean forUpdate;
         //查询字段
-        private       Set<String>               selectColumns;
+        private Set<String> selectColumns;
         //排除的查询字段
-        private       Set<String>               excludeColumns;
-        private       String                    countColumn;
-        private       List<Sqls.Criteria>       sqlsCriteria;
+        private Set<String> excludeColumns;
+        private String countColumn;
+        private List<Sqls.Criteria> sqlsCriteria;
         //动态表名
-        private       List<Example.Criteria>    exampleCriterias;
+        private List<Example.Criteria> exampleCriterias;
         //动态表名
-        private       String                    tableName;
+        private String tableName;
 
         public Builder(Class<?> entityClass) {
             this(entityClass, true);
@@ -972,10 +972,10 @@ public class Example implements IDynamicTableName {
             for (String property : properties) {
                 String column;
                 if ((column = propertyforOderBy(property)) != null) {
-                    columns.append(",").append(column);
+                    columns.append(",").append(column).append(order);
                 }
             }
-            columns.append(order);
+            ;
             if (columns.length() > 0) {
                 orderByClause.append(columns);
             }

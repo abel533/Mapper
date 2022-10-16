@@ -39,12 +39,12 @@ public class TableClass implements Serializable {
 
     private IntrospectedTable introspectedTable;
 
-    private String                 tableName;
-    private String                 variableName;
-    private String                 lowerCaseName;
-    private String                 shortClassName;
-    private String                 fullClassName;
-    private String                 packageName;
+    private String tableName;
+    private String variableName;
+    private String lowerCaseName;
+    private String shortClassName;
+    private String fullClassName;
+    private String packageName;
     private FullyQualifiedJavaType type;
 
     private List<ColumnField> pkFields;

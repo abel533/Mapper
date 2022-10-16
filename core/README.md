@@ -21,23 +21,26 @@ CSDN博客：http://blog.csdn.net/isea533/article/details/73555400
 GitHub项目：https://github.com/mybatis-book/book
 
 ## 通用 Mapper 支持 Mybatis-3.2.4 及以上版本
+
 ## 不是表中字段的属性必须加 `@Transient` 注解
 
 ## Spring DevTools 配置
+
 感谢[emf1002](https://github.com/emf1002)提供的解决方案。
 
 在使用 DevTools 时，通用Mapper经常会出现 `class x.x.A cannot be cast to x.x.A`。
 
 同一个类如果使用了不同的类加载器，就会产生这样的错误，所以解决方案就是让通用Mapper和实体类使用相同的类加载器即可。
 
-DevTools 默认会对 IDE 中引入的所有项目使用 restart 类加载器，对于引入的 jar 包使用 base 类加载器，因此只要保证通用Mapper的jar包使用 restart
-类加载器即可。
+DevTools 默认会对 IDE 中引入的所有项目使用 restart 类加载器，对于引入的 jar 包使用 base 类加载器，因此只要保证通用Mapper的jar包使用 restart 类加载器即可。
 
 在 `src/main/resources` 中创建 META-INF 目录，在此目录下添加 spring-devtools.properties 配置，内容如下：
+
 ```properties
 restart.include.mapper=/mapper-[\\w-\\.]+jar
 restart.include.pagehelper=/pagehelper-[\\w-\\.]+jar
 ```
+
 使用这个配置后，就会使用 restart 类加载加载 include 进去的 jar 包。
 
 ## 项目文档
@@ -111,10 +114,12 @@ Country代码：
         private String countrycode;
         //省略setter和getter方法
     }
-    
-[使用Mapper专用的MyBatis Generator插件](http://git.oschina.net/free/Mapper/blob/master/wiki/mapper3/7.UseMBG.md) 可以方便的生成这些（带注解的）实体类。
+
+[使用Mapper专用的MyBatis Generator插件](http://git.oschina.net/free/Mapper/blob/master/wiki/mapper3/7.UseMBG.md)
+可以方便的生成这些（带注解的）实体类。
 
 ## 使用 Maven
+
 ```xml
 <dependency>
     <groupId>tk.mybatis</groupId>
@@ -122,7 +127,9 @@ Country代码：
     <version>最新版本</version>
 </dependency>
 ```
+
 如果你使用 Spring Boot 可以直接引入：
+
 ```xml
 <!--mapper-->
 <dependency>
@@ -131,7 +138,8 @@ Country代码：
     <version>最新版本</version>
 </dependency>
 ```
-具体用法可以参考：[MyBatis-Spring-Boot](https://github.com/abel533/MyBatis-Spring-Boot) 
+
+具体用法可以参考：[MyBatis-Spring-Boot](https://github.com/abel533/MyBatis-Spring-Boot)
 
 ## 引入 Jar 包，下载地址：
 
@@ -145,14 +153,14 @@ http://repo1.maven.org/maven2/javax/persistence/persistence-api/1.0/
 
 ## [更新日志](http://git.oschina.net/free/Mapper/blob/master/wiki/Changelog.md)
 
-##作者信息
+## 作者信息
 
-MyBatis 工具网站:[http://mybatis.tk](http://www.mybatis.tk)
+MyBatis 工具网站:[https://mybatis.io](https://mybatis.io)
 
 作者博客：http://blog.csdn.net/isea533
 
 作者邮箱： abel533@gmail.com
 
-如需加群，请通过 http://mybatis.tk 首页按钮加群。
+如需加群，请通过 https://mybatis.io 首页按钮加群。
 
 推荐使用Mybatis分页插件:[PageHelper分页插件](https://github.com/pagehelper/Mybatis-PageHelper)

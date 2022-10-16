@@ -17,11 +17,11 @@ public class TimeModel3 implements Serializable {
     @Id
     private Integer id;
     @ColumnType(jdbcType = JdbcType.DATE)
-    private Date    testDate;
+    private Date testDate;
     @ColumnType(jdbcType = JdbcType.TIME)
-    private Date    testTime;
+    private Date testTime;
     @ColumnType(jdbcType = JdbcType.TIMESTAMP)
-    private Date    testDatetime;
+    private Date testDatetime;
 
     public Integer getId() {
         return id;

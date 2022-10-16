@@ -379,7 +379,7 @@ public class SqlHelper {
      *
      * @param entityClass
      * @param defaultTableName
-     * @param parameterName 动态表名的参数名
+     * @param parameterName    动态表名的参数名
      * @return
      */
     public static String insertIntoTable(Class<?> entityClass, String defaultTableName, String parameterName) {
@@ -493,7 +493,7 @@ public class SqlHelper {
                     sql.append("<bind name=\"").append(column.getProperty()).append("Version\" value=\"");
                     //version = ${@tk.mybatis.mapper.version@nextVersionClass("versionClass", version)}
                     sql.append("@tk.mybatis.mapper.version.VersionUtil@nextVersion(")
-                        .append("@").append(versionClass).append("@class, ");
+                            .append("@").append(versionClass).append("@class, ");
                     if (StringUtil.isNotEmpty(entityName)) {
                         sql.append(entityName).append(".");
                     }
@@ -537,7 +537,7 @@ public class SqlHelper {
                 logicDeleteColumn = column;
             }
             if (!column.isId() && column.isUpdatable()) {
-                if(column.getEntityField().isAnnotationPresent(Version.class)){
+                if (column.getEntityField().isAnnotationPresent(Version.class)) {
                     //ignore
                 } else if (column == logicDeleteColumn) {
                     sql.append(logicDeleteColumnEqualsValue(column, false)).append(",");
@@ -944,7 +944,6 @@ public class SqlHelper {
     public static String exampleWhereClause() {
         return "<if test=\"_parameter != null\">" +
                 "<where>\n" +
-                " ${@tk.mybatis.mapper.util.OGNL@andNotLogicDelete(_parameter)}" +
                 " <trim prefix=\"(\" prefixOverrides=\"and |or \" suffix=\")\">\n" +
                 "  <foreach collection=\"oredCriteria\" item=\"criteria\">\n" +
                 "    <if test=\"criteria.valid\">\n" +
@@ -973,6 +972,7 @@ public class SqlHelper {
                 "    </if>\n" +
                 "  </foreach>\n" +
                 " </trim>\n" +
+                " ${@tk.mybatis.mapper.util.OGNL@andNotLogicDelete(_parameter)}" +
                 "</where>" +
                 "</if>";
     }
@@ -984,7 +984,6 @@ public class SqlHelper {
      */
     public static String updateByExampleWhereClause() {
         return "<where>\n" +
-                " ${@tk.mybatis.mapper.util.OGNL@andNotLogicDelete(example)}" +
                 " <trim prefix=\"(\" prefixOverrides=\"and |or \" suffix=\")\">\n" +
                 "  <foreach collection=\"example.oredCriteria\" item=\"criteria\">\n" +
                 "    <if test=\"criteria.valid\">\n" +
@@ -1013,6 +1012,7 @@ public class SqlHelper {
                 "    </if>\n" +
                 "  </foreach>\n" +
                 " </trim>\n" +
+                " ${@tk.mybatis.mapper.util.OGNL@andNotLogicDelete(example)}" +
                 "</where>";
     }
 

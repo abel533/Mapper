@@ -15,12 +15,14 @@ import java.lang.annotation.Target;
 public @interface Order {
     /**
      * 升降序
+     *
      * @return
      */
     String value() default "ASC";
 
     /**
      * 优先级, 值小的优先
+     *
      * @return
      */
     int priority() default 1;

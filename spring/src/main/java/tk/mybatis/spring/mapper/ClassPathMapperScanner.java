@@ -124,11 +124,11 @@ public class ClassPathMapperScanner extends ClassPathBeanDefinitionScanner {
             @Override
             public boolean match(MetadataReader metadataReader, MetadataReaderFactory metadataReaderFactory) throws IOException {
                 String className = metadataReader.getClassMetadata().getClassName();
-                if(className.endsWith("package-info")){
+                if (className.endsWith("package-info")) {
                     return true;
                 }
                 return metadataReader.getAnnotationMetadata()
-                    .hasAnnotation("tk.mybatis.mapper.annotation.RegisterMapper");
+                        .hasAnnotation("tk.mybatis.mapper.annotation.RegisterMapper");
             }
         });
     }
@@ -166,11 +166,11 @@ public class ClassPathMapperScanner extends ClassPathBeanDefinitionScanner {
             definition.getConstructorArgumentValues().addGenericArgumentValue(definition.getBeanClassName()); // issue #59
             definition.setBeanClass(this.mapperFactoryBean.getClass());
             //设置通用 Mapper
-            if(StringUtils.hasText(this.mapperHelperBeanName)){
+            if (StringUtils.hasText(this.mapperHelperBeanName)) {
                 definition.getPropertyValues().add("mapperHelper", new RuntimeBeanReference(this.mapperHelperBeanName));
             } else {
                 //不做任何配置的时候使用默认方式
-                if(this.mapperHelper == null){
+                if (this.mapperHelper == null) {
                     this.mapperHelper = new MapperHelper();
                 }
                 definition.getPropertyValues().add("mapperHelper", this.mapperHelper);
@@ -279,7 +279,7 @@ public class ClassPathMapperScanner extends ClassPathBeanDefinitionScanner {
         if (mapperHelper == null) {
             mapperHelper = new MapperHelper();
         }
-        if(config != null){
+        if (config != null) {
             mapperHelper.setConfig(config);
         }
     }
@@ -297,7 +297,7 @@ public class ClassPathMapperScanner extends ClassPathBeanDefinitionScanner {
         for (String property : properties) {
             property = property.trim();
             int index = property.indexOf("=");
-            if(index < 0){
+            if (index < 0) {
                 throw new MapperException("通过 @MapperScan 注解的 properties 参数配置出错:" + property + " !\n"
                         + "请保证配置项按 properties 文件格式要求进行配置，例如：\n"
                         + "properties = {\n"

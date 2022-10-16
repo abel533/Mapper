@@ -44,16 +44,16 @@ public class Config {
     public static final String PREFIX = "mapper";
 
     private List<Class> mappers = new ArrayList<Class>();
-    private String  IDENTITY;
+    private String IDENTITY;
     private boolean BEFORE;
-    private String  seqFormat;
-    private String  catalog;
-    private String  schema;
+    private String seqFormat;
+    private String catalog;
+    private String schema;
     //校验调用Example方法时，Example(entityClass)和Mapper<EntityClass>是否一致
     private boolean checkExampleEntityClass;
     //使用简单类型
     //3.5.0 后默认值改为 true
-    private boolean useSimpleType    = true;
+    private boolean useSimpleType = true;
     /**
      * @since 3.5.0
      */

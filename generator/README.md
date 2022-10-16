@@ -16,7 +16,6 @@
 
 代码生成器的配置在 `generatorConfig.xml` 中。
 
-
 # 代码生成器文档
 
 代码生成器是基于 MBG 插件的，所以需要配合 MBG 使用。
@@ -71,6 +70,7 @@
     </context>
 </generatorConfiguration>
 ```
+
 在这个配置中，我们只关注 `tk.mybatis.mapper.generator.TemplateFilePlugin`。
 
 ## 基于模板的插件 `TemplateFilePlugin`
@@ -96,8 +96,7 @@
 
 ### 1. `targetProject`
 
-用于指定目标项目，一般是 `src/main/java` 或者 `src/main/resource` 这样的目录。
-还可以是 `src/test/java` 或者 `src/test/resource` 这样的目录。
+用于指定目标项目，一般是 `src/main/java` 或者 `src/main/resource` 这样的目录。 还可以是 `src/test/java` 或者 `src/test/resource` 这样的目录。
 
 在多模块项目中，还能通过相对路径指定为其他的目录，例如：
 
@@ -119,7 +118,7 @@
 
 这个属性还有一个特殊的地方，它还支持使用模板，就和下面的 `fileName` 一样，举个简单的使用场景。
 
->你可能在生成前端代码的时候，希望将表对应的 JSP 生成在自己的一个目录中，此时可以配置为： 
+> 你可能在生成前端代码的时候，希望将表对应的 JSP 生成在自己的一个目录中，此时可以配置为：
 >
 >`<property name="targetPackage" value="WEB-INF/jsp/${tableClass.lowerCaseName}/"/>`
 >
@@ -185,7 +184,7 @@
 
 因为一个模板只能生成一类的文件，所以如果要生成多个不同的文件，就需要配置多个插件。
 
->这种设计很灵活，因为自由度很高，所以代价就是配置的多。
+> 这种设计很灵活，因为自由度很高，所以代价就是配置的多。
 >
 >但是正常情况下，根据业务设计的一套模板基本是固定的，不会有太多变化，所以用起来并不麻烦。
 
@@ -230,8 +229,8 @@
 </plugin>
 ```
 
-前两个会生成 Dao 后缀的 Mapper 接口和 XML，其中有个针对性的参数 `mapperSuffix` 用于配置后缀，
-还有个 `mapperPackage` 在生成 XML 时获取接口的包名（因为和这里的 `targetPackage` 可以不同）。
+前两个会生成 Dao 后缀的 Mapper 接口和 XML，其中有个针对性的参数 `mapperSuffix` 用于配置后缀， 还有个 `mapperPackage` 在生成 XML
+时获取接口的包名（因为和这里的 `targetPackage` 可以不同）。
 
 后两个插件用于演示所有可用的属性，而且是两种不同的模式。
 
@@ -354,6 +353,7 @@ Blob列：
 测试生成的**部分**结果如下。
 
 实体：
+
 ```java
 @Table(name = "`user_info`")
 public class UserInfo {
@@ -364,6 +364,7 @@ public class UserInfo {
 ```
 
 Dao：
+
 ```java
 package test.mapper;
 
@@ -380,6 +381,7 @@ public interface UserInfoDao extends tk.mybatis.mapper.common.Mapper<UserInfo> {
 ```
 
 XML：
+
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper
@@ -391,6 +393,7 @@ XML：
 ```
 
 test-one.ftl 生成的信息如下：
+
 ```java
 目标package: 
 
@@ -603,16 +606,16 @@ Blob列：
 基础的代码生成器是很简单的，和 Java 拼字符串输出很像，这里只是使用了模板。
 
 几乎所有人都在 JSP 中用过的 EL 就是一种模板，可能你会 `<c:forEach ` 这种，但是联想不到这里的代码生成器而已。
- 
+
 后续会在 https://github.com/abel533/Mybatis-Spring 项目中提供一套模板做为示例。
 
->项目的发展离不开你的支持，请作者喝杯咖啡吧！
+> 项目的发展离不开你的支持，请作者喝杯咖啡吧！
 >
 >支付宝
 >
-><img width="360" src="https://camo.githubusercontent.com/4af3ab81f88d87abfb9c67f9c6bba84047b079e1/68747470733a2f2f6d7962617469732e746b2f696d672f616c695f7061792e706e67" alt="支付宝" data-canonical-src="https://mybatis.tk/img/ali_pay.png">
+><img width="360" src="https://camo.githubusercontent.com/4af3ab81f88d87abfb9c67f9c6bba84047b079e1/68747470733a2f2f6d7962617469732e746b2f696d672f616c695f7061792e706e67" alt="支付宝" data-canonical-src="https://mybatis.io/img/ali_pay.png">
 >
 >微信
 >
-><img width="360" src="https://camo.githubusercontent.com/56a0b0aa0c09116cb0ef2f3ebe7f6d7103705a98/68747470733a2f2f6d7962617469732e746b2f696d672f77785f7061792e706e67" alt="微信" data-canonical-src="https://mybatis.tk/img/wx_pay.png">
+><img width="360" src="https://camo.githubusercontent.com/56a0b0aa0c09116cb0ef2f3ebe7f6d7103705a98/68747470733a2f2f6d7962617469732e746b2f696d672f77785f7061792e706e67" alt="微信" data-canonical-src="https://mybatis.io/img/wx_pay.png">
 

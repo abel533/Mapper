@@ -3,6 +3,7 @@ package tk.mybatis.mapper.configuration;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+
 import java.util.List;
 
 /**

@@ -25,6 +25,7 @@
 package tk.mybatis.mapper.generator;
 
 import org.mybatis.generator.codegen.mybatis3.IntrospectedTableMyBatis3Impl;
+import org.mybatis.generator.internal.util.StringUtility;
 
 import java.text.MessageFormat;
 
@@ -71,41 +72,59 @@ public class TkMyBatis3Impl extends IntrospectedTableMyBatis3Impl {
         }
 
         StringBuilder sb = new StringBuilder();
-        sb.append(calculateJavaClientImplementationPackage());
+        sb.append(this.calculateJavaClientInterfacePackage());
         sb.append('.');
-        sb.append(fullyQualifiedTable.getDomainObjectName());
-        sb.append("DAOImpl"); //$NON-NLS-1$
-        setDAOImplementationType(sb.toString());
-
-        sb.setLength(0);
-        sb.append(calculateJavaClientInterfacePackage());
-        sb.append('.');
-        sb.append(fullyQualifiedTable.getDomainObjectName());
-        sb.append("DAO"); //$NON-NLS-1$
-        setDAOInterfaceType(sb.toString());
-
-        sb.setLength(0);
-        sb.append(calculateJavaClientInterfacePackage());
-        sb.append('.');
-        if (stringHasValue(tableConfiguration.getMapperName())) {
+        if (StringUtility.stringHasValue(this.tableConfiguration.getMapperName())) {
             //支持mapperName = "{0}Dao" 等用法
             sb.append(MessageFormat.format(tableConfiguration.getMapperName(), fullyQualifiedTable.getDomainObjectName()));
         } else {
-            sb.append(fullyQualifiedTable.getDomainObjectName());
-            sb.append("Mapper"); //$NON-NLS-1$
-        }
-        setMyBatis3JavaMapperType(sb.toString());
+            if (StringUtility.stringHasValue(this.fullyQualifiedTable.getDomainObjectSubPackage())) {
+                sb.append(this.fullyQualifiedTable.getDomainObjectSubPackage());
+                sb.append('.');
+            }
 
+            sb.append(this.fullyQualifiedTable.getDomainObjectName());
+            sb.append("Mapper");
+        }
+
+        this.setMyBatis3JavaMapperType(sb.toString());
         sb.setLength(0);
-        sb.append(calculateJavaClientInterfacePackage());
+        sb.append(this.calculateJavaClientInterfacePackage());
         sb.append('.');
-        if (stringHasValue(tableConfiguration.getSqlProviderName())) {
+        if (StringUtility.stringHasValue(this.tableConfiguration.getSqlProviderName())) {
             //支持mapperName = "{0}SqlProvider" 等用法
             sb.append(MessageFormat.format(tableConfiguration.getSqlProviderName(), fullyQualifiedTable.getDomainObjectName()));
         } else {
-            sb.append(fullyQualifiedTable.getDomainObjectName());
-            sb.append("SqlProvider"); //$NON-NLS-1$
+            if (StringUtility.stringHasValue(this.fullyQualifiedTable.getDomainObjectSubPackage())) {
+                sb.append(this.fullyQualifiedTable.getDomainObjectSubPackage());
+                sb.append('.');
+            }
+
+            sb.append(this.fullyQualifiedTable.getDomainObjectName());
+            sb.append("SqlProvider");
         }
-        setMyBatis3SqlProviderType(sb.toString());
+
+        this.setMyBatis3SqlProviderType(sb.toString());
+        sb.setLength(0);
+        sb.append(this.calculateDynamicSqlSupportPackage());
+        sb.append('.');
+        if (StringUtility.stringHasValue(this.tableConfiguration.getDynamicSqlSupportClassName())) {
+            sb.append(this.tableConfiguration.getDynamicSqlSupportClassName());
+        } else {
+            if (StringUtility.stringHasValue(this.fullyQualifiedTable.getDomainObjectSubPackage())) {
+                sb.append(this.fullyQualifiedTable.getDomainObjectSubPackage());
+                sb.append('.');
+            }
+
+            sb.append(this.fullyQualifiedTable.getDomainObjectName());
+            sb.append("DynamicSqlSupport");
+        }
+
+        this.setMyBatisDynamicSqlSupportType(sb.toString());
+        if (StringUtility.stringHasValue(this.tableConfiguration.getDynamicSqlTableObjectName())) {
+            this.setMyBatisDynamicSQLTableObjectName(this.tableConfiguration.getDynamicSqlTableObjectName());
+        } else {
+            this.setMyBatisDynamicSQLTableObjectName(this.fullyQualifiedTable.getDomainObjectName());
+        }
     }
 }

@@ -45,6 +45,6 @@ public interface HsqldbMapper<T> {
      * @param limit
      * @return
      */
-    @SelectProvider(type=HsqldbProvider.class,method = "dynamicSQL")
+    @SelectProvider(type = HsqldbProvider.class, method = "dynamicSQL")
     List<T> selectPage(@Param("entity") T object, @Param("offset") int offset, @Param("limit") int limit);
 }

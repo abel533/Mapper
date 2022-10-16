@@ -38,6 +38,7 @@ import java.util.Properties;
 import java.util.Set;
 
 public class MapperCommentGenerator implements CommentGenerator {
+
     //开始的分隔符，例如mysql为`，sqlserver为[
     private String beginningDelimiter = "";
     //结束的分隔符，例如mysql为`，sqlserver为]
@@ -46,6 +47,8 @@ public class MapperCommentGenerator implements CommentGenerator {
     private boolean forceAnnotation;
     //是否生成swagger注解
     private boolean needsSwagger;
+    //逻辑删除字段
+    private String logicDeleteColumn = "";
 
     public MapperCommentGenerator() {
         super();
@@ -93,6 +96,10 @@ public class MapperCommentGenerator implements CommentGenerator {
         String needsSwagger = properties.getProperty("needsSwagger");
         if (StringUtility.stringHasValue(needsSwagger)) {
             this.needsSwagger = "TRUE".equalsIgnoreCase(needsSwagger);
+        }
+        String logicDeleteColumn = properties.getProperty("logicDeleteColumn");
+        if (StringUtility.stringHasValue(logicDeleteColumn)) {
+            this.logicDeleteColumn = logicDeleteColumn;
         }
     }
 
@@ -176,8 +183,14 @@ public class MapperCommentGenerator implements CommentGenerator {
         } else if (forceAnnotation) {
             field.addAnnotation("@Column(name = \"" + getDelimiterName(column) + "\")");
         }
+
+        // 添加逻辑删除注解
+        if (column.equals(this.logicDeleteColumn)) {
+            field.addAnnotation("@LogicDelete");
+        }
+
         if (introspectedColumn.isIdentity()) {
-            if ("JDBC".equals(introspectedTable.getTableConfiguration().getGeneratedKey().getRuntimeSqlStatement())) {
+            if ("JDBC".equals(introspectedTable.getTableConfiguration().getGeneratedKey().get().getRuntimeSqlStatement())) {
                 field.addAnnotation("@GeneratedValue(generator = \"JDBC\")");
             } else {
                 field.addAnnotation("@GeneratedValue(strategy = GenerationType.IDENTITY)");
@@ -185,9 +198,10 @@ public class MapperCommentGenerator implements CommentGenerator {
         } else if (introspectedColumn.isSequenceColumn()) {
             //在 Oracle 中，如果需要是 SEQ_TABLENAME，那么可以配置为 select SEQ_{1} from dual
             String tableName = introspectedTable.getFullyQualifiedTableNameAtRuntime();
-            String sql = MessageFormat.format(introspectedTable.getTableConfiguration().getGeneratedKey().getRuntimeSqlStatement(), tableName, tableName.toUpperCase());
+            String sql = MessageFormat.format(introspectedTable.getTableConfiguration().getGeneratedKey().get().getRuntimeSqlStatement(), tableName, tableName.toUpperCase());
             field.addAnnotation("@GeneratedValue(strategy = GenerationType.IDENTITY, generator = \"" + sql + "\")");
         }
+
         // region swagger注解
         if (this.needsSwagger) {
             String remarks = introspectedColumn.getRemarks();
@@ -242,7 +256,7 @@ public class MapperCommentGenerator implements CommentGenerator {
         }
         sb.setLength(0);
         sb.append(" * @return ");
-        sb.append(introspectedColumn.getActualColumnName());
+        sb.append(introspectedColumn.getJavaProperty());
         if (StringUtility.stringHasValue(introspectedColumn.getRemarks())) {
             sb.append(" - ");
             sb.append(introspectedColumn.getRemarks());

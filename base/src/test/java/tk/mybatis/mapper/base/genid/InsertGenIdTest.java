@@ -59,7 +59,9 @@ public class InsertGenIdTest extends BaseTest {
     protected Reader getConfigFileAsReader() throws IOException {
         URL url = getClass().getResource("mybatis-config.xml");
         return toReader(url);
-    };
+    }
+
+    ;
 
     /**
      * 获取初始化 sql
@@ -69,10 +71,12 @@ public class InsertGenIdTest extends BaseTest {
     protected Reader getSqlFileAsReader() throws IOException {
         URL url = getClass().getResource("CreateDB.sql");
         return toReader(url);
-    };
+    }
+
+    ;
 
     @Test
-    public void testGenId(){
+    public void testGenId() {
         SqlSession sqlSession = getSqlSession();
         try {
             CountryMapper mapper = sqlSession.getMapper(CountryMapper.class);
@@ -88,7 +92,7 @@ public class InsertGenIdTest extends BaseTest {
     }
 
     @Test
-    public void testGenIdWithExistsId(){
+    public void testGenIdWithExistsId() {
         SqlSession sqlSession = getSqlSession();
         try {
             CountryMapper mapper = sqlSession.getMapper(CountryMapper.class);
@@ -105,7 +109,7 @@ public class InsertGenIdTest extends BaseTest {
 
 
     @Test
-    public void testUUID(){
+    public void testUUID() {
         SqlSession sqlSession = getSqlSession();
         try {
             UserMapper mapper = sqlSession.getMapper(UserMapper.class);

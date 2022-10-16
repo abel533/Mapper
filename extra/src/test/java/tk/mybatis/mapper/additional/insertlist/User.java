@@ -36,9 +36,9 @@ public class User implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @KeySql(genId = UUIdGenId.class)
-    private String              id;
-    private String            name;
-    private String            role;
+    private String id;
+    private String name;
+    private String role;
 
     public User() {
     }

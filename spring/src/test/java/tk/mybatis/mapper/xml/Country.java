@@ -31,8 +31,8 @@ public class Country implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     private Integer id;
-    private String  countryname;
-    private String  countrycode;
+    private String countryname;
+    private String countrycode;
 
     public String getCountrycode() {
         return countrycode;

@@ -13,7 +13,7 @@ import java.util.List;
 /**
  * @author liuzh
  */
-public class DefaultEnumTypeHandlerTest extends BaseTest{
+public class DefaultEnumTypeHandlerTest extends BaseTest {
 
     @Override
     protected Config getConfig() {
@@ -33,7 +33,7 @@ public class DefaultEnumTypeHandlerTest extends BaseTest{
     }
 
     @Test
-    public void testSelect(){
+    public void testSelect() {
         SqlSession sqlSession = getSqlSession();
         try {
             UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
@@ -59,7 +59,7 @@ public class DefaultEnumTypeHandlerTest extends BaseTest{
     }
 
     @Test
-    public void testInsert(){
+    public void testInsert() {
         SqlSession sqlSession = getSqlSession();
         try {
             UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
@@ -82,7 +82,7 @@ public class DefaultEnumTypeHandlerTest extends BaseTest{
     }
 
     @Test
-    public void testUpdate(){
+    public void testUpdate() {
         SqlSession sqlSession = getSqlSession();
         try {
             UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
@@ -105,7 +105,7 @@ public class DefaultEnumTypeHandlerTest extends BaseTest{
     }
 
     @Test
-    public void testDelete(){
+    public void testDelete() {
         SqlSession sqlSession = getSqlSession();
         try {
             UserMapper userMapper = sqlSession.getMapper(UserMapper.class);

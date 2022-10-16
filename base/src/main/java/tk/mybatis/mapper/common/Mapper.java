@@ -39,6 +39,7 @@ public interface Mapper<T> extends
         BaseMapper<T>,
         ExampleMapper<T>,
         RowBoundsMapper<T>,
+        SaveMapper<T>,
         Marker {
 
 }

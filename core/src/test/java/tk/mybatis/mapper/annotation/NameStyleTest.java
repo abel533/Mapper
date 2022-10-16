@@ -25,7 +25,7 @@ public class NameStyleTest {
     private Configuration configuration;
 
     @Before
-    public void beforeTest(){
+    public void beforeTest() {
         config = new Config();
         config.setStyle(Style.normal);
 
@@ -38,7 +38,7 @@ public class NameStyleTest {
     }
 
     @Test
-    public void testCamelhump(){
+    public void testCamelhump() {
         EntityHelper.initEntityNameMap(UserCamelhump.class, config);
         EntityTable entityTable = EntityHelper.getEntityTable(UserCamelhump.class);
         Assert.assertNotNull(entityTable);
@@ -78,7 +78,7 @@ public class NameStyleTest {
     }
 
     @Test
-    public void testCamelhumpAndUppercase(){
+    public void testCamelhumpAndUppercase() {
         EntityHelper.initEntityNameMap(UserCamelhumpAndUppercase.class, config);
         EntityTable entityTable = EntityHelper.getEntityTable(UserCamelhumpAndUppercase.class);
         Assert.assertNotNull(entityTable);
@@ -118,7 +118,7 @@ public class NameStyleTest {
     }
 
     @Test
-    public void testCamelhumpAndLowercase(){
+    public void testCamelhumpAndLowercase() {
         EntityHelper.initEntityNameMap(UserCamelhumpAndLowercase.class, config);
         EntityTable entityTable = EntityHelper.getEntityTable(UserCamelhumpAndLowercase.class);
         Assert.assertNotNull(entityTable);
@@ -158,7 +158,7 @@ public class NameStyleTest {
     }
 
     @Test
-    public void testNormal(){
+    public void testNormal() {
         EntityHelper.initEntityNameMap(UserNormal.class, config);
         EntityTable entityTable = EntityHelper.getEntityTable(UserNormal.class);
         Assert.assertNotNull(entityTable);
@@ -198,7 +198,7 @@ public class NameStyleTest {
     }
 
     @Test
-    public void testUppercase(){
+    public void testUppercase() {
         EntityHelper.initEntityNameMap(UserUppercase.class, config);
         EntityTable entityTable = EntityHelper.getEntityTable(UserUppercase.class);
         Assert.assertNotNull(entityTable);
@@ -238,7 +238,7 @@ public class NameStyleTest {
     }
 
     @Test
-    public void testLowercase(){
+    public void testLowercase() {
         EntityHelper.initEntityNameMap(UserLowercase.class, config);
         EntityTable entityTable = EntityHelper.getEntityTable(UserLowercase.class);
         Assert.assertNotNull(entityTable);

@@ -37,8 +37,8 @@ import tk.mybatis.mapper.version.VersionException;
 import java.util.Set;
 
 /**
- * @Description:  通用Mapper接口,更新,强制，实现
  * @author qrqhuangcy
+ * @Description: 通用Mapper接口, 更新, 强制，实现
  * @date 2018-06-26
  */
 public class UpdateByPrimaryKeySelectiveForceProvider extends MapperTemplate {
@@ -90,9 +90,9 @@ public class UpdateByPrimaryKeySelectiveForceProvider extends MapperTemplate {
                     String versionClass = version.nextVersion().getCanonicalName();
                     //version = ${@tk.mybatis.mapper.version@nextVersionClass("versionClass", version)}
                     sql.append(column.getColumn())
-                        .append(" = ${@tk.mybatis.mapper.version.VersionUtil@nextVersion(")
-                        .append("@").append(versionClass).append("@class, ")
-                        .append(column.getProperty()).append(")},");
+                            .append(" = ${@tk.mybatis.mapper.version.VersionUtil@nextVersion(")
+                            .append("@").append(versionClass).append("@class, ")
+                            .append(column.getProperty()).append(")},");
                 } else if (notNull) {
                     sql.append(this.getIfNotNull(entityName, column, column.getColumnEqualsHolder(entityName) + ",", notEmpty));
                 } else {

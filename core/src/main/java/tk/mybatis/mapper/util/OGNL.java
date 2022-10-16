@@ -97,8 +97,8 @@ public abstract class OGNL {
      * @param error
      * @return
      */
-    public static boolean notEmptyCollectionCheck(Object parameter, String error){
-        if(parameter == null || (parameter instanceof Collection && ((Collection) parameter).size() == 0)){
+    public static boolean notEmptyCollectionCheck(Object parameter, String error) {
+        if (parameter == null || (parameter instanceof Collection && ((Collection) parameter).size() == 0)) {
             throw new IllegalArgumentException(error);
         }
         return true;
@@ -121,7 +121,7 @@ public abstract class OGNL {
                 } else {
                     Method getter = parameter.getClass().getDeclaredMethod("getOredCriteria");
                     Object list = getter.invoke(parameter);
-                    if(list != null && list instanceof List && ((List) list).size() > 0){
+                    if (list != null && list instanceof List && ((List) list).size() > 0) {
                         return true;
                     }
                 }
@@ -239,7 +239,7 @@ public abstract class OGNL {
             Example example = (Example) parameter;
             Map<String, EntityColumn> propertyMap = example.getPropertyMap();
 
-            for (Map.Entry<String, EntityColumn> entry: propertyMap.entrySet()) {
+            for (Map.Entry<String, EntityColumn> entry : propertyMap.entrySet()) {
                 EntityColumn column = entry.getValue();
                 if (column.getEntityField().isAnnotationPresent(LogicDelete.class)) {
                     // 未逻辑删除的条件

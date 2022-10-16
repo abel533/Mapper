@@ -132,7 +132,7 @@ public class BaseInsertProvider extends MapperTemplate {
         return sql.toString();
     }
 
-    private void processKey(StringBuilder sql, Class<?> entityClass, MappedStatement ms, Set<EntityColumn> columnList){
+    private void processKey(StringBuilder sql, Class<?> entityClass, MappedStatement ms, Set<EntityColumn> columnList) {
         //Identity列只能有一个
         Boolean hasIdentityKey = false;
         //先处理cache或bind节点
@@ -153,7 +153,7 @@ public class BaseInsertProvider extends MapperTemplate {
                 //插入selectKey
                 SelectKeyHelper.newSelectKeyMappedStatement(ms, column, entityClass, isBEFORE(), getIDENTITY(column));
                 hasIdentityKey = true;
-            } else if(column.getGenIdClass() != null){
+            } else if (column.getGenIdClass() != null) {
                 sql.append("<bind name=\"").append(column.getColumn()).append("GenIdBind\" value=\"@tk.mybatis.mapper.genid.GenIdUtil@genId(");
                 sql.append("_parameter").append(", '").append(column.getProperty()).append("'");
                 sql.append(", @").append(column.getGenIdClass().getCanonicalName()).append("@class");

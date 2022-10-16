@@ -24,20 +24,20 @@ public class OracleProvider extends MapperTemplate {
      * <bind name="listNotEmptyCheck" value="@tk.mybatis.mapper.util.OGNL@notEmptyCollectionCheck(list, 'tk.mybatis.mapper.additional.dialect.oracle.DemoCountryMapper.insertList 方法参数为空')"/>
      * INSERT ALL
      * <foreach collection="list" item="record">
-     *     INTO demo_country
-     *     <trim prefix="(" suffix=")" suffixOverrides=",">country_id,country_name,country_code,</trim>
-     *     VALUES
-     *     <trim prefix="(" suffix=")" suffixOverrides=",">
-     *         <bind name="country_idGenIdBind"  value="@tk.mybatis.mapper.genid.GenIdUtil@genId(record, 'countryId', @tk.mybatis.mapper.additional.insertlist.UUIdGenId@class, 'demo_country', 'country_id')"/>
-     *         #{record.countryId},#{record.countryName},#{record.countryCode},
-     *     </trim>
+     * INTO demo_country
+     * <trim prefix="(" suffix=")" suffixOverrides=",">country_id,country_name,country_code,</trim>
+     * VALUES
+     * <trim prefix="(" suffix=")" suffixOverrides=",">
+     * <bind name="country_idGenIdBind"  value="@tk.mybatis.mapper.genid.GenIdUtil@genId(record, 'countryId', @tk.mybatis.mapper.additional.insertlist.UUIdGenId@class, 'demo_country', 'country_id')"/>
+     * #{record.countryId},#{record.countryName},#{record.countryCode},
+     * </trim>
      * </foreach>
      * SELECT 1 FROM DUAL
-     * 
+     *
      * @param ms
      * @return
      */
-    public String insertList(MappedStatement ms){
+    public String insertList(MappedStatement ms) {
         final Class<?> entityClass = getEntityClass(ms);
         //开始拼sql
         StringBuilder sql = new StringBuilder();
@@ -46,7 +46,7 @@ public class OracleProvider extends MapperTemplate {
         sql.append("INSERT ALL\n");
         sql.append("<foreach collection=\"list\" item=\"record\">\n");
 
-        String tableName = SqlHelper.getDynamicTableName(entityClass, tableName(entityClass),"list[0]");
+        String tableName = SqlHelper.getDynamicTableName(entityClass, tableName(entityClass), "list[0]");
         String columns = SqlHelper.insertColumns(entityClass, false, false, false);
         sql.append(" INTO ").append(tableName).append(" ").append(columns).append("\n");
         sql.append(" VALUES ");
@@ -56,7 +56,7 @@ public class OracleProvider extends MapperTemplate {
         Set<EntityColumn> columnList = EntityHelper.getColumns(entityClass);
         //单独增加对 genId 方式的支持
         for (EntityColumn column : columnList) {
-            if(column.getGenIdClass() != null){
+            if (column.getGenIdClass() != null) {
                 sql.append("<bind name=\"").append(column.getColumn()).append("GenIdBind\" value=\"@tk.mybatis.mapper.genid.GenIdUtil@genId(");
                 sql.append("record").append(", '").append(column.getProperty()).append("'");
                 sql.append(", @").append(column.getGenIdClass().getCanonicalName()).append("@class");

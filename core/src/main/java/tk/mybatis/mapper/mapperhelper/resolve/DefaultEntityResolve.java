@@ -172,7 +172,7 @@ public class DefaultEntityResolve implements EntityResolve {
      */
     protected void processOrderBy(EntityTable entityTable, EntityField field, EntityColumn entityColumn) {
         String orderBy = "";
-        if(field.isAnnotationPresent(OrderBy.class)){
+        if (field.isAnnotationPresent(OrderBy.class)) {
             orderBy = field.getAnnotation(OrderBy.class).value();
             if ("".equals(orderBy)) {
                 orderBy = "ASC";
@@ -264,17 +264,17 @@ public class DefaultEntityResolve implements EntityResolve {
         } else if (keySql.dialect() == IdentityDialect.DEFAULT) {
             entityColumn.setIdentity(true);
             entityColumn.setOrder(ORDER.AFTER);
-        }  else if (keySql.dialect() != IdentityDialect.NULL) {
+        } else if (keySql.dialect() != IdentityDialect.NULL) {
             //自动增长
             entityColumn.setIdentity(true);
             entityColumn.setOrder(ORDER.AFTER);
             entityColumn.setGenerator(keySql.dialect().getIdentityRetrievalStatement());
-        } else if (StringUtil.isNotEmpty(keySql.sql())){
+        } else if (StringUtil.isNotEmpty(keySql.sql())) {
 
             entityColumn.setIdentity(true);
             entityColumn.setOrder(keySql.order());
             entityColumn.setGenerator(keySql.sql());
-        } else if (keySql.genSql() != GenSql.NULL.class){
+        } else if (keySql.genSql() != GenSql.NULL.class) {
             entityColumn.setIdentity(true);
             entityColumn.setOrder(keySql.order());
             try {
@@ -284,7 +284,7 @@ public class DefaultEntityResolve implements EntityResolve {
                 log.error("实例化 GenSql 失败: " + e, e);
                 throw new MapperException("实例化 GenSql 失败: " + e, e);
             }
-        } else if(keySql.genId() != GenId.NULL.class){
+        } else if (keySql.genId() != GenId.NULL.class) {
             entityColumn.setIdentity(false);
             entityColumn.setGenIdClass(keySql.genId());
         } else {

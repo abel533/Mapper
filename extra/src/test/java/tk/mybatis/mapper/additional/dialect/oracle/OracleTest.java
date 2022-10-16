@@ -50,7 +50,9 @@ public class OracleTest extends BaseTest {
     protected Reader getConfigFileAsReader() throws IOException {
         URL url = getClass().getResource("mybatis-config.xml");
         return toReader(url);
-    };
+    }
+
+    ;
 
     @Override
     protected void runSql(Reader reader) {
@@ -74,9 +76,9 @@ public class OracleTest extends BaseTest {
         try {
             DemoCountryMapper mapper = sqlSession.getMapper(DemoCountryMapper.class);
             List<DemoCountry> countryList = new ArrayList<DemoCountry>();
-            countryList.add(new DemoCountry("20", "Zimbabwe","ZW"));
-            countryList.add(new DemoCountry("21", "Zaire","ZR"));
-            countryList.add(new DemoCountry("22", "Zambia","ZM"));
+            countryList.add(new DemoCountry("20", "Zimbabwe", "ZW"));
+            countryList.add(new DemoCountry("21", "Zaire", "ZR"));
+            countryList.add(new DemoCountry("22", "Zambia", "ZM"));
             int updates = mapper.insertList(countryList);
             Assert.assertEquals(3, updates);
         } finally {

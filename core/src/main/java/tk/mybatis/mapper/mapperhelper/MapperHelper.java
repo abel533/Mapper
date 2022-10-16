@@ -188,14 +188,14 @@ public class MapperHelper {
      */
     public MapperTemplate isMapperMethod(String msId) {
         MapperTemplate mapperTemplate = getMapperTemplateByMsId(msId);
-        if(mapperTemplate == null){
+        if (mapperTemplate == null) {
             //通过 @RegisterMapper 注解自动注册的功能
             try {
                 Class<?> mapperClass = getMapperClass(msId);
-                if(mapperClass.isInterface() && hasRegisterMapper(mapperClass)){
+                if (mapperClass.isInterface() && hasRegisterMapper(mapperClass)) {
                     mapperTemplate = getMapperTemplateByMsId(msId);
                 }
-            } catch (Exception e){
+            } catch (Exception e) {
                 log.warn("特殊情况: " + e);
             }
         }
@@ -208,7 +208,7 @@ public class MapperHelper {
      * @param msId
      * @return
      */
-    public MapperTemplate getMapperTemplateByMsId(String msId){
+    public MapperTemplate getMapperTemplateByMsId(String msId) {
         for (Map.Entry<Class<?>, MapperTemplate> entry : registerMapper.entrySet()) {
             if (entry.getValue().supportMethod(msId)) {
                 return entry.getValue();
@@ -239,14 +239,14 @@ public class MapperHelper {
      * @param mapperInterface
      * @return
      */
-    private boolean hasRegisterMapper(Class<?> mapperInterface){
+    private boolean hasRegisterMapper(Class<?> mapperInterface) {
         //如果一个都没匹配上，很可能是还没有注册 mappers，此时通过 @RegisterMapper 注解进行判断
         Class<?>[] interfaces = mapperInterface.getInterfaces();
         boolean hasRegisterMapper = false;
         if (interfaces != null && interfaces.length > 0) {
             for (Class<?> anInterface : interfaces) {
                 //自动注册标记了 @RegisterMapper 的接口
-                if(anInterface.isAnnotationPresent(RegisterMapper.class)){
+                if (anInterface.isAnnotationPresent(RegisterMapper.class)) {
                     hasRegisterMapper = true;
                     //如果已经注册过，就避免在反复调用下面会迭代的方法
                     if (!registerMapper.containsKey(anInterface)) {
@@ -254,7 +254,7 @@ public class MapperHelper {
                     }
                 }
                 //如果父接口的父接口存在注解，也可以注册
-                else if(hasRegisterMapper(anInterface)){
+                else if (hasRegisterMapper(anInterface)) {
                     hasRegisterMapper = true;
                 }
             }
@@ -300,9 +300,9 @@ public class MapperHelper {
      *
      * @param ms
      */
-    public void processMappedStatement(MappedStatement ms){
+    public void processMappedStatement(MappedStatement ms) {
         MapperTemplate mapperTemplate = isMapperMethod(ms.getId());
-        if(mapperTemplate != null && ms.getSqlSource() instanceof ProviderSqlSource) {
+        if (mapperTemplate != null && ms.getSqlSource() instanceof ProviderSqlSource) {
             setSqlSource(ms, mapperTemplate);
         }
     }
@@ -323,17 +323,17 @@ public class MapperHelper {
      */
     public void setConfig(Config config) {
         this.config = config;
-        if(config.getResolveClass() != null){
+        if (config.getResolveClass() != null) {
             try {
                 EntityHelper.setResolve(config.getResolveClass().newInstance());
             } catch (Exception e) {
                 log.error("创建 " + config.getResolveClass().getCanonicalName()
-                    + " 实例失败，请保证该类有默认的构造方法!", e);
+                        + " 实例失败，请保证该类有默认的构造方法!", e);
                 throw new MapperException("创建 " + config.getResolveClass().getCanonicalName()
                         + " 实例失败，请保证该类有默认的构造方法!", e);
             }
         }
-        if(config.getMappers() != null && config.getMappers().size() > 0){
+        if (config.getMappers() != null && config.getMappers().size() > 0) {
             for (Class mapperClass : config.getMappers()) {
                 registerMapper(mapperClass);
             }

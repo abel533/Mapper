@@ -29,6 +29,7 @@ import org.mybatis.generator.api.IntrospectedTable;
 import org.mybatis.generator.api.dom.java.*;
 import org.mybatis.generator.config.CommentGeneratorConfiguration;
 import org.mybatis.generator.config.Context;
+import org.mybatis.generator.config.JDBCConnectionConfiguration;
 import org.mybatis.generator.internal.util.StringUtility;
 
 import java.util.*;
@@ -39,6 +40,7 @@ import java.util.*;
  * @author liuzh
  */
 public class MapperPlugin extends FalseMethodPlugin {
+
     private Set<String> mappers = new HashSet<String>();
     private boolean caseSensitive = false;
     private boolean useMapperCommentGenerator = true;
@@ -63,6 +65,11 @@ public class MapperPlugin extends FalseMethodPlugin {
     private boolean needsToString = false;
     //是否需要生成Accessors(chain = true)注解
     private boolean needsAccessors = false;
+    private boolean needsBuilder = false;
+    private boolean needsSuperBuilder = false;
+    private boolean needsNoArgsConstructor = false;
+    private boolean needsAllArgsConstructor = false;
+
     //是否需要生成EqualsAndHashCode注解
     private boolean needsEqualsAndHashCode = false;
     //是否需要生成EqualsAndHashCode注解，并且“callSuper = true”
@@ -73,6 +80,9 @@ public class MapperPlugin extends FalseMethodPlugin {
     private boolean generateDefaultInstanceMethod = false;
     //是否生成swagger注解,包括 @ApiModel和@ApiModelProperty
     private boolean needsSwagger = false;
+    //是否逻辑删除
+    private boolean logicDelete = false;
+
 
     public String getDelimiterName(String name) {
         StringBuilder nameBuilder = new StringBuilder();
@@ -90,12 +100,11 @@ public class MapperPlugin extends FalseMethodPlugin {
      * 生成的Mapper接口
      *
      * @param interfaze
-     * @param topLevelClass
      * @param introspectedTable
      * @return
      */
     @Override
-    public boolean clientGenerated(Interface interfaze, TopLevelClass topLevelClass, IntrospectedTable introspectedTable) {
+    public boolean clientGenerated(Interface interfaze, IntrospectedTable introspectedTable) {
         //获取实体类
         FullyQualifiedJavaType entityType = new FullyQualifiedJavaType(introspectedTable.getBaseRecordType());
         //import接口
@@ -154,6 +163,22 @@ public class MapperPlugin extends FalseMethodPlugin {
             topLevelClass.addImportedType("lombok.experimental.Accessors");
             topLevelClass.addAnnotation("@Accessors(chain = true)");
         }
+        if (this.needsSuperBuilder) {
+            topLevelClass.addImportedType("lombok.experimental.SuperBuilder");
+            topLevelClass.addAnnotation("@SuperBuilder");
+        }
+        if (this.needsBuilder) {
+            topLevelClass.addImportedType("lombok.Builder");
+            topLevelClass.addAnnotation("@Builder");
+        }
+        if (this.needsNoArgsConstructor) {
+            topLevelClass.addImportedType("lombok.NoArgsConstructor");
+            topLevelClass.addAnnotation("@NoArgsConstructor");
+        }
+        if (this.needsAllArgsConstructor) {
+            topLevelClass.addImportedType("lombok.AllArgsConstructor");
+            topLevelClass.addAnnotation("@AllArgsConstructor");
+        }
         // lombok扩展结束
         // region swagger扩展
         if (this.needsSwagger) {
@@ -210,38 +235,44 @@ public class MapperPlugin extends FalseMethodPlugin {
         }
         if (generateColumnConsts) {
             for (IntrospectedColumn introspectedColumn : introspectedTable.getAllColumns()) {
-                Field field = new Field();
+                String fieldName = introspectedColumn.getActualColumnName().toUpperCase(); //$NON-NLS-1$
+                FullyQualifiedJavaType fieldType = new FullyQualifiedJavaType(String.class.getName()); //$NON-NLS-1$
+                Field field = new Field(fieldName, fieldType);
                 field.setVisibility(JavaVisibility.PUBLIC);
                 field.setStatic(true);
                 field.setFinal(true);
-                field.setName(introspectedColumn.getActualColumnName().toUpperCase()); //$NON-NLS-1$
-                field.setType(new FullyQualifiedJavaType(String.class.getName())); //$NON-NLS-1$
                 field.setInitializationString("\"" + introspectedColumn.getJavaProperty() + "\"");
                 context.getCommentGenerator().addClassComment(topLevelClass, introspectedTable);
                 topLevelClass.addField(field);
                 //增加字段名常量,用于pageHelper
-                Field columnField = new Field();
+                String  columnFieldName = "DB_" + introspectedColumn.getActualColumnName().toUpperCase(); //$NON-NLS-1$
+                FullyQualifiedJavaType columnFieldType = new FullyQualifiedJavaType(String.class.getName()); //$NON-NLS-1$
+                Field columnField = new Field(columnFieldName, columnFieldType);
                 columnField.setVisibility(JavaVisibility.PUBLIC);
                 columnField.setStatic(true);
                 columnField.setFinal(true);
-                columnField.setName("DB_" + introspectedColumn.getActualColumnName().toUpperCase()); //$NON-NLS-1$
-                columnField.setType(new FullyQualifiedJavaType(String.class.getName())); //$NON-NLS-1$
                 columnField.setInitializationString("\"" + introspectedColumn.getActualColumnName() + "\"");
                 topLevelClass.addField(columnField);
             }
         }
+
+        if(this.logicDelete)
+        {
+            topLevelClass.addImportedType("tk.mybatis.mapper.annotation.LogicDelete");
+        }
+
+
         if (generateDefaultInstanceMethod) {
             //注意基本类型和包装的index要一致,方便后面使用
             List<String> baseClassName = Arrays.asList("byte", "short", "char", "int", "long", "float", "double", "boolean");
             List<String> wrapperClassName = Arrays.asList("Byte", "Short", "Character", "Integer", "Long", "Float", "Double", "Boolean");
             List<String> otherClassName = Arrays.asList("String", "BigDecimal", "BigInteger");
-            Method defaultMethod = new Method();
+            Method defaultMethod = new Method("defaultInstance");
             //增加方法注释
             defaultMethod.addJavaDocLine("/**");
             defaultMethod.addJavaDocLine(" * 带默认值的实例");
             defaultMethod.addJavaDocLine("*/");
             defaultMethod.setStatic(true);
-            defaultMethod.setName("defaultInstance");
             defaultMethod.setVisibility(JavaVisibility.PUBLIC);
             defaultMethod.setReturnType(topLevelClass.getType());
             defaultMethod.addBodyLine(String.format("%s instance = new %s();", topLevelClass.getType().getShortName(), topLevelClass.getType().getShortName()));
@@ -368,10 +399,20 @@ public class MapperPlugin extends FalseMethodPlugin {
             commentCfg.setConfigurationType(MapperCommentGenerator.class.getCanonicalName());
             context.setCommentGeneratorConfiguration(commentCfg);
         }
+
+        JDBCConnectionConfiguration jdbcConnectionConfiguration = null;
+        try {
+            java.lang.reflect.Field jdbcConnectionConfigurationField = Context.class.getDeclaredField("jdbcConnectionConfiguration");
+            jdbcConnectionConfigurationField.setAccessible(true);
+            jdbcConnectionConfiguration = (JDBCConnectionConfiguration) jdbcConnectionConfigurationField.get(context);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         //支持oracle获取注释#114
-        context.getJdbcConnectionConfiguration().addProperty("remarksReporting", "true");
+        jdbcConnectionConfiguration.addProperty("remarksReporting", "true");
         //支持mysql获取注释
-        context.getJdbcConnectionConfiguration().addProperty("useInformationSchema", "true");
+        jdbcConnectionConfiguration.addProperty("useInformationSchema", "true");
     }
 
     @Override
@@ -403,6 +444,10 @@ public class MapperPlugin extends FalseMethodPlugin {
             String lombokEqualsAndHashCodeCallSuper = getProperty("lombokEqualsAndHashCodeCallSuper", "false");
             this.needsEqualsAndHashCodeAndCallSuper = this.needsEqualsAndHashCode && "TRUE".equalsIgnoreCase(lombokEqualsAndHashCodeCallSuper);
             this.needsAccessors = lombok.contains("Accessors");
+            this.needsSuperBuilder = lombok.contains("SuperBuilder");
+            this.needsBuilder = !this.needsSuperBuilder && lombok.contains("Builder");
+            this.needsNoArgsConstructor = lombok.contains("NoArgsConstructor");
+            this.needsAllArgsConstructor = lombok.contains("AllArgsConstructor");
         }
         //swagger扩展
         String swagger = getProperty("swagger", "false");
@@ -420,6 +465,8 @@ public class MapperPlugin extends FalseMethodPlugin {
         }
         this.generateColumnConsts = getPropertyAsBoolean("generateColumnConsts");
         this.generateDefaultInstanceMethod = getPropertyAsBoolean("generateDefaultInstanceMethod");
+
+        this.logicDelete = Boolean.parseBoolean(this.properties.getProperty("logicDelete"));
     }
 
     protected String getProperty(String key) {

@@ -60,7 +60,7 @@ public class TestLogicDelete {
 
             TbUser tbUser = new TbUser();
             tbUser.setUsername("test");
-            Assert.assertEquals(2,  mapper.select(tbUser).size());
+            Assert.assertEquals(2, mapper.select(tbUser).size());
 
             // 物理删除2条已经为逻辑删除状态的数据
             Assert.assertEquals(2, mapper.delete(tbUser));

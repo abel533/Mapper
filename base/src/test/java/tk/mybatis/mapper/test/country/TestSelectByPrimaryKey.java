@@ -89,7 +89,7 @@ public class TestSelectByPrimaryKey {
         try {
             CountryMapper mapper = sqlSession.getMapper(CountryMapper.class);
             Assert.assertNull(mapper.selectByPrimaryKey(new Country()));
-            Assert.assertNull(mapper.selectByPrimaryKey(new HashMap<String,Object>()));
+            Assert.assertNull(mapper.selectByPrimaryKey(new HashMap<String, Object>()));
             Assert.assertNull(mapper.selectByPrimaryKey(-10));
             Assert.assertNull(mapper.selectByPrimaryKey(0));
             Assert.assertNull(mapper.selectByPrimaryKey(1000));

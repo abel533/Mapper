@@ -33,6 +33,7 @@ import java.util.List;
  * <p>Oracle批量插入
  * <p>支持@{@link KeySql#genId()}，不支持@{@link KeySql#sql()}
  * <p>因INSERT ALL语法不支持序列，可手工获取序列并设置至Entity或绑定触发器
+ *
  * @author qrqhuangcy
  * @date 2018-11-16
  */

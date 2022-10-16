@@ -42,7 +42,7 @@ import java.util.*;
  * @since 3.4.5
  */
 public class FreemarkerTemplateFormatter implements TemplateFormatter, ListTemplateFormatter {
-    private final Configuration        configuration  = new Configuration(Configuration.VERSION_2_3_23);
+    private final Configuration configuration = new Configuration(Configuration.VERSION_2_3_23);
     private final StringTemplateLoader templateLoader = new StringTemplateLoader();
 
     public FreemarkerTemplateFormatter() {

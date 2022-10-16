@@ -34,9 +34,9 @@ import java.io.Serializable;
 public class User implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
-    private Long              id;
-    private String            name;
-    private String            role;
+    private Long id;
+    private String name;
+    private String role;
     //存储聚合函数值
     @Transient
     private Long aggregation;

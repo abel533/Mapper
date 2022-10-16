@@ -42,7 +42,7 @@ import java.util.List;
 public class SelectKeyGenerator implements KeyGenerator {
 
     public static final String SELECT_KEY_SUFFIX = "!selectKey";
-    private boolean         executeBefore;
+    private boolean executeBefore;
     private MappedStatement keyStatement;
 
     public SelectKeyGenerator(MappedStatement keyStatement, boolean executeBefore) {
@@ -123,9 +123,9 @@ public class SelectKeyGenerator implements KeyGenerator {
 
     private void setValue(MetaObject metaParam, String property, Object value) {
         if (metaParam.hasSetter(property)) {
-            if(metaParam.hasGetter(property)){
+            if (metaParam.hasGetter(property)) {
                 Object defaultValue = metaParam.getValue(property);
-                if(defaultValue != null){
+                if (defaultValue != null) {
                     return;
                 }
             }

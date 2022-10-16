@@ -1,5 +1,6 @@
 # Maven #
 target/
+.flattened-pom.xml
 
 # IDEA #
 .idea/

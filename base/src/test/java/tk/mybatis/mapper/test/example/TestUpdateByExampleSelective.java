@@ -51,7 +51,7 @@ public class TestUpdateByExampleSelective {
             Assert.assertEquals(83, count);
 
             example = new Example(Country.class);
-            example.createCriteria().andEqualTo("countryname","天朝");
+            example.createCriteria().andEqualTo("countryname", "天朝");
             count = mapper.selectCountByExample(example);
             Assert.assertEquals(83, count);
         } finally {
@@ -75,7 +75,7 @@ public class TestUpdateByExampleSelective {
             Assert.assertEquals(true, count > 83);
 
             example = new Example(Country.class);
-            example.createCriteria().andEqualTo("countryname","天朝");
+            example.createCriteria().andEqualTo("countryname", "天朝");
             count = mapper.selectCountByExample(example);
             Assert.assertEquals(true, count > 83);
         } finally {

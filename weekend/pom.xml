@@ -28,11 +28,10 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>tk.mybatis</groupId>
-        <artifactId>mapper-parent</artifactId>
-        <version>3</version>
+        <artifactId>mapper-modules</artifactId>
+        <version>${revision}</version>
     </parent>
     <artifactId>mapper-weekend</artifactId>
-    <version>1.1.5</version>
 
     <name>weekend</name>
     <description>Mybatis通用Mapper扩展 - weekend</description>
@@ -52,11 +51,6 @@
         </developer>
     </developers>
 
-    <properties>
-        <jdk.version>1.8</jdk.version>
-        <mapper-module.version>1.1.5</mapper-module.version>
-    </properties>
-
     <dependencies>
         <dependency>
             <groupId>org.mybatis</groupId>
@@ -65,13 +59,13 @@
         <dependency>
             <groupId>tk.mybatis</groupId>
             <artifactId>mapper-core</artifactId>
-            <version>${mapper-module.version}</version>
+            <version>${project.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>tk.mybatis</groupId>
             <artifactId>mapper-base</artifactId>
-            <version>${mapper-module.version}</version>
+            <version>${project.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

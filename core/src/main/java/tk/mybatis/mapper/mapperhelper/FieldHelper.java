@@ -106,6 +106,22 @@ public class FieldHelper {
     }
 
     /**
+     * 判断是否已经包含同名的field
+     *
+     * @param fieldList
+     * @param filedName
+     * @return
+     */
+    private static boolean containFiled(List<EntityField> fieldList, String filedName) {
+        for (EntityField field : fieldList) {
+            if (field.getName().equals(filedName)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
      * Field接口
      */
     interface IFieldHelper {
@@ -177,6 +193,10 @@ public class FieldHelper {
                 Field field = fields[i];
                 //排除静态字段，解决bug#2
                 if (!Modifier.isStatic(field.getModifiers()) && !Modifier.isTransient(field.getModifiers())) {
+                    //如果父类中包含与子类同名field，则跳过处理，允许子类进行覆盖
+                    if (FieldHelper.containFiled(fieldList, field.getName())) {
+                        continue;
+                    }
                     if (level.intValue() != 0) {
                         //将父类的字段放在前面
                         fieldList.add(index, new EntityField(field, null));
@@ -300,6 +320,10 @@ public class FieldHelper {
                         }
                     } else {
                         entityField.setJavaType(field.getType());
+                    }
+                    //如果父类中包含与子类同名field，则跳过处理，允许子类进行覆盖
+                    if (FieldHelper.containFiled(fieldList, field.getName())) {
+                        continue;
                     }
                     if (level.intValue() != 0) {
                         //将父类的字段放在前面

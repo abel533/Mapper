@@ -27,7 +27,7 @@ public class ColumnTypeTest {
     private Configuration configuration;
 
     @Before
-    public void beforeTest(){
+    public void beforeTest() {
         config = new Config();
         config.setStyle(Style.normal);
 
@@ -40,7 +40,7 @@ public class ColumnTypeTest {
     }
 
     @Test
-    public void testColumn(){
+    public void testColumn() {
         EntityHelper.initEntityNameMap(UserColumn.class, config);
         EntityTable entityTable = EntityHelper.getEntityTable(UserColumn.class);
         Assert.assertNotNull(entityTable);
@@ -79,7 +79,7 @@ public class ColumnTypeTest {
     }
 
     @Test
-    public void testJdbcTypeVarchar(){
+    public void testJdbcTypeVarchar() {
         EntityHelper.initEntityNameMap(UserJdbcTypeVarchar.class, config);
         EntityTable entityTable = EntityHelper.getEntityTable(UserJdbcTypeVarchar.class);
         Assert.assertNotNull(entityTable);
@@ -119,7 +119,7 @@ public class ColumnTypeTest {
     }
 
     @Test
-    public void testJdbcTypeBlob(){
+    public void testJdbcTypeBlob() {
         EntityHelper.initEntityNameMap(UserJdbcTypeBlob.class, config);
         EntityTable entityTable = EntityHelper.getEntityTable(UserJdbcTypeBlob.class);
         Assert.assertNotNull(entityTable);
@@ -159,7 +159,7 @@ public class ColumnTypeTest {
     }
 
     @Test
-    public void testTypehandler(){
+    public void testTypehandler() {
         EntityHelper.initEntityNameMap(UserTypehandler.class, config);
         EntityTable entityTable = EntityHelper.getEntityTable(UserTypehandler.class);
         Assert.assertNotNull(entityTable);
@@ -198,7 +198,7 @@ public class ColumnTypeTest {
     }
 
     @Test
-    public void testAll(){
+    public void testAll() {
         EntityHelper.initEntityNameMap(UserAll.class, config);
         EntityTable entityTable = EntityHelper.getEntityTable(UserAll.class);
         Assert.assertNotNull(entityTable);

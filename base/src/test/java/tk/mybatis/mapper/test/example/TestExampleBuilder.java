@@ -143,10 +143,11 @@ public class TestExampleBuilder {
             sqlSession.close();
         }
     }
+
     /*
-    * @description: 单个where组合查询测试
-    * 直接把example的构造放到selectByExample()函数里
-    * */
+     * @description: 单个where组合查询测试
+     * 直接把example的构造放到selectByExample()函数里
+     * */
     @Test
     public void testWhereCompound0() {
         SqlSession sqlSession = MybatisHelper.getSqlSession();
@@ -154,13 +155,13 @@ public class TestExampleBuilder {
             CountryMapper mapper = sqlSession.getMapper(CountryMapper.class);
             List<Country> countries = mapper.selectByExample(
                     Example.builder(Country.class)
-                    .where(Sqls.custom()
-                            .andEqualTo("countryname", "China")
-                            .andEqualTo("id", 35)
-                            .orIn("id", new ArrayList<Integer>(Arrays.asList(35, 183)))
-                            .orLike("countryname","Ye%")
-                    )
-                    .build());
+                            .where(Sqls.custom()
+                                    .andEqualTo("countryname", "China")
+                                    .andEqualTo("id", 35)
+                                    .orIn("id", new ArrayList<Integer>(Arrays.asList(35, 183)))
+                                    .orLike("countryname", "Ye%")
+                            )
+                            .build());
             Country country35 = countries.get(2);
             Assert.assertEquals(Integer.valueOf(35), country35.getId());
             Assert.assertEquals("China", country35.getCountryname());
@@ -191,9 +192,9 @@ public class TestExampleBuilder {
             CountryMapper mapper = sqlSession.getMapper(CountryMapper.class);
             Example example = Example.builder(Country.class)
                     .where(Sqls.custom()
-                        .andBetween("id", 35, 50)
-                        .orLessThan("id", 40)
-                        .orIsNull("countryname")
+                            .andBetween("id", 35, 50)
+                            .orLessThan("id", 40)
+                            .orIsNull("countryname")
                     )
                     .build();
             List<Country> countries = mapper.selectByExample(example);
@@ -202,9 +203,10 @@ public class TestExampleBuilder {
             sqlSession.close();
         }
     }
+
     /*
-    *   @description: 多个where连接的查询语句测试
-    * */
+     *   @description: 多个where连接的查询语句测试
+     * */
     @Test
     public void testWhereAndWhereCompound() {
         SqlSession sqlSession = MybatisHelper.getSqlSession();
@@ -212,11 +214,11 @@ public class TestExampleBuilder {
             CountryMapper mapper = sqlSession.getMapper(CountryMapper.class);
             Example example = Example.builder(Country.class)
                     .where(Sqls.custom()
-                        .andEqualTo("countryname", "China")
-                        .andEqualTo("id", 35)
+                            .andEqualTo("countryname", "China")
+                            .andEqualTo("id", 35)
                     )
                     .andWhere(Sqls.custom()
-                        .andEqualTo("id", 183)
+                            .andEqualTo("id", 183)
                     )
                     .build();
             List<Country> countries = mapper.selectByExample(example);
@@ -263,19 +265,19 @@ public class TestExampleBuilder {
             Example example = Example.builder(Country.class)
                     .selectDistinct()
                     .where(Sqls.custom()
-                        .andEqualTo("countryname", "China")
-                        .andEqualTo("id", 35)
+                            .andEqualTo("countryname", "China")
+                            .andEqualTo("id", 35)
                     )
                     .orWhere(Sqls.custom()
-                        .andBetween("countryname", 'C', 'H')
-                        .andNotLike("countryname", "Co%")
+                            .andBetween("countryname", 'C', 'H')
+                            .andNotLike("countryname", "Co%")
                     )
                     .andWhere(Sqls.custom()
-                        .andLessThan("id", "100")
-                        .orGreaterThan("id", "55")
+                            .andLessThan("id", "100")
+                            .orGreaterThan("id", "55")
                     )
                     .orWhere(Sqls.custom()
-                        .andEqualTo("countryname", "Cook Is.")
+                            .andEqualTo("countryname", "Cook Is.")
                     )
                     .orderByAsc("id", "countryname")
                     .orderByDesc("countrycode")
@@ -290,9 +292,9 @@ public class TestExampleBuilder {
     }
 
     /*
-    *  @description: 测试order by
-    *  orderBy()默认为Asc（升序），与orderByAsc()一样
-    * */
+     *  @description: 测试order by
+     *  orderBy()默认为Asc（升序），与orderByAsc()一样
+     * */
     @Test
     public void testOrderBy() {
         SqlSession sqlSession = MybatisHelper.getSqlSession();
@@ -303,7 +305,7 @@ public class TestExampleBuilder {
                     .orderBy("id").orderByAsc("countryname").orderByDesc("countrycode")
                     .build();
             List<Country> countries = mapper.selectByExample(example);
-            for (Country country :countries) {
+            for (Country country : countries) {
                 System.out.println(country.getId() + " " + country.getCountryname() + " " + country.getCountrycode());
             }
             Assert.assertEquals(6, countries.size());

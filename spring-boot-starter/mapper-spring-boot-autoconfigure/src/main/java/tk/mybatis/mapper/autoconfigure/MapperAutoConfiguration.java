@@ -1,17 +1,17 @@
 /**
- *    Copyright 2015-2018 the original author or authors.
- *
- *    Licensed under the Apache License, Version 2.0 (the "License");
- *    you may not use this file except in compliance with the License.
- *    You may obtain a copy of the License at
- *
- *       http://www.apache.org/licenses/LICENSE-2.0
- *
- *    Unless required by applicable law or agreed to in writing, software
- *    distributed under the License is distributed on an "AS IS" BASIS,
- *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *    See the License for the specific language governing permissions and
- *    limitations under the License.
+ * Copyright 2015-2018 the original author or authors.
+ * <p>
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package tk.mybatis.mapper.autoconfigure;
 
@@ -78,7 +78,7 @@ import java.util.List;
  * @author Eduardo Macarrón
  */
 @org.springframework.context.annotation.Configuration
-@ConditionalOnClass({ SqlSessionFactory.class, SqlSessionFactoryBean.class })
+@ConditionalOnClass({SqlSessionFactory.class, SqlSessionFactoryBean.class})
 @ConditionalOnSingleCandidate(DataSource.class)
 @EnableConfigurationProperties(MybatisProperties.class)
 @AutoConfigureAfter(DataSourceAutoConfiguration.class)
@@ -98,10 +98,10 @@ public class MapperAutoConfiguration implements InitializingBean {
     private final List<ConfigurationCustomizer> configurationCustomizers;
 
     public MapperAutoConfiguration(MybatisProperties properties,
-                                    ObjectProvider<Interceptor[]> interceptorsProvider,
-                                    ResourceLoader resourceLoader,
-                                    ObjectProvider<DatabaseIdProvider> databaseIdProvider,
-                                    ObjectProvider<List<ConfigurationCustomizer>> configurationCustomizersProvider) {
+                                   ObjectProvider<Interceptor[]> interceptorsProvider,
+                                   ResourceLoader resourceLoader,
+                                   ObjectProvider<DatabaseIdProvider> databaseIdProvider,
+                                   ObjectProvider<List<ConfigurationCustomizer>> configurationCustomizersProvider) {
         this.properties = properties;
         this.interceptors = interceptorsProvider.getIfAvailable();
         this.resourceLoader = resourceLoader;
@@ -215,7 +215,7 @@ public class MapperAutoConfiguration implements InitializingBean {
                     }
                 }
                 BaseProperties properties = SpringBootBindUtil.bind(environment, BaseProperties.class, BaseProperties.MYBATIS_PREFIX);
-                if(properties != null && properties.getBasePackages() != null && properties.getBasePackages().length > 0){
+                if (properties != null && properties.getBasePackages() != null && properties.getBasePackages().length > 0) {
                     packages.addAll(Arrays.asList(properties.getBasePackages()));
                 } else {
                     //设置了包名的情况下，不需要指定该注解
@@ -253,7 +253,7 @@ public class MapperAutoConfiguration implements InitializingBean {
      * on the same component-scanning path as Spring Boot itself.
      */
     @org.springframework.context.annotation.Configuration
-    @Import({ AutoConfiguredMapperScannerRegistrar.class })
+    @Import({AutoConfiguredMapperScannerRegistrar.class})
     @ConditionalOnMissingBean(MapperFactoryBean.class)
     public static class MapperScannerRegistrarNotFoundConfiguration implements InitializingBean {
 
