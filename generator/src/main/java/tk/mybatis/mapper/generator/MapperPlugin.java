@@ -242,7 +242,7 @@ public class MapperPlugin extends FalseMethodPlugin {
                 field.setStatic(true);
                 field.setFinal(true);
                 field.setInitializationString("\"" + introspectedColumn.getJavaProperty() + "\"");
-                context.getCommentGenerator().addClassComment(topLevelClass, introspectedTable);
+                context.getCommentGenerator().addFieldComment(field, introspectedTable, introspectedColumn);
                 topLevelClass.addField(field);
                 //增加字段名常量,用于pageHelper
                 String  columnFieldName = "DB_" + introspectedColumn.getActualColumnName().toUpperCase(); //$NON-NLS-1$
