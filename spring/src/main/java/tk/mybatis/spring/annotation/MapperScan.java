@@ -150,4 +150,11 @@ public @interface MapperScan {
      * @return
      */
     String mapperHelperRef() default "";
+
+    /**
+     * Whether enable lazy initialization of mapper bean.
+     * Default is {@code false}.
+     * @return set {@code true} to enable lazy initialization
+     */
+    String lazyInitialization() default "";
 }

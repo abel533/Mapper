@@ -221,6 +221,12 @@ public class MapperAutoConfiguration implements InitializingBean {
                     //设置了包名的情况下，不需要指定该注解
                     scanner.setAnnotationClass(Mapper.class);
                 }
+
+                String lazyInitialization = environment.getProperty("mybatis.lazy-initialization");
+                if (StringUtils.hasText(lazyInitialization)) {
+                    scanner.setLazyInitialization(Boolean.valueOf(lazyInitialization));
+                }
+
                 scanner.registerFilters();
                 scanner.doScan(StringUtils.toStringArray(packages));
             } catch (IllegalStateException ex) {
