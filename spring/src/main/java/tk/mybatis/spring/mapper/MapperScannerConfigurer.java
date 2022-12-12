@@ -39,7 +39,6 @@ import tk.mybatis.mapper.mapperhelper.MapperHelper;
 
 import java.lang.annotation.Annotation;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Properties;
 
 import static org.springframework.util.Assert.notNull;
@@ -211,8 +210,7 @@ public class MapperScannerConfigurer implements BeanDefinitionRegistryPostProces
             this.sqlSessionTemplateBeanName = updatePropertyValue("sqlSessionTemplateBeanName", values);
             this.lazyInitialization = updatePropertyValue("lazyInitialization", values);
         }
-        this.lazyInitialization = Optional.ofNullable(this.lazyInitialization).map(getEnvironment()::resolvePlaceholders)
-                .orElse(null);
+        this.lazyInitialization = this.lazyInitialization == null ? null : getEnvironment().resolvePlaceholders(this.lazyInitialization);
     }
 
     private Environment getEnvironment() {
