@@ -62,6 +62,8 @@ public class ClassPathMapperScanner extends ClassPathBeanDefinitionScanner {
 
     private boolean addToConfig = true;
 
+    private boolean lazyInitialization;
+
     private SqlSessionFactory sqlSessionFactory;
 
     private SqlSessionTemplate sqlSessionTemplate;
@@ -207,6 +209,8 @@ public class ClassPathMapperScanner extends ClassPathBeanDefinitionScanner {
                 }
                 definition.setAutowireMode(AbstractBeanDefinition.AUTOWIRE_BY_TYPE);
             }
+
+            definition.setLazyInit(lazyInitialization);
         }
     }
 
@@ -247,6 +251,10 @@ public class ClassPathMapperScanner extends ClassPathBeanDefinitionScanner {
 
     public void setAnnotationClass(Class<? extends Annotation> annotationClass) {
         this.annotationClass = annotationClass;
+    }
+
+    public void setLazyInitialization(boolean lazyInitialization) {
+        this.lazyInitialization = lazyInitialization;
     }
 
     /**

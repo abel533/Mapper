@@ -32,6 +32,7 @@ import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.core.env.Environment;
 import org.springframework.util.StringUtils;
 import tk.mybatis.mapper.common.Marker;
 import tk.mybatis.mapper.mapperhelper.MapperHelper;
@@ -100,6 +101,8 @@ public class MapperScannerConfigurer implements BeanDefinitionRegistryPostProces
 
     private boolean addToConfig = true;
 
+    private String lazyInitialization;
+
     private SqlSessionFactory sqlSessionFactory;
 
     private SqlSessionTemplate sqlSessionTemplate;
@@ -167,6 +170,9 @@ public class MapperScannerConfigurer implements BeanDefinitionRegistryPostProces
         scanner.setSqlSessionTemplateBeanName(this.sqlSessionTemplateBeanName);
         scanner.setResourceLoader(this.applicationContext);
         scanner.setBeanNameGenerator(this.nameGenerator);
+        if (StringUtils.hasText(lazyInitialization)) {
+            scanner.setLazyInitialization(Boolean.valueOf(lazyInitialization));
+        }
         scanner.registerFilters();
         //设置通用 Mapper
         scanner.setMapperHelper(this.mapperHelper);
@@ -202,7 +208,13 @@ public class MapperScannerConfigurer implements BeanDefinitionRegistryPostProces
             this.basePackage = updatePropertyValue("basePackage", values);
             this.sqlSessionFactoryBeanName = updatePropertyValue("sqlSessionFactoryBeanName", values);
             this.sqlSessionTemplateBeanName = updatePropertyValue("sqlSessionTemplateBeanName", values);
+            this.lazyInitialization = updatePropertyValue("lazyInitialization", values);
         }
+        this.lazyInitialization = this.lazyInitialization == null ? null : getEnvironment().resolvePlaceholders(this.lazyInitialization);
+    }
+
+    private Environment getEnvironment() {
+        return this.applicationContext.getEnvironment();
     }
 
     private String updatePropertyValue(String propertyName, PropertyValues values) {
@@ -253,6 +265,15 @@ public class MapperScannerConfigurer implements BeanDefinitionRegistryPostProces
      */
     public void setAddToConfig(boolean addToConfig) {
         this.addToConfig = addToConfig;
+    }
+
+    /**
+     * Set whether enable lazy initialization for mapper bean.
+     * Default is {@code false}.
+     * @param lazyInitialization Set the @{code true} to enable
+     */
+    public void setLazyInitialization(String lazyInitialization) {
+        this.lazyInitialization = lazyInitialization;
     }
 
     /**

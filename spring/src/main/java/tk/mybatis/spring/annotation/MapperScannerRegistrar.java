@@ -107,6 +107,12 @@ public class MapperScannerRegistrar implements ImportBeanDefinitionRegistrar, Re
                         "如果你使用 tk.mybatis.mapper.session.Configuration 配置的通用 Mapper，你可以忽略该错误!", e);
             }
         }
+
+        String lazyInitialization = annoAttrs.getString("lazyInitialization");
+        if (StringUtils.hasText(lazyInitialization)) {
+            scanner.setLazyInitialization(Boolean.valueOf(lazyInitialization));
+        }
+
         scanner.registerFilters();
         scanner.doScan(StringUtils.toStringArray(basePackages));
     }
