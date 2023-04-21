@@ -178,4 +178,14 @@ public class ExampleProvider extends MapperTemplate {
     public String selectOneByExample(MappedStatement ms) {
         return selectByExample(ms);
     }
+
+    /**
+     * 根据 ROW_NUMBER 开窗函数的相关参数执行对应的查询
+     */
+    public String selectRowNumberByExample(MappedStatement ms) {
+        Class<?> clazz = getEntityClass(ms);
+        return SqlHelper.rowNumberBefore() +
+                selectByExample(ms) +
+                SqlHelper.rowNumberAfter(clazz);
+    }
 }

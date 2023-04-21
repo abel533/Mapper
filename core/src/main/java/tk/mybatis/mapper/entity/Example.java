@@ -69,6 +69,8 @@ public class Example implements IDynamicTableName {
 
     protected OrderBy ORDERBY;
 
+    protected RowNumberExample rowNumberParam; // ROW_NUMBER 函数需要的相关参数
+
     /**
      * 默认exists为true
      *
@@ -104,6 +106,7 @@ public class Example implements IDynamicTableName {
         //根据李领北建议修改#159
         propertyMap = table.getPropertyMap();
         this.ORDERBY = new OrderBy(this, propertyMap);
+        this.rowNumberParam = RowNumberExample.EMPTY;
     }
 
 
@@ -119,6 +122,7 @@ public class Example implements IDynamicTableName {
         this.forUpdate = builder.forUpdate;
         this.tableName = builder.tableName;
         this.ORDERBY = new OrderBy(this, propertyMap);
+        this.rowNumberParam = builder.rowNumberParam;
 
         if (!StringUtil.isEmpty(builder.orderByClause.toString())) {
             this.orderByClause = builder.orderByClause.toString();
@@ -224,6 +228,10 @@ public class Example implements IDynamicTableName {
 
     public Map<String, EntityColumn> getPropertyMap() {
         return propertyMap;
+    }
+
+    public RowNumberExample getRowNumberParam() {
+        return rowNumberParam;
     }
 
     public static class OrderBy {
@@ -844,6 +852,8 @@ public class Example implements IDynamicTableName {
         //动态表名
         private String tableName;
 
+        private RowNumberExample rowNumberParam;
+
         public Builder(Class<?> entityClass) {
             this(entityClass, true);
         }
@@ -889,6 +899,11 @@ public class Example implements IDynamicTableName {
                     }
                 }
             }
+            return this;
+        }
+
+        public Builder rowNumberParam(RowNumberExample param) {
+            this.rowNumberParam = param;
             return this;
         }
 
@@ -1147,5 +1162,9 @@ public class Example implements IDynamicTableName {
      */
     public void setTableName(String tableName) {
         this.tableName = tableName;
+    }
+
+    public void setRowNumberParam(RowNumberExample rowNumberParam) {
+        this.rowNumberParam = rowNumberParam;
     }
 }
