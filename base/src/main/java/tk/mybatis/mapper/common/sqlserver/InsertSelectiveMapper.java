@@ -21,7 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package tk.mybatis.mapper.common.sqlserver;
 
 import org.apache.ibatis.annotations.InsertProvider;
@@ -40,5 +39,4 @@ public interface InsertSelectiveMapper<T> {
     @Options(useGeneratedKeys = true)
     @InsertProvider(type = SqlServerProvider.class, method = "dynamicSQL")
     int insertSelective(T record);
-
 }

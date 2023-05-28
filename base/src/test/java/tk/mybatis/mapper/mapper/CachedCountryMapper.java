@@ -21,7 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package tk.mybatis.mapper.mapper;
 
 import tk.mybatis.mapper.common.Mapper;
@@ -33,5 +32,6 @@ import tk.mybatis.mapper.model.Country;
  */
 //@CacheNamespace
 public interface CachedCountryMapper extends Mapper<Country>, HsqldbMapper<Country> {
+
     int selectCache(int id);
 }

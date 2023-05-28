@@ -36,7 +36,6 @@ import org.springframework.util.StringUtils;
 import tk.mybatis.mapper.MapperException;
 import tk.mybatis.mapper.entity.Config;
 import tk.mybatis.mapper.mapperhelper.MapperHelper;
-
 import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.util.Arrays;
@@ -93,16 +92,15 @@ public class ClassPathMapperScanner extends ClassPathBeanDefinitionScanner {
      */
     public void registerFilters() {
         boolean acceptAllInterfaces = true;
-
         // if specified, use the given annotation and / or marker interface
         if (this.annotationClass != null) {
             addIncludeFilter(new AnnotationTypeFilter(this.annotationClass));
             acceptAllInterfaces = false;
         }
-
         // override AssignableTypeFilter to ignore matches on the actual marker interface
         if (this.markerInterface != null) {
             addIncludeFilter(new AssignableTypeFilter(this.markerInterface) {
+
                 @Override
                 protected boolean matchClassName(String className) {
                     return false;
@@ -110,27 +108,26 @@ public class ClassPathMapperScanner extends ClassPathBeanDefinitionScanner {
             });
             acceptAllInterfaces = false;
         }
-
         if (acceptAllInterfaces) {
             // default include filter that accepts all classes
             addIncludeFilter(new TypeFilter() {
+
                 @Override
                 public boolean match(MetadataReader metadataReader, MetadataReaderFactory metadataReaderFactory) throws IOException {
                     return true;
                 }
             });
         }
-
         // exclude package-info.java
         addExcludeFilter(new TypeFilter() {
+
             @Override
             public boolean match(MetadataReader metadataReader, MetadataReaderFactory metadataReaderFactory) throws IOException {
                 String className = metadataReader.getClassMetadata().getClassName();
                 if (className.endsWith("package-info")) {
                     return true;
                 }
-                return metadataReader.getAnnotationMetadata()
-                        .hasAnnotation("tk.mybatis.mapper.annotation.RegisterMapper");
+                return metadataReader.getAnnotationMetadata().hasAnnotation("tk.mybatis.mapper.annotation.RegisterMapper");
             }
         });
     }
@@ -143,13 +140,11 @@ public class ClassPathMapperScanner extends ClassPathBeanDefinitionScanner {
     @Override
     public Set<BeanDefinitionHolder> doScan(String... basePackages) {
         Set<BeanDefinitionHolder> beanDefinitions = super.doScan(basePackages);
-
         if (beanDefinitions.isEmpty()) {
             logger.warn("No MyBatis mapper was found in '" + Arrays.toString(basePackages) + "' package. Please check your configuration.");
         } else {
             processBeanDefinitions(beanDefinitions);
         }
-
         return beanDefinitions;
     }
 
@@ -157,15 +152,13 @@ public class ClassPathMapperScanner extends ClassPathBeanDefinitionScanner {
         GenericBeanDefinition definition;
         for (BeanDefinitionHolder holder : beanDefinitions) {
             definition = (GenericBeanDefinition) holder.getBeanDefinition();
-
             if (logger.isDebugEnabled()) {
-                logger.debug("Creating MapperFactoryBean with name '" + holder.getBeanName()
-                        + "' and '" + definition.getBeanClassName() + "' mapperInterface");
+                logger.debug("Creating MapperFactoryBean with name '" + holder.getBeanName() + "' and '" + definition.getBeanClassName() + "' mapperInterface");
             }
-
             // the mapper interface is the original class of the bean
             // but, the actual class of the bean is MapperFactoryBean
-            definition.getConstructorArgumentValues().addGenericArgumentValue(definition.getBeanClassName()); // issue #59
+            // issue #59
+            definition.getConstructorArgumentValues().addGenericArgumentValue(definition.getBeanClassName());
             definition.setBeanClass(this.mapperFactoryBean.getClass());
             //设置通用 Mapper
             if (StringUtils.hasText(this.mapperHelperBeanName)) {
@@ -177,9 +170,7 @@ public class ClassPathMapperScanner extends ClassPathBeanDefinitionScanner {
                 }
                 definition.getPropertyValues().add("mapperHelper", this.mapperHelper);
             }
-
             definition.getPropertyValues().add("addToConfig", this.addToConfig);
-
             boolean explicitFactoryUsed = false;
             if (StringUtils.hasText(this.sqlSessionFactoryBeanName)) {
                 definition.getPropertyValues().add("sqlSessionFactory", new RuntimeBeanReference(this.sqlSessionFactoryBeanName));
@@ -188,7 +179,6 @@ public class ClassPathMapperScanner extends ClassPathBeanDefinitionScanner {
                 definition.getPropertyValues().add("sqlSessionFactory", this.sqlSessionFactory);
                 explicitFactoryUsed = true;
             }
-
             if (StringUtils.hasText(this.sqlSessionTemplateBeanName)) {
                 if (explicitFactoryUsed) {
                     logger.warn("Cannot use both: sqlSessionTemplate and sqlSessionFactory together. sqlSessionFactory is ignored.");
@@ -202,14 +192,12 @@ public class ClassPathMapperScanner extends ClassPathBeanDefinitionScanner {
                 definition.getPropertyValues().add("sqlSessionTemplate", this.sqlSessionTemplate);
                 explicitFactoryUsed = true;
             }
-
             if (!explicitFactoryUsed) {
                 if (logger.isDebugEnabled()) {
                     logger.debug("Enabling autowire by type for MapperFactoryBean with name '" + holder.getBeanName() + "'.");
                 }
                 definition.setAutowireMode(AbstractBeanDefinition.AUTOWIRE_BY_TYPE);
             }
-
             definition.setLazyInit(lazyInitialization);
         }
     }
@@ -230,9 +218,7 @@ public class ClassPathMapperScanner extends ClassPathBeanDefinitionScanner {
         if (super.checkCandidate(beanName, beanDefinition)) {
             return true;
         } else {
-            logger.warn("Skipping MapperFactoryBean with name '" + beanName
-                    + "' and '" + beanDefinition.getBeanClassName() + "' mapperInterface"
-                    + ". Bean already defined with the same name!");
+            logger.warn("Skipping MapperFactoryBean with name '" + beanName + "' and '" + beanDefinition.getBeanClassName() + "' mapperInterface" + ". Bean already defined with the same name!");
             return false;
         }
     }
@@ -306,13 +292,7 @@ public class ClassPathMapperScanner extends ClassPathBeanDefinitionScanner {
             property = property.trim();
             int index = property.indexOf("=");
             if (index < 0) {
-                throw new MapperException("通过 @MapperScan 注解的 properties 参数配置出错:" + property + " !\n"
-                        + "请保证配置项按 properties 文件格式要求进行配置，例如：\n"
-                        + "properties = {\n"
-                        + "\t\"mappers=tk.mybatis.mapper.common.Mapper\",\n"
-                        + "\t\"notEmpty=true\"\n"
-                        + "}"
-                );
+                throw new MapperException("通过 @MapperScan 注解的 properties 参数配置出错:" + property + " !\n" + "请保证配置项按 properties 文件格式要求进行配置，例如：\n" + "properties = {\n" + "\t\"mappers=tk.mybatis.mapper.common.Mapper\",\n" + "\t\"notEmpty=true\"\n" + "}");
             }
             props.put(property.substring(0, index).trim(), property.substring(index + 1).trim());
         }

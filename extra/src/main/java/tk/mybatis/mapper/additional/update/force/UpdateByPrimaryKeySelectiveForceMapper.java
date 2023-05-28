@@ -3,7 +3,6 @@ package tk.mybatis.mapper.additional.update.force;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.UpdateProvider;
 import tk.mybatis.mapper.annotation.RegisterMapper;
-
 import java.util.List;
 
 /**

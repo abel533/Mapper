@@ -8,6 +8,7 @@ import java.util.List;
  * @date 2017/11/18
  */
 public class Sqls {
+
     private Criteria criteria;
 
     private Sqls() {
@@ -52,7 +53,6 @@ public class Sqls {
         return this;
     }
 
-
     public Sqls andLessThan(String property, Object value) {
         this.criteria.criterions.add(new Criterion(property, value, "<", "and"));
         return this;
@@ -93,7 +93,6 @@ public class Sqls {
         return this;
     }
 
-
     public Sqls orIsNull(String property) {
         this.criteria.criterions.add(new Criterion(property, "is null", "or"));
         return this;
@@ -103,7 +102,6 @@ public class Sqls {
         this.criteria.criterions.add(new Criterion(property, "is not null", "or"));
         return this;
     }
-
 
     public Sqls orEqualTo(String property, Object value) {
         this.criteria.criterions.add(new Criterion(property, value, "=", "or"));
@@ -166,7 +164,9 @@ public class Sqls {
     }
 
     public static class Criteria {
+
         private String andOr;
+
         private List<Criterion> criterions;
 
         public Criteria() {
@@ -187,10 +187,15 @@ public class Sqls {
     }
 
     public static class Criterion {
+
         private String property;
+
         private Object value;
+
         private Object secondValue;
+
         private String condition;
+
         private String andOr;
 
         public Criterion(String property, String condition, String andOr) {
@@ -198,7 +203,6 @@ public class Sqls {
             this.condition = condition;
             this.andOr = andOr;
         }
-
 
         public Criterion(String property, Object value, String condition, String andOr) {
             this.property = property;
@@ -230,12 +234,12 @@ public class Sqls {
         public Object[] getValues() {
             if (value != null) {
                 if (secondValue != null) {
-                    return new Object[]{value, secondValue};
+                    return new Object[] { value, secondValue };
                 } else {
-                    return new Object[]{value};
+                    return new Object[] { value };
                 }
             } else {
-                return new Object[]{};
+                return new Object[] {};
             }
         }
 

@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package tk.mybatis.spring.annotation;
 
 import org.slf4j.Logger;
@@ -32,12 +31,12 @@ import org.springframework.util.ClassUtils;
 import org.springframework.util.StringUtils;
 import tk.mybatis.spring.mapper.ClassPathMapperScanner;
 import tk.mybatis.spring.mapper.MapperFactoryBean;
-
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.List;
 
 public class MapperScannerRegistrar implements ImportBeanDefinitionRegistrar, ResourceLoaderAware, EnvironmentAware {
+
     public static final Logger LOGGER = LoggerFactory.getLogger(MapperScannerRegistrar.class);
 
     private ResourceLoader resourceLoader;
@@ -46,37 +45,30 @@ public class MapperScannerRegistrar implements ImportBeanDefinitionRegistrar, Re
 
     @Override
     public void registerBeanDefinitions(AnnotationMetadata importingClassMetadata, BeanDefinitionRegistry registry) {
-
         AnnotationAttributes annoAttrs = AnnotationAttributes.fromMap(importingClassMetadata.getAnnotationAttributes(MapperScan.class.getName()));
         ClassPathMapperScanner scanner = new ClassPathMapperScanner(registry);
         // this check is needed in Spring 3.1
         if (resourceLoader != null) {
             scanner.setResourceLoader(resourceLoader);
         }
-
         Class<? extends Annotation> annotationClass = annoAttrs.getClass("annotationClass");
         if (!Annotation.class.equals(annotationClass)) {
             scanner.setAnnotationClass(annotationClass);
         }
-
         Class<?> markerInterface = annoAttrs.getClass("markerInterface");
         if (!Class.class.equals(markerInterface)) {
             scanner.setMarkerInterface(markerInterface);
         }
-
         Class<? extends BeanNameGenerator> generatorClass = annoAttrs.getClass("nameGenerator");
         if (!BeanNameGenerator.class.equals(generatorClass)) {
             scanner.setBeanNameGenerator(BeanUtils.instantiateClass(generatorClass));
         }
-
         Class<? extends MapperFactoryBean> mapperFactoryBeanClass = annoAttrs.getClass("factoryBean");
         if (!MapperFactoryBean.class.equals(mapperFactoryBeanClass)) {
             scanner.setMapperFactoryBean(BeanUtils.instantiateClass(mapperFactoryBeanClass));
         }
-
         scanner.setSqlSessionTemplateBeanName(annoAttrs.getString("sqlSessionTemplateRef"));
         scanner.setSqlSessionFactoryBeanName(annoAttrs.getString("sqlSessionFactoryRef"));
-
         List<String> basePackages = new ArrayList<String>();
         for (String pkg : annoAttrs.getStringArray("value")) {
             if (StringUtils.hasText(pkg)) {
@@ -102,17 +94,13 @@ public class MapperScannerRegistrar implements ImportBeanDefinitionRegistrar, Re
             try {
                 scanner.setMapperProperties(this.environment);
             } catch (Exception e) {
-                LOGGER.warn("只有 Spring Boot 环境中可以通过 Environment(配置文件,环境变量,运行参数等方式) 配置通用 Mapper，" +
-                        "其他环境请通过 @MapperScan 注解中的 mapperHelperRef 或 properties 参数进行配置!" +
-                        "如果你使用 tk.mybatis.mapper.session.Configuration 配置的通用 Mapper，你可以忽略该错误!", e);
+                LOGGER.warn("只有 Spring Boot 环境中可以通过 Environment(配置文件,环境变量,运行参数等方式) 配置通用 Mapper，" + "其他环境请通过 @MapperScan 注解中的 mapperHelperRef 或 properties 参数进行配置!" + "如果你使用 tk.mybatis.mapper.session.Configuration 配置的通用 Mapper，你可以忽略该错误!", e);
             }
         }
-
         String lazyInitialization = annoAttrs.getString("lazyInitialization");
         if (StringUtils.hasText(lazyInitialization)) {
             scanner.setLazyInitialization(Boolean.valueOf(lazyInitialization));
         }
-
         scanner.registerFilters();
         scanner.doScan(StringUtils.toStringArray(basePackages));
     }

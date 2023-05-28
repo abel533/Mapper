@@ -21,7 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package tk.mybatis.mapper.entity;
 
 import tk.mybatis.mapper.util.Sqls;
@@ -32,5 +31,4 @@ import tk.mybatis.mapper.util.Sqls;
 public interface SqlsCriteria {
 
     Sqls.Criteria getCriteria();
-
 }

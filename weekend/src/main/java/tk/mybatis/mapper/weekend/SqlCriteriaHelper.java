@@ -2,7 +2,6 @@ package tk.mybatis.mapper.weekend;
 
 import tk.mybatis.mapper.util.Sqls;
 import tk.mybatis.mapper.weekend.reflection.Reflections;
-
 import java.util.Optional;
 
 /**
@@ -12,6 +11,7 @@ import java.util.Optional;
  * @date 2019-04-15 10:26
  */
 public class SqlCriteriaHelper<T> implements tk.mybatis.mapper.entity.SqlsCriteria {
+
     private Sqls.Criteria criteria;
 
     private SqlCriteriaHelper() {
@@ -32,7 +32,6 @@ public class SqlCriteriaHelper<T> implements tk.mybatis.mapper.entity.SqlsCriter
         this.criteria.getCriterions().add(new Sqls.Criterion(Reflections.fnToFieldName(fn), "is null", "and"));
         return this;
     }
-
 
     /**
      * AND column IS NOT NULL
@@ -249,7 +248,6 @@ public class SqlCriteriaHelper<T> implements tk.mybatis.mapper.entity.SqlsCriter
         return this;
     }
 
-
     /**
      * AND column LIKE %value
      * 当 value = null 则当前属性不参与查询
@@ -291,11 +289,7 @@ public class SqlCriteriaHelper<T> implements tk.mybatis.mapper.entity.SqlsCriter
      * @return
      */
     public SqlCriteriaHelper<T> andNotLike(Fn<T, Object> fn, String value) {
-        if (Optional.ofNullable(value).isPresent()) {
-            value = "%" + value + "%";
-            this.criteria.getCriterions().add(new Sqls.Criterion(Reflections.fnToFieldName(fn), value, "not like", "and"));
-        }
-        return this;
+        return addNotLikeCriterion(fn, value);
     }
 
     /**
@@ -307,11 +301,7 @@ public class SqlCriteriaHelper<T> implements tk.mybatis.mapper.entity.SqlsCriter
      * @return
      */
     public SqlCriteriaHelper<T> andNotLikeLeft(Fn<T, Object> fn, String value) {
-        if (Optional.ofNullable(value).isPresent()) {
-            value = "%" + value + "%";
-            this.criteria.getCriterions().add(new Sqls.Criterion(Reflections.fnToFieldName(fn), value, "not like", "and"));
-        }
-        return this;
+        return addNotLikeCriterion(fn, value);
     }
 
     /**
@@ -353,7 +343,6 @@ public class SqlCriteriaHelper<T> implements tk.mybatis.mapper.entity.SqlsCriter
         this.criteria.getCriterions().add(new Sqls.Criterion(Reflections.fnToFieldName(fn), "is not null", "or"));
         return this;
     }
-
 
     /**
      * OR column = value
@@ -543,7 +532,6 @@ public class SqlCriteriaHelper<T> implements tk.mybatis.mapper.entity.SqlsCriter
         return this;
     }
 
-
     /**
      * OR column LIKE value
      * 当 value = null 则当前属性不参与查询
@@ -559,7 +547,6 @@ public class SqlCriteriaHelper<T> implements tk.mybatis.mapper.entity.SqlsCriter
         }
         return this;
     }
-
 
     /**
      * OR column LIKE %value
@@ -577,7 +564,6 @@ public class SqlCriteriaHelper<T> implements tk.mybatis.mapper.entity.SqlsCriter
         return this;
     }
 
-
     /**
      * OR column LIKE value%
      * 当 value = null 则当前属性不参与查询
@@ -594,7 +580,6 @@ public class SqlCriteriaHelper<T> implements tk.mybatis.mapper.entity.SqlsCriter
         return this;
     }
 
-
     /**
      * OR column NOT LIKE value
      * 当 value = null 则当前属性不参与查询
@@ -610,7 +595,6 @@ public class SqlCriteriaHelper<T> implements tk.mybatis.mapper.entity.SqlsCriter
         }
         return this;
     }
-
 
     /**
      * OR column NOT LIKE %value
@@ -644,9 +628,16 @@ public class SqlCriteriaHelper<T> implements tk.mybatis.mapper.entity.SqlsCriter
         return this;
     }
 
-
     @Override
     public Sqls.Criteria getCriteria() {
         return criteria;
+    }
+
+    private SqlCriteriaHelper<T> addNotLikeCriterion(Fn<T, Object> fn, String value) {
+        if (Optional.ofNullable(value).isPresent()) {
+            value = "%" + value + "%";
+            this.criteria.getCriterions().add(new Sqls.Criterion(Reflections.fnToFieldName(fn), value, "not like", "and"));
+        }
+        return this;
     }
 }

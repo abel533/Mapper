@@ -21,7 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package tk.mybatis.mapper.model;
 
 import javax.persistence.GeneratedValue;
@@ -32,6 +31,7 @@ import javax.persistence.Id;
  * Created by liuzh on 2014/11/21.
  */
 public class UserLogin2Key {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer logid;
@@ -41,10 +41,7 @@ public class UserLogin2Key {
 
     @Override
     public String toString() {
-        return "UserLogin2Key{" +
-                "logid=" + logid +
-                ", username='" + username + '\'' +
-                '}';
+        return "UserLogin2Key{" + "logid=" + logid + ", username='" + username + '\'' + '}';
     }
 
     public Integer getLogid() {

@@ -9,5 +9,4 @@ import tk.mybatis.mapper.common.Mapper;
  */
 @CacheNamespace
 public interface CountryCacheMapper extends Mapper<Country> {
-
 }

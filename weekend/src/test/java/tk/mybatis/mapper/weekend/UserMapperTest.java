@@ -22,7 +22,6 @@
  * THE SOFTWARE.
  *
  */
-
 package tk.mybatis.mapper.weekend;
 
 import org.apache.ibatis.session.SqlSession;
@@ -33,7 +32,6 @@ import tk.mybatis.mapper.weekend.entity.Country;
 import tk.mybatis.mapper.weekend.entity.User;
 import tk.mybatis.mapper.weekend.mapper.CountryMapper;
 import tk.mybatis.mapper.weekend.mapper.UserMapper;
-
 import java.util.Arrays;
 import java.util.List;
 
@@ -53,11 +51,7 @@ public class UserMapperTest {
         SqlSession sqlSession = MybatisHelper.getSqlSession();
         UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
         Weekend<User> weekend = Weekend.of(User.class);
-        weekend.weekendCriteria()
-                .andIsNull(User::getId)
-                .andBetween(User::getId, 0, 10)
-                .andIn(User::getUserName, Arrays.asList("a", "b", "c"));
-
+        weekend.weekendCriteria().andIsNull(User::getId).andBetween(User::getId, 0, 10).andIn(User::getUserName, Arrays.asList("a", "b", "c"));
         List<User> users = userMapper.selectByExample(weekend);
         for (User user : users) {
             System.out.println(user.getUserName());
@@ -79,6 +73,5 @@ public class UserMapperTest {
         //count 查询
         weekend2.withCountProperty(Country::getCountryname);
         countryMapper.selectCountByExample(weekend2);
-
     }
 }

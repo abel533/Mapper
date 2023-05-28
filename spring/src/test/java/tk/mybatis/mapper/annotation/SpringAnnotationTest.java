@@ -15,7 +15,6 @@ import tk.mybatis.mapper.common.Mapper;
 import tk.mybatis.mapper.entity.Config;
 import tk.mybatis.mapper.mapperhelper.MapperHelper;
 import tk.mybatis.spring.annotation.MapperScan;
-
 import javax.sql.DataSource;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +22,6 @@ import java.util.List;
 /**
  * @author liuzh
  */
-
 public class SpringAnnotationTest {
 
     private AnnotationConfigApplicationContext applicationContext;
@@ -83,11 +81,10 @@ public class SpringAnnotationTest {
     @Configuration
     @MapperScan(value = "tk.mybatis.mapper.annotation", mapperHelperRef = "mapperHelper")
     public static class MyBatisConfigRef {
+
         @Bean
         public DataSource dataSource() {
-            return new EmbeddedDatabaseBuilder()
-                    .addScript("tk/mybatis/mapper/xml/CreateDB.sql")
-                    .build();
+            return new EmbeddedDatabaseBuilder().addScript("tk/mybatis/mapper/xml/CreateDB.sql").build();
         }
 
         @Bean
@@ -108,7 +105,6 @@ public class SpringAnnotationTest {
             List<Class> mappers = new ArrayList<Class>();
             mappers.add(Mapper.class);
             config.setMappers(mappers);
-
             MapperHelper mapperHelper = new MapperHelper();
             mapperHelper.setConfig(config);
             return mapperHelper;
@@ -116,18 +112,12 @@ public class SpringAnnotationTest {
     }
 
     @Configuration
-    @MapperScan(value = "tk.mybatis.mapper.annotation",
-            properties = {
-                    "mappers=tk.mybatis.mapper.common.Mapper",
-                    "notEmpty=true"
-            }
-    )
+    @MapperScan(value = "tk.mybatis.mapper.annotation", properties = { "mappers=tk.mybatis.mapper.common.Mapper", "notEmpty=true" })
     public static class MyBatisConfigProperties {
+
         @Bean
         public DataSource dataSource() {
-            return new EmbeddedDatabaseBuilder()
-                    .addScript("tk/mybatis/mapper/xml/CreateDB.sql")
-                    .build();
+            return new EmbeddedDatabaseBuilder().addScript("tk/mybatis/mapper/xml/CreateDB.sql").build();
         }
 
         @Bean
@@ -144,19 +134,13 @@ public class SpringAnnotationTest {
     }
 
     @Configuration
-    @MapperScan(value = "tk.mybatis.mapper.annotation",
-            properties = {
-                    //参数配置错误
-                    "mapperstk.mybatis.mapper.common.Mapper",
-                    "notEmpty=true"
-            }
-    )
+    @MapperScan(value = "tk.mybatis.mapper.annotation", properties = { //参数配置错误
+    "mapperstk.mybatis.mapper.common.Mapper", "notEmpty=true" })
     public static class MyBatisConfigPropertiesError {
+
         @Bean
         public DataSource dataSource() {
-            return new EmbeddedDatabaseBuilder()
-                    .addScript("tk/mybatis/mapper/xml/CreateDB.sql")
-                    .build();
+            return new EmbeddedDatabaseBuilder().addScript("tk/mybatis/mapper/xml/CreateDB.sql").build();
         }
 
         @Bean
@@ -175,11 +159,10 @@ public class SpringAnnotationTest {
     @Configuration
     @MapperScan(value = "tk.mybatis.mapper.annotation")
     public static class MyBatisConfiguration {
+
         @Bean
         public DataSource dataSource() {
-            return new EmbeddedDatabaseBuilder()
-                    .addScript("tk/mybatis/mapper/xml/CreateDB.sql")
-                    .build();
+            return new EmbeddedDatabaseBuilder().addScript("tk/mybatis/mapper/xml/CreateDB.sql").build();
         }
 
         @Bean
@@ -196,8 +179,5 @@ public class SpringAnnotationTest {
             sessionFactory.setConfiguration(configuration);
             return sessionFactory.getObject();
         }
-
     }
-
-
 }

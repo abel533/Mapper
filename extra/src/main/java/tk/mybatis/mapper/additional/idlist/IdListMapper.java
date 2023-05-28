@@ -21,7 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package tk.mybatis.mapper.additional.idlist;
 
 /**
@@ -32,5 +31,4 @@ package tk.mybatis.mapper.additional.idlist;
  */
 @tk.mybatis.mapper.annotation.RegisterMapper
 public interface IdListMapper<T, PK> extends SelectByIdListMapper<T, PK>, DeleteByIdListMapper<T, PK> {
-
 }

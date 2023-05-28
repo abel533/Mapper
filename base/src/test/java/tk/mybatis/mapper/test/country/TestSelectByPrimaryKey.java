@@ -21,7 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package tk.mybatis.mapper.test.country;
 
 import org.apache.ibatis.session.SqlSession;
@@ -30,7 +29,6 @@ import org.junit.Test;
 import tk.mybatis.mapper.mapper.CountryMapper;
 import tk.mybatis.mapper.mapper.MybatisHelper;
 import tk.mybatis.mapper.model.Country;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -50,7 +48,6 @@ public class TestSelectByPrimaryKey {
         try {
             CountryMapper mapper = sqlSession.getMapper(CountryMapper.class);
             Country country = mapper.selectByPrimaryKey(35);
-
             Assert.assertNotNull(country);
             Assert.assertEquals(true, country.getId() == 35);
             Assert.assertEquals("China", country.getCountryname());
@@ -107,7 +104,6 @@ public class TestSelectByPrimaryKey {
         SqlSession sqlSession = MybatisHelper.getSqlSession();
         try {
             CountryMapper mapper = sqlSession.getMapper(CountryMapper.class);
-
             Map map = new HashMap();
             map.put("id", 35);
             Country country = mapper.selectByPrimaryKey(map);
@@ -115,7 +111,6 @@ public class TestSelectByPrimaryKey {
             Assert.assertEquals(true, country.getId() == 35);
             Assert.assertEquals("China", country.getCountryname());
             Assert.assertEquals("CN", country.getCountrycode());
-
             map = new HashMap();
             map.put("countryname", "China");
             Assert.assertNull(mapper.selectByPrimaryKey(map));

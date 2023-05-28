@@ -21,7 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package tk.mybatis.mapper.entity;
 
 import org.apache.ibatis.mapping.ResultFlag;
@@ -32,7 +31,6 @@ import org.apache.ibatis.type.TypeException;
 import org.apache.ibatis.type.TypeHandler;
 import tk.mybatis.mapper.MapperException;
 import tk.mybatis.mapper.util.StringUtil;
-
 import javax.persistence.Table;
 import java.lang.reflect.Constructor;
 import java.util.*;
@@ -45,23 +43,36 @@ import java.util.regex.Pattern;
  * @author liuzh
  */
 public class EntityTable {
+
     public static final Pattern DELIMITER = Pattern.compile("^[`\\[\"]?(.*?)[`\\]\"]?$");
+
     //属性和列对应
     protected Map<String, EntityColumn> propertyMap;
+
     private String name;
+
     private String catalog;
+
     private String schema;
+
     private String orderByClause;
+
     private String baseSelect;
+
     //实体类 => 全部列属性
     private LinkedHashSet<EntityColumn> entityClassColumns;
+
     //实体类 => 主键信息
     private LinkedHashSet<EntityColumn> entityClassPKColumns;
+
     //useGenerator包含多列的时候需要用到
     private List<String> keyProperties;
+
     private List<String> keyColumns;
+
     //resultMap对象
     private ResultMap resultMap;
+
     //类
     private Class<?> entityClass;
 
@@ -188,9 +199,9 @@ public class EntityTable {
 
     public String[] getKeyColumns() {
         if (keyColumns != null && keyColumns.size() > 0) {
-            return keyColumns.toArray(new String[]{});
+            return keyColumns.toArray(new String[] {});
         }
-        return new String[]{};
+        return new String[] {};
     }
 
     public void setKeyColumns(String keyColumn) {
@@ -204,9 +215,9 @@ public class EntityTable {
 
     public String[] getKeyProperties() {
         if (keyProperties != null && keyProperties.size() > 0) {
-            return keyProperties.toArray(new String[]{});
+            return keyProperties.toArray(new String[] {});
         }
-        return new String[]{};
+        return new String[] {};
     }
 
     public void setKeyProperties(String keyProperty) {

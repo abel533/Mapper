@@ -5,7 +5,6 @@ import org.junit.Assert;
 import org.junit.Test;
 import tk.mybatis.mapper.additional.BaseTest;
 import tk.mybatis.mapper.additional.Country;
-
 import java.io.IOException;
 import java.io.Reader;
 import java.net.URL;
@@ -21,9 +20,6 @@ public class UpdateByDifferMapperTest extends BaseTest {
         URL url = getClass().getResource("mybatis-config.xml");
         return toReader(url);
     }
-
-    ;
-
 
     @Test
     public void testUpdateByDiffer() {
@@ -46,5 +42,4 @@ public class UpdateByDifferMapperTest extends BaseTest {
             sqlSession.close();
         }
     }
-
 }

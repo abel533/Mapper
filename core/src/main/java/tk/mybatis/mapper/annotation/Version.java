@@ -21,12 +21,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package tk.mybatis.mapper.annotation;
 
 import tk.mybatis.mapper.version.DefaultNextVersion;
 import tk.mybatis.mapper.version.NextVersion;
-
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -36,7 +34,7 @@ import java.lang.annotation.Target;
  * @author liuzh
  * @since 3.5.0
  */
-@Target({ElementType.FIELD, ElementType.METHOD})
+@Target({ ElementType.FIELD, ElementType.METHOD })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Version {
 
@@ -46,5 +44,4 @@ public @interface Version {
      * @return
      */
     Class<? extends NextVersion> nextVersion() default DefaultNextVersion.class;
-
 }

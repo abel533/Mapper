@@ -21,7 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package tk.mybatis.mapper.common;
 
 import tk.mybatis.mapper.common.example.*;
@@ -33,12 +32,5 @@ import tk.mybatis.mapper.common.example.*;
  * @author liuzh
  */
 @tk.mybatis.mapper.annotation.RegisterMapper
-public interface ExampleMapper<T> extends
-        SelectByExampleMapper<T>,
-        SelectOneByExampleMapper<T>,
-        SelectCountByExampleMapper<T>,
-        DeleteByExampleMapper<T>,
-        UpdateByExampleMapper<T>,
-        UpdateByExampleSelectiveMapper<T> {
-
+public interface ExampleMapper<T> extends SelectByExampleMapper<T>, SelectOneByExampleMapper<T>, SelectCountByExampleMapper<T>, DeleteByExampleMapper<T>, UpdateByExampleMapper<T>, UpdateByExampleSelectiveMapper<T> {
 }

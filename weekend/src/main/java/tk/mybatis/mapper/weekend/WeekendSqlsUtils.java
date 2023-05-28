@@ -22,7 +22,6 @@
  * THE SOFTWARE.
  *
  */
-
 package tk.mybatis.mapper.weekend;
 
 /**
@@ -161,7 +160,7 @@ public class WeekendSqlsUtils {
     }
 
     public static <T> WeekendSqls<T> andNotLike(Fn<T, Object> fn, String value) {
-        return WeekendSqls.<T>custom().andNotLike(fn ,value);
+        return WeekendSqls.<T>custom().andNotLike(fn, value);
     }
 
     public static <T> WeekendSqls<T> orIsNull(String property) {
@@ -275,5 +274,4 @@ public class WeekendSqlsUtils {
     public static <T> WeekendSqls<T> orNotLike(Fn<T, Object> fn, String value) {
         return WeekendSqls.<T>custom().orNotLike(fn, value);
     }
-
 }

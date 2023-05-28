@@ -72,5 +72,4 @@ public class SafeUpdateByFieldTest extends BaseTest {
             sqlSession.close();
         }
     }
-
 }

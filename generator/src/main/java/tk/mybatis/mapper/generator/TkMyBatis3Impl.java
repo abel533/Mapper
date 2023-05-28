@@ -21,14 +21,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package tk.mybatis.mapper.generator;
 
 import org.mybatis.generator.codegen.mybatis3.IntrospectedTableMyBatis3Impl;
 import org.mybatis.generator.internal.util.StringUtility;
-
 import java.text.MessageFormat;
-
 import static org.mybatis.generator.internal.util.StringUtility.stringHasValue;
 
 /**
@@ -57,10 +54,12 @@ public class TkMyBatis3Impl extends IntrospectedTableMyBatis3Impl {
             }
             //支持mapperName = "{0}Dao" 等用法
             sb.append(MessageFormat.format(mapperName, fullyQualifiedTable.getDomainObjectName()));
-            sb.append(".xml"); //$NON-NLS-1$
+            //$NON-NLS-1$
+            sb.append(".xml");
         } else {
             sb.append(fullyQualifiedTable.getDomainObjectName());
-            sb.append("Mapper.xml"); //$NON-NLS-1$
+            //$NON-NLS-1$
+            sb.append("Mapper.xml");
         }
         return sb.toString();
     }
@@ -70,7 +69,6 @@ public class TkMyBatis3Impl extends IntrospectedTableMyBatis3Impl {
         if (context.getJavaClientGeneratorConfiguration() == null) {
             return;
         }
-
         StringBuilder sb = new StringBuilder();
         sb.append(this.calculateJavaClientInterfacePackage());
         sb.append('.');
@@ -82,11 +80,9 @@ public class TkMyBatis3Impl extends IntrospectedTableMyBatis3Impl {
                 sb.append(this.fullyQualifiedTable.getDomainObjectSubPackage());
                 sb.append('.');
             }
-
             sb.append(this.fullyQualifiedTable.getDomainObjectName());
             sb.append("Mapper");
         }
-
         this.setMyBatis3JavaMapperType(sb.toString());
         sb.setLength(0);
         sb.append(this.calculateJavaClientInterfacePackage());
@@ -99,11 +95,9 @@ public class TkMyBatis3Impl extends IntrospectedTableMyBatis3Impl {
                 sb.append(this.fullyQualifiedTable.getDomainObjectSubPackage());
                 sb.append('.');
             }
-
             sb.append(this.fullyQualifiedTable.getDomainObjectName());
             sb.append("SqlProvider");
         }
-
         this.setMyBatis3SqlProviderType(sb.toString());
         sb.setLength(0);
         sb.append(this.calculateDynamicSqlSupportPackage());
@@ -115,11 +109,9 @@ public class TkMyBatis3Impl extends IntrospectedTableMyBatis3Impl {
                 sb.append(this.fullyQualifiedTable.getDomainObjectSubPackage());
                 sb.append('.');
             }
-
             sb.append(this.fullyQualifiedTable.getDomainObjectName());
             sb.append("DynamicSqlSupport");
         }
-
         this.setMyBatisDynamicSqlSupportType(sb.toString());
         if (StringUtility.stringHasValue(this.tableConfiguration.getDynamicSqlTableObjectName())) {
             this.setMyBatisDynamicSQLTableObjectName(this.tableConfiguration.getDynamicSqlTableObjectName());

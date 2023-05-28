@@ -21,13 +21,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package tk.mybatis.mapper.code;
 
 /**
  * @author liuzh
  */
 public enum IdentityDialect {
+
     DB2("VALUES IDENTITY_VAL_LOCAL()"),
     MYSQL("SELECT LAST_INSERT_ID()"),
     SQLSERVER("SELECT SCOPE_IDENTITY()"),

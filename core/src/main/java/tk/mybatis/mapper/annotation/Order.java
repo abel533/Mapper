@@ -9,10 +9,11 @@ import java.lang.annotation.Target;
  * @description: 字段排序
  * @author: qrqhuangcy
  * @date: 2018-11-11
- **/
-@Target({ElementType.FIELD, ElementType.METHOD})
+ */
+@Target({ ElementType.FIELD, ElementType.METHOD })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Order {
+
     /**
      * 升降序
      *

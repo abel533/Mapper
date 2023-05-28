@@ -22,7 +22,6 @@
  * THE SOFTWARE.
  *
  */
-
 package tk.mybatis.mapper.weekend;
 
 import org.apache.ibatis.io.Resources;
@@ -36,7 +35,6 @@ import tk.mybatis.mapper.common.MySqlMapper;
 import tk.mybatis.mapper.common.SqlServerMapper;
 import tk.mybatis.mapper.entity.Config;
 import tk.mybatis.mapper.mapperhelper.MapperHelper;
-
 import java.io.IOException;
 import java.io.Reader;
 import java.sql.Connection;
@@ -47,6 +45,7 @@ import java.sql.Connection;
  * Update: liuzh(2014-06-06 13:33)
  */
 public class MybatisHelper {
+
     private static SqlSessionFactory sqlSessionFactory;
 
     static {
@@ -97,7 +96,6 @@ public class MybatisHelper {
                 //配置完成后，执行下面的操作
                 mapperHelper.processConfiguration(session.getConfiguration());
                 //OK - mapperHelper的任务已经完成，可以不管了
-
                 Connection conn = session.getConnection();
                 reader = Resources.getResourceAsReader("CreateDB.sql");
                 ScriptRunner runner = new ScriptRunner(conn);

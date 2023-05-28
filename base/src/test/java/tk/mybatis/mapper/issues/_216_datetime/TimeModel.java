@@ -10,11 +10,16 @@ import java.util.Date;
  */
 @Table(name = "test_timestamp")
 public class TimeModel implements Serializable {
+
     private static final long serialVersionUID = 1L;
+
     @Id
     private Integer id;
+
     private Date testDate;
+
     private Date testTime;
+
     private Date testDatetime;
 
     public Integer getId() {

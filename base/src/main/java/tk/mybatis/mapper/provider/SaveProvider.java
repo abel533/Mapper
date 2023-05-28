@@ -4,7 +4,6 @@ import org.apache.ibatis.mapping.MappedStatement;
 import tk.mybatis.mapper.MapperException;
 import tk.mybatis.mapper.entity.EntityColumn;
 import tk.mybatis.mapper.mapperhelper.*;
-
 import java.lang.reflect.Field;
 import java.util.Set;
 
@@ -15,7 +14,6 @@ import java.util.Set;
  */
 public class SaveProvider extends MapperTemplate {
 
-
     public SaveProvider(Class<?> mapperClass, MapperHelper mapperHelper) {
         super(mapperClass, mapperHelper);
     }
@@ -25,15 +23,13 @@ public class SaveProvider extends MapperTemplate {
      * @param ms
      * @return
      */
-    public String save(MappedStatement ms){
-
+    public String save(MappedStatement ms) {
         Class<?> entityClass = getEntityClass(ms);
         Field[] fields = entityClass.getFields();
         StringBuilder sql = new StringBuilder();
-
         Set<EntityColumn> columnList = EntityHelper.getPKColumns(entityClass);
         if (columnList.size() == 1) {
-            EntityColumn column = (EntityColumn)columnList.iterator().next();
+            EntityColumn column = (EntityColumn) columnList.iterator().next();
             String id = column.getColumn();
             sql.append("<choose>");
             sql.append("<when test='" + id + "!=null'>");
@@ -95,7 +91,7 @@ public class SaveProvider extends MapperTemplate {
         return sql.toString();
     }
 
-    private void processKey(StringBuilder sql, Class<?> entityClass, MappedStatement ms, Set<EntityColumn> columnList){
+    private void processKey(StringBuilder sql, Class<?> entityClass, MappedStatement ms, Set<EntityColumn> columnList) {
         //Identity列只能有一个
         Boolean hasIdentityKey = false;
         //先处理cache或bind节点
@@ -116,7 +112,7 @@ public class SaveProvider extends MapperTemplate {
                 //插入selectKey
                 SelectKeyHelper.newSelectKeyMappedStatement(ms, column, entityClass, isBEFORE(), getIDENTITY(column));
                 hasIdentityKey = true;
-            } else if(column.getGenIdClass() != null){
+            } else if (column.getGenIdClass() != null) {
                 sql.append("<bind name=\"").append(column.getColumn()).append("GenIdBind\" value=\"@tk.mybatis.mapper.genid.GenIdUtil@genId(");
                 sql.append("_parameter").append(", '").append(column.getProperty()).append("'");
                 sql.append(", @").append(column.getGenIdClass().getName()).append("@class");
@@ -124,7 +120,6 @@ public class SaveProvider extends MapperTemplate {
                 sql.append(", '").append(column.getColumn()).append("')");
                 sql.append("\"/>");
             }
-
         }
     }
 }

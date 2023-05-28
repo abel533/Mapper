@@ -21,13 +21,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package tk.mybatis.mapper.common.special;
 
 import org.apache.ibatis.annotations.InsertProvider;
 import org.apache.ibatis.annotations.Options;
 import tk.mybatis.mapper.provider.SpecialProvider;
-
 import java.util.List;
 
 /**
@@ -48,5 +46,4 @@ public interface InsertListMapper<T> {
     @Options(useGeneratedKeys = true)
     @InsertProvider(type = SpecialProvider.class, method = "dynamicSQL")
     int insertList(List<? extends T> recordList);
-
 }

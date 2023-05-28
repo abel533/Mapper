@@ -21,7 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package tk.mybatis.sample;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,12 +29,11 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import tk.mybatis.sample.domain.Country;
 import tk.mybatis.sample.mapper.CountryMapper;
-
 import java.util.List;
 
 @SpringBootApplication
-//@MapperScan(basePackages = "tk.mybatis.sample", annotationClass = Mapper.class )
-public class SampleXmlApplication implements CommandLineRunner {
+public class //@MapperScan(basePackages = "tk.mybatis.sample", annotationClass = Mapper.class )
+SampleXmlApplication implements CommandLineRunner {
 
     @Autowired
     private CountryMapper countryMapper;
@@ -57,5 +55,4 @@ public class SampleXmlApplication implements CommandLineRunner {
             System.out.println("Country Name: " + country.getCountryname());
         }
     }
-
 }

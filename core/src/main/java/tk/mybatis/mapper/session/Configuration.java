@@ -3,7 +3,6 @@ package tk.mybatis.mapper.session;
 import org.apache.ibatis.mapping.MappedStatement;
 import tk.mybatis.mapper.entity.Config;
 import tk.mybatis.mapper.mapperhelper.MapperHelper;
-
 import java.util.Properties;
 
 /**
@@ -63,5 +62,4 @@ public class Configuration extends org.apache.ibatis.session.Configuration {
             throw new RuntimeException(e);
         }
     }
-
 }

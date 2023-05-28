@@ -21,7 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package tk.mybatis.mapper.mapperhelper;
 
 import org.apache.ibatis.executor.keygen.Jdbc3KeyGenerator;
@@ -34,7 +33,6 @@ import org.apache.ibatis.session.Configuration;
 import tk.mybatis.mapper.code.ORDER;
 import tk.mybatis.mapper.entity.EntityColumn;
 import tk.mybatis.mapper.util.MetaObjectUtil;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -65,7 +63,6 @@ public class SelectKeyHelper {
             keyGenerator = new Jdbc3KeyGenerator();
         } else {
             SqlSource sqlSource = new RawSqlSource(configuration, IDENTITY, entityClass);
-
             MappedStatement.Builder statementBuilder = new MappedStatement.Builder(configuration, keyId, sqlSource, SqlCommandType.SELECT);
             statementBuilder.resource(ms.getResource());
             statementBuilder.fetchSize(null);
@@ -78,30 +75,17 @@ public class SelectKeyHelper {
             statementBuilder.resultOrdered(false);
             statementBuilder.resulSets(null);
             statementBuilder.timeout(configuration.getDefaultStatementTimeout());
-
             List<ParameterMapping> parameterMappings = new ArrayList<ParameterMapping>();
-            ParameterMap.Builder inlineParameterMapBuilder = new ParameterMap.Builder(
-                    configuration,
-                    statementBuilder.id() + "-Inline",
-                    entityClass,
-                    parameterMappings);
+            ParameterMap.Builder inlineParameterMapBuilder = new ParameterMap.Builder(configuration, statementBuilder.id() + "-Inline", entityClass, parameterMappings);
             statementBuilder.parameterMap(inlineParameterMapBuilder.build());
-
             List<ResultMap> resultMaps = new ArrayList<ResultMap>();
-            ResultMap.Builder inlineResultMapBuilder = new ResultMap.Builder(
-                    configuration,
-                    statementBuilder.id() + "-Inline",
-                    column.getJavaType(),
-                    new ArrayList<ResultMapping>(),
-                    null);
+            ResultMap.Builder inlineResultMapBuilder = new ResultMap.Builder(configuration, statementBuilder.id() + "-Inline", column.getJavaType(), new ArrayList<ResultMapping>(), null);
             resultMaps.add(inlineResultMapBuilder.build());
             statementBuilder.resultMaps(resultMaps);
             statementBuilder.resultSetType(null);
-
             statementBuilder.flushCacheRequired(false);
             statementBuilder.useCache(false);
             statementBuilder.cache(null);
-
             MappedStatement statement = statementBuilder.build();
             try {
                 configuration.addMappedStatement(statement);

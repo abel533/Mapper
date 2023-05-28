@@ -22,7 +22,6 @@
  * THE SOFTWARE.
  *
  */
-
 package tk.mybatis.mapper.weekend;
 
 import tk.mybatis.mapper.util.Sqls;
@@ -34,6 +33,7 @@ import tk.mybatis.mapper.weekend.reflection.Reflections;
  * @author XuYin
  */
 public class WeekendSqls<T> implements tk.mybatis.mapper.entity.SqlsCriteria {
+
     private Criteria criteria;
 
     private WeekendSqls() {

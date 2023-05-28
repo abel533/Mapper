@@ -21,7 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package tk.mybatis.mapper.test.country;
 
 import org.apache.ibatis.session.SqlSession;
@@ -48,7 +47,6 @@ public class TestCache {
             country = mapper.selectOne(country);
             //只有close才会真正缓存，而不是用一级缓存
             sqlSession.close();
-
             //======================================================================
             sqlSession = MybatisHelper.getSqlSession();
             mapper = sqlSession.getMapper(CachedCountryMapper.class);
@@ -71,7 +69,6 @@ public class TestCache {
             sqlSession.selectOne("selectCache", 35);
             //只有close才会真正缓存，而不是用一级缓存
             sqlSession.close();
-
             //======================================================================
             sqlSession = MybatisHelper.getSqlSession();
             sqlSession.selectOne("selectCache", 35);

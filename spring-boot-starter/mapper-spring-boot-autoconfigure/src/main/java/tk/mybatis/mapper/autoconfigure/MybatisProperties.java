@@ -23,7 +23,6 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternResolver;
 import tk.mybatis.spring.annotation.BaseProperties;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -93,7 +92,7 @@ public class MybatisProperties extends BaseProperties {
      * @since 1.1.0
      */
     public String getConfigLocation() {
-        return this.configLocation;
+        return retrieveLocation();
     }
 
     /**
@@ -105,7 +104,7 @@ public class MybatisProperties extends BaseProperties {
 
     @Deprecated
     public String getConfig() {
-        return this.configLocation;
+        return retrieveLocation();
     }
 
     @Deprecated
@@ -207,4 +206,7 @@ public class MybatisProperties extends BaseProperties {
         }
     }
 
+    private String retrieveLocation() {
+        return this.configLocation;
+    }
 }

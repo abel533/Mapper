@@ -22,13 +22,13 @@
  * THE SOFTWARE.
  *
  */
-
 package tk.mybatis.mapper.weekend.reflection;
 
 /**
  * @author Frank
  */
 public class ReflectionOperationException extends RuntimeException {
+
     public ReflectionOperationException() {
     }
 

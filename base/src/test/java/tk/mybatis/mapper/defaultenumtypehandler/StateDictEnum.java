@@ -4,8 +4,8 @@ package tk.mybatis.mapper.defaultenumtypehandler;
  * @author liuzh
  */
 public enum StateDictEnum implements Dict {
-    enabled(1),
-    disabled(2);
+
+    enabled(1), disabled(2);
 
     private int value;
 
@@ -22,5 +22,4 @@ public enum StateDictEnum implements Dict {
     public String getName() {
         return name();
     }
-
 }

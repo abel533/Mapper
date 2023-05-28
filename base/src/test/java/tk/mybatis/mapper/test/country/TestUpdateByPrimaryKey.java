@@ -21,7 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package tk.mybatis.mapper.test.country;
 
 import org.apache.ibatis.session.SqlSession;
@@ -81,7 +80,6 @@ public class TestUpdateByPrimaryKey {
             country.setCountryname(null);
             country.setCountryname("美国");
             Assert.assertEquals(1, mapper.updateByPrimaryKey(country));
-
             country = mapper.selectByPrimaryKey(174);
             Assert.assertNotNull(country);
             Assert.assertEquals(174, (int) country.getId());
@@ -100,9 +98,7 @@ public class TestUpdateByPrimaryKey {
         SqlSession sqlSession = MybatisHelper.getSqlSession();
         try {
             CountryMapper mapper = sqlSession.getMapper(CountryMapper.class);
-
             Assert.assertEquals(0, mapper.updateByPrimaryKey(new Key()));
-
             Key key = new Key();
             key.setId(174);
             key.setCountrycode("CN");
@@ -126,21 +122,16 @@ public class TestUpdateByPrimaryKey {
             Assert.assertEquals(new Integer(1), country.getVersion());
             country.setCountryname("美国2");
             Assert.assertEquals(1, mapper.updateByPrimaryKey(country));
-
             country = mapper.selectByPrimaryKey(174);
             Assert.assertNotNull(country);
             Assert.assertEquals(new Integer(2), country.getVersion());
-
             country.setCountryname("美国3");
             Assert.assertEquals(1, mapper.updateByPrimaryKey(country));
-
             country = mapper.selectByPrimaryKey(174);
             Assert.assertNotNull(country);
             Assert.assertEquals(new Integer(3), country.getVersion());
-
             country.setCountryname("美国4");
             Assert.assertEquals(1, mapper.updateByPrimaryKey(country));
-
             country = mapper.selectByPrimaryKey(174);
             Assert.assertNotNull(country);
             Assert.assertEquals(new Integer(4), country.getVersion());
@@ -150,6 +141,7 @@ public class TestUpdateByPrimaryKey {
     }
 
     class Key extends Country {
+
         private String countrytel;
 
         public String getCountrytel() {

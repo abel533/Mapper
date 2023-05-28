@@ -11,8 +11,7 @@ import java.lang.annotation.Target;
  * @author liuzh
  * @since 3.6.0
  */
-@Target({ElementType.TYPE})
+@Target({ ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface RegisterMapper {
-
 }

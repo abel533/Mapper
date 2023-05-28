@@ -21,7 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package tk.mybatis.mapper.generator;
 
 import org.mybatis.generator.api.GeneratedJavaFile;
@@ -39,7 +38,6 @@ import tk.mybatis.mapper.generator.formatter.ListTemplateFormatter;
 import tk.mybatis.mapper.generator.formatter.TemplateFormatter;
 import tk.mybatis.mapper.generator.model.TableClass;
 import tk.mybatis.mapper.generator.model.TableColumnBuilder;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -64,39 +62,49 @@ import java.util.*;
  * @since 3.4.5
  */
 public class TemplateFilePlugin extends PluginAdapter {
+
     /**
      * 默认的模板格式化类
      */
     public static final String DEFAULT_TEMPLATEFORMATTER = "tk.mybatis.mapper.generator.formatter.FreemarkerTemplateFormatter";
+
     /**
      * 单个文件模式
      */
     private String singleMode;
+
     /**
      * 项目路径（目录需要已经存在）
      */
     private String targetProject;
+
     /**
      * 生成的包（路径不存在则创建）
      */
     private String targetPackage;
+
     /**
      * 模板路径
      */
     private String templatePath;
+
     /**
      * 模板内容
      */
     private String templateContent;
+
     /**
      * 文件名模板，通过模板方式生成文件名，包含后缀
      */
     private String fileName;
+
     /**
      * 模板生成器
      */
     private Object templateFormatter;
+
     private String templateFormatterClass;
+
     private Set<TableClass> cacheTables;
 
     /**

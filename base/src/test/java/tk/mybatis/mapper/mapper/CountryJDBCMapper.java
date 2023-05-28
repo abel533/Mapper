@@ -21,7 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package tk.mybatis.mapper.mapper;
 
 import tk.mybatis.mapper.common.SqlServerMapper;
@@ -31,5 +30,6 @@ import tk.mybatis.mapper.model.CountryJDBC;
  * Created by liuzh on 2014/11/19.
  */
 public interface CountryJDBCMapper extends SqlServerMapper<CountryJDBC> {
+
     int insertA(CountryJDBC countryJDBC);
 }

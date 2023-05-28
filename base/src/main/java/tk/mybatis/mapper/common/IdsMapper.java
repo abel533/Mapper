@@ -21,7 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package tk.mybatis.mapper.common;
 
 import tk.mybatis.mapper.common.ids.DeleteByIdsMapper;
@@ -35,5 +34,4 @@ import tk.mybatis.mapper.common.ids.SelectByIdsMapper;
  */
 @tk.mybatis.mapper.annotation.RegisterMapper
 public interface IdsMapper<T> extends SelectByIdsMapper<T>, DeleteByIdsMapper<T> {
-
 }

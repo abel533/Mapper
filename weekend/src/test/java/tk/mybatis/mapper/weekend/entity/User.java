@@ -22,7 +22,6 @@
  * THE SOFTWARE.
  *
  */
-
 package tk.mybatis.mapper.weekend.entity;
 
 import javax.persistence.Table;
@@ -32,7 +31,9 @@ import javax.persistence.Table;
  */
 @Table(name = "user")
 public class User {
+
     private Long id;
+
     private String userName;
 
     public Long getId() {

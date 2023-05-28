@@ -4,7 +4,6 @@ import org.apache.ibatis.session.SqlSession;
 import org.junit.Assert;
 import org.junit.Test;
 import tk.mybatis.mapper.additional.BaseTest;
-
 import java.io.IOException;
 import java.io.Reader;
 import java.net.URL;
@@ -76,8 +75,7 @@ public class SelectByPropertyMapperTest extends BaseTest {
         SqlSession sqlSession = getSqlSession();
         try {
             BookMapper mapper = sqlSession.getMapper(BookMapper.class);
-            List<Book> books = mapper.selectBetweenByProperty(Book::getPublished, LocalDate.of(2015, 11, 11),
-                    LocalDate.of(2019, 11, 11));
+            List<Book> books = mapper.selectBetweenByProperty(Book::getPublished, LocalDate.of(2015, 11, 11), LocalDate.of(2019, 11, 11));
             Assert.assertEquals(4, books.size());
         } finally {
             sqlSession.close();
@@ -107,5 +105,4 @@ public class SelectByPropertyMapperTest extends BaseTest {
             sqlSession.close();
         }
     }
-
 }

@@ -21,7 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package tk.mybatis.mapper.test.country;
 
 import org.apache.ibatis.exceptions.PersistenceException;
@@ -73,7 +72,6 @@ public class TestUpdateByPrimaryKeySelective {
             country.setId(173);
             country.setCountryname("英国");
             Assert.assertEquals(1, mapper.updateByPrimaryKeySelective(country));
-
             country = mapper.selectByPrimaryKey(173);
             Assert.assertNotNull(country);
             Assert.assertEquals(173, (int) country.getId());
@@ -104,6 +102,7 @@ public class TestUpdateByPrimaryKeySelective {
     }
 
     class Key extends Country {
+
         private String countrytel;
 
         public String getCountrytel() {
@@ -114,5 +113,4 @@ public class TestUpdateByPrimaryKeySelective {
             this.countrytel = countrytel;
         }
     }
-
 }

@@ -22,7 +22,6 @@
  * THE SOFTWARE.
  *
  */
-
 package tk.mybatis.mapper.weekend.mapper;
 
 import tk.mybatis.mapper.common.Mapper;

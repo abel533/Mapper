@@ -51,11 +51,7 @@ public class DeletePropertyProvider extends MapperTemplate {
         sql.append("\">\n");
         String entityClassName = entityClass.getName();
         //通过实体类名获取运行时属性对应的字段
-        String ognl = new StringBuilder("${@")
-                .append(propertyHelper)
-                .append("@getColumnByProperty(@java.lang.Class@forName(\"")
-                .append(entityClassName)
-                .append("\"), @tk.mybatis.mapper.weekend.reflection.Reflections@fnToFieldName(fn))}").toString();
+        String ognl = new StringBuilder("${@").append(propertyHelper).append("@getColumnByProperty(@java.lang.Class@forName(\"").append(entityClassName).append("\"), @tk.mybatis.mapper.weekend.reflection.Reflections@fnToFieldName(fn))}").toString();
         sql.append(ognl + " = #{value}\n");
         sql.append("</if>\n");
         sql.append("</where>");
@@ -84,12 +80,7 @@ public class DeletePropertyProvider extends MapperTemplate {
         }
         sql.append("<where>\n");
         String entityClassName = entityClass.getName();
-        String sqlSegment =
-                "${@" + propertyHelper + "@getColumnByProperty(@java.lang.Class@forName(\"" + entityClassName + "\"),"
-                        + "@tk.mybatis.mapper.weekend.reflection.Reflections@fnToFieldName(fn))} in"
-                        + "<foreach open=\"(\" close=\")\" separator=\",\" collection=\"values\" item=\"obj\">\n"
-                        + "#{obj}\n"
-                        + "</foreach>\n";
+        String sqlSegment = "${@" + propertyHelper + "@getColumnByProperty(@java.lang.Class@forName(\"" + entityClassName + "\")," + "@tk.mybatis.mapper.weekend.reflection.Reflections@fnToFieldName(fn))} in" + "<foreach open=\"(\" close=\")\" separator=\",\" collection=\"values\" item=\"obj\">\n" + "#{obj}\n" + "</foreach>\n";
         sql.append(sqlSegment);
         // 逻辑删除的未删除查询条件
         sql.append(SqlHelper.whereLogicDelete(entityClass, false));
@@ -119,10 +110,7 @@ public class DeletePropertyProvider extends MapperTemplate {
         }
         sql.append("<where>\n");
         String entityClassName = entityClass.getName();
-        String sqlSegment =
-                "${@" + propertyHelper + "@getColumnByProperty(@java.lang.Class@forName(\"" + entityClassName + "\"),"
-                        + "@tk.mybatis.mapper.weekend.reflection.Reflections@fnToFieldName(fn))} "
-                        + "between #{begin} and #{end}";
+        String sqlSegment = "${@" + propertyHelper + "@getColumnByProperty(@java.lang.Class@forName(\"" + entityClassName + "\")," + "@tk.mybatis.mapper.weekend.reflection.Reflections@fnToFieldName(fn))} " + "between #{begin} and #{end}";
         sql.append(sqlSegment);
         // 逻辑删除的未删除查询条件
         sql.append(SqlHelper.whereLogicDelete(entityClass, false));

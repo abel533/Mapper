@@ -7,7 +7,6 @@ import org.junit.Test;
 import tk.mybatis.mapper.base.BaseTest;
 import tk.mybatis.mapper.base.Country;
 import tk.mybatis.mapper.base.CountryMapper;
-
 import java.io.IOException;
 import java.io.Reader;
 
@@ -40,10 +39,8 @@ public class CacheTest extends BaseTest {
         try {
             CountryMapper mapper = sqlSession.getMapper(CountryMapper.class);
             Country country = mapper.selectByPrimaryKey(35);
-
             Assert.assertEquals("China", country.getCountryname());
             Assert.assertEquals("CN", country.getCountrycode());
-
             Assert.assertNotEquals("中国", country.getCountryname());
             Assert.assertNotEquals("ZH", country.getCountrycode());
         } finally {
@@ -116,7 +113,6 @@ public class CacheTest extends BaseTest {
         } finally {
             sqlSession.close();
         }
-
         //--------------------selectById---------------------
         sqlSession = getSqlSession();
         try {
@@ -181,7 +177,6 @@ public class CacheTest extends BaseTest {
         } finally {
             sqlSession.close();
         }
-
         //--------------------selectById---------------------
         sqlSession = getSqlSession();
         try {
@@ -218,5 +213,4 @@ public class CacheTest extends BaseTest {
             sqlSession.close();
         }
     }
-
 }

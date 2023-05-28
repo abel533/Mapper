@@ -21,7 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package tk.mybatis.mapper.util;
 
 import org.apache.ibatis.cache.Cache;
@@ -55,7 +54,6 @@ public class MsUtil {
             return mapperClass;
         }
         ClassLoader[] classLoader = getClassLoaders();
-
         for (ClassLoader cl : classLoader) {
             if (null != cl) {
                 try {
@@ -76,7 +74,7 @@ public class MsUtil {
     }
 
     private static ClassLoader[] getClassLoaders() {
-        return new ClassLoader[]{Thread.currentThread().getContextClassLoader(), MsUtil.class.getClassLoader()};
+        return new ClassLoader[] { Thread.currentThread().getContextClassLoader(), MsUtil.class.getClassLoader() };
     }
 
     /**
@@ -98,5 +96,4 @@ public class MsUtil {
     public static String getMethodName(String msId) {
         return msId.substring(msId.lastIndexOf(".") + 1);
     }
-
 }

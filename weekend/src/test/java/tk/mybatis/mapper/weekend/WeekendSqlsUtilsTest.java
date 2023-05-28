@@ -22,7 +22,6 @@
  * THE SOFTWARE.
  *
  */
-
 package tk.mybatis.mapper.weekend;
 
 import org.apache.ibatis.session.SqlSession;
@@ -34,9 +33,7 @@ import tk.mybatis.mapper.entity.Example;
 import tk.mybatis.mapper.util.Sqls;
 import tk.mybatis.mapper.weekend.entity.Country;
 import tk.mybatis.mapper.weekend.mapper.CountryMapper;
-
 import java.util.List;
-
 import static tk.mybatis.mapper.weekend.WeekendSqlsUtils.andLike;
 
 /**
@@ -53,13 +50,8 @@ public class WeekendSqlsUtilsTest {
         SqlSession sqlSession = MybatisHelper.getSqlSession();
         try {
             CountryMapper mapper = sqlSession.getMapper(CountryMapper.class);
-
-            List<Country> selectByWeekendSql = mapper.selectByExample(new Example.Builder(Country.class)
-                    .where(andLike(Country::getCountryname, "China")).build());
-
-            List<Country> selectByExample = mapper.selectByExample(
-                    new Example.Builder(Country.class).where(Sqls.custom().andLike("countryname", "China")).build());
-
+            List<Country> selectByWeekendSql = mapper.selectByExample(new Example.Builder(Country.class).where(andLike(Country::getCountryname, "China")).build());
+            List<Country> selectByExample = mapper.selectByExample(new Example.Builder(Country.class).where(Sqls.custom().andLike("countryname", "China")).build());
             //判断两个结果数组内容是否相同
             Assert.assertArrayEquals(selectByExample.toArray(), selectByWeekendSql.toArray());
         } finally {
@@ -72,21 +64,12 @@ public class WeekendSqlsUtilsTest {
         SqlSession sqlSession = MybatisHelper.getSqlSession();
         try {
             CountryMapper mapper = sqlSession.getMapper(CountryMapper.class);
-
-            List<Country> selectByWeekendSql = mapper.selectByExample(new Example.Builder(Country.class)
-                    .where(andLike(Country::getCountryname, "%a%")
-                            .andGreaterThan(Country::getCountrycode, "123"))
-                    .build());
-
-
-            List<Country> selectByExample = mapper.selectByExample(new Example.Builder(Country.class)
-                    .where(Sqls.custom().andLike("countryname", "%a%").andGreaterThan("countrycode", "123")).build());
-
+            List<Country> selectByWeekendSql = mapper.selectByExample(new Example.Builder(Country.class).where(andLike(Country::getCountryname, "%a%").andGreaterThan(Country::getCountrycode, "123")).build());
+            List<Country> selectByExample = mapper.selectByExample(new Example.Builder(Country.class).where(Sqls.custom().andLike("countryname", "%a%").andGreaterThan("countrycode", "123")).build());
             // 判断两个结果数组内容是否相同
             Assert.assertArrayEquals(selectByExample.toArray(), selectByWeekendSql.toArray());
         } finally {
             sqlSession.close();
         }
     }
-
 }

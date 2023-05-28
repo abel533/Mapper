@@ -2,7 +2,6 @@ package tk.mybatis.mapper.keysql;
 
 import tk.mybatis.mapper.annotation.KeySql;
 import tk.mybatis.mapper.code.ORDER;
-
 import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -12,10 +11,12 @@ import javax.persistence.Table;
  */
 @Table(name = "user_auto_increment")
 public class UserSqlAfter {
+
     @Id
     @KeySql(sql = "SELECT LAST_INSERT_ID()", order = ORDER.AFTER)
     @Column(insertable = false)
     private Integer id;
+
     private String name;
 
     public Integer getId() {

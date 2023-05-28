@@ -21,7 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package tk.mybatis.mapper.test.othres;
 
 import org.junit.Assert;
@@ -34,14 +33,9 @@ import tk.mybatis.mapper.util.StringUtil;
  * @since 2015-10-31 09:41
  */
 public class StyleTest {
-    private String[] fields = new String[]{
-            "hello",
-            "hello_world",
-            //"hello_World",
-            "helloWorld",
-            "hello1",
-            "hello_1"
-    };
+
+    private String[] fields = new String[] { "hello", "hello_world", //"hello_World",
+    "helloWorld", "hello1", "hello_1" };
 
     @Test
     public void testNormal() {
@@ -84,5 +78,4 @@ public class StyleTest {
             System.out.println(field + " - " + StringUtil.convertByStyle(field, Style.camelhumpAndLowercase));
         }
     }
-
 }

@@ -21,7 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package tk.mybatis.mapper.test.identity;
 
 import org.apache.ibatis.session.SqlSession;
@@ -30,13 +29,13 @@ import org.junit.Test;
 import tk.mybatis.mapper.mapper.CountryIMapper;
 import tk.mybatis.mapper.mapper.MybatisHelper;
 import tk.mybatis.mapper.model.CountryI;
-
 import java.util.List;
 
 /**
  * Created by liuzh on 2014/11/21.
  */
 public class TestIndentity {
+
     /**
      * 插入完整数据
      */
@@ -70,12 +69,10 @@ public class TestIndentity {
             country.setCountrycode("CN");
             country.setCountryname("天朝");
             Assert.assertEquals(1, mapper.insert(country));
-
             //查询CN结果
             country = new CountryI();
             country.setCountrycode("CN");
             List<CountryI> list = mapper.select(country);
-
             Assert.assertEquals(1, list.size());
             Assert.assertNotNull(list.get(0).getCountryname());
             Assert.assertEquals("天朝", list.get(0).getCountryname());
@@ -123,12 +120,10 @@ public class TestIndentity {
             country.setCountrycode("CN");
             country.setCountryname("天朝");
             Assert.assertEquals(1, mapper.insertSelective(country));
-
             //查询CN结果
             country = new CountryI();
             country.setCountrycode("CN");
             List<CountryI> list = mapper.select(country);
-
             Assert.assertEquals(1, list.size());
             Assert.assertNotNull(list.get(0).getCountryname());
             Assert.assertEquals("天朝", list.get(0).getCountryname());

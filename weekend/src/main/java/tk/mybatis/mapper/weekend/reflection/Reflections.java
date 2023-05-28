@@ -22,11 +22,9 @@
  * THE SOFTWARE.
  *
  */
-
 package tk.mybatis.mapper.weekend.reflection;
 
 import tk.mybatis.mapper.weekend.Fn;
-
 import java.beans.Introspector;
 import java.lang.invoke.SerializedLambda;
 import java.lang.reflect.Method;
@@ -36,7 +34,9 @@ import java.util.regex.Pattern;
  * @author Frank
  */
 public class Reflections {
+
     private static final Pattern GET_PATTERN = Pattern.compile("^get[A-Z].*");
+
     private static final Pattern IS_PATTERN = Pattern.compile("^is[A-Z].*");
 
     private Reflections() {

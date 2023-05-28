@@ -21,11 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package tk.mybatis.mapper.generator.formatter;
 
 import tk.mybatis.mapper.generator.model.TableClass;
-
 import java.util.Properties;
 
 /**

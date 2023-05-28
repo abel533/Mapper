@@ -21,7 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package tk.mybatis.mapper.version;
 
 import java.util.Map;
@@ -67,5 +66,4 @@ public class VersionUtil {
             throw new VersionException("获取下一个版本号失败!", e);
         }
     }
-
 }

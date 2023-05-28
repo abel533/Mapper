@@ -21,12 +21,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package tk.mybatis.mapper.autoconfigure;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import tk.mybatis.mapper.entity.Config;
-
 
 /**
  * 这个类存在的主要目的是方便 IDE 自动提示 mapper. 开头的配置
@@ -36,5 +34,4 @@ import tk.mybatis.mapper.entity.Config;
  */
 @ConfigurationProperties(prefix = MapperProperties.PREFIX)
 public class MapperProperties extends Config {
-
 }

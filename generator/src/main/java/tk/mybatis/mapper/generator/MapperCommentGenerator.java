@@ -21,7 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package tk.mybatis.mapper.generator;
 
 import org.mybatis.generator.api.CommentGenerator;
@@ -32,7 +31,6 @@ import org.mybatis.generator.api.dom.xml.TextElement;
 import org.mybatis.generator.api.dom.xml.XmlElement;
 import org.mybatis.generator.config.MergeConstants;
 import org.mybatis.generator.internal.util.StringUtility;
-
 import java.text.MessageFormat;
 import java.util.Properties;
 import java.util.Set;
@@ -41,12 +39,16 @@ public class MapperCommentGenerator implements CommentGenerator {
 
     //开始的分隔符，例如mysql为`，sqlserver为[
     private String beginningDelimiter = "";
+
     //结束的分隔符，例如mysql为`，sqlserver为]
     private String endingDelimiter = "";
+
     //强制生成注解
     private boolean forceAnnotation;
+
     //是否生成swagger注解
     private boolean needsSwagger;
+
     //逻辑删除字段
     private String logicDeleteColumn = "";
 
@@ -171,9 +173,7 @@ public class MapperCommentGenerator implements CommentGenerator {
         }
         String column = introspectedColumn.getActualColumnName();
         if (StringUtility.stringContainsSpace(column) || introspectedTable.getTableConfiguration().isAllColumnDelimitingEnabled()) {
-            column = introspectedColumn.getContext().getBeginningDelimiter()
-                    + column
-                    + introspectedColumn.getContext().getEndingDelimiter();
+            column = introspectedColumn.getContext().getBeginningDelimiter() + column + introspectedColumn.getContext().getEndingDelimiter();
         }
         if (!column.equals(introspectedColumn.getJavaProperty())) {
             //@Column
@@ -183,12 +183,10 @@ public class MapperCommentGenerator implements CommentGenerator {
         } else if (forceAnnotation) {
             field.addAnnotation("@Column(name = \"" + getDelimiterName(column) + "\")");
         }
-
         // 添加逻辑删除注解
         if (column.equals(this.logicDeleteColumn)) {
             field.addAnnotation("@LogicDelete");
         }
-
         if (introspectedColumn.isIdentity()) {
             if ("JDBC".equals(introspectedTable.getTableConfiguration().getGeneratedKey().get().getRuntimeSqlStatement())) {
                 field.addAnnotation("@GeneratedValue(generator = \"JDBC\")");
@@ -201,7 +199,6 @@ public class MapperCommentGenerator implements CommentGenerator {
             String sql = MessageFormat.format(introspectedTable.getTableConfiguration().getGeneratedKey().get().getRuntimeSqlStatement(), tableName, tableName.toUpperCase());
             field.addAnnotation("@GeneratedValue(strategy = GenerationType.IDENTITY, generator = \"" + sql + "\")");
         }
-
         // region swagger注解
         if (this.needsSwagger) {
             String remarks = introspectedColumn.getRemarks();
@@ -226,7 +223,6 @@ public class MapperCommentGenerator implements CommentGenerator {
 
     @Override
     public void addModelClassComment(TopLevelClass topLevelClass, IntrospectedTable introspectedTable) {
-
     }
 
     /**
@@ -310,7 +306,6 @@ public class MapperCommentGenerator implements CommentGenerator {
      */
     @Override
     public void addGeneralMethodAnnotation(Method method, IntrospectedTable introspectedTable, Set<FullyQualifiedJavaType> set) {
-
     }
 
     /**
@@ -318,7 +313,6 @@ public class MapperCommentGenerator implements CommentGenerator {
      */
     @Override
     public void addGeneralMethodAnnotation(Method method, IntrospectedTable introspectedTable, IntrospectedColumn introspectedColumn, Set<FullyQualifiedJavaType> set) {
-
     }
 
     /**
@@ -326,7 +320,6 @@ public class MapperCommentGenerator implements CommentGenerator {
      */
     @Override
     public void addFieldAnnotation(Field field, IntrospectedTable introspectedTable, Set<FullyQualifiedJavaType> set) {
-
     }
 
     /**
@@ -334,7 +327,6 @@ public class MapperCommentGenerator implements CommentGenerator {
      */
     @Override
     public void addFieldAnnotation(Field field, IntrospectedTable introspectedTable, IntrospectedColumn introspectedColumn, Set<FullyQualifiedJavaType> set) {
-
     }
 
     /**
@@ -342,6 +334,5 @@ public class MapperCommentGenerator implements CommentGenerator {
      */
     @Override
     public void addClassAnnotation(InnerClass innerClass, IntrospectedTable introspectedTable, Set<FullyQualifiedJavaType> set) {
-
     }
 }

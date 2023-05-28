@@ -21,7 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package tk.mybatis.mapper.test.country;
 
 import org.apache.ibatis.session.SqlSession;
@@ -30,7 +29,6 @@ import org.junit.Test;
 import tk.mybatis.mapper.mapper.CountryMapper;
 import tk.mybatis.mapper.mapper.MybatisHelper;
 import tk.mybatis.mapper.model.Country;
-
 import java.util.List;
 
 /**
@@ -48,7 +46,6 @@ public class TestSelectAll {
         SqlSession sqlSession = MybatisHelper.getSqlSession();
         try {
             CountryMapper mapper = sqlSession.getMapper(CountryMapper.class);
-
             List<Country> countryList = mapper.selectAll();
             //查询总数
             Assert.assertEquals(183, countryList.size());
@@ -65,7 +62,6 @@ public class TestSelectAll {
         SqlSession sqlSession = MybatisHelper.getSqlSession();
         try {
             CountryMapper mapper = sqlSession.getMapper(CountryMapper.class);
-
             List<Country> countryList = mapper.selectAll();
             //查询总数
             Assert.assertEquals(183, countryList.size());

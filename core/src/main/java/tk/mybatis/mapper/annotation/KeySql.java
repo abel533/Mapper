@@ -21,14 +21,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package tk.mybatis.mapper.annotation;
 
 import tk.mybatis.mapper.code.IdentityDialect;
 import tk.mybatis.mapper.code.ORDER;
 import tk.mybatis.mapper.genid.GenId;
 import tk.mybatis.mapper.gensql.GenSql;
-
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -40,7 +38,7 @@ import java.lang.annotation.Target;
  * @author liuzh
  * @since 2015-10-29 22:00
  */
-@Target({ElementType.FIELD, ElementType.METHOD})
+@Target({ ElementType.FIELD, ElementType.METHOD })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface KeySql {
 
@@ -85,5 +83,4 @@ public @interface KeySql {
      * @return
      */
     Class<? extends GenId> genId() default GenId.NULL.class;
-
 }

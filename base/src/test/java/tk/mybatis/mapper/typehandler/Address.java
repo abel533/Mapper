@@ -6,8 +6,11 @@ import java.io.Serializable;
  * @author liuzh
  */
 public class Address implements Serializable {
+
     private static final long serialVersionUID = 1L;
+
     private String province;
+
     private String city;
 
     public String getProvince() {

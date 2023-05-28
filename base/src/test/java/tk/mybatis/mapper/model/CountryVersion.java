@@ -21,11 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package tk.mybatis.mapper.model;
 
 import tk.mybatis.mapper.annotation.Version;
-
 import javax.persistence.Table;
 
 /**
@@ -35,6 +33,7 @@ import javax.persistence.Table;
  */
 @Table(name = "country")
 public class CountryVersion extends Country {
+
     @Version
     private Integer version;
 
@@ -45,5 +44,4 @@ public class CountryVersion extends Country {
     public void setVersion(Integer version) {
         this.version = version;
     }
-
 }

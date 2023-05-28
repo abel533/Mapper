@@ -21,7 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package tk.mybatis.mapper.additional.insert;
 
 import org.apache.ibatis.mapping.MappedStatement;
@@ -30,7 +29,6 @@ import tk.mybatis.mapper.mapperhelper.EntityHelper;
 import tk.mybatis.mapper.mapperhelper.MapperHelper;
 import tk.mybatis.mapper.mapperhelper.MapperTemplate;
 import tk.mybatis.mapper.mapperhelper.SqlHelper;
-
 import java.util.Set;
 
 /**
@@ -87,5 +85,4 @@ public class InsertListProvider extends MapperTemplate {
         sql.append("</foreach>");
         return sql.toString();
     }
-
 }

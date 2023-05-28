@@ -21,7 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package tk.mybatis.mapper.common.ids;
 
 import org.apache.ibatis.annotations.DeleteProvider;
@@ -44,5 +43,4 @@ public interface DeleteByIdsMapper<T> {
      */
     @DeleteProvider(type = IdsProvider.class, method = "dynamicSQL")
     int deleteByIds(String ids);
-
 }

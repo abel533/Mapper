@@ -10,8 +10,8 @@ import tk.mybatis.mapper.common.Mapper;
  * namespace 有两种配置方法，参考下面两行注解
  */
 @CacheNamespaceRef(CountryCacheRefMapper.class)
-//@CacheNamespaceRef(name = "tk.mybatis.mapper.cache.CountryCacheRefMapper")
-public interface CountryCacheRefMapper extends Mapper<Country> {
+public interface //@CacheNamespaceRef(name = "tk.mybatis.mapper.cache.CountryCacheRefMapper")
+CountryCacheRefMapper extends Mapper<Country> {
 
     /**
      * 定义在 XML 中的方法

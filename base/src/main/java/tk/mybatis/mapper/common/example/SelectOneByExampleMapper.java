@@ -21,7 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package tk.mybatis.mapper.common.example;
 
 import org.apache.ibatis.annotations.SelectProvider;
@@ -44,5 +43,4 @@ public interface SelectOneByExampleMapper<T> {
      */
     @SelectProvider(type = ExampleProvider.class, method = "dynamicSQL")
     T selectOneByExample(Object example);
-
 }

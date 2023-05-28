@@ -21,14 +21,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package tk.mybatis.mapper.provider.base;
 
 import org.apache.ibatis.mapping.MappedStatement;
 import tk.mybatis.mapper.MapperException;
 import tk.mybatis.mapper.entity.EntityColumn;
 import tk.mybatis.mapper.mapperhelper.*;
-
 import java.util.Set;
 
 /**
@@ -104,7 +102,6 @@ public class BaseInsertProvider extends MapperTemplate {
             }
         }
         sql.append("</trim>");
-
         sql.append("<trim prefix=\"VALUES(\" suffix=\")\" suffixOverrides=\",\">");
         for (EntityColumn column : columnList) {
             if (!column.isInsertable()) {
@@ -161,7 +158,6 @@ public class BaseInsertProvider extends MapperTemplate {
                 sql.append(", '").append(column.getColumn()).append("')");
                 sql.append("\"/>");
             }
-
         }
     }
 }

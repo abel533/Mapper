@@ -21,14 +21,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package tk.mybatis.mapper.additional.update.force;
 
 import org.apache.ibatis.session.SqlSession;
 import org.junit.Assert;
 import org.junit.Test;
 import tk.mybatis.mapper.additional.BaseTest;
-
 import java.io.IOException;
 import java.io.Reader;
 import java.net.URL;
@@ -51,8 +49,6 @@ public class UpdateByPrimaryKeySelectiveForceTest extends BaseTest {
         return toReader(url);
     }
 
-    ;
-
     /**
      * 获取初始化 sql
      *
@@ -72,7 +68,6 @@ public class UpdateByPrimaryKeySelectiveForceTest extends BaseTest {
             country.setId(174);
             country.setCountryname("英国");
             mapper.updateByPrimaryKeySelectiveForce(country, null);
-
             country = mapper.selectByPrimaryKey(174);
             Assert.assertNotNull(country.getCountrycode());
         } finally {
@@ -88,7 +83,6 @@ public class UpdateByPrimaryKeySelectiveForceTest extends BaseTest {
             CountryInt country = new CountryInt();
             country.setId(174);
             mapper.updateByPrimaryKeySelectiveForce(country, Arrays.asList("countrycode", "countryname"));
-
             country = mapper.selectByPrimaryKey(174);
             Assert.assertNull(country.getCountrycode());
             Assert.assertNull(country.getCountryname());

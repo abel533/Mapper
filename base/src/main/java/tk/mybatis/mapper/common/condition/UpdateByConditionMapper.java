@@ -21,7 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package tk.mybatis.mapper.common.condition;
 
 import org.apache.ibatis.annotations.Param;
@@ -46,5 +45,4 @@ public interface UpdateByConditionMapper<T> {
      */
     @UpdateProvider(type = ConditionProvider.class, method = "dynamicSQL")
     int updateByCondition(@Param("record") T record, @Param("example") Object condition);
-
 }

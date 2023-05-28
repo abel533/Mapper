@@ -21,7 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package tk.mybatis.mapper.version;
 
 /**
@@ -29,6 +28,7 @@ package tk.mybatis.mapper.version;
  * @since 3.5.0
  */
 public class VersionException extends RuntimeException {
+
     public VersionException() {
         super();
     }
@@ -44,5 +44,4 @@ public class VersionException extends RuntimeException {
     public VersionException(Throwable cause) {
         super(cause);
     }
-
 }

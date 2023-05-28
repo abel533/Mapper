@@ -8,5 +8,4 @@ public interface Dict {
     int getValue();
 
     String getName();
-
 }

@@ -14,12 +14,7 @@ public class TbUserLogicDelete extends BaseLogicDelete {
 
     @Override
     public String toString() {
-        return "TbUser{" +
-                "id=" + id +
-                ", username='" + username + '\'' +
-                ", password='" + password + '\'' +
-                ", isValid=" + isValid +
-                '}';
+        return "TbUser{" + "id=" + id + ", username='" + username + '\'' + ", password='" + password + '\'' + ", isValid=" + isValid + '}';
     }
 
     public String getUsername() {
@@ -37,5 +32,4 @@ public class TbUserLogicDelete extends BaseLogicDelete {
     public void setPassword(String password) {
         this.password = password;
     }
-
 }

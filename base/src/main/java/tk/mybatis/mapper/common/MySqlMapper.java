@@ -21,7 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package tk.mybatis.mapper.common;
 
 import tk.mybatis.mapper.common.special.InsertListMapper;
@@ -34,8 +33,5 @@ import tk.mybatis.mapper.common.special.InsertUseGeneratedKeysMapper;
  * @author liuzh
  */
 @tk.mybatis.mapper.annotation.RegisterMapper
-public interface MySqlMapper<T> extends
-        InsertListMapper<T>,
-        InsertUseGeneratedKeysMapper<T> {
-
+public interface MySqlMapper<T> extends InsertListMapper<T>, InsertUseGeneratedKeysMapper<T> {
 }

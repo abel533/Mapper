@@ -20,12 +20,7 @@ public class TbUser {
 
     @Override
     public String toString() {
-        return "TbUser{" +
-                "id=" + id +
-                ", username='" + username + '\'' +
-                ", password='" + password + '\'' +
-                ", isValid=" + isValid +
-                '}';
+        return "TbUser{" + "id=" + id + ", username='" + username + '\'' + ", password='" + password + '\'' + ", isValid=" + isValid + '}';
     }
 
     public Integer getId() {

@@ -21,7 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package tk.mybatis.mapper.test.country;
 
 import org.apache.ibatis.session.SqlSession;
@@ -30,7 +29,6 @@ import org.junit.Test;
 import tk.mybatis.mapper.mapper.CountryMapper;
 import tk.mybatis.mapper.mapper.MybatisHelper;
 import tk.mybatis.mapper.model.Country;
-
 import java.util.List;
 
 /**
@@ -54,7 +52,6 @@ public class TestSelect {
             //countryList = mapper.select(country);
             //查询总数
             //Assert.assertEquals(2, countryList.size());
-
             country.setDynamicTableName123(null);
             countryList = mapper.select(country);
             //查询总数
@@ -77,7 +74,6 @@ public class TestSelect {
             List<Country> countryList = mapper.selectPage(country, 0, 10);
             //查询总数
             Assert.assertEquals(1, countryList.size());
-
             countryList = mapper.selectPage(null, 100, 10);
             //查询总数
             Assert.assertEquals(10, countryList.size());
@@ -131,7 +127,6 @@ public class TestSelect {
             Country country = new Country();
             country.setCountrycode("CN");
             List<Country> countryList = mapper.select(country);
-
             Assert.assertEquals(1, countryList.size());
             Assert.assertEquals(true, countryList.get(0).getId() == 35);
             Assert.assertEquals("China", countryList.get(0).getCountryname());
@@ -150,9 +145,9 @@ public class TestSelect {
             CountryMapper mapper = sqlSession.getMapper(CountryMapper.class);
             Country country = new Country();
             country.setCountrycode("CN");
-            country.setCountryname("天朝");//实际上是 China
+            //实际上是 China
+            country.setCountryname("天朝");
             List<Country> countryList = mapper.select(country);
-
             Assert.assertEquals(0, countryList.size());
         } finally {
             sqlSession.close();
@@ -169,7 +164,6 @@ public class TestSelect {
             CountryMapper mapper = sqlSession.getMapper(CountryMapper.class);
             //根据主键删除
             Assert.assertEquals(183, mapper.select(new Key()).size());
-
             Key key = new Key();
             key.setCountrycode("CN");
             key.setCountrytel("+86");
@@ -180,6 +174,7 @@ public class TestSelect {
     }
 
     class Key extends Country {
+
         private String countrytel;
 
         public String getCountrytel() {
@@ -190,5 +185,4 @@ public class TestSelect {
             this.countrytel = countrytel;
         }
     }
-
 }

@@ -21,13 +21,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package tk.mybatis.mapper.entity.model;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class CountryExample {
+
     protected String orderByClause;
 
     protected boolean distinct;
@@ -68,6 +68,7 @@ public class CountryExample {
     }
 
     protected abstract static class GeneratedCriteria {
+
         protected List<Criterion> criteria;
 
         protected GeneratedCriteria() {
@@ -297,15 +298,19 @@ public class CountryExample {
         }
 
         public List<Criterion> getAllCriteria() {
-            return criteria;
+            return getSearchCriteria();
         }
 
         public List<Criterion> getCriteria() {
-            return criteria;
+            return getSearchCriteria();
         }
 
         public boolean isValid() {
             return criteria.size() > 0;
+        }
+
+        private List<Criterion> getSearchCriteria() {
+            return criteria;
         }
     }
 
@@ -317,6 +322,7 @@ public class CountryExample {
     }
 
     public static class Criterion {
+
         private String condition;
 
         private Object value;

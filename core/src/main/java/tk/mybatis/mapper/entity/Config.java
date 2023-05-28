@@ -21,7 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package tk.mybatis.mapper.entity;
 
 import tk.mybatis.mapper.MapperException;
@@ -30,7 +29,6 @@ import tk.mybatis.mapper.code.Style;
 import tk.mybatis.mapper.mapperhelper.resolve.EntityResolve;
 import tk.mybatis.mapper.util.SimpleTypeUtil;
 import tk.mybatis.mapper.util.StringUtil;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -41,51 +39,68 @@ import java.util.Properties;
  * @author liuzh
  */
 public class Config {
+
     public static final String PREFIX = "mapper";
 
     private List<Class> mappers = new ArrayList<Class>();
+
     private String IDENTITY;
+
     private boolean BEFORE;
+
     private String seqFormat;
+
     private String catalog;
+
     private String schema;
+
     //校验调用Example方法时，Example(entityClass)和Mapper<EntityClass>是否一致
     private boolean checkExampleEntityClass;
+
     //使用简单类型
     //3.5.0 后默认值改为 true
     private boolean useSimpleType = true;
+
     /**
      * @since 3.5.0
      */
     private boolean enumAsSimpleType;
+
     /**
      * 是否支持方法上的注解，默认false
      */
     private boolean enableMethodAnnotation;
+
     /**
      * 对于一般的getAllIfColumnNode，是否判断!=''，默认不判断
      */
     private boolean notEmpty;
+
     /**
      * 字段转换风格，默认驼峰转下划线
      */
     private Style style;
+
     /**
      * 处理关键字，默认空，mysql可以设置为 `{0}`, sqlserver 为 [{0}]，{0} 代表的列名
      */
     private String wrapKeyword = "";
+
     /**
      * 配置解析器
      */
     private Class<? extends EntityResolve> resolveClass;
+
     /**
      * 安全删除，开启后，不允许删全表，如 delete from table
      */
     private boolean safeDelete;
+
     /**
      * 安全更新，开启后，不允许更新全表，如 update table set xx=?
      */
     private boolean safeUpdate;
+
     /**
      * 是否设置 javaType
      */
@@ -343,7 +358,6 @@ public class Config {
         if (StringUtil.isNotEmpty(schema)) {
             setSchema(schema);
         }
-
         //ORDER 有三个属性名可以进行配置
         String ORDER = properties.getProperty("ORDER");
         if (StringUtil.isNotEmpty(ORDER)) {
@@ -357,8 +371,6 @@ public class Config {
         if (StringUtil.isNotEmpty(ORDER)) {
             setBefore(Boolean.valueOf(ORDER));
         }
-
-
         this.notEmpty = Boolean.valueOf(properties.getProperty("notEmpty"));
         this.enableMethodAnnotation = Boolean.valueOf(properties.getProperty("enableMethodAnnotation"));
         this.checkExampleEntityClass = Boolean.valueOf(properties.getProperty("checkExampleEntityClass"));

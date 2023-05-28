@@ -21,7 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package tk.mybatis.mapper.test.example;
 
 import org.apache.ibatis.session.SqlSession;
@@ -36,7 +35,6 @@ import tk.mybatis.mapper.mapper.CountryMapper;
 import tk.mybatis.mapper.mapper.MybatisHelper;
 import tk.mybatis.mapper.model.Country;
 import tk.mybatis.mapper.model.Country2;
-
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -46,6 +44,7 @@ import java.util.Set;
  * @author liuzh
  */
 public class TestSelectByExample {
+
     @Rule
     public ExpectedException exception = ExpectedException.none();
 
@@ -101,9 +100,7 @@ public class TestSelectByExample {
         try {
             CountryMapper mapper = sqlSession.getMapper(CountryMapper.class);
             Example example = new Example(Country.class);
-            example.createCriteria()
-                    .andCondition("countryname like 'C%' and id < 100")
-                    .andCondition("length(countryname) = ", 5);
+            example.createCriteria().andCondition("countryname like 'C%' and id < 100").andCondition("length(countryname) = ", 5);
             List<Country> countries = mapper.selectByExample(example);
             //查询总数
             Assert.assertEquals(3, countries.size());
@@ -119,9 +116,8 @@ public class TestSelectByExample {
             CountryMapper mapper = sqlSession.getMapper(CountryMapper.class);
             Example example = new Example(Country.class);
             Set<Integer> set = new HashSet<Integer>();
-            set.addAll(Arrays.asList(new Integer[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11}));
-            example.createCriteria().andIn("id", set)
-                    .andNotIn("id", Arrays.asList(new Object[]{11}));
+            set.addAll(Arrays.asList(new Integer[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 }));
+            example.createCriteria().andIn("id", set).andNotIn("id", Arrays.asList(new Object[] { 11 }));
             List<Country> countries = mapper.selectByExample(example);
             //查询总数
             Assert.assertEquals(10, countries.size());
@@ -136,8 +132,7 @@ public class TestSelectByExample {
         try {
             CountryMapper mapper = sqlSession.getMapper(CountryMapper.class);
             Example example = new Example(Country.class);
-            example.createCriteria().andIn("id", Arrays.asList(new Integer[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11}))
-                    .andNotIn("id", Arrays.asList(new Object[]{11}));
+            example.createCriteria().andIn("id", Arrays.asList(new Integer[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 })).andNotIn("id", Arrays.asList(new Object[] { 11 }));
             List<Country> countries = mapper.selectByExample(example);
             //查询总数
             Assert.assertEquals(10, countries.size());
@@ -186,7 +181,6 @@ public class TestSelectByExample {
         try {
             Country ct = new Country();
             ct.setCountryname("China");
-
             CountryMapper mapper = sqlSession.getMapper(CountryMapper.class);
             Example example = new Example(Country.class);
             example.createCriteria().andGreaterThan("id", 20).andEqualTo(ct);
@@ -198,7 +192,6 @@ public class TestSelectByExample {
             sqlSession.close();
         }
     }
-
 
     @Test
     public void testSelectColumnsByExample() {
@@ -247,7 +240,6 @@ public class TestSelectByExample {
             List<Country> countries = mapper.selectByExample(example);
             //查询总数
             Assert.assertEquals(90, countries.size());
-
             //当不使用条件时，也不能出错
             example = new Example(Country.class);
             example.createCriteria();
@@ -267,7 +259,7 @@ public class TestSelectByExample {
         try {
             CountryMapper mapper = sqlSession.getMapper(CountryMapper.class);
             Example example = new Example(Country.class);
-//            example.setOrderByClause("id desc");
+            //            example.setOrderByClause("id desc");
             example.orderBy("id").desc().orderBy("countryname").orderBy("countrycode").asc();
             List<Country> countries = mapper.selectByExample(example);
             //查询总数
@@ -286,7 +278,7 @@ public class TestSelectByExample {
         try {
             CountryMapper mapper = sqlSession.getMapper(CountryMapper.class);
             Example example = new Example(Country.class);
-            example.selectProperties(new String[]{"countryname"});
+            example.selectProperties(new String[] { "countryname" });
             example.createCriteria().andEqualTo("id", 35);
             List<Country> country1 = mapper.selectByExample(example);
             Assert.assertEquals(null, country1.get(0).getId());
@@ -308,7 +300,7 @@ public class TestSelectByExample {
         try {
             CountryMapper mapper = sqlSession.getMapper(CountryMapper.class);
             Example example = new Example(Country.class);
-            example.selectProperties(new String[]{"countrymame"});
+            example.selectProperties(new String[] { "countrymame" });
             example.createCriteria().andEqualTo("id", 35);
             List<Country> country2 = mapper.selectByExample(example);
             Assert.assertEquals(null, country2.get(0).getId());
@@ -330,7 +322,7 @@ public class TestSelectByExample {
         try {
             CountryMapper mapper = sqlSession.getMapper(CountryMapper.class);
             Example example = new Example(Country.class);
-            example.selectProperties(new String[]{"name"});
+            example.selectProperties(new String[] { "name" });
             example.createCriteria().andEqualTo("id", 35);
             List<Country> country = mapper.selectByExample(example);
         } finally {
@@ -349,7 +341,7 @@ public class TestSelectByExample {
         try {
             CountryMapper mapper = sqlSession.getMapper(CountryMapper.class);
             Example example = new Example(Country.class);
-            example.selectProperties(new String[]{"dynamicTableName123"});
+            example.selectProperties(new String[] { "dynamicTableName123" });
             example.createCriteria().andEqualTo("id", 35);
             List<Country> country = mapper.selectByExample(example);
         } finally {
@@ -368,7 +360,7 @@ public class TestSelectByExample {
         try {
             CountryMapper mapper = sqlSession.getMapper(CountryMapper.class);
             Example example = new Example(Country.class);
-            example.excludeProperties(new String[]{"countrymame"});
+            example.excludeProperties(new String[] { "countrymame" });
             example.createCriteria().andEqualTo("id", 35);
             List<Country> country = mapper.selectByExample(example);
         } finally {
@@ -387,12 +379,11 @@ public class TestSelectByExample {
         try {
             CountryMapper mapper = sqlSession.getMapper(CountryMapper.class);
             Example example = new Example(Country.class);
-            example.excludeProperties(new String[]{"dynamicTableName123"});
+            example.excludeProperties(new String[] { "dynamicTableName123" });
             example.createCriteria().andEqualTo("id", 35);
             List<Country> country = mapper.selectByExample(example);
         } finally {
             sqlSession.close();
         }
     }
-
 }

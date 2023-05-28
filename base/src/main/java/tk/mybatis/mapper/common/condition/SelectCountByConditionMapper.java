@@ -21,7 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package tk.mybatis.mapper.common.condition;
 
 import org.apache.ibatis.annotations.SelectProvider;
@@ -44,5 +43,4 @@ public interface SelectCountByConditionMapper<T> {
      */
     @SelectProvider(type = ConditionProvider.class, method = "dynamicSQL")
     int selectCountByCondition(Object condition);
-
 }

@@ -4,6 +4,7 @@ package tk.mybatis.spring.annotation;
  * @author liuzh
  */
 public class BaseProperties {
+
     public static final String MYBATIS_PREFIX = "mybatis";
 
     /**

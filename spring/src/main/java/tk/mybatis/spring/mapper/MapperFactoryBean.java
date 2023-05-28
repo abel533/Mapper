@@ -21,7 +21,6 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.mybatis.spring.support.SqlSessionDaoSupport;
 import org.springframework.beans.factory.FactoryBean;
 import tk.mybatis.mapper.mapperhelper.MapperHelper;
-
 import static org.springframework.util.Assert.notNull;
 
 /**
@@ -74,9 +73,7 @@ public class MapperFactoryBean<T> extends SqlSessionDaoSupport implements Factor
     @Override
     protected void checkDaoConfig() {
         super.checkDaoConfig();
-
         notNull(this.mapperInterface, "Property 'mapperInterface' is required");
-
         Configuration configuration = getSqlSession().getConfiguration();
         if (this.addToConfig && !configuration.hasMapper(this.mapperInterface)) {
             try {
@@ -121,7 +118,6 @@ public class MapperFactoryBean<T> extends SqlSessionDaoSupport implements Factor
     }
 
     //------------- mutators --------------
-
     /**
      * {@inheritDoc}
      */

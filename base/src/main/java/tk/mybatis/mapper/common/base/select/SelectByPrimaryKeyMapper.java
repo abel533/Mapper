@@ -21,7 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package tk.mybatis.mapper.common.base.select;
 
 import org.apache.ibatis.annotations.SelectProvider;
@@ -51,5 +50,4 @@ public interface SelectByPrimaryKeyMapper<T> {
      */
     @SelectProvider(type = BaseSelectProvider.class, method = "dynamicSQL")
     T selectByPrimaryKey(Object key);
-
 }

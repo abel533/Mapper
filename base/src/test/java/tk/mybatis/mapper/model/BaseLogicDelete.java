@@ -1,7 +1,6 @@
 package tk.mybatis.mapper.model;
 
 import tk.mybatis.mapper.annotation.LogicDelete;
-
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;

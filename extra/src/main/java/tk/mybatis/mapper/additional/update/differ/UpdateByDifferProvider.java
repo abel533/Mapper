@@ -21,7 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package tk.mybatis.mapper.additional.update.differ;
 
 import org.apache.ibatis.mapping.MappedStatement;
@@ -32,14 +31,15 @@ import tk.mybatis.mapper.mapperhelper.MapperHelper;
 import tk.mybatis.mapper.mapperhelper.MapperTemplate;
 import tk.mybatis.mapper.mapperhelper.SqlHelper;
 import tk.mybatis.mapper.version.VersionException;
-
 import java.util.Set;
 
 /**
  * @author liuzh
  */
 public class UpdateByDifferProvider extends MapperTemplate {
+
     public static final String OLD = "old";
+
     public static final String NEWER = "newer";
 
     public UpdateByDifferProvider(Class<?> mapperClass, MapperHelper mapperHelper) {
@@ -81,7 +81,6 @@ public class UpdateByDifferProvider extends MapperTemplate {
         sql.append("</where>");
         return sql.toString();
     }
-
 
     /**
      * 乐观锁字段条件
@@ -131,10 +130,7 @@ public class UpdateByDifferProvider extends MapperTemplate {
                     Version version = versionColumn.getEntityField().getAnnotation(Version.class);
                     String versionClass = version.nextVersion().getName();
                     //version = ${@tk.mybatis.mapper.version@nextVersionClass("versionClass", version)}
-                    sql.append(column.getColumn())
-                            .append(" = ${@tk.mybatis.mapper.version.VersionUtil@nextVersion(")
-                            .append("@").append(versionClass).append("@class, ")
-                            .append(NEWER).append('.').append(column.getProperty()).append(")},");
+                    sql.append(column.getColumn()).append(" = ${@tk.mybatis.mapper.version.VersionUtil@nextVersion(").append("@").append(versionClass).append("@class, ").append(NEWER).append('.').append(column.getProperty()).append(")},");
                 } else {
                     //if old.xx != newer.xx
                     sql.append(getIfNotEqual(column, column.getColumnEqualsHolder(NEWER) + ","));
@@ -160,5 +156,4 @@ public class UpdateByDifferProvider extends MapperTemplate {
         sql.append("</if>");
         return sql.toString();
     }
-
 }

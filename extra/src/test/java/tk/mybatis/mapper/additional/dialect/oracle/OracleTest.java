@@ -21,7 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package tk.mybatis.mapper.additional.dialect.oracle;
 
 import org.apache.ibatis.session.SqlSession;
@@ -29,7 +28,6 @@ import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 import tk.mybatis.mapper.additional.BaseTest;
-
 import java.io.IOException;
 import java.io.Reader;
 import java.net.URL;
@@ -51,8 +49,6 @@ public class OracleTest extends BaseTest {
         URL url = getClass().getResource("mybatis-config.xml");
         return toReader(url);
     }
-
-    ;
 
     @Override
     protected void runSql(Reader reader) {

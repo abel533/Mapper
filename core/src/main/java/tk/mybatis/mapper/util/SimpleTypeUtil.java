@@ -21,11 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package tk.mybatis.mapper.util;
 
 import tk.mybatis.mapper.MapperException;
-
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.sql.Timestamp;
@@ -37,18 +35,9 @@ import java.util.Set;
  * 参考 org.apache.ibatis.type.SimpleTypeRegistry
  */
 public class SimpleTypeUtil {
-    public static final String[] JAVA8_DATE_TIME = {
-            "java.time.Instant",
-            "java.time.LocalDateTime",
-            "java.time.LocalDate",
-            "java.time.LocalTime",
-            "java.time.OffsetDateTime",
-            "java.time.OffsetTime",
-            "java.time.ZonedDateTime",
-            "java.time.Year",
-            "java.time.Month",
-            "java.time.YearMonth"
-    };
+
+    public static final String[] JAVA8_DATE_TIME = { "java.time.Instant", "java.time.LocalDateTime", "java.time.LocalDate", "java.time.LocalTime", "java.time.OffsetDateTime", "java.time.OffsetTime", "java.time.ZonedDateTime", "java.time.Year", "java.time.Month", "java.time.YearMonth" };
+
     private static final Set<Class<?>> SIMPLE_TYPE_SET = new HashSet<Class<?>>();
 
     /**
@@ -139,5 +128,4 @@ public class SimpleTypeUtil {
     public static boolean isSimpleType(Class<?> clazz) {
         return SIMPLE_TYPE_SET.contains(clazz);
     }
-
 }

@@ -10,7 +10,6 @@ import tk.mybatis.mapper.mapperhelper.SqlHelper;
 import tk.mybatis.mapper.util.Assert;
 import tk.mybatis.mapper.util.SqlReservedWords;
 import tk.mybatis.mapper.util.StringUtil;
-
 import java.text.MessageFormat;
 import java.util.Map;
 
@@ -102,5 +101,4 @@ public class AggregationProvider extends MapperTemplate {
         sql.append(SqlHelper.exampleForUpdate());
         return sql.toString();
     }
-
 }

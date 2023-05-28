@@ -21,13 +21,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package tk.mybatis.mapper.common.base.select;
 
 import org.apache.ibatis.annotations.SelectProvider;
 import tk.mybatis.mapper.annotation.RegisterMapper;
 import tk.mybatis.mapper.provider.base.BaseSelectProvider;
-
 import java.util.List;
 
 /**
@@ -47,5 +45,4 @@ public interface SelectMapper<T> {
      */
     @SelectProvider(type = BaseSelectProvider.class, method = "dynamicSQL")
     List<T> select(T record);
-
 }

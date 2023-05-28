@@ -21,7 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package tk.mybatis.mapper.common.base.update;
 
 import org.apache.ibatis.annotations.UpdateProvider;
@@ -45,5 +44,4 @@ public interface UpdateByPrimaryKeySelectiveMapper<T> {
      */
     @UpdateProvider(type = BaseUpdateProvider.class, method = "dynamicSQL")
     int updateByPrimaryKeySelective(T record);
-
 }

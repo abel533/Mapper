@@ -21,7 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package tk.mybatis.mapper.additional.update.force;
 
 import org.apache.ibatis.mapping.MappedStatement;
@@ -33,7 +32,6 @@ import tk.mybatis.mapper.mapperhelper.MapperTemplate;
 import tk.mybatis.mapper.mapperhelper.SqlHelper;
 import tk.mybatis.mapper.util.StringUtil;
 import tk.mybatis.mapper.version.VersionException;
-
 import java.util.Set;
 
 /**
@@ -49,14 +47,12 @@ public class UpdateByPrimaryKeySelectiveForceProvider extends MapperTemplate {
         super(mapperClass, mapperHelper);
     }
 
-
     public String updateByPrimaryKeySelectiveForce(MappedStatement ms) {
         Class entityClass = getEntityClass(ms);
         StringBuilder sql = new StringBuilder();
         sql.append(SqlHelper.updateTable(entityClass, tableName(entityClass), "record"));
         sql.append(this.updateSetColumnsForce(entityClass, "record", true, isNotEmpty()));
         sql.append(SqlHelper.wherePKColumns(entityClass, "record", true));
-
         return sql.toString();
     }
 
@@ -89,9 +85,7 @@ public class UpdateByPrimaryKeySelectiveForceProvider extends MapperTemplate {
                     Version version = versionColumn.getEntityField().getAnnotation(Version.class);
                     String versionClass = version.nextVersion().getName();
                     //version = ${@tk.mybatis.mapper.version@nextVersionClass("versionClass", version)}
-                    sql.append(column.getColumn())
-                            .append(" = ${@tk.mybatis.mapper.version.VersionUtil@nextVersion(")
-                            .append("@").append(versionClass).append("@class, ");
+                    sql.append(column.getColumn()).append(" = ${@tk.mybatis.mapper.version.VersionUtil@nextVersion(").append("@").append(versionClass).append("@class, ");
                     //虽然从函数调用上来看entityName必为"record"，但还是判断一下
                     if (StringUtil.isNotEmpty(entityName)) {
                         sql.append(entityName).append('.');
@@ -138,7 +132,6 @@ public class UpdateByPrimaryKeySelectiveForceProvider extends MapperTemplate {
         sql.append("\">");
         sql.append(contents);
         sql.append("</when>");
-
         //指定的字段会被强制更新
         sql.append("<when test=\"");
         sql.append(FORCE_UPDATE_PROPERTIES).append(" != null and ").append(FORCE_UPDATE_PROPERTIES).append(".contains('");
@@ -146,10 +139,8 @@ public class UpdateByPrimaryKeySelectiveForceProvider extends MapperTemplate {
         sql.append("')\">");
         sql.append(contents);
         sql.append("</when>");
-
         sql.append("<otherwise></otherwise>");
         sql.append("</choose>");
         return sql.toString();
     }
-
 }

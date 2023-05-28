@@ -21,7 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package tk.mybatis.mapper.generator;
 
 import org.mybatis.generator.api.IntrospectedTable;
@@ -30,7 +29,6 @@ import org.mybatis.generator.api.dom.java.Interface;
 import org.mybatis.generator.api.dom.java.Method;
 import org.mybatis.generator.api.dom.java.TopLevelClass;
 import org.mybatis.generator.api.dom.xml.XmlElement;
-
 import java.util.List;
 
 /**
@@ -46,85 +44,84 @@ public class FalseMethodPlugin extends PluginAdapter {
     }
 
     //下面所有return false的方法都不生成。这些都是基础的CRUD方法，使用通用Mapper实现
-
     @Override
     public boolean clientDeleteByPrimaryKeyMethodGenerated(Method method, Interface interfaze, IntrospectedTable introspectedTable) {
-        return false;
+        return deny(method, interfaze, introspectedTable);
     }
 
     @Override
     public boolean clientInsertMethodGenerated(Method method, Interface interfaze, IntrospectedTable introspectedTable) {
-        return false;
+        return deny(method, interfaze, introspectedTable);
     }
 
     @Override
     public boolean clientInsertSelectiveMethodGenerated(Method method, Interface interfaze, IntrospectedTable introspectedTable) {
-        return false;
+        return deny(method, interfaze, introspectedTable);
     }
 
     @Override
     public boolean clientSelectAllMethodGenerated(Method method, Interface interfaze, IntrospectedTable introspectedTable) {
-        return false;
+        return deny(method, interfaze, introspectedTable);
     }
 
     @Override
     public boolean clientSelectByPrimaryKeyMethodGenerated(Method method, Interface interfaze, IntrospectedTable introspectedTable) {
-        return false;
+        return deny(method, interfaze, introspectedTable);
     }
 
     @Override
     public boolean clientUpdateByPrimaryKeySelectiveMethodGenerated(Method method, Interface interfaze, IntrospectedTable introspectedTable) {
-        return false;
+        return deny(method, interfaze, introspectedTable);
     }
 
     @Override
     public boolean clientUpdateByPrimaryKeyWithBLOBsMethodGenerated(Method method, Interface interfaze, IntrospectedTable introspectedTable) {
-        return false;
+        return deny(method, interfaze, introspectedTable);
     }
 
     @Override
     public boolean clientUpdateByPrimaryKeyWithoutBLOBsMethodGenerated(Method method, Interface interfaze, IntrospectedTable introspectedTable) {
-        return false;
+        return deny(method, interfaze, introspectedTable);
     }
 
     @Override
     public boolean sqlMapDeleteByPrimaryKeyElementGenerated(XmlElement element, IntrospectedTable introspectedTable) {
-        return false;
+        return noConditionMet(element, introspectedTable);
     }
 
     @Override
     public boolean sqlMapInsertElementGenerated(XmlElement element, IntrospectedTable introspectedTable) {
-        return false;
+        return noConditionMet(element, introspectedTable);
     }
 
     @Override
     public boolean sqlMapInsertSelectiveElementGenerated(XmlElement element, IntrospectedTable introspectedTable) {
-        return false;
+        return noConditionMet(element, introspectedTable);
     }
 
     @Override
     public boolean sqlMapSelectAllElementGenerated(XmlElement element, IntrospectedTable introspectedTable) {
-        return false;
+        return noConditionMet(element, introspectedTable);
     }
 
     @Override
     public boolean sqlMapSelectByPrimaryKeyElementGenerated(XmlElement element, IntrospectedTable introspectedTable) {
-        return false;
+        return noConditionMet(element, introspectedTable);
     }
 
     @Override
     public boolean sqlMapUpdateByPrimaryKeySelectiveElementGenerated(XmlElement element, IntrospectedTable introspectedTable) {
-        return false;
+        return noConditionMet(element, introspectedTable);
     }
 
     @Override
     public boolean sqlMapUpdateByPrimaryKeyWithBLOBsElementGenerated(XmlElement element, IntrospectedTable introspectedTable) {
-        return false;
+        return noConditionMet(element, introspectedTable);
     }
 
     @Override
     public boolean sqlMapUpdateByPrimaryKeyWithoutBLOBsElementGenerated(XmlElement element, IntrospectedTable introspectedTable) {
-        return false;
+        return noConditionMet(element, introspectedTable);
     }
 
     @Override
@@ -134,17 +131,28 @@ public class FalseMethodPlugin extends PluginAdapter {
 
     @Override
     public boolean providerApplyWhereMethodGenerated(Method method, TopLevelClass topLevelClass, IntrospectedTable introspectedTable) {
-        return false;
+        return denied(method, topLevelClass, introspectedTable);
     }
 
     @Override
     public boolean providerInsertSelectiveMethodGenerated(Method method, TopLevelClass topLevelClass, IntrospectedTable introspectedTable) {
-        return false;
+        return denied(method, topLevelClass, introspectedTable);
     }
 
     @Override
     public boolean providerUpdateByPrimaryKeySelectiveMethodGenerated(Method method, TopLevelClass topLevelClass, IntrospectedTable introspectedTable) {
+        return denied(method, topLevelClass, introspectedTable);
+    }
+
+    private boolean deny(Method method, Interface interfaze, IntrospectedTable introspectedTable) {
         return false;
     }
 
+    private boolean denied(Method method, TopLevelClass topLevelClass, IntrospectedTable introspectedTable) {
+        return false;
+    }
+
+    private boolean noConditionMet(XmlElement element, IntrospectedTable introspectedTable) {
+        return false;
+    }
 }

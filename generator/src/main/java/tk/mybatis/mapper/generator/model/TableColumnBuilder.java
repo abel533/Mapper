@@ -21,14 +21,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package tk.mybatis.mapper.generator.model;
 
 import org.mybatis.generator.api.FullyQualifiedTable;
 import org.mybatis.generator.api.IntrospectedColumn;
 import org.mybatis.generator.api.IntrospectedTable;
 import org.mybatis.generator.api.dom.java.FullyQualifiedJavaType;
-
 import java.beans.Introspector;
 import java.util.ArrayList;
 import java.util.List;
@@ -48,10 +46,8 @@ public class TableColumnBuilder {
     public static TableClass build(IntrospectedTable introspectedTable) {
         TableClass tableClass = new TableClass();
         tableClass.setIntrospectedTable(introspectedTable);
-
         FullyQualifiedTable fullyQualifiedTable = introspectedTable.getFullyQualifiedTable();
         tableClass.setTableName(fullyQualifiedTable.getIntrospectedTableName());
-
         FullyQualifiedJavaType type = new FullyQualifiedJavaType(introspectedTable.getBaseRecordType());
         tableClass.setType(type);
         tableClass.setVariableName(Introspector.decapitalize(type.getShortName()));
@@ -59,7 +55,6 @@ public class TableColumnBuilder {
         tableClass.setShortClassName(type.getShortName());
         tableClass.setFullClassName(type.getFullyQualifiedName());
         tableClass.setPackageName(type.getPackageName());
-
         List<ColumnField> pkFields = new ArrayList<ColumnField>();
         List<ColumnField> baseFields = new ArrayList<ColumnField>();
         List<ColumnField> blobFields = new ArrayList<ColumnField>();
@@ -86,7 +81,6 @@ public class TableColumnBuilder {
         tableClass.setBaseFields(baseFields);
         tableClass.setBlobFields(blobFields);
         tableClass.setAllFields(allFields);
-
         return tableClass;
     }
 
@@ -119,6 +113,4 @@ public class TableColumnBuilder {
         field.setScale(column.getScale());
         return field;
     }
-
-
 }

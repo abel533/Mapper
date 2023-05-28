@@ -2,7 +2,6 @@ package tk.mybatis.mapper.issues._216_datetime;
 
 import org.apache.ibatis.type.JdbcType;
 import tk.mybatis.mapper.annotation.ColumnType;
-
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.io.Serializable;
@@ -13,13 +12,18 @@ import java.util.Date;
  */
 @Table(name = "test_timestamp")
 public class TimeModel3 implements Serializable {
+
     private static final long serialVersionUID = 1L;
+
     @Id
     private Integer id;
+
     @ColumnType(jdbcType = JdbcType.DATE)
     private Date testDate;
+
     @ColumnType(jdbcType = JdbcType.TIME)
     private Date testTime;
+
     @ColumnType(jdbcType = JdbcType.TIMESTAMP)
     private Date testDatetime;
 

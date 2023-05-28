@@ -21,12 +21,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package tk.mybatis.mapper.additional.idlist;
 
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.SelectProvider;
-
 import java.util.List;
 
 /**
@@ -46,5 +44,4 @@ public interface SelectByIdListMapper<T, PK> {
      */
     @SelectProvider(type = IdListProvider.class, method = "dynamicSQL")
     List<T> selectByIdList(@Param("idList") List<PK> idList);
-
 }

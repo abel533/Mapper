@@ -21,12 +21,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package tk.mybatis.mapper.util;
 
 import org.apache.ibatis.reflection.MetaObject;
 import tk.mybatis.mapper.MapperException;
-
 import java.lang.reflect.Method;
 
 /**
@@ -35,6 +33,7 @@ import java.lang.reflect.Method;
  * @author liuzh
  */
 public class MetaObjectUtil {
+
     public static Method method;
 
     static {
@@ -49,7 +48,6 @@ public class MetaObjectUtil {
                 throw new MapperException(e2);
             }
         }
-
     }
 
     public static MetaObject forObject(Object object) {
@@ -59,5 +57,4 @@ public class MetaObjectUtil {
             throw new MapperException(e);
         }
     }
-
 }

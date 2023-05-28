@@ -21,7 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package tk.mybatis.mapper.common;
 
 import tk.mybatis.mapper.common.base.BaseDeleteMapper;
@@ -40,10 +39,5 @@ import tk.mybatis.mapper.common.base.BaseUpdateMapper;
  * @author liuzh
  */
 @tk.mybatis.mapper.annotation.RegisterMapper
-public interface BaseMapper<T> extends
-        BaseSelectMapper<T>,
-        BaseInsertMapper<T>,
-        BaseUpdateMapper<T>,
-        BaseDeleteMapper<T> {
-
+public interface BaseMapper<T> extends BaseSelectMapper<T>, BaseInsertMapper<T>, BaseUpdateMapper<T>, BaseDeleteMapper<T> {
 }
