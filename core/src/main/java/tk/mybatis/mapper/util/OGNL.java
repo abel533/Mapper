@@ -21,7 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package tk.mybatis.mapper.util;
 
 import tk.mybatis.mapper.MapperException;
@@ -31,7 +30,6 @@ import tk.mybatis.mapper.entity.Example;
 import tk.mybatis.mapper.entity.IDynamicTableName;
 import tk.mybatis.mapper.mapperhelper.EntityHelper;
 import tk.mybatis.mapper.mapperhelper.SqlHelper;
-
 import java.lang.reflect.Method;
 import java.util.*;
 
@@ -41,7 +39,9 @@ import java.util.*;
  * @author liuzh
  */
 public abstract class OGNL {
+
     public static final String SAFE_DELETE_ERROR = "通用 Mapper 安全检查: 对查询条件参数进行检查时出错!";
+
     public static final String SAFE_DELETE_EXCEPTION = "通用 Mapper 安全检查: 当前操作的方法没有指定查询条件，不允许执行该操作!";
 
     /**
@@ -56,8 +56,7 @@ public abstract class OGNL {
             Example example = (Example) parameter;
             Class<?> entityClass = example.getEntityClass();
             if (!entityClass.getName().equals(entityFullName)) {
-                throw new MapperException("当前 Example 方法对应实体为:" + entityFullName
-                        + ", 但是参数 Example 中的 entityClass 为:" + entityClass.getName());
+                throw new MapperException("当前 Example 方法对应实体为:" + entityFullName + ", 但是参数 Example 中的 entityClass 为:" + entityClass.getName());
             }
         }
         return true;
@@ -238,13 +237,11 @@ public abstract class OGNL {
         if (parameter instanceof Example) {
             Example example = (Example) parameter;
             Map<String, EntityColumn> propertyMap = example.getPropertyMap();
-
             for (Map.Entry<String, EntityColumn> entry : propertyMap.entrySet()) {
                 EntityColumn column = entry.getValue();
                 if (column.getEntityField().isAnnotationPresent(LogicDelete.class)) {
                     // 未逻辑删除的条件
                     result = column.getColumn() + " = " + SqlHelper.getLogicDeletedValue(column, false);
-
                     // 如果Example中有条件，则拼接" and "，
                     // 如果是空的oredCriteria，则where中只有逻辑删除注解的未删除条件
                     if (hasWhereCause(example)) {
@@ -273,5 +270,4 @@ public abstract class OGNL {
         }
         return false;
     }
-
 }

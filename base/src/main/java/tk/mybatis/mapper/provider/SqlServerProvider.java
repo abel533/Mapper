@@ -21,7 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package tk.mybatis.mapper.provider;
 
 import org.apache.ibatis.mapping.MappedStatement;
@@ -53,10 +52,8 @@ public class SqlServerProvider extends MapperTemplate {
         sql.append(SqlHelper.insertIntoTable(entityClass, tableName(entityClass)));
         sql.append(SqlHelper.insertColumns(entityClass, true, false, false));
         sql.append(SqlHelper.insertValuesColumns(entityClass, true, false, false));
-
         // 反射把MappedStatement中的设置主键名
         EntityHelper.setKeyProperties(EntityHelper.getPKColumns(entityClass), ms);
-
         return sql.toString();
     }
 
@@ -72,10 +69,8 @@ public class SqlServerProvider extends MapperTemplate {
         sql.append(SqlHelper.insertIntoTable(entityClass, tableName(entityClass)));
         sql.append(SqlHelper.insertColumns(entityClass, true, true, isNotEmpty()));
         sql.append(SqlHelper.insertValuesColumns(entityClass, true, true, isNotEmpty()));
-
         // 反射把MappedStatement中的设置主键名
         EntityHelper.setKeyProperties(EntityHelper.getPKColumns(entityClass), ms);
-
         return sql.toString();
     }
 }

@@ -21,7 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package tk.mybatis.mapper.model;
 
 import javax.persistence.Id;
@@ -33,6 +32,7 @@ import javax.persistence.Transient;
  * Update: liuzh(2014-06-06 13:38)
  */
 public class CountryT {
+
     @Id
     private Integer id;
 
@@ -43,11 +43,7 @@ public class CountryT {
 
     @Override
     public String toString() {
-        return "Country{" +
-                "id=" + id +
-                ", countryname='" + countryname + '\'' +
-                ", countrycode='" + countrycode + '\'' +
-                '}';
+        return "Country{" + "id=" + id + ", countryname='" + countryname + '\'' + ", countrycode='" + countrycode + '\'' + '}';
     }
 
     public String getCountrycode() {

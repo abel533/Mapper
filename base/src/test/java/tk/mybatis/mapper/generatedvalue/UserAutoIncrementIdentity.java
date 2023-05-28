@@ -7,10 +7,12 @@ import javax.persistence.*;
  */
 @Table(name = "user_auto_increment")
 public class UserAutoIncrementIdentity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(insertable = false)
     private Integer id;
+
     private String name;
 
     public Integer getId() {

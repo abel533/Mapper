@@ -58,7 +58,6 @@ import tk.mybatis.spring.annotation.BaseProperties;
 import tk.mybatis.spring.mapper.ClassPathMapperScanner;
 import tk.mybatis.spring.mapper.MapperFactoryBean;
 import tk.mybatis.spring.mapper.SpringBootBindUtil;
-
 import javax.sql.DataSource;
 import java.util.Arrays;
 import java.util.List;
@@ -78,7 +77,7 @@ import java.util.List;
  * @author Eduardo Macarrón
  */
 @org.springframework.context.annotation.Configuration
-@ConditionalOnClass({SqlSessionFactory.class, SqlSessionFactoryBean.class})
+@ConditionalOnClass({ SqlSessionFactory.class, SqlSessionFactoryBean.class })
 @ConditionalOnSingleCandidate(DataSource.class)
 @EnableConfigurationProperties(MybatisProperties.class)
 @AutoConfigureAfter(DataSourceAutoConfiguration.class)
@@ -97,11 +96,7 @@ public class MapperAutoConfiguration implements InitializingBean {
 
     private final List<ConfigurationCustomizer> configurationCustomizers;
 
-    public MapperAutoConfiguration(MybatisProperties properties,
-                                   ObjectProvider<Interceptor[]> interceptorsProvider,
-                                   ResourceLoader resourceLoader,
-                                   ObjectProvider<DatabaseIdProvider> databaseIdProvider,
-                                   ObjectProvider<List<ConfigurationCustomizer>> configurationCustomizersProvider) {
+    public MapperAutoConfiguration(MybatisProperties properties, ObjectProvider<Interceptor[]> interceptorsProvider, ResourceLoader resourceLoader, ObjectProvider<DatabaseIdProvider> databaseIdProvider, ObjectProvider<List<ConfigurationCustomizer>> configurationCustomizersProvider) {
         this.properties = properties;
         this.interceptors = interceptorsProvider.getIfAvailable();
         this.resourceLoader = resourceLoader;
@@ -117,8 +112,7 @@ public class MapperAutoConfiguration implements InitializingBean {
     private void checkConfigFileExists() {
         if (this.properties.isCheckConfigLocation() && StringUtils.hasText(this.properties.getConfigLocation())) {
             Resource resource = this.resourceLoader.getResource(this.properties.getConfigLocation());
-            Assert.state(resource.exists(), "Cannot find config location: " + resource
-                    + " (please add config file or check your Mybatis configuration)");
+            Assert.state(resource.exists(), "Cannot find config location: " + resource + " (please add config file or check your Mybatis configuration)");
         }
     }
 
@@ -153,7 +147,6 @@ public class MapperAutoConfiguration implements InitializingBean {
         if (!ObjectUtils.isEmpty(this.properties.resolveMapperLocations())) {
             factory.setMapperLocations(this.properties.resolveMapperLocations());
         }
-
         return factory.getObject();
     }
 
@@ -188,8 +181,7 @@ public class MapperAutoConfiguration implements InitializingBean {
      * mappers working correctly, out-of-the-box, similar to using Spring Data JPA
      * repositories.
      */
-    public static class AutoConfiguredMapperScannerRegistrar
-            implements BeanFactoryAware, ImportBeanDefinitionRegistrar, ResourceLoaderAware, EnvironmentAware {
+    public static class AutoConfiguredMapperScannerRegistrar implements BeanFactoryAware, ImportBeanDefinitionRegistrar, ResourceLoaderAware, EnvironmentAware {
 
         private BeanFactory beanFactory;
 
@@ -199,9 +191,7 @@ public class MapperAutoConfiguration implements InitializingBean {
 
         @Override
         public void registerBeanDefinitions(AnnotationMetadata importingClassMetadata, BeanDefinitionRegistry registry) {
-
             logger.debug("Searching for mappers annotated with @Mapper");
-
             ClassPathMapperScanner scanner = new ClassPathMapperScanner(registry);
             scanner.setMapperProperties(environment);
             try {
@@ -221,12 +211,10 @@ public class MapperAutoConfiguration implements InitializingBean {
                     //设置了包名的情况下，不需要指定该注解
                     scanner.setAnnotationClass(Mapper.class);
                 }
-
                 String lazyInitialization = environment.getProperty("mybatis.lazy-initialization");
                 if (StringUtils.hasText(lazyInitialization)) {
                     scanner.setLazyInitialization(Boolean.valueOf(lazyInitialization));
                 }
-
                 scanner.registerFilters();
                 scanner.doScan(StringUtils.toStringArray(packages));
             } catch (IllegalStateException ex) {
@@ -259,7 +247,7 @@ public class MapperAutoConfiguration implements InitializingBean {
      * on the same component-scanning path as Spring Boot itself.
      */
     @org.springframework.context.annotation.Configuration
-    @Import({AutoConfiguredMapperScannerRegistrar.class})
+    @Import({ AutoConfiguredMapperScannerRegistrar.class })
     @ConditionalOnMissingBean(MapperFactoryBean.class)
     public static class MapperScannerRegistrarNotFoundConfiguration implements InitializingBean {
 
@@ -280,6 +268,5 @@ public class MapperAutoConfiguration implements InitializingBean {
         public MapperCacheDisabler mapperCacheDisabler() {
             return new MapperCacheDisabler();
         }
-
     }
 }

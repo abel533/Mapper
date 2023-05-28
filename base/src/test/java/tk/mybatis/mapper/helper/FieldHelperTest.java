@@ -21,14 +21,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package tk.mybatis.mapper.helper;
 
 import org.junit.Test;
 import tk.mybatis.mapper.entity.EntityField;
 import tk.mybatis.mapper.mapperhelper.FieldHelper;
 import tk.mybatis.mapper.model.Country;
-
 import javax.persistence.Id;
 import java.beans.IntrospectionException;
 import java.util.List;
@@ -46,7 +44,6 @@ public class FieldHelperTest {
             System.out.println(field.getName() + "  -  @Id:" + field.isAnnotationPresent(Id.class) + "  -  javaType:" + field.getJavaType());
         }
         System.out.println("======================================");
-
         fields = FieldHelper.getAll(Country.class);
         for (EntityField field : fields) {
             System.out.println(field.getName() + "  -  @Id:" + field.isAnnotationPresent(Id.class) + "  -  javaType:" + field.getJavaType());
@@ -57,24 +54,28 @@ public class FieldHelperTest {
     @Test
     public void test2() throws IntrospectionException {
         Thread t1 = new Thread(new Runnable() {
+
             @Override
             public void run() {
                 FieldHelper.getFields(Country.class);
             }
         });
         Thread t2 = new Thread(new Runnable() {
+
             @Override
             public void run() {
                 FieldHelper.getFields(Country.class);
             }
         });
         Thread t3 = new Thread(new Runnable() {
+
             @Override
             public void run() {
                 FieldHelper.getFields(Country.class);
             }
         });
         Thread t4 = new Thread(new Runnable() {
+
             @Override
             public void run() {
                 FieldHelper.getFields(Country.class);

@@ -21,7 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package tk.mybatis.mapper.common.base.insert;
 
 import org.apache.ibatis.annotations.InsertProvider;
@@ -45,5 +44,4 @@ public interface InsertMapper<T> {
      */
     @InsertProvider(type = BaseInsertProvider.class, method = "dynamicSQL")
     int insert(T record);
-
 }

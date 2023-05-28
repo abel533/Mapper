@@ -21,7 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package tk.mybatis.mapper.test.transientc;
 
 import org.apache.ibatis.session.SqlSession;
@@ -30,13 +29,13 @@ import org.junit.Test;
 import tk.mybatis.mapper.mapper.CountryTMapper;
 import tk.mybatis.mapper.mapper.MybatisHelper;
 import tk.mybatis.mapper.model.CountryT;
-
 import java.util.List;
 
 /**
  * Created by liuzh on 2014/11/21.
  */
 public class TestTransient {
+
     /**
      * 插入完整数据
      */
@@ -50,12 +49,10 @@ public class TestTransient {
             country.setCountrycode("CN");
             country.setCountryname("天朝");
             Assert.assertEquals(1, mapper.insert(country));
-
             //查询CN结果
             country = new CountryT();
             country.setCountrycode("CN");
             List<CountryT> list = mapper.select(country);
-
             Assert.assertEquals(2, list.size());
             //屏蔽的数据是null
             Assert.assertNull(list.get(0).getCountrycode());
@@ -79,7 +76,6 @@ public class TestTransient {
             country.setCountryname("美国");
             country.setCountrycode("US");
             Assert.assertEquals(1, mapper.updateByPrimaryKey(country));
-
             country = mapper.selectByPrimaryKey(174);
             Assert.assertNotNull(country);
             Assert.assertEquals(174, (int) country.getId());
@@ -102,7 +98,6 @@ public class TestTransient {
             country.setId(174);
             country.setCountrycode("US");
             List<CountryT> countryList = mapper.select(country);
-
             Assert.assertEquals(1, countryList.size());
             Assert.assertEquals(true, countryList.get(0).getId() == 174);
             Assert.assertNotNull(countryList.get(0).getCountryname());

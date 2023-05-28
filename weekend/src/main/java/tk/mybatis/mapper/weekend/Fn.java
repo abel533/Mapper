@@ -22,7 +22,6 @@
  * THE SOFTWARE.
  *
  */
-
 package tk.mybatis.mapper.weekend;
 
 import java.io.Serializable;

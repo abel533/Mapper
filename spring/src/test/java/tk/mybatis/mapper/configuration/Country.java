@@ -21,17 +21,20 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package tk.mybatis.mapper.configuration;
 
 import javax.persistence.Id;
 import java.io.Serializable;
 
 public class Country implements Serializable {
+
     private static final long serialVersionUID = 1L;
+
     @Id
     private Integer id;
+
     private String countryname;
+
     private String countrycode;
 
     public String getCountrycode() {

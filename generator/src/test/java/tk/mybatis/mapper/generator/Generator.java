@@ -21,7 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package tk.mybatis.mapper.generator;
 
 import org.hsqldb.cmdline.SqlFile;
@@ -29,7 +28,6 @@ import org.mybatis.generator.api.MyBatisGenerator;
 import org.mybatis.generator.config.Configuration;
 import org.mybatis.generator.config.xml.ConfigurationParser;
 import org.mybatis.generator.internal.DefaultShellCallback;
-
 import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -55,11 +53,9 @@ public class Generator {
         try {
             Connection connection = DriverManager.getConnection(url, user, password);
             InputStream inputStream = getResourceAsStream("CreateDB.sql");
-
             SqlFile sqlFile = new SqlFile(new InputStreamReader(inputStream), "init", System.out, "UTF-8", false, new File("."));
             sqlFile.setConnection(connection);
             sqlFile.execute();
-
             connection.close();
         } catch (Exception e) {
             e.printStackTrace();

@@ -22,19 +22,18 @@
  * THE SOFTWARE.
  *
  */
-
 package tk.mybatis.mapper.weekend;
 
 import tk.mybatis.mapper.entity.EntityColumn;
 import tk.mybatis.mapper.entity.Example.Criteria;
 import tk.mybatis.mapper.weekend.reflection.Reflections;
-
 import java.util.Map;
 
 /**
  * @author Frank
  */
 public class WeekendCriteria<A, B> extends Criteria {
+
     protected WeekendCriteria(Map<String, EntityColumn> propertyMap, boolean exists, boolean notNull) {
         super(propertyMap, exists, notNull);
     }

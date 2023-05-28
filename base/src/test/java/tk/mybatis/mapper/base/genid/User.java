@@ -1,17 +1,19 @@
 package tk.mybatis.mapper.base.genid;
 
 import tk.mybatis.mapper.annotation.KeySql;
-
 import javax.persistence.Id;
 
 /**
  * @author liuzh
  */
 public class User {
+
     @Id
     @KeySql(genId = UUIdGenId.class)
     private String id;
+
     private String name;
+
     private String code;
 
     public User() {

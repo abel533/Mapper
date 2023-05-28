@@ -21,9 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package tk.mybatis.mapper.common;
-
 
 import tk.mybatis.mapper.common.condition.*;
 
@@ -34,11 +32,5 @@ import tk.mybatis.mapper.common.condition.*;
  * @author liuzh
  */
 @tk.mybatis.mapper.annotation.RegisterMapper
-public interface ConditionMapper<T> extends
-        SelectByConditionMapper<T>,
-        SelectCountByConditionMapper<T>,
-        DeleteByConditionMapper<T>,
-        UpdateByConditionMapper<T>,
-        UpdateByConditionSelectiveMapper<T> {
-
+public interface ConditionMapper<T> extends SelectByConditionMapper<T>, SelectCountByConditionMapper<T>, DeleteByConditionMapper<T>, UpdateByConditionMapper<T>, UpdateByConditionSelectiveMapper<T> {
 }

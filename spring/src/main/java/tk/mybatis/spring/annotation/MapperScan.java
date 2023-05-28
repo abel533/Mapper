@@ -13,14 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package tk.mybatis.spring.annotation;
 
 import org.springframework.beans.factory.support.BeanNameGenerator;
 import org.springframework.context.annotation.Import;
 import tk.mybatis.spring.mapper.MapperFactoryBean;
 import tk.mybatis.spring.mapper.MapperScannerConfigurer;
-
 import java.lang.annotation.*;
 
 /**
@@ -133,7 +131,6 @@ public @interface MapperScan {
 
     /**
      * Specifies a custom MapperFactoryBean to return a mybatis proxy as spring bean.
-     *
      */
     Class<? extends MapperFactoryBean> factoryBean() default MapperFactoryBean.class;
 

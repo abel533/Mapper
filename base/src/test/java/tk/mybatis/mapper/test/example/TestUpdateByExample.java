@@ -21,7 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package tk.mybatis.mapper.test.example;
 
 import org.apache.ibatis.session.SqlSession;
@@ -53,7 +52,6 @@ public class TestUpdateByExample {
             country.setId(1000);
             int count = mapper.updateByExample(country, example);
             Assert.assertEquals(1, count);
-
             example = new Example(Country.class);
             example.createCriteria().andIsNull("countrycode");
             count = mapper.selectCountByExample(example);
@@ -72,13 +70,10 @@ public class TestUpdateByExample {
             Country country = new Country();
             country.setCountryname("天朝");
             country.setId(1000);
-
-
             CountryExample example = new CountryExample();
             example.createCriteria().andIdEqualTo(35);
             int count = mapper.updateByExample(country, example);
             Assert.assertEquals(1, count);
-
             example = new CountryExample();
             example.createCriteria().andCountrycodeIsNull();
             count = mapper.selectCountByExample(example);
@@ -88,5 +83,4 @@ public class TestUpdateByExample {
             sqlSession.close();
         }
     }
-
 }

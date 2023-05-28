@@ -21,7 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package tk.mybatis.mapper.test.rowbounds;
 
 import org.apache.ibatis.session.RowBounds;
@@ -32,7 +31,6 @@ import tk.mybatis.mapper.entity.Example;
 import tk.mybatis.mapper.mapper.CountryMapper;
 import tk.mybatis.mapper.mapper.MybatisHelper;
 import tk.mybatis.mapper.model.Country;
-
 import java.util.List;
 
 /**
@@ -55,5 +53,4 @@ public class TestSelectRowBounds {
             sqlSession.close();
         }
     }
-
 }

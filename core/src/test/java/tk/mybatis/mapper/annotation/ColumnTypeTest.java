@@ -14,7 +14,6 @@ import tk.mybatis.mapper.entity.Config;
 import tk.mybatis.mapper.entity.EntityColumn;
 import tk.mybatis.mapper.entity.EntityTable;
 import tk.mybatis.mapper.mapperhelper.EntityHelper;
-
 import java.util.Set;
 
 /**
@@ -30,11 +29,11 @@ public class ColumnTypeTest {
     public void beforeTest() {
         config = new Config();
         config.setStyle(Style.normal);
-
         configuration = new Configuration();
     }
 
     class UserColumn {
+
         @ColumnType(column = "user_name")
         private String name;
     }
@@ -44,14 +43,11 @@ public class ColumnTypeTest {
         EntityHelper.initEntityNameMap(UserColumn.class, config);
         EntityTable entityTable = EntityHelper.getEntityTable(UserColumn.class);
         Assert.assertNotNull(entityTable);
-
         Set<EntityColumn> columns = entityTable.getEntityClassColumns();
         Assert.assertEquals(1, columns.size());
-
         for (EntityColumn column : columns) {
             Assert.assertEquals("user_name", column.getColumn());
             Assert.assertEquals("name", column.getProperty());
-
             Assert.assertEquals("user_name = #{name}", column.getColumnEqualsHolder());
             Assert.assertEquals("user_name = #{record.name}", column.getColumnEqualsHolder("record"));
             Assert.assertEquals("#{name}", column.getColumnHolder());
@@ -60,12 +56,9 @@ public class ColumnTypeTest {
             Assert.assertEquals("#{record.namesuffix},", column.getColumnHolder("record", "suffix", ","));
             Assert.assertNull(column.getTypeHandler());
         }
-
         ResultMap resultMap = entityTable.getResultMap(configuration);
         Assert.assertEquals("[USER_NAME]", resultMap.getMappedColumns().toString());
-
         Assert.assertEquals(1, resultMap.getResultMappings().size());
-
         ResultMapping resultMapping = resultMap.getResultMappings().get(0);
         Assert.assertEquals("user_name", resultMapping.getColumn());
         Assert.assertEquals("name", resultMapping.getProperty());
@@ -74,6 +67,7 @@ public class ColumnTypeTest {
     }
 
     class UserJdbcTypeVarchar {
+
         @ColumnType(jdbcType = JdbcType.VARCHAR)
         private String name;
     }
@@ -83,14 +77,11 @@ public class ColumnTypeTest {
         EntityHelper.initEntityNameMap(UserJdbcTypeVarchar.class, config);
         EntityTable entityTable = EntityHelper.getEntityTable(UserJdbcTypeVarchar.class);
         Assert.assertNotNull(entityTable);
-
         Set<EntityColumn> columns = entityTable.getEntityClassColumns();
         Assert.assertEquals(1, columns.size());
-
         for (EntityColumn column : columns) {
             Assert.assertEquals("name", column.getColumn());
             Assert.assertEquals("name", column.getProperty());
-
             Assert.assertEquals("name = #{name, jdbcType=VARCHAR}", column.getColumnEqualsHolder());
             Assert.assertEquals("name = #{record.name, jdbcType=VARCHAR}", column.getColumnEqualsHolder("record"));
             Assert.assertEquals("#{name, jdbcType=VARCHAR}", column.getColumnHolder());
@@ -99,12 +90,9 @@ public class ColumnTypeTest {
             Assert.assertEquals("#{record.namesuffix, jdbcType=VARCHAR},", column.getColumnHolder("record", "suffix", ","));
             Assert.assertNull(column.getTypeHandler());
         }
-
         ResultMap resultMap = entityTable.getResultMap(configuration);
         Assert.assertEquals("[NAME]", resultMap.getMappedColumns().toString());
-
         Assert.assertEquals(1, resultMap.getResultMappings().size());
-
         ResultMapping resultMapping = resultMap.getResultMappings().get(0);
         Assert.assertEquals("name", resultMapping.getColumn());
         Assert.assertEquals("name", resultMapping.getProperty());
@@ -114,6 +102,7 @@ public class ColumnTypeTest {
     }
 
     class UserJdbcTypeBlob {
+
         @ColumnType(jdbcType = JdbcType.BLOB)
         private String name;
     }
@@ -123,14 +112,11 @@ public class ColumnTypeTest {
         EntityHelper.initEntityNameMap(UserJdbcTypeBlob.class, config);
         EntityTable entityTable = EntityHelper.getEntityTable(UserJdbcTypeBlob.class);
         Assert.assertNotNull(entityTable);
-
         Set<EntityColumn> columns = entityTable.getEntityClassColumns();
         Assert.assertEquals(1, columns.size());
-
         for (EntityColumn column : columns) {
             Assert.assertEquals("name", column.getColumn());
             Assert.assertEquals("name", column.getProperty());
-
             Assert.assertEquals("name = #{name, jdbcType=BLOB}", column.getColumnEqualsHolder());
             Assert.assertEquals("name = #{record.name, jdbcType=BLOB}", column.getColumnEqualsHolder("record"));
             Assert.assertEquals("#{name, jdbcType=BLOB}", column.getColumnHolder());
@@ -139,12 +125,9 @@ public class ColumnTypeTest {
             Assert.assertEquals("#{record.namesuffix, jdbcType=BLOB},", column.getColumnHolder("record", "suffix", ","));
             Assert.assertNull(column.getTypeHandler());
         }
-
         ResultMap resultMap = entityTable.getResultMap(configuration);
         Assert.assertEquals("[NAME]", resultMap.getMappedColumns().toString());
-
         Assert.assertEquals(1, resultMap.getResultMappings().size());
-
         ResultMapping resultMapping = resultMap.getResultMappings().get(0);
         Assert.assertEquals("name", resultMapping.getColumn());
         Assert.assertEquals("name", resultMapping.getProperty());
@@ -154,6 +137,7 @@ public class ColumnTypeTest {
     }
 
     class UserTypehandler {
+
         @ColumnType(typeHandler = BlobTypeHandler.class)
         private String name;
     }
@@ -163,14 +147,11 @@ public class ColumnTypeTest {
         EntityHelper.initEntityNameMap(UserTypehandler.class, config);
         EntityTable entityTable = EntityHelper.getEntityTable(UserTypehandler.class);
         Assert.assertNotNull(entityTable);
-
         Set<EntityColumn> columns = entityTable.getEntityClassColumns();
         Assert.assertEquals(1, columns.size());
-
         for (EntityColumn column : columns) {
             Assert.assertEquals("name", column.getColumn());
             Assert.assertEquals("name", column.getProperty());
-
             Assert.assertEquals("name = #{name, typeHandler=org.apache.ibatis.type.BlobTypeHandler}", column.getColumnEqualsHolder());
             Assert.assertEquals("name = #{record.name, typeHandler=org.apache.ibatis.type.BlobTypeHandler}", column.getColumnEqualsHolder("record"));
             Assert.assertEquals("#{name, typeHandler=org.apache.ibatis.type.BlobTypeHandler}", column.getColumnHolder());
@@ -179,12 +160,9 @@ public class ColumnTypeTest {
             Assert.assertEquals("#{record.namesuffix, typeHandler=org.apache.ibatis.type.BlobTypeHandler},", column.getColumnHolder("record", "suffix", ","));
             Assert.assertNotNull(column.getTypeHandler());
         }
-
         ResultMap resultMap = entityTable.getResultMap(configuration);
         Assert.assertEquals("[NAME]", resultMap.getMappedColumns().toString());
-
         Assert.assertEquals(1, resultMap.getResultMappings().size());
-
         ResultMapping resultMapping = resultMap.getResultMappings().get(0);
         Assert.assertEquals("name", resultMapping.getColumn());
         Assert.assertEquals("name", resultMapping.getProperty());
@@ -193,6 +171,7 @@ public class ColumnTypeTest {
     }
 
     class UserAll {
+
         @ColumnType(column = "user_name", jdbcType = JdbcType.BLOB, typeHandler = BlobTypeHandler.class)
         private String name;
     }
@@ -202,14 +181,11 @@ public class ColumnTypeTest {
         EntityHelper.initEntityNameMap(UserAll.class, config);
         EntityTable entityTable = EntityHelper.getEntityTable(UserAll.class);
         Assert.assertNotNull(entityTable);
-
         Set<EntityColumn> columns = entityTable.getEntityClassColumns();
         Assert.assertEquals(1, columns.size());
-
         for (EntityColumn column : columns) {
             Assert.assertEquals("user_name", column.getColumn());
             Assert.assertEquals("name", column.getProperty());
-
             Assert.assertEquals("user_name = #{name, jdbcType=BLOB, typeHandler=org.apache.ibatis.type.BlobTypeHandler}", column.getColumnEqualsHolder());
             Assert.assertEquals("user_name = #{record.name, jdbcType=BLOB, typeHandler=org.apache.ibatis.type.BlobTypeHandler}", column.getColumnEqualsHolder("record"));
             Assert.assertEquals("#{name, jdbcType=BLOB, typeHandler=org.apache.ibatis.type.BlobTypeHandler}", column.getColumnHolder());
@@ -218,17 +194,13 @@ public class ColumnTypeTest {
             Assert.assertEquals("#{record.namesuffix, jdbcType=BLOB, typeHandler=org.apache.ibatis.type.BlobTypeHandler},", column.getColumnHolder("record", "suffix", ","));
             Assert.assertNotNull(column.getTypeHandler());
         }
-
         ResultMap resultMap = entityTable.getResultMap(configuration);
         Assert.assertEquals("[USER_NAME]", resultMap.getMappedColumns().toString());
-
         Assert.assertEquals(1, resultMap.getResultMappings().size());
-
         ResultMapping resultMapping = resultMap.getResultMappings().get(0);
         Assert.assertEquals("user_name", resultMapping.getColumn());
         Assert.assertEquals("name", resultMapping.getProperty());
         Assert.assertNotNull(resultMapping.getJdbcType());
         Assert.assertEquals(BlobTypeHandler.class, resultMapping.getTypeHandler().getClass());
     }
-
 }

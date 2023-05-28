@@ -21,7 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package tk.mybatis.mapper.test.country;
 
 import org.apache.ibatis.exceptions.PersistenceException;
@@ -31,7 +30,6 @@ import org.junit.Test;
 import tk.mybatis.mapper.mapper.CountryMapper;
 import tk.mybatis.mapper.mapper.MybatisHelper;
 import tk.mybatis.mapper.model.Country;
-
 import java.util.List;
 
 /**
@@ -82,12 +80,10 @@ public class TestInsertSelective {
             country.setCountrycode("CN");
             country.setCountryname("天朝");
             Assert.assertEquals(1, mapper.insertSelective(country));
-
             //查询CN结果2个
             country = new Country();
             country.setCountrycode("CN");
             List<Country> list = mapper.select(country);
-
             Assert.assertEquals(2, list.size());
             //删除插入的数据,以免对其他测试产生影响
             Assert.assertEquals(1, mapper.deleteByPrimaryKey(10086));
@@ -108,12 +104,10 @@ public class TestInsertSelective {
             country.setId(10086);
             country.setCountryname("天朝");
             Assert.assertEquals(1, mapper.insertSelective(country));
-
             //查询CN结果2个
             country = new Country();
             country.setId(10086);
             List<Country> list = mapper.select(country);
-
             Assert.assertEquals(1, list.size());
             //默认值
             Assert.assertNotNull(list.get(0).getCountrycode());
@@ -124,5 +118,4 @@ public class TestInsertSelective {
             sqlSession.close();
         }
     }
-
 }

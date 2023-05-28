@@ -21,13 +21,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package tk.mybatis.mapper.genid;
 
 import org.apache.ibatis.reflection.MetaObject;
 import tk.mybatis.mapper.MapperException;
 import tk.mybatis.mapper.util.MetaObjectUtil;
-
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.ReentrantLock;
@@ -77,5 +75,4 @@ public class GenIdUtil {
             throw new MapperException("生成 ID 失败!", e);
         }
     }
-
 }

@@ -4,7 +4,6 @@ import org.apache.ibatis.session.SqlSession;
 import org.junit.Assert;
 import org.junit.Test;
 import tk.mybatis.mapper.base.BaseTest;
-
 import java.io.IOException;
 import java.io.Reader;
 import java.net.URL;
@@ -13,43 +12,8 @@ import java.net.URL;
  * @author liuzh
  */
 public class InsertGenIdTest extends BaseTest {
-    private String[][] countries = new String[][]{
-            {"Angola", "AO"},
-            {"Afghanistan", "AF"},
-            {"Albania", "AL"},
-            {"Algeria", "DZ"},
-            {"Andorra", "AD"},
-            {"Anguilla", "AI"},
-            {"Antigua and Barbuda", "AG"},
-            {"Argentina", "AR"},
-            {"Armenia", "AM"},
-            {"Australia", "AU"},
-            {"Austria", "AT"},
-            {"Azerbaijan", "AZ"},
-            {"Bahamas", "BS"},
-            {"Bahrain", "BH"},
-            {"Bangladesh", "BD"},
-            {"Barbados", "BB"},
-            {"Belarus", "BY"},
-            {"Belgium", "BE"},
-            {"Belize", "BZ"},
-            {"Benin", "BJ"},
-            {"Bermuda Is.", "BM"},
-            {"Bolivia", "BO"},
-            {"Botswana", "BW"},
-            {"Brazil", "BR"},
-            {"Brunei", "BN"},
-            {"Bulgaria", "BG"},
-            {"Burkina-faso", "BF"},
-            {"Burma", "MM"},
-            {"Burundi", "BI"},
-            {"Cameroon", "CM"},
-            {"Canada", "CA"},
-            {"Central African Republic", "CF"},
-            {"Chad", "TD"},
-            {"Chile", "CL"},
-            {"China", "CN"}
-    };
+
+    private String[][] countries = new String[][] { { "Angola", "AO" }, { "Afghanistan", "AF" }, { "Albania", "AL" }, { "Algeria", "DZ" }, { "Andorra", "AD" }, { "Anguilla", "AI" }, { "Antigua and Barbuda", "AG" }, { "Argentina", "AR" }, { "Armenia", "AM" }, { "Australia", "AU" }, { "Austria", "AT" }, { "Azerbaijan", "AZ" }, { "Bahamas", "BS" }, { "Bahrain", "BH" }, { "Bangladesh", "BD" }, { "Barbados", "BB" }, { "Belarus", "BY" }, { "Belgium", "BE" }, { "Belize", "BZ" }, { "Benin", "BJ" }, { "Bermuda Is.", "BM" }, { "Bolivia", "BO" }, { "Botswana", "BW" }, { "Brazil", "BR" }, { "Brunei", "BN" }, { "Bulgaria", "BG" }, { "Burkina-faso", "BF" }, { "Burma", "MM" }, { "Burundi", "BI" }, { "Cameroon", "CM" }, { "Canada", "CA" }, { "Central African Republic", "CF" }, { "Chad", "TD" }, { "Chile", "CL" }, { "China", "CN" } };
 
     /**
      * 获取 mybatis 配置
@@ -61,8 +25,6 @@ public class InsertGenIdTest extends BaseTest {
         return toReader(url);
     }
 
-    ;
-
     /**
      * 获取初始化 sql
      *
@@ -72,8 +34,6 @@ public class InsertGenIdTest extends BaseTest {
         URL url = getClass().getResource("CreateDB.sql");
         return toReader(url);
     }
-
-    ;
 
     @Test
     public void testGenId() {
@@ -107,7 +67,6 @@ public class InsertGenIdTest extends BaseTest {
         }
     }
 
-
     @Test
     public void testUUID() {
         SqlSession sqlSession = getSqlSession();
@@ -123,5 +82,4 @@ public class InsertGenIdTest extends BaseTest {
             sqlSession.close();
         }
     }
-
 }

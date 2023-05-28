@@ -21,7 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package tk.mybatis.mapper.model;
 
 import javax.persistence.*;
@@ -34,29 +33,28 @@ import java.io.Serializable;
 public class UserInfoAble extends UserParent implements Serializable {
 
     private static final long serialVersionUID = -7703830119762722918L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
     private String username;
+
     private String password;
+
     private String usertype;
+
     private String realname;
+
     private String qq;
+
     private String email;
+
     private String tel;
 
     @Override
     public String toString() {
-        return "UserInfo{" +
-                "id=" + id +
-                ", username='" + username + '\'' +
-                ", password='" + password + '\'' +
-                ", usertype='" + usertype + '\'' +
-                ", realname='" + realname + '\'' +
-                ", qq='" + qq + '\'' +
-                ", email='" + email + '\'' +
-                ", tel='" + tel + '\'' +
-                '}';
+        return "UserInfo{" + "id=" + id + ", username='" + username + '\'' + ", password='" + password + '\'' + ", usertype='" + usertype + '\'' + ", realname='" + realname + '\'' + ", qq='" + qq + '\'' + ", email='" + email + '\'' + ", tel='" + tel + '\'' + '}';
     }
 
     public String getEmail() {

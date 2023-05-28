@@ -21,7 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package tk.mybatis.mapper.test.user;
 
 import org.apache.ibatis.session.SqlSession;
@@ -29,7 +28,6 @@ import org.junit.Assert;
 import tk.mybatis.mapper.mapper.MybatisHelper;
 import tk.mybatis.mapper.mapper.UserInfoMapMapper;
 import tk.mybatis.mapper.model.UserInfoMap;
-
 import java.util.List;
 
 /**
@@ -39,11 +37,10 @@ import java.util.List;
  */
 public class TestMap {
 
-
     /**
      * 新增
      */
-//    @Test
+    //    @Test
     public void testInsert() {
         SqlSession sqlSession = MybatisHelper.getSqlSession();
         try {
@@ -52,12 +49,9 @@ public class TestMap {
             userInfoMap.setUserName("abel533");
             userInfoMap.setPassword("123456");
             userInfoMap.setUserType("2");
-
             Assert.assertEquals(1, mapper.insert(userInfoMap));
-
             Assert.assertNotNull(userInfoMap.getId());
             Assert.assertEquals(6, (int) userInfoMap.getId());
-
             Assert.assertEquals(1, mapper.deleteByPrimaryKey(userInfoMap));
         } finally {
             sqlSession.close();
@@ -67,7 +61,7 @@ public class TestMap {
     /**
      * 主要测试删除
      */
-//    @Test
+    //    @Test
     public void testDelete() {
         SqlSession sqlSession = MybatisHelper.getSqlSession();
         try {
@@ -76,10 +70,8 @@ public class TestMap {
             Assert.assertEquals(5, mapper.selectCount(new UserInfoMap()));
             //查询100
             UserInfoMap userInfoMap = mapper.selectByPrimaryKey(1);
-
             //根据主键删除
             Assert.assertEquals(1, mapper.deleteByPrimaryKey(1));
-
             //查询总数
             Assert.assertEquals(4, mapper.selectCount(new UserInfoMap()));
             //插入
@@ -89,11 +81,10 @@ public class TestMap {
         }
     }
 
-
     /**
      * 查询
      */
-//    @Test
+    //    @Test
     public void testSelect() {
         SqlSession sqlSession = MybatisHelper.getSqlSession();
         try {
@@ -110,7 +101,7 @@ public class TestMap {
     /**
      * 根据主键全更新
      */
-//    @Test
+    //    @Test
     public void testUpdateByPrimaryKey() {
         SqlSession sqlSession = MybatisHelper.getSqlSession();
         try {
@@ -121,7 +112,6 @@ public class TestMap {
             userInfoMap.setRealName("liuzh");
             //不会更新user_type
             Assert.assertEquals(1, mapper.updateByPrimaryKey(userInfoMap));
-
             userInfoMap = mapper.selectByPrimaryKey(userInfoMap);
             Assert.assertNull(userInfoMap.getUserType());
             Assert.assertEquals("liuzh", userInfoMap.getRealName());
@@ -133,7 +123,7 @@ public class TestMap {
     /**
      * 根据主键更新非null
      */
-//    @Test
+    //    @Test
     public void testUpdateByPrimaryKeySelective() {
         SqlSession sqlSession = MybatisHelper.getSqlSession();
         try {
@@ -144,7 +134,6 @@ public class TestMap {
             userInfoMap.setRealName("liuzh");
             //不会更新user_type
             Assert.assertEquals(1, mapper.updateByPrimaryKeySelective(userInfoMap));
-
             userInfoMap = mapper.selectByPrimaryKey(1);
             Assert.assertEquals("1", userInfoMap.getUserType());
             Assert.assertEquals("liuzh", userInfoMap.getRealName());
@@ -152,6 +141,4 @@ public class TestMap {
             sqlSession.close();
         }
     }
-
-
 }

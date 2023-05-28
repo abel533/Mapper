@@ -21,14 +21,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package tk.mybatis.mapper.helper;
 
 import org.junit.Test;
 import tk.mybatis.mapper.entity.EntityField;
 import tk.mybatis.mapper.mapperhelper.FieldHelper;
 import tk.mybatis.mapper.model.Country;
-
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import java.beans.BeanInfo;
@@ -66,14 +64,9 @@ public class FieldTest {
         for (PropertyDescriptor desc : descriptors) {
             if (desc != null && !"class".equals(desc.getName())) {
                 EntityField entityField = new EntityField(null, desc);
-                if (desc.getReadMethod() != null
-                        && desc.getReadMethod().getGenericReturnType() != null
-                        && desc.getReadMethod().getGenericReturnType() instanceof TypeVariable) {
+                if (desc.getReadMethod() != null && desc.getReadMethod().getGenericReturnType() != null && desc.getReadMethod().getGenericReturnType() instanceof TypeVariable) {
                     entityField.setJavaType(genericMap.get(((TypeVariable) desc.getReadMethod().getGenericReturnType()).getName()));
-                } else if (desc.getWriteMethod() != null
-                        && desc.getWriteMethod().getGenericParameterTypes() != null
-                        && desc.getWriteMethod().getGenericParameterTypes().length == 1
-                        && desc.getWriteMethod().getGenericParameterTypes()[0] instanceof TypeVariable) {
+                } else if (desc.getWriteMethod() != null && desc.getWriteMethod().getGenericParameterTypes() != null && desc.getWriteMethod().getGenericParameterTypes().length == 1 && desc.getWriteMethod().getGenericParameterTypes()[0] instanceof TypeVariable) {
                     entityField.setJavaType(genericMap.get(((TypeVariable) desc.getWriteMethod().getGenericParameterTypes()[0]).getName()));
                 }
                 entityFields.add(entityField);
@@ -93,11 +86,7 @@ public class FieldTest {
         //获取父类和泛型信息
         Class<?> superClass = entityClass.getSuperclass();
         //判断superClass
-        if (superClass != null
-                && !superClass.equals(Object.class)
-                && (superClass.isAnnotationPresent(Entity.class)
-                || (!Map.class.isAssignableFrom(superClass)
-                && !Collection.class.isAssignableFrom(superClass)))) {
+        if (superClass != null && !superClass.equals(Object.class) && (superClass.isAnnotationPresent(Entity.class) || (!Map.class.isAssignableFrom(superClass) && !Collection.class.isAssignableFrom(superClass)))) {
             if (entityClass.getGenericSuperclass() instanceof ParameterizedType) {
                 Type[] types = ((ParameterizedType) entityClass.getGenericSuperclass()).getActualTypeArguments();
                 TypeVariable[] typeVariables = superClass.getTypeParameters();
@@ -135,7 +124,6 @@ public class FieldTest {
             }
             fieldList.add(entityField);
         }
-
         Class<?> superClass = entityClass.getSuperclass();
         Map<String, Class<?>> _genericMap = null;
         if (entityClass.getGenericSuperclass() instanceof ParameterizedType) {
@@ -153,13 +141,13 @@ public class FieldTest {
 
     //    @Test
     public void test1() throws IntrospectionException {
-        List<EntityField> fields = null;// = new ArrayList<EntityField>();
+        // = new ArrayList<EntityField>();
+        List<EntityField> fields = null;
         processAllColumns(Country.class, fields, null);
         for (EntityField field : fields) {
             System.out.println(field.getName() + "  -  @Id:" + field.isAnnotationPresent(Id.class) + "  -  javaType:" + field.getJavaType());
         }
         System.out.println("======================================");
-
         fields = FieldHelper.getAll(Country.class);
         for (EntityField field : fields) {
             System.out.println(field.getName() + "  -  @Id:" + field.isAnnotationPresent(Id.class) + "  -  javaType:" + field.getJavaType());

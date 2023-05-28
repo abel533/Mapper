@@ -2,7 +2,6 @@ package tk.mybatis.mapper.keysql;
 
 import tk.mybatis.mapper.annotation.KeySql;
 import tk.mybatis.mapper.code.ORDER;
-
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -11,9 +10,11 @@ import javax.persistence.Table;
  */
 @Table(name = "user")
 public class UserSqlBefore {
+
     @Id
     @KeySql(sql = "select 12345", order = ORDER.BEFORE)
     private Integer id;
+
     private String name;
 
     public Integer getId() {

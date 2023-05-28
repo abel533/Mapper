@@ -21,16 +21,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package tk.mybatis.mapper.generator.formatter;
-
 
 import freemarker.cache.StringTemplateLoader;
 import freemarker.template.Configuration;
 import freemarker.template.DefaultObjectWrapper;
 import freemarker.template.Template;
 import tk.mybatis.mapper.generator.model.TableClass;
-
 import java.io.StringWriter;
 import java.io.Writer;
 import java.util.*;
@@ -42,7 +39,9 @@ import java.util.*;
  * @since 3.4.5
  */
 public class FreemarkerTemplateFormatter implements TemplateFormatter, ListTemplateFormatter {
+
     private final Configuration configuration = new Configuration(Configuration.VERSION_2_3_23);
+
     private final StringTemplateLoader templateLoader = new StringTemplateLoader();
 
     public FreemarkerTemplateFormatter() {

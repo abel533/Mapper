@@ -42,7 +42,6 @@ public class SafeDeleteByMethodTest extends BaseTest {
         }
     }
 
-
     @Test(expected = PersistenceException.class)
     public void testSafeDeleteByExample() {
         SqlSession sqlSession = getSqlSession();
@@ -64,5 +63,4 @@ public class SafeDeleteByMethodTest extends BaseTest {
             sqlSession.close();
         }
     }
-
 }

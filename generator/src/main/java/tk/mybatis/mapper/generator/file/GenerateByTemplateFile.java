@@ -21,14 +21,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package tk.mybatis.mapper.generator.file;
 
 import org.mybatis.generator.api.GeneratedJavaFile;
 import org.mybatis.generator.api.dom.java.CompilationUnit;
 import tk.mybatis.mapper.generator.formatter.TemplateFormatter;
 import tk.mybatis.mapper.generator.model.TableClass;
-
 import java.util.Properties;
 
 /**
@@ -36,6 +34,7 @@ import java.util.Properties;
  * @since 3.4.5
  */
 public class GenerateByTemplateFile extends GeneratedJavaFile {
+
     public static final String ENCODING = "UTF-8";
 
     private String targetPackage;
@@ -84,5 +83,4 @@ public class GenerateByTemplateFile extends GeneratedJavaFile {
     public boolean isMergeable() {
         return false;
     }
-
 }

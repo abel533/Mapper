@@ -1,7 +1,6 @@
 package tk.mybatis.mapper.version;
 
 import tk.mybatis.mapper.annotation.Version;
-
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.sql.Timestamp;
@@ -11,6 +10,7 @@ import java.sql.Timestamp;
  */
 @Table(name = "user_timestamp")
 public class UserTimestamp {
+
     @Id
     private Integer id;
 

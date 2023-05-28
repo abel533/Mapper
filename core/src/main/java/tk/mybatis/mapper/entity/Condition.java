@@ -21,7 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package tk.mybatis.mapper.entity;
 
 /**
@@ -31,6 +30,7 @@ package tk.mybatis.mapper.entity;
  * @since 2015-06-10
  */
 public class Condition extends Example {
+
     public Condition(Class<?> entityClass) {
         super(entityClass);
     }

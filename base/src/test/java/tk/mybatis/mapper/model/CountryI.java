@@ -21,12 +21,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package tk.mybatis.mapper.model;
 
 import tk.mybatis.mapper.annotation.NameStyle;
 import tk.mybatis.mapper.code.Style;
-
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -38,19 +36,18 @@ import javax.persistence.Id;
  */
 @NameStyle(Style.camelhump)
 public class CountryI {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
     private String countryname;
+
     private String countrycode;
 
     @Override
     public String toString() {
-        return "Country{" +
-                "id=" + id +
-                ", countryname='" + countryname + '\'' +
-                ", countrycode='" + countrycode + '\'' +
-                '}';
+        return "Country{" + "id=" + id + ", countryname='" + countryname + '\'' + ", countrycode='" + countrycode + '\'' + '}';
     }
 
     public String getCountrycode() {

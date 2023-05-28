@@ -7,7 +7,6 @@ import tk.mybatis.mapper.code.Style;
 import tk.mybatis.mapper.entity.Config;
 import tk.mybatis.mapper.entity.EntityTable;
 import tk.mybatis.mapper.mapperhelper.EntityHelper;
-
 import javax.persistence.Table;
 
 /**
@@ -25,6 +24,7 @@ public class TableTest {
 
     @Table(name = "sys_user")
     class User {
+
         private String name;
     }
 
@@ -35,5 +35,4 @@ public class TableTest {
         Assert.assertNotNull(entityTable);
         Assert.assertEquals("sys_user", entityTable.getName());
     }
-
 }

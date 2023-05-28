@@ -4,8 +4,8 @@ package tk.mybatis.mapper.defaultenumtypehandler;
  * @author liuzh
  */
 public enum LockDictEnum implements Dict {
-    locked(1),
-    unlocked(2);
+
+    locked(1), unlocked(2);
 
     private int value;
 
@@ -22,5 +22,4 @@ public enum LockDictEnum implements Dict {
     public String getName() {
         return name();
     }
-
 }

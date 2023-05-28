@@ -6,7 +6,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.util.ClassUtils;
 import org.springframework.util.ReflectionUtils;
-
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Map;
@@ -32,12 +31,10 @@ public class MapperCacheDisabler implements InitializingBean {
             removeStaticCache(ClassUtils.forName("tk.mybatis.mapper.util.MsUtil", appClassLoader), "CLASS_CACHE");
             removeStaticCache(ClassUtils.forName("tk.mybatis.mapper.genid.GenIdUtil", appClassLoader));
             removeStaticCache(ClassUtils.forName("tk.mybatis.mapper.version.VersionUtil", appClassLoader));
-
             removeEntityHelperCache(ClassUtils.forName("tk.mybatis.mapper.mapperhelper.EntityHelper", appClassLoader));
         } catch (Exception ex) {
         }
     }
-
 
     private void removeStaticCache(Class<?> utilClass) {
         removeStaticCache(utilClass, "CACHE");
@@ -54,14 +51,12 @@ public class MapperCacheDisabler implements InitializingBean {
                 } else if (cache instanceof Cache) {
                     ((Cache) cache).clear();
                 } else {
-                    throw new UnsupportedOperationException("cache field must be a java.util.Map " +
-                            "or org.apache.ibatis.cache.Cache instance");
+                    throw new UnsupportedOperationException("cache field must be a java.util.Map " + "or org.apache.ibatis.cache.Cache instance");
                 }
                 logger.info("Clear " + utilClass.getName() + " " + fieldName + " cache.");
             }
         } catch (Exception ex) {
-            logger.warn("Failed to disable " + utilClass.getName() + " "
-                    + fieldName + " cache. ClassCastExceptions may occur", ex);
+            logger.warn("Failed to disable " + utilClass.getName() + " " + fieldName + " cache. ClassCastExceptions may occur", ex);
         }
     }
 
@@ -86,5 +81,4 @@ public class MapperCacheDisabler implements InitializingBean {
             logger.warn("Failed to disable Mapper MsUtil cache. ClassCastExceptions may occur", ex);
         }
     }
-
 }

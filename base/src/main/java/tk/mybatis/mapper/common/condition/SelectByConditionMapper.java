@@ -21,12 +21,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package tk.mybatis.mapper.common.condition;
 
 import org.apache.ibatis.annotations.SelectProvider;
 import tk.mybatis.mapper.provider.ConditionProvider;
-
 import java.util.List;
 
 /**
@@ -46,5 +44,4 @@ public interface SelectByConditionMapper<T> {
      */
     @SelectProvider(type = ConditionProvider.class, method = "dynamicSQL")
     List<T> selectByCondition(Object condition);
-
 }

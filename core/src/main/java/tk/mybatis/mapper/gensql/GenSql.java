@@ -13,6 +13,7 @@ public interface GenSql {
     String genSql(EntityTable entityTable, EntityColumn entityColumn);
 
     class NULL implements GenSql {
+
         @Override
         public String genSql(EntityTable entityTable, EntityColumn entityColumn) {
             throw new UnsupportedOperationException();

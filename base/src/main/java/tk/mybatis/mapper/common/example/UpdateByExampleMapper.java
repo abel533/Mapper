@@ -21,7 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package tk.mybatis.mapper.common.example;
 
 import org.apache.ibatis.annotations.Param;
@@ -46,5 +45,4 @@ public interface UpdateByExampleMapper<T> {
      */
     @UpdateProvider(type = ExampleProvider.class, method = "dynamicSQL")
     int updateByExample(@Param("record") T record, @Param("example") Object example);
-
 }

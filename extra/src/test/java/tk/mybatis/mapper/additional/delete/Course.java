@@ -1,7 +1,6 @@
 package tk.mybatis.mapper.additional.delete;
 
 import tk.mybatis.mapper.annotation.LogicDelete;
-
 import javax.persistence.Column;
 import javax.persistence.Id;
 import java.time.LocalDate;

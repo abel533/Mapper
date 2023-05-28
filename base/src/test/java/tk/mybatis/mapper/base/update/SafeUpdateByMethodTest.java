@@ -74,5 +74,4 @@ public class SafeUpdateByMethodTest extends BaseTest {
             sqlSession.close();
         }
     }
-
 }

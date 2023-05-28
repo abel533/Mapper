@@ -21,7 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package tk.mybatis.mapper.common;
 
 /**
@@ -31,5 +30,4 @@ package tk.mybatis.mapper.common;
  * @since 3.2.2
  */
 public interface Marker {
-
 }

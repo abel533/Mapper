@@ -21,7 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package tk.mybatis.mapper.test.country;
 
 import org.apache.ibatis.session.SqlSession;
@@ -49,7 +48,6 @@ public class TestExistsWithPrimaryKey {
             Country country = new Country();
             country.setId(35);
             Assert.assertEquals(true, mapper.existsWithPrimaryKey(country));
-
             country.setId(0);
             Assert.assertEquals(false, mapper.existsWithPrimaryKey(country));
         } finally {

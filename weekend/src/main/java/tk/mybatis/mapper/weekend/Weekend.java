@@ -22,11 +22,9 @@
  * THE SOFTWARE.
  *
  */
-
 package tk.mybatis.mapper.weekend;
 
 import tk.mybatis.mapper.weekend.reflection.Reflections;
-
 import java.util.stream.Stream;
 
 /**

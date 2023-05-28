@@ -10,10 +10,12 @@ import javax.persistence.Table;
  */
 @Table(name = "user_auto_increment")
 public class UserAutoIncrement {
+
     @Id
     @GeneratedValue(generator = "JDBC")
     @Column(insertable = false)
     private Integer id;
+
     private String name;
 
     public Integer getId() {

@@ -21,7 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package tk.mybatis.mapper.test.able;
 
 import org.apache.ibatis.session.SqlSession;
@@ -50,13 +49,11 @@ public class TestBasicAble {
             userInfo.setUsername("abel533");
             userInfo.setPassword("123456");
             userInfo.setUsertype("2");
-            userInfo.setEmail("abel533@gmail.com");//insert=false
-
+            //insert=false
+            userInfo.setEmail("abel533@gmail.com");
             Assert.assertEquals(1, mapper.insert(userInfo));
-
             Assert.assertNotNull(userInfo.getId());
             Assert.assertEquals(6, (int) userInfo.getId());
-
             userInfo = mapper.selectByPrimaryKey(userInfo.getId());
             //email没有插入
             Assert.assertNull(userInfo.getEmail());
@@ -78,10 +75,10 @@ public class TestBasicAble {
             Assert.assertNotNull(userInfo);
             userInfo.setUsertype(null);
             userInfo.setEmail("abel533@gmail.com");
-            userInfo.setAddress("这个地址不会更新进去");//update=false
+            //update=false
+            userInfo.setAddress("这个地址不会更新进去");
             //不会更新username
             Assert.assertEquals(1, mapper.updateByPrimaryKey(userInfo));
-
             userInfo = mapper.selectByPrimaryKey(userInfo);
             Assert.assertNull(userInfo.getUsertype());
             Assert.assertNotEquals("这个地址不会更新进去", userInfo.getAddress());
@@ -107,7 +104,6 @@ public class TestBasicAble {
             userInfo.setAddress("这个地址不会更新进去");
             //不会更新username
             Assert.assertEquals(1, mapper.updateByPrimaryKeySelective(userInfo));
-
             userInfo = mapper.selectByPrimaryKey(1);
             Assert.assertEquals("1", userInfo.getUsertype());
             Assert.assertEquals("12345678", userInfo.getPassword());
@@ -117,6 +113,4 @@ public class TestBasicAble {
             sqlSession.close();
         }
     }
-
-
 }

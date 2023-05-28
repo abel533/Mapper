@@ -21,11 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package tk.mybatis.sample.mapper;
 
 import tk.mybatis.sample.domain.Country;
-
 import java.util.List;
 
 /**
@@ -34,5 +32,4 @@ import java.util.List;
 public interface CountryMapper extends BaseMapper<Country> {
 
     List<Country> findAll();
-
 }

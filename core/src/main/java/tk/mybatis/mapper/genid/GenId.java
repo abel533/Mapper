@@ -26,11 +26,10 @@ public interface GenId<T> {
     T genId(String table, String column);
 
     class NULL implements GenId {
+
         @Override
         public Object genId(String table, String column) {
             throw new UnsupportedOperationException();
         }
     }
-
-
 }

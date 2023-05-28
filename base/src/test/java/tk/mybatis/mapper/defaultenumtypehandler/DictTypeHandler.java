@@ -2,7 +2,6 @@ package tk.mybatis.mapper.defaultenumtypehandler;
 
 import org.apache.ibatis.type.BaseTypeHandler;
 import org.apache.ibatis.type.JdbcType;
-
 import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -14,6 +13,7 @@ import java.sql.SQLException;
 public class DictTypeHandler extends BaseTypeHandler<Dict> {
 
     private final Class<? extends Dict> type;
+
     private final Dict[] enums;
 
     public DictTypeHandler(Class<? extends Dict> type) {

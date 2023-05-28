@@ -21,7 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package tk.mybatis.mapper.common;
 
 /**
@@ -35,11 +34,5 @@ package tk.mybatis.mapper.common;
  * @author liuzh
  */
 @tk.mybatis.mapper.annotation.RegisterMapper
-public interface Mapper<T> extends
-        BaseMapper<T>,
-        ExampleMapper<T>,
-        RowBoundsMapper<T>,
-        SaveMapper<T>,
-        Marker {
-
+public interface Mapper<T> extends BaseMapper<T>, ExampleMapper<T>, RowBoundsMapper<T>, SaveMapper<T>, Marker {
 }

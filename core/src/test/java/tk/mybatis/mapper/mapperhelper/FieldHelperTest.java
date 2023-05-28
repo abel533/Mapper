@@ -3,7 +3,6 @@ package tk.mybatis.mapper.mapperhelper;
 import org.junit.Assert;
 import org.junit.Test;
 import tk.mybatis.mapper.entity.EntityField;
-
 import java.util.List;
 
 /**
@@ -12,9 +11,13 @@ import java.util.List;
 public class FieldHelperTest {
 
     static class User {
+
         private Integer id;
+
         private String name;
+
         private transient String other1;
+
         public static final Integer FINAL = 1;
     }
 
@@ -27,7 +30,9 @@ public class FieldHelperTest {
     }
 
     static class Admin {
+
         private Integer admin;
+
         private User user;
     }
 
@@ -38,5 +43,4 @@ public class FieldHelperTest {
         Assert.assertEquals("admin", fieldList.get(0).getName());
         Assert.assertEquals("user", fieldList.get(1).getName());
     }
-
 }

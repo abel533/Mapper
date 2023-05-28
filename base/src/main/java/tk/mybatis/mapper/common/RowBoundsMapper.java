@@ -21,7 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package tk.mybatis.mapper.common;
 
 import tk.mybatis.mapper.common.rowbounds.SelectByExampleRowBoundsMapper;
@@ -38,8 +37,5 @@ import tk.mybatis.mapper.common.rowbounds.SelectRowBoundsMapper;
  * @author liuzh
  */
 @tk.mybatis.mapper.annotation.RegisterMapper
-public interface RowBoundsMapper<T> extends
-        SelectByExampleRowBoundsMapper<T>,
-        SelectRowBoundsMapper<T> {
-
+public interface RowBoundsMapper<T> extends SelectByExampleRowBoundsMapper<T>, SelectRowBoundsMapper<T> {
 }

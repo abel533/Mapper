@@ -21,12 +21,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package tk.mybatis.mapper.additional.idlist;
 
 import org.apache.ibatis.annotations.DeleteProvider;
 import org.apache.ibatis.annotations.Param;
-
 import java.util.List;
 
 /**
@@ -46,5 +44,4 @@ public interface DeleteByIdListMapper<T, PK> {
      */
     @DeleteProvider(type = IdListProvider.class, method = "dynamicSQL")
     int deleteByIdList(@Param("idList") List<PK> idList);
-
 }

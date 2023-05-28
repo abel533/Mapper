@@ -21,12 +21,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package tk.mybatis.mapper.generator.model;
 
 import org.mybatis.generator.api.IntrospectedTable;
 import org.mybatis.generator.api.dom.java.FullyQualifiedJavaType;
-
 import java.io.Serializable;
 import java.util.List;
 
@@ -35,21 +33,31 @@ import java.util.List;
  * @since 3.4.5
  */
 public class TableClass implements Serializable {
+
     private static final long serialVersionUID = -746251813735169289L;
 
     private IntrospectedTable introspectedTable;
 
     private String tableName;
+
     private String variableName;
+
     private String lowerCaseName;
+
     private String shortClassName;
+
     private String fullClassName;
+
     private String packageName;
+
     private FullyQualifiedJavaType type;
 
     private List<ColumnField> pkFields;
+
     private List<ColumnField> baseFields;
+
     private List<ColumnField> blobFields;
+
     private List<ColumnField> allFields;
 
     public List<ColumnField> getAllFields() {

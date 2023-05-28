@@ -7,11 +7,16 @@ import java.io.Serializable;
  * @author liuzh
  */
 public class User implements Serializable {
+
     private static final long serialVersionUID = 1L;
+
     @Id
     private Integer id;
+
     private String name;
+
     private LockDictEnum lock;
+
     private StateDictEnum state;
 
     public Integer getId() {

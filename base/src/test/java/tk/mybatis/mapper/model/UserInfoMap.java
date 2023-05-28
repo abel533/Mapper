@@ -21,7 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package tk.mybatis.mapper.model;
 
 import javax.persistence.GeneratedValue;
@@ -36,12 +35,17 @@ import java.util.HashMap;
 public class UserInfoMap extends HashMap<String, Object> implements Serializable {
 
     private static final long serialVersionUID = -7703830119762722918L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
     private String userName;
+
     private String password;
+
     private String userType;
+
     private String realName;
 
     @Override

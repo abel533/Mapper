@@ -8,9 +8,11 @@ import org.junit.runners.model.Statement;
  * @author liuzh
  */
 public class UseJava8Rule implements TestRule {
+
     @Override
     public Statement apply(final Statement base, final Description description) {
         return new Statement() {
+
             @Override
             public void evaluate() throws Throwable {
                 String version = System.getProperty("java.version");

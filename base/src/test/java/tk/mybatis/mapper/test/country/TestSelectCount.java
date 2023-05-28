@@ -21,7 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package tk.mybatis.mapper.test.country;
 
 import org.apache.ibatis.session.SqlSession;
@@ -94,11 +93,11 @@ public class TestSelectCount {
             CountryMapper mapper = sqlSession.getMapper(CountryMapper.class);
             Country country = new Country();
             country.setCountrycode("CN");
-            country.setCountryname("天朝");//实际上是 China
+            //实际上是 China
+            country.setCountryname("天朝");
             Assert.assertEquals(0, mapper.selectCount(country));
         } finally {
             sqlSession.close();
         }
     }
-
 }

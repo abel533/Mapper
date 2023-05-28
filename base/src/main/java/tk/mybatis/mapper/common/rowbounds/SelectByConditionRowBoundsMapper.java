@@ -21,13 +21,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package tk.mybatis.mapper.common.rowbounds;
 
 import org.apache.ibatis.annotations.SelectProvider;
 import org.apache.ibatis.session.RowBounds;
 import tk.mybatis.mapper.provider.ConditionProvider;
-
 import java.util.List;
 
 /**
@@ -48,5 +46,4 @@ public interface SelectByConditionRowBoundsMapper<T> {
      */
     @SelectProvider(type = ConditionProvider.class, method = "dynamicSQL")
     List<T> selectByConditionAndRowBounds(Object condition, RowBounds rowBounds);
-
 }

@@ -1,7 +1,6 @@
 package tk.mybatis.mapper.version;
 
 import tk.mybatis.mapper.annotation.Version;
-
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -10,6 +9,7 @@ import javax.persistence.Table;
  */
 @Table(name = "user_int")
 public class UserInt {
+
     @Id
     private Integer id;
 

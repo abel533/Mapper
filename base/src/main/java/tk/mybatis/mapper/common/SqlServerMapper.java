@@ -21,9 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package tk.mybatis.mapper.common;
-
 
 import tk.mybatis.mapper.common.sqlserver.InsertMapper;
 import tk.mybatis.mapper.common.sqlserver.InsertSelectiveMapper;
@@ -35,8 +33,5 @@ import tk.mybatis.mapper.common.sqlserver.InsertSelectiveMapper;
  * @author liuzh
  */
 @tk.mybatis.mapper.annotation.RegisterMapper
-public interface SqlServerMapper<T> extends
-        InsertMapper<T>,
-        InsertSelectiveMapper<T> {
-
+public interface SqlServerMapper<T> extends InsertMapper<T>, InsertSelectiveMapper<T> {
 }

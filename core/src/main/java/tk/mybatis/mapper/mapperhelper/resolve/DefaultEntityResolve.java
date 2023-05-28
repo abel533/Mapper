@@ -22,7 +22,6 @@ import tk.mybatis.mapper.mapperhelper.FieldHelper;
 import tk.mybatis.mapper.util.SimpleTypeUtil;
 import tk.mybatis.mapper.util.SqlReservedWords;
 import tk.mybatis.mapper.util.StringUtil;
-
 import javax.persistence.*;
 import java.text.MessageFormat;
 import java.util.LinkedHashSet;
@@ -32,6 +31,7 @@ import java.util.List;
  * @author liuzh
  */
 public class DefaultEntityResolve implements EntityResolve {
+
     private final Log log = LogFactory.getLog(DefaultEntityResolve.class);
 
     @Override
@@ -42,7 +42,6 @@ public class DefaultEntityResolve implements EntityResolve {
             NameStyle nameStyle = entityClass.getAnnotation(NameStyle.class);
             style = nameStyle.value();
         }
-
         //创建并缓存EntityTable
         EntityTable entityTable = null;
         if (entityClass.isAnnotationPresent(Table.class)) {
@@ -75,11 +74,12 @@ public class DefaultEntityResolve implements EntityResolve {
             //如果启用了简单类型，就做简单类型校验，如果不是简单类型，直接跳过
             //3.5.0 如果启用了枚举作为简单类型，就不会自动忽略枚举类型
             //4.0 如果标记了 Column 或 ColumnType 注解，也不忽略
-            if (!config.isUseSimpleType() //关闭简单类型限制时，所有字段都处理
-                    || (config.isUseSimpleType() && SimpleTypeUtil.isSimpleType(field.getJavaType())) //开启简单类型时只处理包含的简单类型
-                    || field.isAnnotationPresent(Column.class) //有注解的处理，不考虑类型
-                    || field.isAnnotationPresent(ColumnType.class) //有注解的处理，不考虑类型
-                    || (config.isEnumAsSimpleType() && Enum.class.isAssignableFrom(field.getJavaType()))) { //开启枚举作为简单类型时处理
+            if (//关闭简单类型限制时，所有字段都处理
+            !config.isUseSimpleType() || //开启简单类型时只处理包含的简单类型
+            (config.isUseSimpleType() && SimpleTypeUtil.isSimpleType(field.getJavaType())) || //有注解的处理，不考虑类型
+            field.isAnnotationPresent(Column.class) || //有注解的处理，不考虑类型
+            field.isAnnotationPresent(ColumnType.class) || (config.isEnumAsSimpleType() && Enum.class.isAssignableFrom(field.getJavaType()))) {
+                //开启枚举作为简单类型时处理
                 processField(entityTable, field, config, style);
             }
         }
@@ -238,10 +238,7 @@ public class DefaultEntityResolve implements EntityResolve {
                     entityColumn.setGenerator(generator);
                 }
             } else {
-                throw new MapperException(entityColumn.getProperty()
-                        + " - 该字段@GeneratedValue配置只允许以下几种形式:" +
-                        "\n1.useGeneratedKeys的@GeneratedValue(generator=\\\"JDBC\\\")  " +
-                        "\n2.类似mysql数据库的@GeneratedValue(strategy=GenerationType.IDENTITY[,generator=\"Mysql\"])");
+                throw new MapperException(entityColumn.getProperty() + " - 该字段@GeneratedValue配置只允许以下几种形式:" + "\n1.useGeneratedKeys的@GeneratedValue(generator=\\\"JDBC\\\")  " + "\n2.类似mysql数据库的@GeneratedValue(strategy=GenerationType.IDENTITY[,generator=\"Mysql\"])");
             }
         }
     }
@@ -268,7 +265,6 @@ public class DefaultEntityResolve implements EntityResolve {
             entityColumn.setOrder(ORDER.AFTER);
             entityColumn.setGenerator(keySql.dialect().getIdentityRetrievalStatement());
         } else if (StringUtil.isNotEmpty(keySql.sql())) {
-
             entityColumn.setIdentity(true);
             entityColumn.setOrder(keySql.order());
             entityColumn.setGenerator(keySql.sql());
@@ -286,9 +282,7 @@ public class DefaultEntityResolve implements EntityResolve {
             entityColumn.setIdentity(false);
             entityColumn.setGenIdClass(keySql.genId());
         } else {
-            throw new MapperException(entityTable.getEntityClass().getName()
-                    + " 类中的 @KeySql 注解配置无效!");
+            throw new MapperException(entityTable.getEntityClass().getName() + " 类中的 @KeySql 注解配置无效!");
         }
     }
-
 }

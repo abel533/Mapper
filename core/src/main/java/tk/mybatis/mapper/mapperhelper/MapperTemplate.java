@@ -21,7 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package tk.mybatis.mapper.mapperhelper;
 
 import org.apache.ibatis.mapping.MappedStatement;
@@ -37,7 +36,6 @@ import tk.mybatis.mapper.entity.EntityColumn;
 import tk.mybatis.mapper.entity.EntityTable;
 import tk.mybatis.mapper.util.MetaObjectUtil;
 import tk.mybatis.mapper.util.StringUtil;
-
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
@@ -48,7 +46,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-
 import static tk.mybatis.mapper.util.MsUtil.getMapperClass;
 import static tk.mybatis.mapper.util.MsUtil.getMethodName;
 
@@ -58,10 +55,15 @@ import static tk.mybatis.mapper.util.MsUtil.getMethodName;
  * @author liuzh
  */
 public abstract class MapperTemplate {
+
     private static final XMLLanguageDriver languageDriver = new XMLLanguageDriver();
+
     protected Map<String, Method> methodMap = new ConcurrentHashMap<String, Method>();
+
     protected Map<String, Class<?>> entityClassMap = new ConcurrentHashMap<String, Class<?>>();
+
     protected Class<?> mapperClass;
+
     protected MapperHelper mapperHelper;
 
     public MapperTemplate(Class<?> mapperClass, MapperHelper mapperHelper) {
@@ -234,15 +236,13 @@ public abstract class MapperTemplate {
             //第一种，直接操作ms，不需要返回值
             if (method.getReturnType() == Void.TYPE) {
                 method.invoke(this, ms);
-            }
-            //第二种，返回SqlNode
-            else if (SqlNode.class.isAssignableFrom(method.getReturnType())) {
+            } else //第二种，返回SqlNode
+            if (SqlNode.class.isAssignableFrom(method.getReturnType())) {
                 SqlNode sqlNode = (SqlNode) method.invoke(this, ms);
                 DynamicSqlSource dynamicSqlSource = new DynamicSqlSource(ms.getConfiguration(), sqlNode);
                 setSqlSource(ms, dynamicSqlSource);
-            }
-            //第三种，返回xml形式的sql字符串
-            else if (String.class.equals(method.getReturnType())) {
+            } else //第三种，返回xml形式的sql字符串
+            if (String.class.equals(method.getReturnType())) {
                 String xmlSql = (String) method.invoke(this, ms);
                 SqlSource sqlSource = createSqlSource(ms, xmlSql);
                 //替换原有的SqlSource
@@ -256,5 +256,4 @@ public abstract class MapperTemplate {
             throw new MapperException(e.getTargetException() != null ? e.getTargetException() : e);
         }
     }
-
 }

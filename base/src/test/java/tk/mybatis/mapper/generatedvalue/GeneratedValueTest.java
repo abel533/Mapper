@@ -6,7 +6,6 @@ import org.junit.Ignore;
 import org.junit.Test;
 import tk.mybatis.mapper.base.BaseTest;
 import tk.mybatis.mapper.entity.Config;
-
 import java.io.IOException;
 import java.io.Reader;
 
@@ -39,12 +38,10 @@ public class GeneratedValueTest extends BaseTest {
         SqlSession sqlSession = getSqlSession();
         try {
             UserAutoIncrementMapper mapper = sqlSession.getMapper(UserAutoIncrementMapper.class);
-
             UserAutoIncrement user = new UserAutoIncrement();
             user.setName("liuzh");
             Assert.assertEquals(1, mapper.insert(user));
             Assert.assertNotNull(user.getId());
-
             user = mapper.selectByPrimaryKey(user.getId());
             Assert.assertEquals("liuzh", user.getName());
         } finally {
@@ -57,12 +54,10 @@ public class GeneratedValueTest extends BaseTest {
         SqlSession sqlSession = getSqlSession();
         try {
             UserAutoIncrementIdentityMapper mapper = sqlSession.getMapper(UserAutoIncrementIdentityMapper.class);
-
             UserAutoIncrementIdentity user = new UserAutoIncrementIdentity();
             user.setName("liuzh");
             Assert.assertEquals(1, mapper.insert(user));
             Assert.assertNotNull(user.getId());
-
             user = mapper.selectByPrimaryKey(user.getId());
             Assert.assertEquals("liuzh", user.getName());
         } finally {
@@ -75,17 +70,14 @@ public class GeneratedValueTest extends BaseTest {
         SqlSession sqlSession = getSqlSession();
         try {
             UserSqlAfterMapper mapper = sqlSession.getMapper(UserSqlAfterMapper.class);
-
             UserSqlAfter user = new UserSqlAfter();
             user.setName("liuzh");
             Assert.assertEquals(1, mapper.insert(user));
             Assert.assertNotNull(user.getId());
-
             user = mapper.selectByPrimaryKey(user.getId());
             Assert.assertEquals("liuzh", user.getName());
         } finally {
             sqlSession.close();
         }
     }
-
 }

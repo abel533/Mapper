@@ -3,11 +3,9 @@ package tk.mybatis.mapper.version;
 import org.apache.ibatis.session.SqlSession;
 import org.junit.Test;
 import tk.mybatis.mapper.base.BaseTest;
-
 import java.io.IOException;
 import java.io.Reader;
 import java.sql.Timestamp;
-
 import static org.junit.Assert.*;
 
 /**
@@ -50,7 +48,6 @@ public class VersionTest extends BaseTest {
             Timestamp joinDate = user.getJoinDate();
             int count = mapper.updateByPrimaryKey(user);
             assertEquals(1, count);
-
             user = mapper.selectByPrimaryKey(999);
             assertFalse(joinDate.equals(user.getJoinDate()));
         } finally {
@@ -68,7 +65,6 @@ public class VersionTest extends BaseTest {
             Timestamp joinDate = user.getJoinDate();
             int count = mapper.updateByPrimaryKeySelective(user);
             assertEquals(1, count);
-
             user = mapper.selectByPrimaryKey(999);
             assertFalse(joinDate.equals(user.getJoinDate()));
         } finally {
@@ -86,7 +82,6 @@ public class VersionTest extends BaseTest {
             Integer age = user.getAge();
             int count = mapper.updateByPrimaryKey(user);
             assertEquals(1, count);
-
             user = mapper.selectByPrimaryKey(999);
             assertFalse(age.equals(user.getAge()));
         } finally {
@@ -104,13 +99,10 @@ public class VersionTest extends BaseTest {
             Integer age = user.getAge();
             int count = mapper.updateByPrimaryKeySelective(user);
             assertEquals(1, count);
-
             user = mapper.selectByPrimaryKey(999);
             assertFalse(age.equals(user.getAge()));
         } finally {
             sqlSession.close();
         }
     }
-
-
 }

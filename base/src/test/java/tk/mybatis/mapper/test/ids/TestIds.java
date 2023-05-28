@@ -21,7 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package tk.mybatis.mapper.test.ids;
 
 import org.apache.ibatis.session.SqlSession;
@@ -30,7 +29,6 @@ import org.junit.Test;
 import tk.mybatis.mapper.mapper.CountryMapper;
 import tk.mybatis.mapper.mapper.MybatisHelper;
 import tk.mybatis.mapper.model.Country;
-
 import java.util.List;
 
 /**
@@ -67,5 +65,4 @@ public class TestIds {
             sqlSession.close();
         }
     }
-
 }

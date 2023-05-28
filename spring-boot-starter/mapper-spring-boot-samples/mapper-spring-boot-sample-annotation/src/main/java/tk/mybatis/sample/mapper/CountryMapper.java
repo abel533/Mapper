@@ -21,7 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package tk.mybatis.sample.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
@@ -29,5 +28,4 @@ import tk.mybatis.sample.domain.Country;
 
 @Mapper
 public interface CountryMapper extends tk.mybatis.mapper.common.Mapper<Country> {
-
 }

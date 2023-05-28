@@ -21,7 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package tk.mybatis.mapper.common.example;
 
 import org.apache.ibatis.annotations.DeleteProvider;
@@ -44,5 +43,4 @@ public interface DeleteByExampleMapper<T> {
      */
     @DeleteProvider(type = ExampleProvider.class, method = "dynamicSQL")
     int deleteByExample(Object example);
-
 }

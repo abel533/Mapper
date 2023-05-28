@@ -21,7 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package tk.mybatis.mapper.entity;
 
 import org.apache.ibatis.type.JdbcType;
@@ -36,28 +35,46 @@ import tk.mybatis.mapper.util.StringUtil;
  * @author liuzh
  */
 public class EntityColumn {
+
     private EntityTable table;
+
     private String property;
+
     private String column;
+
     private Class<?> javaType;
+
     private JdbcType jdbcType;
+
     private Class<? extends TypeHandler<?>> typeHandler;
+
     private boolean id = false;
+
     private boolean identity = false;
+
     private Class<? extends GenId> genIdClass;
+
     //字段是否为 blob
     private boolean blob;
+
     private String generator;
+
     //排序
     private String orderBy;
+
     private int orderPriority;
+
     //可插入
     private boolean insertable = true;
+
     //可更新
     private boolean updatable = true;
+
     private ORDER order = ORDER.DEFAULT;
+
     //是否设置 javaType
     private boolean useJavaType;
+
     /**
      * 对应的字段信息
      *
@@ -144,7 +161,8 @@ public class EntityColumn {
         }
         //3.4.0 以前的 mybatis 无法获取父类中泛型的 javaType，所以如果使用低版本，就需要设置 useJavaType = true
         //useJavaType 默认 false,没有 javaType 限制时，对 ByPrimaryKey 方法的参数校验就放宽了，会自动转型
-        if (useJavaType && !this.javaType.isArray()) {//当类型为数组时，不设置javaType#103
+        if (useJavaType && !this.javaType.isArray()) {
+            //当类型为数组时，不设置javaType#103
             sb.append(", javaType=");
             sb.append(javaType.getName());
         }
@@ -157,22 +175,30 @@ public class EntityColumn {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
         EntityColumn that = (EntityColumn) o;
-
-        if (id != that.id) return false;
-        if (identity != that.identity) return false;
-        if (table != null ? !table.equals(that.table) : that.table != null) return false;
-        if (property != null ? !property.equals(that.property) : that.property != null) return false;
-        if (column != null ? !column.equals(that.column) : that.column != null) return false;
-        if (javaType != null ? !javaType.equals(that.javaType) : that.javaType != null) return false;
-        if (jdbcType != that.jdbcType) return false;
-        if (typeHandler != null ? !typeHandler.equals(that.typeHandler) : that.typeHandler != null) return false;
-        if (generator != null ? !generator.equals(that.generator) : that.generator != null) return false;
+        if (id != that.id)
+            return false;
+        if (identity != that.identity)
+            return false;
+        if (table != null ? !table.equals(that.table) : that.table != null)
+            return false;
+        if (property != null ? !property.equals(that.property) : that.property != null)
+            return false;
+        if (column != null ? !column.equals(that.column) : that.column != null)
+            return false;
+        if (javaType != null ? !javaType.equals(that.javaType) : that.javaType != null)
+            return false;
+        if (jdbcType != that.jdbcType)
+            return false;
+        if (typeHandler != null ? !typeHandler.equals(that.typeHandler) : that.typeHandler != null)
+            return false;
+        if (generator != null ? !generator.equals(that.generator) : that.generator != null)
+            return false;
         return !(orderBy != null ? !orderBy.equals(that.orderBy) : that.orderBy != null);
-
     }
 
     @Override
@@ -354,22 +380,6 @@ public class EntityColumn {
 
     @Override
     public String toString() {
-        return "EntityColumn{" +
-                "table=" + table.getName() +
-                ", property='" + property + '\'' +
-                ", column='" + column + '\'' +
-                ", javaType=" + javaType +
-                ", jdbcType=" + jdbcType +
-                ", typeHandler=" + typeHandler +
-                ", id=" + id +
-                ", identity=" + identity +
-                ", blob=" + blob +
-                ", generator='" + generator + '\'' +
-                ", orderBy='" + orderBy + '\'' +
-                ", orderPriority='" + orderPriority + '\'' +
-                ", insertable=" + insertable +
-                ", updatable=" + updatable +
-                ", order=" + order +
-                '}';
+        return "EntityColumn{" + "table=" + table.getName() + ", property='" + property + '\'' + ", column='" + column + '\'' + ", javaType=" + javaType + ", jdbcType=" + jdbcType + ", typeHandler=" + typeHandler + ", id=" + id + ", identity=" + identity + ", blob=" + blob + ", generator='" + generator + '\'' + ", orderBy='" + orderBy + '\'' + ", orderPriority='" + orderPriority + '\'' + ", insertable=" + insertable + ", updatable=" + updatable + ", order=" + order + '}';
     }
 }

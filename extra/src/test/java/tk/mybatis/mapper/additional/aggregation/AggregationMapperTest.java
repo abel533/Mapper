@@ -5,7 +5,6 @@ import org.junit.Assert;
 import org.junit.Test;
 import tk.mybatis.mapper.additional.BaseTest;
 import tk.mybatis.mapper.entity.Example;
-
 import java.io.IOException;
 import java.io.Reader;
 import java.net.URL;
@@ -23,8 +22,6 @@ public class AggregationMapperTest extends BaseTest {
         return toReader(url);
     }
 
-    ;
-
     /**
      * 获取初始化 sql
      *
@@ -35,15 +32,12 @@ public class AggregationMapperTest extends BaseTest {
         return toReader(url);
     }
 
-    ;
-
     @Test
     public void testCount() {
         SqlSession sqlSession = getSqlSession();
         try {
             UserMapper mapper = sqlSession.getMapper(UserMapper.class);
-            AggregateCondition aggregateCondition = AggregateCondition.builder().
-                    aggregateBy("id").aliasName("total").aggregateType(AggregateType.COUNT).groupBy("role");
+            AggregateCondition aggregateCondition = AggregateCondition.builder().aggregateBy("id").aliasName("total").aggregateType(AggregateType.COUNT).groupBy("role");
             Example example = new Example(User.class);
             List<User> m = mapper.selectAggregationByExample(example, aggregateCondition);
             Assert.assertEquals(2, m.size());
@@ -57,8 +51,7 @@ public class AggregationMapperTest extends BaseTest {
         SqlSession sqlSession = getSqlSession();
         try {
             UserMapper mapper = sqlSession.getMapper(UserMapper.class);
-            AggregateCondition aggregateCondition = AggregateCondition.builder().
-                    aggregateBy("id").aggregateType(AggregateType.AVG);
+            AggregateCondition aggregateCondition = AggregateCondition.builder().aggregateBy("id").aggregateType(AggregateType.AVG);
             Example example = new Example(User.class);
             List<User> m = mapper.selectAggregationByExample(example, aggregateCondition);
             Assert.assertEquals(1, m.size());
@@ -73,8 +66,7 @@ public class AggregationMapperTest extends BaseTest {
         SqlSession sqlSession = getSqlSession();
         try {
             UserMapper mapper = sqlSession.getMapper(UserMapper.class);
-            AggregateCondition aggregateCondition = AggregateCondition.builder().
-                    aggregateBy("id").aliasName("aggregation").aggregateType(AggregateType.SUM);
+            AggregateCondition aggregateCondition = AggregateCondition.builder().aggregateBy("id").aliasName("aggregation").aggregateType(AggregateType.SUM);
             Example example = new Example(User.class);
             List<User> m = mapper.selectAggregationByExample(example, aggregateCondition);
             Assert.assertEquals(1, m.size());
@@ -89,8 +81,7 @@ public class AggregationMapperTest extends BaseTest {
         SqlSession sqlSession = getSqlSession();
         try {
             UserMapper mapper = sqlSession.getMapper(UserMapper.class);
-            AggregateCondition aggregateCondition = AggregateCondition.builder().
-                    aggregateBy("id").aliasName("aggregation").aggregateType(AggregateType.MAX).groupBy("role");
+            AggregateCondition aggregateCondition = AggregateCondition.builder().aggregateBy("id").aliasName("aggregation").aggregateType(AggregateType.MAX).groupBy("role");
             Example example = new Example(User.class);
             example.setOrderByClause("role desc");
             List<User> m = mapper.selectAggregationByExample(example, aggregateCondition);
@@ -107,8 +98,7 @@ public class AggregationMapperTest extends BaseTest {
         SqlSession sqlSession = getSqlSession();
         try {
             UserMapper mapper = sqlSession.getMapper(UserMapper.class);
-            AggregateCondition aggregateCondition = AggregateCondition.builder().
-                    aggregateBy("id").aliasName("aggregation").aggregateType(AggregateType.MIN);
+            AggregateCondition aggregateCondition = AggregateCondition.builder().aggregateBy("id").aliasName("aggregation").aggregateType(AggregateType.MIN);
             Example example = new Example(User.class);
             List<User> m = mapper.selectAggregationByExample(example, aggregateCondition);
             Assert.assertEquals(1, m.size());
@@ -117,6 +107,4 @@ public class AggregationMapperTest extends BaseTest {
             sqlSession.close();
         }
     }
-
-
 }

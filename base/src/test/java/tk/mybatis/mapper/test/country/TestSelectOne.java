@@ -21,7 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package tk.mybatis.mapper.test.country;
 
 import org.apache.ibatis.exceptions.TooManyResultsException;
@@ -78,7 +77,6 @@ public class TestSelectOne {
             Country country = new Country();
             country.setCountrycode("CN");
             Country result = mapper.selectOne(country);
-
             Assert.assertEquals(true, result.getId() == 35);
             Assert.assertEquals("China", result.getCountryname());
         } finally {
@@ -96,13 +94,12 @@ public class TestSelectOne {
             CountryMapper mapper = sqlSession.getMapper(CountryMapper.class);
             Country country = new Country();
             country.setCountrycode("CN");
-            country.setCountryname("天朝");//实际上是 China
+            //实际上是 China
+            country.setCountryname("天朝");
             Country result = mapper.selectOne(country);
-
             Assert.assertNull(result);
         } finally {
             sqlSession.close();
         }
     }
-
 }

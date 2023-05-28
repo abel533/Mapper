@@ -7,12 +7,12 @@ import javax.persistence.*;
  */
 @Table(name = "user_auto_increment")
 public class UserSqlAfter {
+
     @Id
-    @GeneratedValue(
-            strategy = GenerationType.IDENTITY,
-            generator = "SELECT LAST_INSERT_ID()")
+    @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "SELECT LAST_INSERT_ID()")
     @Column(insertable = false)
     private Integer id;
+
     private String name;
 
     public Integer getId() {

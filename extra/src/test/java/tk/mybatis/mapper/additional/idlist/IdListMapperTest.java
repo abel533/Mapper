@@ -6,7 +6,6 @@ import org.junit.Test;
 import tk.mybatis.mapper.additional.BaseTest;
 import tk.mybatis.mapper.additional.Country;
 import tk.mybatis.mapper.entity.Config;
-
 import java.io.IOException;
 import java.io.Reader;
 import java.net.URL;
@@ -75,5 +74,4 @@ public class IdListMapperTest extends BaseTest {
             sqlSession.close();
         }
     }
-
 }

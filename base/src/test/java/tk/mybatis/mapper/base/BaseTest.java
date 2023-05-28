@@ -21,7 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package tk.mybatis.mapper.base;
 
 import org.apache.ibatis.io.Resources;
@@ -32,7 +31,6 @@ import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 import org.junit.Before;
 import tk.mybatis.mapper.entity.Config;
 import tk.mybatis.mapper.mapperhelper.MapperHelper;
-
 import java.io.IOException;
 import java.io.Reader;
 import java.net.URL;
@@ -44,6 +42,7 @@ import java.sql.Connection;
  * @author liuzh
  */
 public abstract class BaseTest {
+
     private SqlSessionFactory sqlSessionFactory;
 
     @Before
@@ -121,8 +120,6 @@ public abstract class BaseTest {
         return toReader(url);
     }
 
-    ;
-
     /**
      * 获取初始化 sql
      *
@@ -132,8 +129,6 @@ public abstract class BaseTest {
         URL url = BaseTest.class.getResource("CreateDB.sql");
         return toReader(url);
     }
-
-    ;
 
     /**
      * 转为 Reader

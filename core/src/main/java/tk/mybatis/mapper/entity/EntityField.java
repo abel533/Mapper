@@ -21,7 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package tk.mybatis.mapper.entity;
 
 import java.beans.PropertyDescriptor;
@@ -36,10 +35,15 @@ import java.lang.reflect.Method;
  * @author liuzh
  */
 public class EntityField {
+
     private String name;
+
     private Field field;
+
     private Class<?> javaType;
+
     private Method setter;
+
     private Method getter;
 
     /**
@@ -138,13 +142,12 @@ public class EntityField {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
         EntityField that = (EntityField) o;
-
         return !(name != null ? !name.equals(that.name) : that.name != null);
-
     }
 
     @Override

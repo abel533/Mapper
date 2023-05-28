@@ -21,7 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package tk.mybatis.mapper.generator;
 
 import org.mybatis.generator.api.IntrospectedTable;
@@ -30,7 +29,6 @@ import org.mybatis.generator.api.dom.java.Interface;
 import org.mybatis.generator.api.dom.java.Method;
 import org.mybatis.generator.api.dom.java.TopLevelClass;
 import org.mybatis.generator.api.dom.xml.XmlElement;
-
 import java.util.List;
 
 /**
@@ -46,7 +44,6 @@ public class FalseMethodPlugin extends PluginAdapter {
     }
 
     //下面所有return false的方法都不生成。这些都是基础的CRUD方法，使用通用Mapper实现
-
     @Override
     public boolean clientDeleteByPrimaryKeyMethodGenerated(Method method, Interface interfaze, IntrospectedTable introspectedTable) {
         return false;
@@ -146,5 +143,4 @@ public class FalseMethodPlugin extends PluginAdapter {
     public boolean providerUpdateByPrimaryKeySelectiveMethodGenerated(Method method, TopLevelClass topLevelClass, IntrospectedTable introspectedTable) {
         return false;
     }
-
 }

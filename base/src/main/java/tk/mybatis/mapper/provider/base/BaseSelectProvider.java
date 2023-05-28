@@ -21,7 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package tk.mybatis.mapper.provider.base;
 
 import org.apache.ibatis.mapping.MappedStatement;
@@ -144,12 +143,10 @@ public class BaseSelectProvider extends MapperTemplate {
         StringBuilder sql = new StringBuilder();
         sql.append(SqlHelper.selectAllColumns(entityClass));
         sql.append(SqlHelper.fromTable(entityClass, tableName(entityClass)));
-
         // 逻辑删除的未删除查询条件
         sql.append("<where>");
         sql.append(SqlHelper.whereLogicDelete(entityClass, false));
         sql.append("</where>");
-
         sql.append(SqlHelper.orderByDefault(entityClass));
         return sql.toString();
     }

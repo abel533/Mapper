@@ -21,17 +21,14 @@ public class RegisterMapperTest {
     public void beforeTest() {
         config = new Config();
         config.setStyle(Style.normal);
-
         configuration = new Configuration();
     }
 
     @RegisterMapper
     interface MapperHashRegisterMapper {
-
     }
 
     interface UserMapper extends MapperHashRegisterMapper {
-
     }
 
     @Test
@@ -41,7 +38,6 @@ public class RegisterMapperTest {
     }
 
     interface RoleMapper {
-
     }
 
     @Test
@@ -52,7 +48,6 @@ public class RegisterMapperTest {
 
     @RegisterMapper
     interface RoleMapper2 {
-
     }
 
     @Test
@@ -60,5 +55,4 @@ public class RegisterMapperTest {
         MapperHelper mapperHelper = new MapperHelper();
         Assert.assertFalse(mapperHelper.isExtendCommonMapper(RoleMapper2.class));
     }
-
 }

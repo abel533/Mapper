@@ -21,7 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package tk.mybatis.mapper.util;
 
 import org.junit.Test;
@@ -34,7 +33,6 @@ public class StringUtilTest {
     public void testIsEmpty() {
         Assert.assertTrue(StringUtil.isEmpty(null));
         Assert.assertTrue(StringUtil.isEmpty(""));
-
         Assert.assertFalse(StringUtil.isEmpty(" "));
         Assert.assertFalse(StringUtil.isEmpty("foo"));
     }
@@ -43,25 +41,18 @@ public class StringUtilTest {
     public void testIsNotEmpty() {
         Assert.assertFalse(StringUtil.isNotEmpty(null));
         Assert.assertFalse(StringUtil.isNotEmpty(""));
-
         Assert.assertTrue(StringUtil.isNotEmpty(" "));
         Assert.assertTrue(StringUtil.isNotEmpty("foo"));
     }
 
     @Test
     public void testConvertByStyle() {
-        Assert.assertEquals("fOo",
-                StringUtil.convertByStyle("fOo", Style.normal));
-        Assert.assertEquals("f_oo",
-                StringUtil.convertByStyle("fOo", Style.camelhump));
-        Assert.assertEquals("FOO",
-                StringUtil.convertByStyle("fOo", Style.uppercase));
-        Assert.assertEquals("foo",
-                StringUtil.convertByStyle("FoO", Style.lowercase));
-        Assert.assertEquals("fo_o",
-                StringUtil.convertByStyle("FoO", Style.camelhumpAndLowercase));
-        Assert.assertEquals("F_OO",
-                StringUtil.convertByStyle("fOo", Style.camelhumpAndUppercase));
+        Assert.assertEquals("fOo", StringUtil.convertByStyle("fOo", Style.normal));
+        Assert.assertEquals("f_oo", StringUtil.convertByStyle("fOo", Style.camelhump));
+        Assert.assertEquals("FOO", StringUtil.convertByStyle("fOo", Style.uppercase));
+        Assert.assertEquals("foo", StringUtil.convertByStyle("FoO", Style.lowercase));
+        Assert.assertEquals("fo_o", StringUtil.convertByStyle("FoO", Style.camelhumpAndLowercase));
+        Assert.assertEquals("F_OO", StringUtil.convertByStyle("fOo", Style.camelhumpAndUppercase));
     }
 
     @Test
@@ -79,14 +70,12 @@ public class StringUtilTest {
     @Test
     public void testIsUppercaseAlpha() {
         Assert.assertTrue(StringUtil.isUppercaseAlpha('F'));
-
         Assert.assertFalse(StringUtil.isUppercaseAlpha('f'));
     }
 
     @Test
     public void testIsLowercaseAlpha() {
         Assert.assertTrue(StringUtil.isLowercaseAlpha('f'));
-
         Assert.assertFalse(StringUtil.isLowercaseAlpha('F'));
     }
 

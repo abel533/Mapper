@@ -2,7 +2,6 @@ package tk.mybatis.mapper.typehandler;
 
 import org.apache.ibatis.type.BaseTypeHandler;
 import org.apache.ibatis.type.JdbcType;
-
 import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -12,6 +11,7 @@ import java.sql.SQLException;
  * @author liuzh
  */
 public class AddressTypeHandler extends BaseTypeHandler<Address> {
+
     @Override
     public void setNonNullParameter(PreparedStatement ps, int i, Address parameter, JdbcType jdbcType) throws SQLException {
         ps.setString(i, parameter.toString());

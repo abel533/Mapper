@@ -21,7 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package tk.mybatis.mapper.test.country;
 
 import org.apache.ibatis.io.Resources;
@@ -33,7 +32,6 @@ import org.junit.Test;
 import tk.mybatis.mapper.mapper.CountryMapper;
 import tk.mybatis.mapper.mapper.MybatisHelper;
 import tk.mybatis.mapper.model.Country;
-
 import java.io.IOException;
 import java.io.Reader;
 import java.sql.Connection;
@@ -57,12 +55,12 @@ public class TestDeleteByPrimaryKey {
             runner.setLogWriter(null);
             runner.runScript(reader);
             reader.close();
-        } catch (IOException e) {}
-        finally {
+        } catch (IOException e) {
+        } finally {
             sqlSession.close();
         }
     }
-	
+
     /**
      * 主要测试删除
      */
@@ -112,7 +110,6 @@ public class TestDeleteByPrimaryKey {
         SqlSession sqlSession = MybatisHelper.getSqlSession();
         try {
             CountryMapper mapper = sqlSession.getMapper(CountryMapper.class);
-
             Country country = new Country();
             country.setId(100);
             Assert.assertEquals(1, mapper.deleteByPrimaryKey(country));
@@ -129,11 +126,9 @@ public class TestDeleteByPrimaryKey {
         SqlSession sqlSession = MybatisHelper.getSqlSession();
         try {
             CountryMapper mapper = sqlSession.getMapper(CountryMapper.class);
-
             Map map = new HashMap();
             map.put("id", 100);
             Assert.assertEquals(1, mapper.deleteByPrimaryKey(map));
-
             map = new HashMap();
             map.put("countryname", "China");
             Assert.assertEquals(0, mapper.deleteByPrimaryKey(map));
@@ -175,5 +170,4 @@ public class TestDeleteByPrimaryKey {
 
     class Key {
     }
-
 }

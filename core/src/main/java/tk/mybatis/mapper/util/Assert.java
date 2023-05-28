@@ -54,5 +54,4 @@ public abstract class Assert {
         }
         return map;
     }
-
 }

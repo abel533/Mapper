@@ -2,7 +2,6 @@ package tk.mybatis.mapper.additional.aggregation;
 
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.SelectProvider;
-
 import java.util.List;
 
 /**
@@ -23,5 +22,4 @@ public interface AggregationMapper<T> {
      */
     @SelectProvider(type = AggregationProvider.class, method = "dynamicSQL")
     List<T> selectAggregationByExample(@Param("example") Object example, @Param("aggregateCondition") AggregateCondition aggregateCondition);
-
 }

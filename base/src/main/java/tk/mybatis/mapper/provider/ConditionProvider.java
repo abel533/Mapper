@@ -21,7 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package tk.mybatis.mapper.provider;
 
 import org.apache.ibatis.mapping.MappedStatement;
@@ -61,7 +60,6 @@ public class ConditionProvider extends MapperTemplate {
     public String deleteByCondition(MappedStatement ms) {
         return exampleProvider.deleteByExample(ms);
     }
-
 
     /**
      * 根据Condition查询

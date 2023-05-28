@@ -21,12 +21,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package tk.mybatis.mapper.additional.dialect.oracle;
 
 import org.apache.ibatis.annotations.InsertProvider;
 import tk.mybatis.mapper.annotation.KeySql;
-
 import java.util.List;
 
 /**
@@ -53,5 +51,4 @@ public interface InsertListMapper<T> {
      */
     @InsertProvider(type = OracleProvider.class, method = "dynamicSQL")
     int insertList(List<? extends T> recordList);
-
 }

@@ -21,12 +21,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package tk.mybatis.mapper.mapperhelper;
 
 import tk.mybatis.mapper.MapperException;
 import tk.mybatis.mapper.entity.EntityField;
-
 import javax.persistence.Entity;
 import java.beans.BeanInfo;
 import java.beans.IntrospectionException;
@@ -125,6 +123,7 @@ public class FieldHelper {
      * Field接口
      */
     interface IFieldHelper {
+
         /**
          * 获取全部的Field
          *
@@ -146,6 +145,7 @@ public class FieldHelper {
      * 支持jdk8
      */
     static class Jdk8FieldHelper implements IFieldHelper {
+
         /**
          * 获取全部的Field
          *
@@ -208,11 +208,7 @@ public class FieldHelper {
                 }
             }
             Class<?> superClass = entityClass.getSuperclass();
-            if (superClass != null
-                    && !superClass.equals(Object.class)
-                    && (superClass.isAnnotationPresent(Entity.class)
-                    || (!Map.class.isAssignableFrom(superClass)
-                    && !Collection.class.isAssignableFrom(superClass)))) {
+            if (superClass != null && !superClass.equals(Object.class) && (superClass.isAnnotationPresent(Entity.class) || (!Map.class.isAssignableFrom(superClass) && !Collection.class.isAssignableFrom(superClass)))) {
                 return _getFields(entityClass.getSuperclass(), fieldList, ++level);
             }
             return fieldList;
@@ -275,14 +271,9 @@ public class FieldHelper {
             for (PropertyDescriptor desc : descriptors) {
                 if (desc != null && !"class".equals(desc.getName())) {
                     EntityField entityField = new EntityField(null, desc);
-                    if (desc.getReadMethod() != null
-                            && desc.getReadMethod().getGenericReturnType() != null
-                            && desc.getReadMethod().getGenericReturnType() instanceof TypeVariable) {
+                    if (desc.getReadMethod() != null && desc.getReadMethod().getGenericReturnType() != null && desc.getReadMethod().getGenericReturnType() instanceof TypeVariable) {
                         entityField.setJavaType(genericMap.get(((TypeVariable) desc.getReadMethod().getGenericReturnType()).getName()));
-                    } else if (desc.getWriteMethod() != null
-                            && desc.getWriteMethod().getGenericParameterTypes() != null
-                            && desc.getWriteMethod().getGenericParameterTypes().length == 1
-                            && desc.getWriteMethod().getGenericParameterTypes()[0] instanceof TypeVariable) {
+                    } else if (desc.getWriteMethod() != null && desc.getWriteMethod().getGenericParameterTypes() != null && desc.getWriteMethod().getGenericParameterTypes().length == 1 && desc.getWriteMethod().getGenericParameterTypes()[0] instanceof TypeVariable) {
                         entityField.setJavaType(genericMap.get(((TypeVariable) desc.getWriteMethod().getGenericParameterTypes()[0]).getName()));
                     }
                     entityFields.add(entityField);
@@ -338,11 +329,7 @@ public class FieldHelper {
             //获取父类和泛型信息
             Class<?> superClass = entityClass.getSuperclass();
             //判断superClass
-            if (superClass != null
-                    && !superClass.equals(Object.class)
-                    && (superClass.isAnnotationPresent(Entity.class)
-                    || (!Map.class.isAssignableFrom(superClass)
-                    && !Collection.class.isAssignableFrom(superClass)))) {
+            if (superClass != null && !superClass.equals(Object.class) && (superClass.isAnnotationPresent(Entity.class) || (!Map.class.isAssignableFrom(superClass) && !Collection.class.isAssignableFrom(superClass)))) {
                 level++;
                 _getFields(superClass, fieldList, genericMap, level);
             }
@@ -361,11 +348,7 @@ public class FieldHelper {
             //获取父类和泛型信息
             Class<?> superClass = entityClass.getSuperclass();
             //判断superClass
-            if (superClass != null
-                    && !superClass.equals(Object.class)
-                    && (superClass.isAnnotationPresent(Entity.class)
-                    || (!Map.class.isAssignableFrom(superClass)
-                    && !Collection.class.isAssignableFrom(superClass)))) {
+            if (superClass != null && !superClass.equals(Object.class) && (superClass.isAnnotationPresent(Entity.class) || (!Map.class.isAssignableFrom(superClass) && !Collection.class.isAssignableFrom(superClass)))) {
                 if (entityClass.getGenericSuperclass() instanceof ParameterizedType) {
                     Type[] types = ((ParameterizedType) entityClass.getGenericSuperclass()).getActualTypeArguments();
                     TypeVariable[] typeVariables = superClass.getTypeParameters();

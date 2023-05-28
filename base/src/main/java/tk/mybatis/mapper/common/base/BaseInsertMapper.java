@@ -21,7 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package tk.mybatis.mapper.common.base;
 
 import tk.mybatis.mapper.annotation.RegisterMapper;
@@ -35,8 +34,5 @@ import tk.mybatis.mapper.common.base.insert.InsertSelectiveMapper;
  * @author liuzh
  */
 @RegisterMapper
-public interface BaseInsertMapper<T> extends
-        InsertMapper<T>,
-        InsertSelectiveMapper<T> {
-
+public interface BaseInsertMapper<T> extends InsertMapper<T>, InsertSelectiveMapper<T> {
 }

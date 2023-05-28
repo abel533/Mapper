@@ -2,14 +2,13 @@ package tk.mybatis.mapper.additional.dialect.oracle;
 
 import tk.mybatis.mapper.additional.insertlist.UUIdGenId;
 import tk.mybatis.mapper.annotation.KeySql;
-
 import javax.persistence.Id;
 
 /**
  * @description:
  * @author: qrqhuangcy
  * @date: 2018-11-17
- **/
+ */
 public class DemoCountry {
 
     @Id

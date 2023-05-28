@@ -21,7 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package tk.mybatis.mapper.provider;
 
 import org.apache.ibatis.mapping.MappedStatement;
@@ -89,7 +88,6 @@ public class ExampleProvider extends MapperTemplate {
         sql.append(SqlHelper.exampleWhereClause());
         return sql.toString();
     }
-
 
     /**
      * 根据Example查询

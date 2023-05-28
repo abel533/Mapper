@@ -21,7 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package tk.mybatis.mapper.model;
 
 import javax.persistence.GeneratedValue;
@@ -33,23 +32,21 @@ import java.util.Date;
  * Created by liuzh on 2014/11/21.
  */
 public class UserLogin {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer logid;
 
     @Id
     private String username;
+
     private Date logindate;
+
     private String loginip;
 
     @Override
     public String toString() {
-        return "UserLogin{" +
-                "logid=" + logid +
-                ", username='" + username + '\'' +
-                ", logindate=" + logindate +
-                ", loginip='" + loginip + '\'' +
-                '}';
+        return "UserLogin{" + "logid=" + logid + ", username='" + username + '\'' + ", logindate=" + logindate + ", loginip='" + loginip + '\'' + '}';
     }
 
     public Integer getLogid() {

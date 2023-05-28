@@ -2,7 +2,6 @@ package tk.mybatis.mapper.additional.aggregation;
 
 import tk.mybatis.mapper.util.Assert;
 import tk.mybatis.mapper.util.StringUtil;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -15,12 +14,17 @@ import java.util.List;
  * @author liuzh
  */
 public class AggregateCondition implements Serializable {
+
     private static final long serialVersionUID = 1L;
+
     // 聚合属性
     private String aggregateProperty;
+
     private String aggregateAliasName;
+
     // groupBy 查询列
     private List<String> groupByProperties;
+
     // 聚合函数
     private AggregateType aggregateType;
 
@@ -62,8 +66,7 @@ public class AggregateCondition implements Serializable {
      * @param aggregateType
      * @param groupByProperties 为保证返回结果key与传入值相同 方法不会去除每一项前后空格
      */
-    public AggregateCondition(String aggregateProperty, AggregateType aggregateType,
-                              String[] groupByProperties) {
+    public AggregateCondition(String aggregateProperty, AggregateType aggregateType, String[] groupByProperties) {
         this.groupByProperties = new ArrayList<String>();
         // 需要放在propertyMap初始化完成后执行
         aggregateType(aggregateType);
@@ -85,8 +88,7 @@ public class AggregateCondition implements Serializable {
     }
 
     public AggregateCondition aggregateBy(String aggregateProperty) {
-        Assert.notEmpty(aggregateProperty,
-                "aggregateProperty must have length; it must not be null or empty");
+        Assert.notEmpty(aggregateProperty, "aggregateProperty must have length; it must not be null or empty");
         this.aggregateProperty = aggregateProperty;
         return this;
     }
@@ -97,8 +99,7 @@ public class AggregateCondition implements Serializable {
     }
 
     public AggregateCondition aggregateType(AggregateType aggregateType) {
-        Assert.notNull(aggregateType,
-                "aggregateType is required; it must not be null");
+        Assert.notNull(aggregateType, "aggregateType is required; it must not be null");
         this.aggregateType = aggregateType;
         return this;
     }

@@ -21,7 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package tk.mybatis.mapper.test.example;
 
 import org.apache.ibatis.exceptions.TooManyResultsException;
@@ -66,5 +65,4 @@ public class TestSelectOneByExample {
             sqlSession.close();
         }
     }
-
 }

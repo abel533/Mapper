@@ -23,7 +23,6 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternResolver;
 import tk.mybatis.spring.annotation.BaseProperties;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -206,5 +205,4 @@ public class MybatisProperties extends BaseProperties {
             return new Resource[0];
         }
     }
-
 }

@@ -21,12 +21,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package tk.mybatis.sample.domain;
 
 import org.apache.ibatis.type.JdbcType;
 import tk.mybatis.mapper.annotation.ColumnType;
-
 import javax.persistence.Id;
 import java.io.Serializable;
 
@@ -36,11 +34,15 @@ import java.io.Serializable;
  * Update: liuzh(2014-06-06 13:38)
  */
 public class Country implements Serializable {
+
     private static final long serialVersionUID = 6569081236403751407L;
+
     @Id
     @ColumnType(jdbcType = JdbcType.BIGINT)
     private Long id;
+
     private String countryname;
+
     private String countrycode;
 
     public Long getId() {

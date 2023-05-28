@@ -21,11 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package tk.mybatis.mapper.util;
 
 import tk.mybatis.mapper.code.Style;
-
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -33,6 +31,7 @@ import java.util.regex.Pattern;
  * Created by liuzh_3nofxnp on 2015/8/26.
  */
 public class StringUtil {
+
     private static Pattern UNDERLINE_TO_CAMELHUMP_PATTERN = Pattern.compile("_[a-z]");
 
     /**
@@ -55,7 +54,6 @@ public class StringUtil {
         return !isEmpty(str);
     }
 
-
     /**
      * 根据指定的样式进行转换
      *
@@ -64,7 +62,7 @@ public class StringUtil {
      * @return
      */
     public static String convertByStyle(String str, Style style) {
-        switch (style) {
+        switch(style) {
             case camelhump:
                 return camelhumpToUnderline(str);
             case uppercase:
@@ -87,8 +85,7 @@ public class StringUtil {
     public static String camelhumpToUnderline(String str) {
         final int size;
         final char[] chars;
-        final StringBuilder sb = new StringBuilder(
-                (size = (chars = str.toCharArray()).length) * 3 / 2 + 1);
+        final StringBuilder sb = new StringBuilder((size = (chars = str.toCharArray()).length) * 3 / 2 + 1);
         char c;
         for (int i = 0; i < size; i++) {
             c = chars[i];

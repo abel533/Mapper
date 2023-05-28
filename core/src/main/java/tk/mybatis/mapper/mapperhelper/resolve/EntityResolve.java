@@ -18,5 +18,4 @@ public interface EntityResolve {
      * @return
      */
     EntityTable resolveEntity(Class<?> entityClass, Config config);
-
 }

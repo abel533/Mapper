@@ -6,14 +6,13 @@ import tk.mybatis.mapper.mapperhelper.EntityHelper;
 import tk.mybatis.mapper.mapperhelper.MapperHelper;
 import tk.mybatis.mapper.mapperhelper.MapperTemplate;
 import tk.mybatis.mapper.mapperhelper.SqlHelper;
-
 import java.util.Set;
 
 /**
  * @description: Oracle实现类
  * @author: qrqhuangcy
  * @date: 2018-11-15
- **/
+ */
 public class OracleProvider extends MapperTemplate {
 
     public OracleProvider(Class<?> mapperClass, MapperHelper mapperHelper) {
@@ -42,17 +41,13 @@ public class OracleProvider extends MapperTemplate {
         //开始拼sql
         StringBuilder sql = new StringBuilder();
         sql.append("<bind name=\"listNotEmptyCheck\" value=\"@tk.mybatis.mapper.util.OGNL@notEmptyCollectionCheck(list, '" + ms.getId() + " 方法参数为空')\"/>\n");
-
         sql.append("INSERT ALL\n");
         sql.append("<foreach collection=\"list\" item=\"record\">\n");
-
         String tableName = SqlHelper.getDynamicTableName(entityClass, tableName(entityClass), "list[0]");
         String columns = SqlHelper.insertColumns(entityClass, false, false, false);
         sql.append(" INTO ").append(tableName).append(" ").append(columns).append("\n");
         sql.append(" VALUES ");
-
         sql.append("<trim prefix=\"(\" suffix=\")\" suffixOverrides=\",\">");
-
         Set<EntityColumn> columnList = EntityHelper.getColumns(entityClass);
         //单独增加对 genId 方式的支持
         for (EntityColumn column : columnList) {
@@ -72,10 +67,8 @@ public class OracleProvider extends MapperTemplate {
             }
         }
         sql.append("</trim>\n");
-
         sql.append("</foreach>\n");
         sql.append("SELECT 1 FROM DUAL");
-
         //System.out.println("sql mapper: \n" + sql.toString());
         return sql.toString();
     }

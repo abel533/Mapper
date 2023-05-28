@@ -21,7 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package tk.mybatis.mapper.common.condition;
 
 import org.apache.ibatis.annotations.DeleteProvider;
@@ -45,5 +44,4 @@ public interface DeleteByConditionMapper<T> {
      */
     @DeleteProvider(type = ConditionProvider.class, method = "dynamicSQL")
     int deleteByCondition(Object condition);
-
 }

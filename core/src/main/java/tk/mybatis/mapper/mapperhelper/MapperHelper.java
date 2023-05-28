@@ -21,7 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package tk.mybatis.mapper.mapperhelper;
 
 import org.apache.ibatis.annotations.DeleteProvider;
@@ -39,11 +38,9 @@ import tk.mybatis.mapper.entity.Config;
 import tk.mybatis.mapper.mapperhelper.resolve.EntityResolve;
 import tk.mybatis.mapper.provider.EmptyProvider;
 import tk.mybatis.mapper.util.StringUtil;
-
 import java.lang.reflect.Method;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
-
 import static tk.mybatis.mapper.util.MsUtil.getMapperClass;
 
 /**
@@ -252,9 +249,8 @@ public class MapperHelper {
                     if (!registerMapper.containsKey(anInterface)) {
                         registerMapper(anInterface);
                     }
-                }
-                //如果父接口的父接口存在注解，也可以注册
-                else if (hasRegisterMapper(anInterface)) {
+                } else //如果父接口的父接口存在注解，也可以注册
+                if (hasRegisterMapper(anInterface)) {
                     hasRegisterMapper = true;
                 }
             }
@@ -327,10 +323,8 @@ public class MapperHelper {
             try {
                 EntityHelper.setResolve(config.getResolveClass().newInstance());
             } catch (Exception e) {
-                log.error("创建 " + config.getResolveClass().getName()
-                        + " 实例失败，请保证该类有默认的构造方法!", e);
-                throw new MapperException("创建 " + config.getResolveClass().getName()
-                        + " 实例失败，请保证该类有默认的构造方法!", e);
+                log.error("创建 " + config.getResolveClass().getName() + " 实例失败，请保证该类有默认的构造方法!", e);
+                throw new MapperException("创建 " + config.getResolveClass().getName() + " 实例失败，请保证该类有默认的构造方法!", e);
             }
         }
         if (config.getMappers() != null && config.getMappers().size() > 0) {
@@ -390,5 +384,4 @@ public class MapperHelper {
             throw new MapperException(e);
         }
     }
-
 }

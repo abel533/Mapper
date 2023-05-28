@@ -21,7 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package tk.mybatis.mapper.additional.update.force;
 
 import javax.persistence.Id;
@@ -35,9 +34,12 @@ import java.io.Serializable;
 public class CountryInt implements Serializable {
 
     private static final long serialVersionUID = -1626761012846137805L;
+
     @Id
     private Integer id;
+
     private String countryname;
+
     private Integer countrycode;
 
     public Integer getId() {
@@ -63,5 +65,4 @@ public class CountryInt implements Serializable {
     public void setCountryname(String countryname) {
         this.countryname = countryname;
     }
-
 }

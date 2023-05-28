@@ -1,7 +1,6 @@
 package tk.mybatis.mapper.typehandler;
 
 import tk.mybatis.mapper.annotation.ColumnType;
-
 import javax.persistence.Id;
 import java.io.Serializable;
 
@@ -9,12 +8,17 @@ import java.io.Serializable;
  * @author liuzh
  */
 public class User implements Serializable {
+
     private static final long serialVersionUID = 1L;
+
     @Id
     private Integer id;
+
     private String name;
+
     @ColumnType(typeHandler = AddressTypeHandler.class)
     private Address address;
+
     //@ColumnType(typeHandler = StateEnumTypeHandler.class)
     private StateEnum state;
 

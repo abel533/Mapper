@@ -21,7 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package tk.mybatis.mapper.model;
 
 import javax.persistence.GeneratedValue;
@@ -35,6 +34,7 @@ import javax.persistence.Table;
  */
 @Table(name = "country")
 public class CountryJDBC {
+
     @Id
     @GeneratedValue(generator = "JDBC")
     private Integer id;
@@ -45,11 +45,7 @@ public class CountryJDBC {
 
     @Override
     public String toString() {
-        return "Country{" +
-                "id=" + id +
-                ", countryname='" + countryname + '\'' +
-                ", countrycode='" + countrycode + '\'' +
-                '}';
+        return "Country{" + "id=" + id + ", countryname='" + countryname + '\'' + ", countrycode='" + countrycode + '\'' + '}';
     }
 
     public String getCountrycode() {

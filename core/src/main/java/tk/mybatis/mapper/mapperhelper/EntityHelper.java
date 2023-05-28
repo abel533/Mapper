@@ -21,7 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package tk.mybatis.mapper.mapperhelper;
 
 import org.apache.ibatis.mapping.MappedStatement;
@@ -32,7 +31,6 @@ import tk.mybatis.mapper.entity.EntityTable;
 import tk.mybatis.mapper.mapperhelper.resolve.DefaultEntityResolve;
 import tk.mybatis.mapper.mapperhelper.resolve.EntityResolve;
 import tk.mybatis.mapper.util.MetaObjectUtil;
-
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -82,21 +80,19 @@ public class EntityHelper {
         if (table.getOrderByClause() != null) {
             return table.getOrderByClause();
         }
-
         List<EntityColumn> orderEntityColumns = new ArrayList<EntityColumn>();
         for (EntityColumn column : table.getEntityClassColumns()) {
             if (column.getOrderBy() != null) {
                 orderEntityColumns.add(column);
             }
         }
-
         Collections.sort(orderEntityColumns, new Comparator<EntityColumn>() {
+
             @Override
             public int compare(EntityColumn o1, EntityColumn o2) {
                 return o1.getOrderPriority() - o2.getOrderPriority();
             }
         });
-
         StringBuilder orderBy = new StringBuilder();
         for (EntityColumn column : orderEntityColumns) {
             if (orderBy.length() != 0) {
@@ -193,12 +189,10 @@ public class EntityHelper {
         if (pkColumns == null || pkColumns.isEmpty()) {
             return;
         }
-
         List<String> keyProperties = new ArrayList<String>(pkColumns.size());
         for (EntityColumn column : pkColumns) {
             keyProperties.add(column.getProperty());
         }
-
-        MetaObjectUtil.forObject(ms).setValue("keyProperties", keyProperties.toArray(new String[]{}));
+        MetaObjectUtil.forObject(ms).setValue("keyProperties", keyProperties.toArray(new String[] {}));
     }
 }

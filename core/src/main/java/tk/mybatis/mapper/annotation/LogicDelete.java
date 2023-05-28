@@ -8,12 +8,11 @@ import java.lang.annotation.Target;
 /**
  * 逻辑删除
  */
-@Target({ElementType.FIELD, ElementType.METHOD})
+@Target({ ElementType.FIELD, ElementType.METHOD })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface LogicDelete {
 
     int isDeletedValue() default 1;
 
     int notDeletedValue() default 0;
-
 }

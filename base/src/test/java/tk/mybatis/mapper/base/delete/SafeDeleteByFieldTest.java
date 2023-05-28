@@ -61,5 +61,4 @@ public class SafeDeleteByFieldTest extends BaseTest {
             sqlSession.close();
         }
     }
-
 }

@@ -22,7 +22,6 @@
  * THE SOFTWARE.
  *
  */
-
 package tk.mybatis.mapper.weekend.entity;
 
 import javax.persistence.Id;
@@ -31,9 +30,12 @@ import java.io.Serializable;
 
 @Table()
 public class Country implements Serializable {
+
     private static final long serialVersionUID = 1L;
+
     @Id
     private Integer id;
+
     private String countryname;
 
     private String countrycode;
@@ -61,5 +63,4 @@ public class Country implements Serializable {
     public void setId(Integer id) {
         this.id = id;
     }
-
 }

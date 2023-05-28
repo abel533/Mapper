@@ -21,14 +21,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package tk.mybatis.spring.mapper;
 
 import org.springframework.beans.MutablePropertyValues;
 import org.springframework.beans.PropertyValues;
 import org.springframework.core.env.Environment;
 import org.springframework.core.env.PropertyResolver;
-
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.util.Map;
@@ -59,6 +57,7 @@ public abstract class SpringBootBindUtil {
     }
 
     public interface IBind {
+
         <T> T bind(Environment environment, Class<T> targetClass, String prefix);
     }
 
@@ -66,21 +65,22 @@ public abstract class SpringBootBindUtil {
      * 使用 Spring Boot 1.x 方式绑定
      */
     public static class SpringBoot1Bind implements IBind {
+
         @Override
         public <T> T bind(Environment environment, Class<T> targetClass, String prefix) {
             /**
-             为了方便以后直接依赖 Spring Boot 2.x 时不需要改动代码，这里也使用反射
-             try {
-             RelaxedPropertyResolver resolver = new RelaxedPropertyResolver(environment);
-             Map<String, Object> properties = resolver.getSubProperties("");
-             T target = targetClass.newInstance();
-             RelaxedDataBinder binder = new RelaxedDataBinder(target, prefix);
-             binder.bind(new MutablePropertyValues(properties));
-             return target;
-             } catch (Exception e) {
-             throw new RuntimeException(e);
-             }
-             下面是这段代码的反射实现
+             *             为了方便以后直接依赖 Spring Boot 2.x 时不需要改动代码，这里也使用反射
+             *             try {
+             *             RelaxedPropertyResolver resolver = new RelaxedPropertyResolver(environment);
+             *             Map<String, Object> properties = resolver.getSubProperties("");
+             *             T target = targetClass.newInstance();
+             *             RelaxedDataBinder binder = new RelaxedDataBinder(target, prefix);
+             *             binder.bind(new MutablePropertyValues(properties));
+             *             return target;
+             *             } catch (Exception e) {
+             *             throw new RuntimeException(e);
+             *             }
+             *             下面是这段代码的反射实现
              */
             try {
                 //反射提取配置信息
@@ -109,13 +109,14 @@ public abstract class SpringBootBindUtil {
      * 使用 Spring Boot 2.x 方式绑定
      */
     public static class SpringBoot2Bind implements IBind {
+
         @Override
         public <T> T bind(Environment environment, Class<T> targetClass, String prefix) {
             /**
-             由于不能同时依赖不同的两个版本，所以使用反射实现下面的代码
-             Binder binder = Binder.get(environment);
-             return binder.bind(prefix, targetClass).get();
-             下面是这两行代码的完全反射版本
+             *             由于不能同时依赖不同的两个版本，所以使用反射实现下面的代码
+             *             Binder binder = Binder.get(environment);
+             *             return binder.bind(prefix, targetClass).get();
+             *             下面是这两行代码的完全反射版本
              */
             try {
                 Class<?> bindClass = Class.forName("org.springframework.boot.context.properties.bind.Binder");
@@ -134,5 +135,4 @@ public abstract class SpringBootBindUtil {
             }
         }
     }
-
 }

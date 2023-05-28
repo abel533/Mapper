@@ -21,13 +21,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package tk.mybatis.mapper;
 
 /**
  * @author liuzh
  */
 public class MapperException extends RuntimeException {
+
     public MapperException() {
         super();
     }
@@ -43,5 +43,4 @@ public class MapperException extends RuntimeException {
     public MapperException(Throwable cause) {
         super(cause);
     }
-
 }

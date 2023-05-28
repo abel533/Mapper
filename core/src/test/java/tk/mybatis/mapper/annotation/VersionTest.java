@@ -11,7 +11,6 @@ import tk.mybatis.mapper.entity.EntityTable;
 import tk.mybatis.mapper.mapperhelper.EntityHelper;
 import tk.mybatis.mapper.mapperhelper.SqlHelper;
 import tk.mybatis.mapper.version.VersionException;
-
 import java.util.Set;
 
 /**
@@ -27,11 +26,11 @@ public class VersionTest {
     public void beforeTest() {
         config = new Config();
         config.setStyle(Style.normal);
-
         configuration = new Configuration();
     }
 
     class UserVersion {
+
         @Version
         private String name;
     }
@@ -41,10 +40,8 @@ public class VersionTest {
         EntityHelper.initEntityNameMap(UserVersion.class, config);
         EntityTable entityTable = EntityHelper.getEntityTable(UserVersion.class);
         Assert.assertNotNull(entityTable);
-
         Set<EntityColumn> columns = entityTable.getEntityClassColumns();
         Assert.assertEquals(1, columns.size());
-
         for (EntityColumn column : columns) {
             Assert.assertTrue(column.getEntityField().isAnnotationPresent(Version.class));
         }
@@ -54,6 +51,7 @@ public class VersionTest {
      * 一个实体类中只能有一个 @Version 注解
      */
     class UserVersionError {
+
         @Version
         private Long id;
 
@@ -68,5 +66,4 @@ public class VersionTest {
         Assert.assertNotNull(entityTable);
         SqlHelper.wherePKColumns(UserVersionError.class, true);
     }
-
 }

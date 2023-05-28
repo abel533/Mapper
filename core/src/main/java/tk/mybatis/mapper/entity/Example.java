@@ -21,7 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package tk.mybatis.mapper.entity;
 
 import org.apache.ibatis.reflection.MetaObject;
@@ -30,7 +29,6 @@ import tk.mybatis.mapper.mapperhelper.EntityHelper;
 import tk.mybatis.mapper.util.MetaObjectUtil;
 import tk.mybatis.mapper.util.Sqls;
 import tk.mybatis.mapper.util.StringUtil;
-
 import java.util.*;
 
 /**
@@ -39,6 +37,7 @@ import java.util.*;
  * @author liuzh
  */
 public class Example implements IDynamicTableName {
+
     protected String orderByClause;
 
     protected boolean distinct;
@@ -62,8 +61,10 @@ public class Example implements IDynamicTableName {
     protected Class<?> entityClass;
 
     protected EntityTable table;
+
     //属性和列对应
     protected Map<String, EntityColumn> propertyMap;
+
     //动态表名
     protected String tableName;
 
@@ -106,7 +107,6 @@ public class Example implements IDynamicTableName {
         this.ORDERBY = new OrderBy(this, propertyMap);
     }
 
-
     private Example(Builder builder) {
         this.exists = builder.exists;
         this.notNull = builder.notNull;
@@ -119,7 +119,6 @@ public class Example implements IDynamicTableName {
         this.forUpdate = builder.forUpdate;
         this.tableName = builder.tableName;
         this.ORDERBY = new OrderBy(this, propertyMap);
-
         if (!StringUtil.isEmpty(builder.orderByClause.toString())) {
             this.orderByClause = builder.orderByClause.toString();
         }
@@ -227,9 +226,12 @@ public class Example implements IDynamicTableName {
     }
 
     public static class OrderBy {
+
         //属性和列对应
         protected Map<String, EntityColumn> propertyMap;
+
         private Example example;
+
         private Boolean isProperty;
 
         public OrderBy(Example example, Map<String, EntityColumn> propertyMap) {
@@ -281,13 +283,18 @@ public class Example implements IDynamicTableName {
     }
 
     protected abstract static class GeneratedCriteria {
+
         protected List<Criterion> criteria;
+
         //字段是否必须存在
         protected boolean exists;
+
         //值是否不能为空
         protected boolean notNull;
+
         //连接条件
         protected String andOr;
+
         //属性和列对应
         protected Map<String, EntityColumn> propertyMap;
 
@@ -705,6 +712,7 @@ public class Example implements IDynamicTableName {
     }
 
     public static class Criterion {
+
         private String condition;
 
         private Object value;
@@ -824,23 +832,37 @@ public class Example implements IDynamicTableName {
     }
 
     public static class Builder {
+
         private final Class<?> entityClass;
+
         protected EntityTable table;
+
         //属性和列对应
         protected Map<String, EntityColumn> propertyMap;
+
         private StringBuilder orderByClause;
+
         private boolean distinct;
+
         private boolean exists;
+
         private boolean notNull;
+
         private boolean forUpdate;
+
         //查询字段
         private Set<String> selectColumns;
+
         //排除的查询字段
         private Set<String> excludeColumns;
+
         private String countColumn;
+
         private List<Sqls.Criteria> sqlsCriteria;
+
         //动态表名
         private List<Example.Criteria> exampleCriterias;
+
         //动态表名
         private String tableName;
 
@@ -996,11 +1018,9 @@ public class Example implements IDynamicTableName {
                 }
                 exampleCriterias.add(exampleCriteria);
             }
-
             if (this.orderByClause.length() > 0) {
                 this.orderByClause = new StringBuilder(this.orderByClause.substring(1, this.orderByClause.length()));
             }
-
             return new Example(this);
         }
 
