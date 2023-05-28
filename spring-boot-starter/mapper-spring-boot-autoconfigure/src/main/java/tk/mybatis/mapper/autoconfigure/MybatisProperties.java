@@ -92,7 +92,7 @@ public class MybatisProperties extends BaseProperties {
      * @since 1.1.0
      */
     public String getConfigLocation() {
-        return this.configLocation;
+        return retrieveLocation();
     }
 
     /**
@@ -104,7 +104,7 @@ public class MybatisProperties extends BaseProperties {
 
     @Deprecated
     public String getConfig() {
-        return this.configLocation;
+        return retrieveLocation();
     }
 
     @Deprecated
@@ -204,5 +204,9 @@ public class MybatisProperties extends BaseProperties {
         } catch (IOException e) {
             return new Resource[0];
         }
+    }
+
+    private String retrieveLocation() {
+        return this.configLocation;
     }
 }

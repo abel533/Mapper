@@ -32,29 +32,7 @@ public class SelectPropertyProvider extends MapperTemplate {
      * @return
      */
     public String selectOneByProperty(MappedStatement ms) {
-        String propertyHelper = SelectPropertyProvider.class.getName();
-        Class<?> entityClass = getEntityClass(ms);
-        //修改返回值类型为实体类型
-        setResultType(ms, entityClass);
-        StringBuilder sql = new StringBuilder();
-        sql.append(SqlHelper.selectAllColumns(entityClass));
-        sql.append(SqlHelper.fromTable(entityClass, tableName(entityClass)));
-        sql.append("<where>\n");
-        sql.append("<if test=\"@");
-        sql.append(propertyHelper);
-        sql.append("@existsWhereCondition(value, ");
-        sql.append(isNotEmpty());
-        sql.append(")");
-        sql.append("\">\n");
-        String entityClassName = entityClass.getName();
-        //通过实体类名获取运行时属性对应的字段
-        String ognl = new StringBuilder("${@").append(propertyHelper).append("@getColumnByProperty(@java.lang.Class@forName(\"").append(entityClassName).append("\"), @tk.mybatis.mapper.weekend.reflection.Reflections@fnToFieldName(fn))}").toString();
-        sql.append(ognl + " = #{value}\n");
-        sql.append("</if>\n");
-        // 逻辑删除的未删除查询条件
-        sql.append(SqlHelper.whereLogicDelete(entityClass, false));
-        sql.append("</where>");
-        return sql.toString();
+        return methodNameOne(ms);
     }
 
     /**
@@ -64,29 +42,7 @@ public class SelectPropertyProvider extends MapperTemplate {
      * @return
      */
     public String selectByProperty(MappedStatement ms) {
-        String propertyHelper = SelectPropertyProvider.class.getName();
-        Class<?> entityClass = getEntityClass(ms);
-        //修改返回值类型为实体类型
-        setResultType(ms, entityClass);
-        StringBuilder sql = new StringBuilder();
-        sql.append(SqlHelper.selectAllColumns(entityClass));
-        sql.append(SqlHelper.fromTable(entityClass, tableName(entityClass)));
-        sql.append("<where>\n");
-        sql.append("<if test=\"@");
-        sql.append(propertyHelper);
-        sql.append("@existsWhereCondition(value, ");
-        sql.append(isNotEmpty());
-        sql.append(")");
-        sql.append("\">\n");
-        String entityClassName = entityClass.getName();
-        //通过实体类名获取运行时属性对应的字段
-        String ognl = new StringBuilder("${@").append(propertyHelper).append("@getColumnByProperty(@java.lang.Class@forName(\"").append(entityClassName).append("\"), @tk.mybatis.mapper.weekend.reflection.Reflections@fnToFieldName(fn))}").toString();
-        sql.append(ognl + " = #{value}\n");
-        sql.append("</if>\n");
-        // 逻辑删除的未删除查询条件
-        sql.append(SqlHelper.whereLogicDelete(entityClass, false));
-        sql.append("</where>");
-        return sql.toString();
+        return methodNameOne(ms);
     }
 
     /**
@@ -228,5 +184,31 @@ public class SelectPropertyProvider extends MapperTemplate {
             }
         }
         return appendWhereCondition;
+    }
+
+    private String methodNameOne(MappedStatement ms) {
+        String propertyHelper = SelectPropertyProvider.class.getName();
+        Class<?> entityClass = getEntityClass(ms);
+        //修改返回值类型为实体类型
+        setResultType(ms, entityClass);
+        StringBuilder sql = new StringBuilder();
+        sql.append(SqlHelper.selectAllColumns(entityClass));
+        sql.append(SqlHelper.fromTable(entityClass, tableName(entityClass)));
+        sql.append("<where>\n");
+        sql.append("<if test=\"@");
+        sql.append(propertyHelper);
+        sql.append("@existsWhereCondition(value, ");
+        sql.append(isNotEmpty());
+        sql.append(")");
+        sql.append("\">\n");
+        String entityClassName = entityClass.getName();
+        //通过实体类名获取运行时属性对应的字段
+        String ognl = new StringBuilder("${@").append(propertyHelper).append("@getColumnByProperty(@java.lang.Class@forName(\"").append(entityClassName).append("\"), @tk.mybatis.mapper.weekend.reflection.Reflections@fnToFieldName(fn))}").toString();
+        sql.append(ognl + " = #{value}\n");
+        sql.append("</if>\n");
+        // 逻辑删除的未删除查询条件
+        sql.append(SqlHelper.whereLogicDelete(entityClass, false));
+        sql.append("</where>");
+        return sql.toString();
     }
 }

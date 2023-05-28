@@ -298,15 +298,19 @@ public class CountryExample {
         }
 
         public List<Criterion> getAllCriteria() {
-            return criteria;
+            return getSearchCriteria();
         }
 
         public List<Criterion> getCriteria() {
-            return criteria;
+            return getSearchCriteria();
         }
 
         public boolean isValid() {
             return criteria.size() > 0;
+        }
+
+        private List<Criterion> getSearchCriteria() {
+            return criteria;
         }
     }
 

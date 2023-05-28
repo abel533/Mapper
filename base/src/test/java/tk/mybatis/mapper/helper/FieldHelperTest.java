@@ -57,33 +57,37 @@ public class FieldHelperTest {
 
             @Override
             public void run() {
-                FieldHelper.getFields(Country.class);
+                getCountryFields();
             }
         });
         Thread t2 = new Thread(new Runnable() {
 
             @Override
             public void run() {
-                FieldHelper.getFields(Country.class);
+                getCountryFields();
             }
         });
         Thread t3 = new Thread(new Runnable() {
 
             @Override
             public void run() {
-                FieldHelper.getFields(Country.class);
+                getCountryFields();
             }
         });
         Thread t4 = new Thread(new Runnable() {
 
             @Override
             public void run() {
-                FieldHelper.getFields(Country.class);
+                getCountryFields();
             }
         });
         t1.start();
         t2.start();
         t3.start();
         t4.start();
+    }
+
+    private void getCountryFields() {
+        FieldHelper.getFields(Country.class);
     }
 }

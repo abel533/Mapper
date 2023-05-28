@@ -289,11 +289,7 @@ public class SqlCriteriaHelper<T> implements tk.mybatis.mapper.entity.SqlsCriter
      * @return
      */
     public SqlCriteriaHelper<T> andNotLike(Fn<T, Object> fn, String value) {
-        if (Optional.ofNullable(value).isPresent()) {
-            value = "%" + value + "%";
-            this.criteria.getCriterions().add(new Sqls.Criterion(Reflections.fnToFieldName(fn), value, "not like", "and"));
-        }
-        return this;
+        return addNotLikeCriterion(fn, value);
     }
 
     /**
@@ -305,11 +301,7 @@ public class SqlCriteriaHelper<T> implements tk.mybatis.mapper.entity.SqlsCriter
      * @return
      */
     public SqlCriteriaHelper<T> andNotLikeLeft(Fn<T, Object> fn, String value) {
-        if (Optional.ofNullable(value).isPresent()) {
-            value = "%" + value + "%";
-            this.criteria.getCriterions().add(new Sqls.Criterion(Reflections.fnToFieldName(fn), value, "not like", "and"));
-        }
-        return this;
+        return addNotLikeCriterion(fn, value);
     }
 
     /**
@@ -639,5 +631,13 @@ public class SqlCriteriaHelper<T> implements tk.mybatis.mapper.entity.SqlsCriter
     @Override
     public Sqls.Criteria getCriteria() {
         return criteria;
+    }
+
+    private SqlCriteriaHelper<T> addNotLikeCriterion(Fn<T, Object> fn, String value) {
+        if (Optional.ofNullable(value).isPresent()) {
+            value = "%" + value + "%";
+            this.criteria.getCriterions().add(new Sqls.Criterion(Reflections.fnToFieldName(fn), value, "not like", "and"));
+        }
+        return this;
     }
 }

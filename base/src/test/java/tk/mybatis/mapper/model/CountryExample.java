@@ -358,15 +358,19 @@ public class CountryExample {
         }
 
         public List<Criterion> getAllCriteria() {
-            return criteria;
+            return analyze();
         }
 
         public List<Criterion> getCriteria() {
-            return criteria;
+            return analyze();
         }
 
         public boolean isValid() {
             return criteria.size() > 0;
+        }
+
+        private List<Criterion> analyze() {
+            return criteria;
         }
     }
 

@@ -68,7 +68,7 @@ public class ConditionProvider extends MapperTemplate {
      * @return
      */
     public String selectByCondition(MappedStatement ms) {
-        return exampleProvider.selectByExample(ms);
+        return select(ms);
     }
 
     /**
@@ -78,7 +78,7 @@ public class ConditionProvider extends MapperTemplate {
      * @return
      */
     public String selectByConditionAndRowBounds(MappedStatement ms) {
-        return exampleProvider.selectByExample(ms);
+        return select(ms);
     }
 
     /**
@@ -99,5 +99,9 @@ public class ConditionProvider extends MapperTemplate {
      */
     public String updateByCondition(MappedStatement ms) {
         return exampleProvider.updateByExample(ms);
+    }
+
+    private String select(MappedStatement ms) {
+        return exampleProvider.selectByExample(ms);
     }
 }

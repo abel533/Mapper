@@ -361,8 +361,7 @@ public class MapperPlugin extends FalseMethodPlugin {
      */
     @Override
     public boolean modelBaseRecordClassGenerated(TopLevelClass topLevelClass, IntrospectedTable introspectedTable) {
-        processEntityClass(topLevelClass, introspectedTable);
-        return true;
+        return processEntityClassWrapper(topLevelClass, introspectedTable);
     }
 
     /**
@@ -374,8 +373,7 @@ public class MapperPlugin extends FalseMethodPlugin {
      */
     @Override
     public boolean modelPrimaryKeyClassGenerated(TopLevelClass topLevelClass, IntrospectedTable introspectedTable) {
-        processEntityClass(topLevelClass, introspectedTable);
-        return true;
+        return processEntityClassWrapper(topLevelClass, introspectedTable);
     }
 
     /**
@@ -478,5 +476,10 @@ public class MapperPlugin extends FalseMethodPlugin {
 
     protected Boolean getPropertyAsBoolean(String key) {
         return Boolean.parseBoolean(getProperty(key));
+    }
+
+    private boolean processEntityClassWrapper(TopLevelClass topLevelClass, IntrospectedTable introspectedTable) {
+        processEntityClass(topLevelClass, introspectedTable);
+        return true;
     }
 }

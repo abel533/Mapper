@@ -684,7 +684,7 @@ public class Example implements IDynamicTableName {
         }
 
         public List<Criterion> getAllCriteria() {
-            return criteria;
+            return setCriteria();
         }
 
         public String getAndOr() {
@@ -696,11 +696,15 @@ public class Example implements IDynamicTableName {
         }
 
         public List<Criterion> getCriteria() {
-            return criteria;
+            return setCriteria();
         }
 
         public boolean isValid() {
             return criteria.size() > 0;
+        }
+
+        private List<Criterion> setCriteria() {
+            return criteria;
         }
     }
 
@@ -935,31 +939,19 @@ public class Example implements IDynamicTableName {
         }
 
         public Builder where(Sqls sqls) {
-            Sqls.Criteria criteria = sqls.getCriteria();
-            criteria.setAndOr("and");
-            this.sqlsCriteria.add(criteria);
-            return this;
+            return setAndOrAnd(sqls);
         }
 
         public Builder where(SqlsCriteria sqls) {
-            Sqls.Criteria criteria = sqls.getCriteria();
-            criteria.setAndOr("and");
-            this.sqlsCriteria.add(criteria);
-            return this;
+            return addSqlsCriteria(sqls);
         }
 
         public Builder andWhere(Sqls sqls) {
-            Sqls.Criteria criteria = sqls.getCriteria();
-            criteria.setAndOr("and");
-            this.sqlsCriteria.add(criteria);
-            return this;
+            return setAndOrAnd(sqls);
         }
 
         public Builder andWhere(SqlsCriteria sqls) {
-            Sqls.Criteria criteria = sqls.getCriteria();
-            criteria.setAndOr("and");
-            this.sqlsCriteria.add(criteria);
-            return this;
+            return addSqlsCriteria(sqls);
         }
 
         public Builder orWhere(Sqls sqls) {
@@ -1089,6 +1081,20 @@ public class Example implements IDynamicTableName {
 
         public Builder setTableName(String tableName) {
             this.tableName = tableName;
+            return this;
+        }
+
+        private Builder setAndOrAnd(Sqls sqls) {
+            Sqls.Criteria criteria = sqls.getCriteria();
+            criteria.setAndOr("and");
+            this.sqlsCriteria.add(criteria);
+            return this;
+        }
+
+        private Builder addSqlsCriteria(SqlsCriteria sqls) {
+            Sqls.Criteria criteria = sqls.getCriteria();
+            criteria.setAndOr("and");
+            this.sqlsCriteria.add(criteria);
             return this;
         }
     }

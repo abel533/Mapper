@@ -120,7 +120,7 @@ public class ExampleProvider extends MapperTemplate {
      * @return
      */
     public String selectByExampleAndRowBounds(MappedStatement ms) {
-        return selectByExample(ms);
+        return select(ms);
     }
 
     /**
@@ -174,6 +174,10 @@ public class ExampleProvider extends MapperTemplate {
      * @return
      */
     public String selectOneByExample(MappedStatement ms) {
+        return select(ms);
+    }
+
+    private String select(MappedStatement ms) {
         return selectByExample(ms);
     }
 }
