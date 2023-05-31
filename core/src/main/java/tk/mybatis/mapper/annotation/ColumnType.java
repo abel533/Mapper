@@ -25,7 +25,6 @@
 package tk.mybatis.mapper.annotation;
 
 import org.apache.ibatis.type.JdbcType;
-import org.apache.ibatis.type.TypeHandler;
 import org.apache.ibatis.type.UnknownTypeHandler;
 
 import java.lang.annotation.ElementType;
@@ -53,5 +52,5 @@ public @interface ColumnType {
 
     JdbcType jdbcType() default JdbcType.UNDEFINED;
 
-    Class<? extends TypeHandler<?>> typeHandler() default UnknownTypeHandler.class;
+    Class<?> typeHandler() default UnknownTypeHandler.class;
 }

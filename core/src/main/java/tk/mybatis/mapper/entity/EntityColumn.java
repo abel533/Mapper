@@ -25,7 +25,6 @@
 package tk.mybatis.mapper.entity;
 
 import org.apache.ibatis.type.JdbcType;
-import org.apache.ibatis.type.TypeHandler;
 import tk.mybatis.mapper.code.ORDER;
 import tk.mybatis.mapper.genid.GenId;
 import tk.mybatis.mapper.util.StringUtil;
@@ -41,7 +40,7 @@ public class EntityColumn {
     private String column;
     private Class<?> javaType;
     private JdbcType jdbcType;
-    private Class<? extends TypeHandler<?>> typeHandler;
+    private Class<?> typeHandler;
     private boolean id = false;
     private boolean identity = false;
     private Class<? extends GenId> genIdClass;
@@ -272,11 +271,11 @@ public class EntityColumn {
         this.table = table;
     }
 
-    public Class<? extends TypeHandler<?>> getTypeHandler() {
+    public Class<?> getTypeHandler() {
         return typeHandler;
     }
 
-    public void setTypeHandler(Class<? extends TypeHandler<?>> typeHandler) {
+    public void setTypeHandler(Class<?> typeHandler) {
         this.typeHandler = typeHandler;
     }
 
