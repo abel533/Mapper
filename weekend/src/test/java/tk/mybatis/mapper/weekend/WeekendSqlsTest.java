@@ -27,9 +27,7 @@ package tk.mybatis.mapper.weekend;
 
 import org.apache.ibatis.session.SqlSession;
 import org.junit.Assert;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.TestRule;
 import tk.mybatis.mapper.entity.Example;
 import tk.mybatis.mapper.util.Sqls;
 import tk.mybatis.mapper.weekend.entity.Country;
@@ -43,9 +41,6 @@ import java.util.List;
  * @author XuYin
  */
 public class WeekendSqlsTest {
-
-    @Rule
-    public TestRule runJava8 = new UseJava8Rule();
 
     @Test
     public void testWeekend() {
