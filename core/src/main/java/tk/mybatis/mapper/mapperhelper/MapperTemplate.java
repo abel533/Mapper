@@ -167,7 +167,18 @@ public abstract class MapperTemplate {
                 if (type instanceof ParameterizedType) {
                     ParameterizedType t = (ParameterizedType) type;
                     if (t.getRawType() == this.mapperClass || this.mapperClass.isAssignableFrom((Class<?>) t.getRawType())) {
-                        Class<?> returnType = (Class<?>) t.getActualTypeArguments()[0];
+                        Type actualType = t.getActualTypeArguments()[0];
+                        Class<?> returnType;
+                        if (actualType instanceof Class) {
+                            returnType = (Class<?>) actualType;
+                        } else if (actualType instanceof ParameterizedType) {
+                            // 获取泛型信息后发现任然是泛型的场景
+                            returnType = (Class<?>) ((ParameterizedType)actualType).getRawType();
+                        } else {
+                            // GenericArrayType、TypeVariable以及WildcardType不受支持
+                            throw new MapperException(msId + " 方法的泛型信息不受支持!");
+                        }
+                        
                         //获取该类型后，第一次对该类型进行初始化
                         EntityHelper.initEntityNameMap(returnType, mapperHelper.getConfig());
                         entityClassMap.put(msId, returnType);
