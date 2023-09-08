@@ -13,7 +13,7 @@ import tk.mybatis.mapper.entity.EntityTable;
 import tk.mybatis.mapper.mapperhelper.EntityHelper;
 import tk.mybatis.mapper.mapperhelper.SqlHelper;
 
-import javax.persistence.Id;
+import jakarta.persistence.Id;
 import java.util.Set;
 
 /**

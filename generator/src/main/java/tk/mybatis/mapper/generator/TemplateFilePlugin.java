@@ -171,7 +171,7 @@ public class TemplateFilePlugin extends PluginAdapter {
             warnings.add("没有配置 \"templateFormatterClass\" 模板处理器，使用默认的处理器!");
         }
         try {
-            templateFormatter = Class.forName(templateFormatterClass).newInstance();
+            templateFormatter = Class.forName(templateFormatterClass).getDeclaredConstructor().newInstance();
         } catch (Exception e) {
             warnings.add("初始化 templateFormatter 出错:" + e.getMessage());
             right = false;
@@ -197,7 +197,7 @@ public class TemplateFilePlugin extends PluginAdapter {
 
     @Override
     public List<GeneratedJavaFile> contextGenerateAdditionalJavaFiles(IntrospectedTable introspectedTable) {
-        List<GeneratedJavaFile> list = new ArrayList<GeneratedJavaFile>();
+        List<GeneratedJavaFile> list = new ArrayList<>();
         TableClass tableClass = TableColumnBuilder.build(introspectedTable);
         if ("TRUE".equalsIgnoreCase(singleMode)) {
             list.add(new GenerateByTemplateFile(tableClass, (TemplateFormatter) templateFormatter, properties, targetProject, targetPackage, fileName, templateContent));
@@ -209,7 +209,7 @@ public class TemplateFilePlugin extends PluginAdapter {
 
     @Override
     public List<GeneratedJavaFile> contextGenerateAdditionalJavaFiles() {
-        List<GeneratedJavaFile> list = new ArrayList<GeneratedJavaFile>();
+        List<GeneratedJavaFile> list = new ArrayList<>();
         if (cacheTables != null && cacheTables.size() > 0) {
             list.add(new GenerateByListTemplateFile(cacheTables, (ListTemplateFormatter) templateFormatter, properties, targetProject, targetPackage, fileName, templateContent));
         }

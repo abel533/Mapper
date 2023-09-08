@@ -72,7 +72,7 @@ public class Generator {
 
     public static void main(String[] args) throws Exception {
         startDB();
-        List<String> warnings = new ArrayList<String>();
+        List<String> warnings = new ArrayList<>();
         boolean overwrite = true;
         ConfigurationParser cp = new ConfigurationParser(warnings);
         Configuration config = cp.parseConfiguration(getResourceAsStream("generatorConfig.xml"));

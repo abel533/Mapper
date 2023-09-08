@@ -26,8 +26,8 @@ package tk.mybatis.mapper.model;
 
 import tk.mybatis.mapper.annotation.Order;
 
-import javax.persistence.Id;
-import javax.persistence.Transient;
+import jakarta.persistence.Id;
+import jakarta.persistence.Transient;
 import java.io.Serializable;
 
 /**

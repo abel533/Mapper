@@ -1,6 +1,6 @@
 package tk.mybatis.mapper.additional.select;
 
-import javax.persistence.Id;
+import jakarta.persistence.Id;
 import java.time.LocalDate;
 
 /**

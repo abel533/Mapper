@@ -24,7 +24,7 @@
 
 package tk.mybatis.mapper.model;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.io.Serializable;
 
 /**

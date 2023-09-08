@@ -27,7 +27,7 @@ package tk.mybatis.sample.domain;
 import org.apache.ibatis.type.JdbcType;
 import tk.mybatis.mapper.annotation.ColumnType;
 
-import javax.persistence.Id;
+import jakarta.persistence.Id;
 import java.io.Serializable;
 
 /**

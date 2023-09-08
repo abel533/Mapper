@@ -125,7 +125,7 @@ public class MapperPlugin extends FalseMethodPlugin {
      */
     private void processEntityClass(TopLevelClass topLevelClass, IntrospectedTable introspectedTable) {
         //引入JPA注解
-        topLevelClass.addImportedType("javax.persistence.*");
+        topLevelClass.addImportedType("jakarta.persistence.*");
         //lombok扩展开始
         //如果需要Data，引入包，代码增加注解
         if (this.needsData) {

@@ -33,7 +33,7 @@ import org.apache.ibatis.type.TypeHandler;
 import tk.mybatis.mapper.MapperException;
 import tk.mybatis.mapper.util.StringUtil;
 
-import javax.persistence.Table;
+import jakarta.persistence.Table;
 import java.lang.reflect.Constructor;
 import java.util.*;
 import java.util.regex.Matcher;

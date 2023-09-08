@@ -25,7 +25,7 @@
 
 package tk.mybatis.mapper.weekend.entity;
 
-import javax.persistence.Table;
+import jakarta.persistence.Table;
 
 /**
  * @author Frank

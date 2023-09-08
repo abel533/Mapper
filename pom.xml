@@ -36,14 +36,14 @@
 
     <properties>
         <revision>4.3.0-SNAPSHOT</revision>
-        <maven.compiler.source>8</maven.compiler.source>
-        <maven.compiler.target>8</maven.compiler.target>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <argLine>-Dfile.encoding=UTF-8</argLine>
 
-        <jpa.version>2.2</jpa.version>
-        <slf4j.version>1.7.26</slf4j.version>
+        <jpa.version>3.1.0</jpa.version>
+        <slf4j.version>2.0.7</slf4j.version>
         <mybatis.version>3.5.11</mybatis.version>
         <!--test-->
         <junit.version>4.13.2</junit.version>
@@ -68,11 +68,10 @@
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <groupId>javax.persistence</groupId>
-                <artifactId>javax.persistence-api</artifactId>
+                <groupId>jakarta.persistence</groupId>
+                <artifactId>jakarta.persistence-api</artifactId>
                 <version>${jpa.version}</version>
             </dependency>
-
 
             <!--optional-->
             <dependency>

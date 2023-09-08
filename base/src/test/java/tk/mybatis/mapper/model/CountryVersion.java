@@ -26,7 +26,7 @@ package tk.mybatis.mapper.model;
 
 import tk.mybatis.mapper.annotation.Version;
 
-import javax.persistence.Table;
+import jakarta.persistence.Table;
 
 /**
  * Description: Country

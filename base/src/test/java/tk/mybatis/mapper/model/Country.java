@@ -27,8 +27,8 @@ package tk.mybatis.mapper.model;
 import tk.mybatis.mapper.annotation.Order;
 import tk.mybatis.mapper.entity.IDynamicTableName;
 
-import javax.persistence.Column;
-import javax.persistence.Transient;
+import jakarta.persistence.Column;
+import jakarta.persistence.Transient;
 import java.io.Serializable;
 import java.util.List;
 
