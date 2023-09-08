@@ -90,7 +90,7 @@ public abstract class SpringBootBindUtil {
                 Object resolver = resolverConstructor.newInstance(environment);
                 Map<String, Object> properties = (Map<String, Object>) getSubPropertiesMethod.invoke(resolver, "");
                 //创建结果类
-                T target = targetClass.newInstance();
+                T target = targetClass.getDeclaredConstructor().newInstance();
                 //反射使用 org.springframework.boot.bind.RelaxedDataBinder
                 Class<?> binderClass = Class.forName("org.springframework.boot.bind.RelaxedDataBinder");
                 Constructor<?> binderConstructor = binderClass.getDeclaredConstructor(Object.class, String.class);

@@ -27,7 +27,7 @@ package tk.mybatis.mapper.mapperhelper;
 import tk.mybatis.mapper.MapperException;
 import tk.mybatis.mapper.entity.EntityField;
 
-import javax.persistence.Entity;
+import jakarta.persistence.Entity;
 import java.beans.BeanInfo;
 import java.beans.IntrospectionException;
 import java.beans.Introspector;
@@ -44,7 +44,7 @@ import java.util.*;
  */
 public class FieldHelper {
 
-    private static final IFieldHelper fieldHelper = new Jdk8FieldHelper();
+    private static final IFieldHelper fieldHelper = new Jdk17FieldHelper();
 
     /**
      * 获取全部的Field
@@ -136,6 +136,7 @@ public class FieldHelper {
 
     /**
      * 支持jdk8
+     * @deprecated
      */
     static class Jdk8FieldHelper implements IFieldHelper {
         /**
@@ -220,6 +221,105 @@ public class FieldHelper {
         public List<EntityField> getProperties(Class<?> entityClass) {
             List<EntityField> entityFields = new ArrayList<EntityField>();
             BeanInfo beanInfo = null;
+            try {
+                beanInfo = Introspector.getBeanInfo(entityClass);
+            } catch (IntrospectionException e) {
+                throw new MapperException(e);
+            }
+            PropertyDescriptor[] descriptors = beanInfo.getPropertyDescriptors();
+            for (PropertyDescriptor desc : descriptors) {
+                if (!"class".equals(desc.getName())) {
+                    entityFields.add(new EntityField(null, desc));
+                }
+            }
+            return entityFields;
+        }
+    }
+
+    /**
+     * 支持jdk8
+     */
+    static class Jdk17FieldHelper implements IFieldHelper {
+        /**
+         * 获取全部的Field
+         *
+         * @param entityClass
+         * @return
+         */
+        @Override
+        public List<EntityField> getFields(Class<?> entityClass) {
+            List<EntityField> fields = _getFields(entityClass, null, null);
+            fields = new ArrayList<>(new LinkedHashSet<>(fields));
+            List<EntityField> properties = getProperties(entityClass);
+            for (EntityField field : fields) {
+                for (EntityField property : properties) {
+                    if (field.getName().equals(property.getName())) {
+                        //泛型的情况下通过属性可以得到实际的类型
+                        field.setJavaType(property.getJavaType());
+                        break;
+                    }
+                }
+            }
+            return fields;
+        }
+
+        /**
+         * 获取全部的Field，仅仅通过Field获取
+         *
+         * @param entityClass
+         * @param fieldList
+         * @param level
+         * @return
+         */
+        private List<EntityField> _getFields(Class<?> entityClass, List<EntityField> fieldList, Integer level) {
+            if (fieldList == null) {
+                fieldList = new ArrayList<>();
+            }
+            if (level == null) {
+                level = 0;
+            }
+            if (entityClass.equals(Object.class)) {
+                return fieldList;
+            }
+            Field[] fields = entityClass.getDeclaredFields();
+            int index = 0;
+            for (Field field : fields) {
+                //排除静态字段，解决bug#2
+                if (!Modifier.isStatic(field.getModifiers()) && !Modifier.isTransient(field.getModifiers())) {
+                    //如果父类中包含与子类同名field，则跳过处理，允许子类进行覆盖
+                    if (FieldHelper.containFiled(fieldList, field.getName())) {
+                        continue;
+                    }
+                    if (level.intValue() != 0) {
+                        //将父类的字段放在前面
+                        fieldList.add(index, new EntityField(field, null));
+                        index++;
+                    } else {
+                        fieldList.add(new EntityField(field, null));
+                    }
+                }
+            }
+            Class<?> superClass = entityClass.getSuperclass();
+            if (superClass != null
+                    && !superClass.equals(Object.class)
+                    && (superClass.isAnnotationPresent(Entity.class)
+                    || (!Map.class.isAssignableFrom(superClass)
+                    && !Collection.class.isAssignableFrom(superClass)))) {
+                return _getFields(entityClass.getSuperclass(), fieldList, ++level);
+            }
+            return fieldList;
+        }
+
+        /**
+         * 通过方法获取属性
+         *
+         * @param entityClass
+         * @return
+         */
+        @Override
+        public List<EntityField> getProperties(Class<?> entityClass) {
+            List<EntityField> entityFields = new ArrayList<>();
+            BeanInfo beanInfo;
             try {
                 beanInfo = Introspector.getBeanInfo(entityClass);
             } catch (IntrospectionException e) {

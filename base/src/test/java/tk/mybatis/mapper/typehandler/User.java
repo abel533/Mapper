@@ -2,7 +2,7 @@ package tk.mybatis.mapper.typehandler;
 
 import tk.mybatis.mapper.annotation.ColumnType;
 
-import javax.persistence.Id;
+import jakarta.persistence.Id;
 import java.io.Serializable;
 
 /**

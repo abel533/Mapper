@@ -24,7 +24,7 @@
 
 package tk.mybatis.mapper.model;
 
-import javax.persistence.Column;
+import jakarta.persistence.Column;
 
 /**
  * @author liuzh_3nofxnp

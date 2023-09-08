@@ -1,7 +1,7 @@
 package tk.mybatis.mapper.model;
 
-import javax.persistence.Column;
-import javax.persistence.Table;
+import jakarta.persistence.Column;
+import jakarta.persistence.Table;
 
 @Table(name = "tb_user")
 public class TbUserLogicDelete extends BaseLogicDelete {

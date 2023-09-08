@@ -3,7 +3,7 @@ package tk.mybatis.mapper.additional.dialect.oracle;
 import tk.mybatis.mapper.additional.insertlist.UUIdGenId;
 import tk.mybatis.mapper.annotation.KeySql;
 
-import javax.persistence.Id;
+import jakarta.persistence.Id;
 
 /**
  * @description:

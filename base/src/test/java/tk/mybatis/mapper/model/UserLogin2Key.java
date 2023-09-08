@@ -24,9 +24,9 @@
 
 package tk.mybatis.mapper.model;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 
 /**
  * Created by liuzh on 2014/11/21.

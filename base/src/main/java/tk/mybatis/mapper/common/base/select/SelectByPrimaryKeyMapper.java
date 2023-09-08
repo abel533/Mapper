@@ -30,7 +30,7 @@ import tk.mybatis.mapper.provider.base.BaseSelectProvider;
 
 /**
  * 通用Mapper接口,其他接口继承该接口即可
- * 需要在Entity类中为主键字段加上@javax.persistence.Id注解,声明主键
+ * 需要在Entity类中为主键字段加上@jakarta.persistence.Id注解,声明主键
  * 否则无法确认实体类哪个属性是主键
  * <p/>
  * <p>这是一个例子，自己扩展时可以参考</p>
