@@ -776,7 +776,12 @@ public class SqlHelper {
     public static String logicDeleteColumnEqualsValue(EntityColumn column, boolean isDeleted) {
         String result = "";
         if (column.getEntityField().isAnnotationPresent(LogicDelete.class)) {
-            result = column.getColumn() + " = " + getLogicDeletedValue(column, isDeleted);
+            Integer logicDeletedValue = getLogicDeletedValue(column, isDeleted);
+            if(logicDeletedValue==null){
+                result  = column.getColumn() + " is null ";
+            }else {
+                result = column.getColumn() + " = " + logicDeletedValue;
+            }
         }
         return result;
     }
@@ -788,15 +793,15 @@ public class SqlHelper {
      * @param isDeleted true：逻辑删除的值，false：未逻辑删除的值
      * @return
      */
-    public static int getLogicDeletedValue(EntityColumn column, boolean isDeleted) {
+    public static Integer getLogicDeletedValue(EntityColumn column, boolean isDeleted) {
         if (!column.getEntityField().isAnnotationPresent(LogicDelete.class)) {
             throw new LogicDeleteException(column.getColumn() + " 没有 @LogicDelete 注解!");
         }
         LogicDelete logicDelete = column.getEntityField().getAnnotation(LogicDelete.class);
         if (isDeleted) {
-            return logicDelete.isDeletedValue();
+            return logicDelete.isNullForDeletedValue()?null: logicDelete.isDeletedValue();
         }
-        return logicDelete.notDeletedValue();
+        return logicDelete.isNullForNotDeletedValue()?null: logicDelete.notDeletedValue();
     }
 
     /**
