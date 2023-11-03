@@ -1,7 +1,5 @@
 package tk.mybatis.mapper.annotation;
 
-import scala.Int;
-
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
