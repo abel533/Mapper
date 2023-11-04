@@ -181,6 +181,7 @@ public class FieldHelper {
                 return fieldList;
             }
             Field[] fields = entityClass.getDeclaredFields();
+            Arrays.sort(fields, Comparator.comparing(Field::getName));
             int index = 0;
             for (int i = 0; i < fields.length; i++) {
                 Field field = fields[i];
