@@ -30,6 +30,8 @@ import tk.mybatis.mapper.weekend.Fn;
 import java.beans.Introspector;
 import java.lang.invoke.SerializedLambda;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Pattern;
 
 /**
@@ -57,5 +59,13 @@ public class Reflections {
         } catch (ReflectiveOperationException e) {
             throw new ReflectionOperationException(e);
         }
+    }
+
+    public static String[] fnToFieldNames(Fn... fns) {
+        List<String> list = new ArrayList<>();
+        for (Fn fn : fns) {
+            list.add(fnToFieldName(fn));
+        }
+        return list.toArray(new String[0]);
     }
 }
