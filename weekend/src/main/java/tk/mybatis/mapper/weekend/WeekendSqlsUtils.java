@@ -278,7 +278,7 @@ public class WeekendSqlsUtils {
         return WeekendSqls.<T>custom().orNotLike(fn, value);
     }
 
-    public static <T> String[] where(Fn<T, Object>... fn) {
+    public static <T> String[] select(Fn<T, Object>... fn) {
         return Reflections.fnToFieldNames(fn);
     }
 }
