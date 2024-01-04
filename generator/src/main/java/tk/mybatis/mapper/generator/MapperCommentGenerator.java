@@ -45,6 +45,8 @@ public class MapperCommentGenerator implements CommentGenerator {
     private String endingDelimiter = "";
     //强制生成注解
     private boolean forceAnnotation;
+    //强制不生成注解
+    private boolean forceNonAnnotation;
     //是否生成swagger注解
     private boolean needsSwagger;
     //逻辑删除字段
@@ -92,6 +94,10 @@ public class MapperCommentGenerator implements CommentGenerator {
         String forceAnnotation = properties.getProperty("forceAnnotation");
         if (StringUtility.stringHasValue(forceAnnotation)) {
             this.forceAnnotation = "TRUE".equalsIgnoreCase(forceAnnotation);
+        }
+        String forceNonAnnotation = properties.getProperty("forceNonAnnotation");
+        if (StringUtility.stringHasValue(forceNonAnnotation)) {
+            this.forceNonAnnotation = "TRUE".equalsIgnoreCase(forceNonAnnotation);
         }
         String needsSwagger = properties.getProperty("needsSwagger");
         if (StringUtility.stringHasValue(needsSwagger)) {
@@ -175,13 +181,15 @@ public class MapperCommentGenerator implements CommentGenerator {
                     + column
                     + introspectedColumn.getContext().getEndingDelimiter();
         }
-        if (!column.equals(introspectedColumn.getJavaProperty())) {
-            //@Column
-            field.addAnnotation("@Column(name = \"" + getDelimiterName(column) + "\")");
-        } else if (StringUtility.stringHasValue(beginningDelimiter) || StringUtility.stringHasValue(endingDelimiter)) {
-            field.addAnnotation("@Column(name = \"" + getDelimiterName(column) + "\")");
-        } else if (forceAnnotation) {
-            field.addAnnotation("@Column(name = \"" + getDelimiterName(column) + "\")");
+        if (!forceNonAnnotation) {
+            if (!column.equals(introspectedColumn.getJavaProperty())) {
+                //@Column
+                field.addAnnotation("@Column(name = \"" + getDelimiterName(column) + "\")");
+            } else if (StringUtility.stringHasValue(beginningDelimiter) || StringUtility.stringHasValue(endingDelimiter)) {
+                field.addAnnotation("@Column(name = \"" + getDelimiterName(column) + "\")");
+            } else if (forceAnnotation) {
+                field.addAnnotation("@Column(name = \"" + getDelimiterName(column) + "\")");
+            }
         }
 
         // 添加逻辑删除注解

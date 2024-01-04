@@ -25,6 +25,8 @@
 
 package tk.mybatis.mapper.weekend;
 
+import tk.mybatis.mapper.weekend.reflection.Reflections;
+
 /**
  * {@link WeekendSqls} 的工具类，提供一系列静态方法，减少泛型参数的指定，使代码更简洁、清晰
  *
@@ -276,4 +278,7 @@ public class WeekendSqlsUtils {
         return WeekendSqls.<T>custom().orNotLike(fn, value);
     }
 
+    public static <T> String[] select(Fn<T, Object>... fn) {
+        return Reflections.fnToFieldNames(fn);
+    }
 }
