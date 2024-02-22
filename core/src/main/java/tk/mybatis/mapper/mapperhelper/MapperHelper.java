@@ -87,7 +87,6 @@ public class MapperHelper {
         this();
         setProperties(properties);
     }
-
     /**
      * 通过通用Mapper接口获取对应的MapperTemplate
      *
@@ -95,56 +94,44 @@ public class MapperHelper {
      * @return
      * @throws Exception
      */
-    private MapperTemplate fromMapperClass(Class<?> mapperClass) {
+    private Collection<MapperTemplate> fromMapperClasses(Class<?> mapperClass) {
+        Map<Class<?>,MapperTemplate> templateMap = new ConcurrentHashMap<Class<?>, MapperTemplate>();
         Method[] methods = mapperClass.getDeclaredMethods();
-        Class<?> templateClass = null;
-        Class<?> tempClass = null;
-        Set<String> methodSet = new HashSet<String>();
         for (Method method : methods) {
+            Class<?> templateClass = null;
             if (method.isAnnotationPresent(SelectProvider.class)) {
                 SelectProvider provider = method.getAnnotation(SelectProvider.class);
-                tempClass = provider.type();
-                methodSet.add(method.getName());
+                templateClass = provider.type();
             } else if (method.isAnnotationPresent(InsertProvider.class)) {
                 InsertProvider provider = method.getAnnotation(InsertProvider.class);
-                tempClass = provider.type();
-                methodSet.add(method.getName());
+                templateClass = provider.type();
             } else if (method.isAnnotationPresent(DeleteProvider.class)) {
                 DeleteProvider provider = method.getAnnotation(DeleteProvider.class);
-                tempClass = provider.type();
-                methodSet.add(method.getName());
+                templateClass = provider.type();
             } else if (method.isAnnotationPresent(UpdateProvider.class)) {
                 UpdateProvider provider = method.getAnnotation(UpdateProvider.class);
-                tempClass = provider.type();
-                methodSet.add(method.getName());
+                templateClass = provider.type();
             }
-            if (templateClass == null) {
-                templateClass = tempClass;
-            } else if (templateClass != tempClass) {
-                log.error("一个通用Mapper中只允许存在一个MapperTemplate子类!");
-                throw new MapperException("一个通用Mapper中只允许存在一个MapperTemplate子类!");
+            if (templateClass == null || !MapperTemplate.class.isAssignableFrom(templateClass)) {
+                templateClass = EmptyProvider.class;
             }
-        }
-        if (templateClass == null || !MapperTemplate.class.isAssignableFrom(templateClass)) {
-            templateClass = EmptyProvider.class;
-        }
-        MapperTemplate mapperTemplate = null;
-        try {
-            mapperTemplate = (MapperTemplate) templateClass.getConstructor(Class.class, MapperHelper.class).newInstance(mapperClass, this);
-        } catch (Exception e) {
-            log.error("实例化MapperTemplate对象失败:" + e, e);
-            throw new MapperException("实例化MapperTemplate对象失败:" + e.getMessage());
-        }
-        //注册方法
-        for (String methodName : methodSet) {
+            MapperTemplate mapperTemplate;
             try {
-                mapperTemplate.addMethodMap(methodName, templateClass.getMethod(methodName, MappedStatement.class));
+                mapperTemplate = templateMap.getOrDefault(templateClass,(MapperTemplate) templateClass.getConstructor(Class.class, MapperHelper.class).newInstance(mapperClass, this));;
+                templateMap.put(templateClass, mapperTemplate);
+            } catch (Exception e) {
+                log.error("实例化MapperTemplate对象失败:" + e, e);
+                throw new MapperException("实例化MapperTemplate对象失败:" + e.getMessage());
+            }
+            //注册方法
+            try {
+                mapperTemplate.addMethodMap(method.getName(), templateClass.getMethod(method.getName(), MappedStatement.class));
             } catch (NoSuchMethodException e) {
-                log.error(templateClass.getName() + "中缺少" + methodName + "方法!", e);
-                throw new MapperException(templateClass.getName() + "中缺少" + methodName + "方法!");
+                log.error(templateClass.getName() + "中缺少" + method.getName() + "方法!", e);
+                throw new MapperException(templateClass.getName() + "中缺少" + method.getName() + "方法!");
             }
         }
-        return mapperTemplate;
+        return templateMap.values();
     }
 
     /**
@@ -155,7 +142,7 @@ public class MapperHelper {
     public void registerMapper(Class<?> mapperClass) {
         if (!registerMapper.containsKey(mapperClass)) {
             registerClass.add(mapperClass);
-            registerMapper.put(mapperClass, fromMapperClass(mapperClass));
+            fromMapperClasses(mapperClass).forEach(c -> registerMapper.put(mapperClass, c));
         }
         //自动注册继承的接口
         Class<?>[] interfaces = mapperClass.getInterfaces();
