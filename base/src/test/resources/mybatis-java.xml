@@ -62,6 +62,7 @@
 
     <mappers>
         <mapper resource="CachedCountryMapper.xml"/>
+        <mapper class="tk.mybatis.mapper.mapper.CountryMultipleMapper"/>
         <mapper class="tk.mybatis.mapper.mapper.CountryMapper"/>
         <mapper class="tk.mybatis.mapper.mapper.Country2Mapper"/>
         <mapper class="tk.mybatis.mapper.mapper.CountryTMapper"/>
