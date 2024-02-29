@@ -23,7 +23,6 @@ public class MultipleMapperProviderTest {
         SqlSession sqlSession = MybatisHelper.getSqlSession();
         try {
             CountryMultipleMapper mapper = sqlSession.getMapper(CountryMultipleMapper.class);
-
             Country country = new Country();
             country.setId(200);
             country.setCountrycode("AB");

@@ -65,7 +65,7 @@ public class MapperHelper {
     /**
      * 注册的通用Mapper接口
      */
-    private Map<Class<?>, MapperTemplate> registerMapper = new ConcurrentHashMap<Class<?>, MapperTemplate>();
+    private Map<Class<?>, Collection<MapperTemplate>> registerMapper = new ConcurrentHashMap<Class<?>, Collection<MapperTemplate>>();
 
     /**
      * 通用Mapper配置
@@ -142,7 +142,7 @@ public class MapperHelper {
     public void registerMapper(Class<?> mapperClass) {
         if (!registerMapper.containsKey(mapperClass)) {
             registerClass.add(mapperClass);
-            fromMapperClasses(mapperClass).forEach(c -> registerMapper.put(mapperClass, c));
+            registerMapper.put(mapperClass,fromMapperClasses(mapperClass));
         }
         //自动注册继承的接口
         Class<?>[] interfaces = mapperClass.getInterfaces();
@@ -196,9 +196,11 @@ public class MapperHelper {
      * @return
      */
     public MapperTemplate getMapperTemplateByMsId(String msId) {
-        for (Map.Entry<Class<?>, MapperTemplate> entry : registerMapper.entrySet()) {
-            if (entry.getValue().supportMethod(msId)) {
-                return entry.getValue();
+        for (Map.Entry<Class<?>, Collection<MapperTemplate>> entry : registerMapper.entrySet()) {
+            for (MapperTemplate t : entry.getValue()) {
+                if (t.supportMethod(msId)) {
+                    return t;
+                }
             }
         }
         return null;
