@@ -176,7 +176,7 @@ public class MapperScannerConfigurer implements BeanDefinitionRegistryPostProces
         scanner.registerFilters();
         //设置通用 Mapper
         scanner.setMapperHelper(this.mapperHelper);
-        scanner.scan(StringUtils.tokenizeToStringArray(this.basePackage, ConfigurableApplicationContext.CONFIG_LOCATION_DELIMITERS));
+        scanner.doScan(StringUtils.tokenizeToStringArray(this.basePackage, ConfigurableApplicationContext.CONFIG_LOCATION_DELIMITERS));
     }
 
     /*
