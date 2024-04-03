@@ -1,0 +1,21 @@
+# 配置数据源
+test:
+  db1:
+    jdbcUrl: jdbc:h2:mem:h2DB
+    driverClassName: org.h2.Driver
+    username: root
+    password: root
+
+mybatis:
+  db1:
+    typeAliases:
+    - "tk.mybatis.solon.test.entity.*"
+    mappers:
+    - "classpath:mapper/*.xml"
+
+# tk mapper的配置
+    tk:
+      mapper:
+        style: camelhumpandlowercase
+        safe-update: true
+        safe-delete: true
