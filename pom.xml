@@ -141,6 +141,7 @@
         <module>weekend</module>
         <module>generator</module>
         <module>spring-boot-starter</module>
+        <module>solon-plugin</module>
     </modules>
 
     <build>
