@@ -54,6 +54,8 @@ public class MapperPlugin extends FalseMethodPlugin {
     private CommentGeneratorConfiguration commentCfg;
     //强制生成注解
     private boolean forceAnnotation;
+    //强制不生成注解
+    private boolean forceNonAnnotation;
 
     //是否需要生成Data注解
     private boolean needsData = false;
@@ -222,16 +224,18 @@ public class MapperPlugin extends FalseMethodPlugin {
                     + context.getEndingDelimiter();
         }
         //是否忽略大小写，对于区分大小写的数据库，会有用
-        if (caseSensitive && !topLevelClass.getType().getShortName().equals(tableName)) {
-            topLevelClass.addAnnotation("@Table(name = \"" + getDelimiterName(tableName) + "\")");
-        } else if (!topLevelClass.getType().getShortName().equalsIgnoreCase(tableName)) {
-            topLevelClass.addAnnotation("@Table(name = \"" + getDelimiterName(tableName) + "\")");
-        } else if (StringUtility.stringHasValue(schema)
-                || StringUtility.stringHasValue(beginningDelimiter)
-                || StringUtility.stringHasValue(endingDelimiter)) {
-            topLevelClass.addAnnotation("@Table(name = \"" + getDelimiterName(tableName) + "\")");
-        } else if (forceAnnotation) {
-            topLevelClass.addAnnotation("@Table(name = \"" + getDelimiterName(tableName) + "\")");
+        if (!forceNonAnnotation) {
+            if (caseSensitive && !topLevelClass.getType().getShortName().equals(tableName)) {
+                topLevelClass.addAnnotation("@Table(name = \"" + getDelimiterName(tableName) + "\")");
+            } else if (!topLevelClass.getType().getShortName().equalsIgnoreCase(tableName)) {
+                topLevelClass.addAnnotation("@Table(name = \"" + getDelimiterName(tableName) + "\")");
+            } else if (StringUtility.stringHasValue(schema)
+                    || StringUtility.stringHasValue(beginningDelimiter)
+                    || StringUtility.stringHasValue(endingDelimiter)) {
+                topLevelClass.addAnnotation("@Table(name = \"" + getDelimiterName(tableName) + "\")");
+            } else if (forceAnnotation) {
+                topLevelClass.addAnnotation("@Table(name = \"" + getDelimiterName(tableName) + "\")");
+            }
         }
         if (generateColumnConsts) {
             for (IntrospectedColumn introspectedColumn : introspectedTable.getAllColumns()) {
@@ -428,6 +432,7 @@ public class MapperPlugin extends FalseMethodPlugin {
         }
         this.caseSensitive = Boolean.parseBoolean(this.properties.getProperty("caseSensitive"));
         this.forceAnnotation = getPropertyAsBoolean("forceAnnotation");
+        this.forceNonAnnotation = getPropertyAsBoolean("forceNonAnnotation");
         this.beginningDelimiter = getProperty("beginningDelimiter", "");
         this.endingDelimiter = getProperty("endingDelimiter", "");
         this.schema = getProperty("schema");
@@ -460,6 +465,10 @@ public class MapperPlugin extends FalseMethodPlugin {
             String forceAnnotation = getProperty("forceAnnotation");
             if (StringUtility.stringHasValue(forceAnnotation)) {
                 commentCfg.addProperty("forceAnnotation", forceAnnotation);
+            }
+            String forceNonAnnotation = getProperty("forceNonAnnotation");
+            if (StringUtility.stringHasValue(forceNonAnnotation)) {
+                commentCfg.addProperty("forceNonAnnotation", forceNonAnnotation);
             }
             commentCfg.addProperty("needsSwagger", this.needsSwagger + "");
         }
