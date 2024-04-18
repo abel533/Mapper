@@ -1,6 +1,8 @@
 package tk.mybatis.mapper.session;
 
 import org.apache.ibatis.mapping.MappedStatement;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import tk.mybatis.mapper.entity.Config;
 import tk.mybatis.mapper.mapperhelper.MapperHelper;
 
@@ -12,6 +14,8 @@ import java.util.Properties;
  * @author liuzh
  */
 public class Configuration extends org.apache.ibatis.session.Configuration {
+
+    private final Logger log = LoggerFactory.getLogger(Configuration.class);
 
     private MapperHelper mapperHelper;
 
@@ -59,7 +63,7 @@ public class Configuration extends org.apache.ibatis.session.Configuration {
             this.mapperHelper.processMappedStatement(ms);
         } catch (IllegalArgumentException e) {
             //这里的异常是导致 Spring 启动死循环的关键位置，为了避免后续会吞异常，这里直接输出
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
             throw new RuntimeException(e);
         }
     }

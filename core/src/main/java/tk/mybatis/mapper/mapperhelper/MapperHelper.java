@@ -32,12 +32,18 @@ import org.apache.ibatis.builder.annotation.ProviderSqlSource;
 import org.apache.ibatis.logging.Log;
 import org.apache.ibatis.logging.LogFactory;
 import org.apache.ibatis.mapping.MappedStatement;
+import org.apache.ibatis.mapping.ResultMap;
+import org.apache.ibatis.mapping.SqlCommandType;
+import org.apache.ibatis.reflection.MetaObject;
+import org.apache.ibatis.scripting.defaults.RawSqlSource;
 import org.apache.ibatis.session.Configuration;
 import tk.mybatis.mapper.MapperException;
 import tk.mybatis.mapper.annotation.RegisterMapper;
 import tk.mybatis.mapper.entity.Config;
+import tk.mybatis.mapper.entity.EntityTable;
 import tk.mybatis.mapper.mapperhelper.resolve.EntityResolve;
 import tk.mybatis.mapper.provider.EmptyProvider;
+import tk.mybatis.mapper.util.MetaObjectUtil;
 import tk.mybatis.mapper.util.StringUtil;
 
 import java.lang.reflect.Method;
@@ -87,6 +93,7 @@ public class MapperHelper {
         this();
         setProperties(properties);
     }
+
     /**
      * 通过通用Mapper接口获取对应的MapperTemplate
      *
@@ -95,7 +102,7 @@ public class MapperHelper {
      * @throws Exception
      */
     private Collection<MapperTemplate> fromMapperClasses(Class<?> mapperClass) {
-        Map<Class<?>,MapperTemplate> templateMap = new ConcurrentHashMap<Class<?>, MapperTemplate>();
+        Map<Class<?>, MapperTemplate> templateMap = new ConcurrentHashMap<Class<?>, MapperTemplate>();
         Method[] methods = mapperClass.getDeclaredMethods();
         for (Method method : methods) {
             Class<?> templateClass = null;
@@ -117,7 +124,7 @@ public class MapperHelper {
             }
             MapperTemplate mapperTemplate;
             try {
-                mapperTemplate = templateMap.getOrDefault(templateClass,(MapperTemplate) templateClass.getConstructor(Class.class, MapperHelper.class).newInstance(mapperClass, this));;
+                mapperTemplate = templateMap.getOrDefault(templateClass, (MapperTemplate) templateClass.getConstructor(Class.class, MapperHelper.class).newInstance(mapperClass, this));
                 templateMap.put(templateClass, mapperTemplate);
             } catch (Exception e) {
                 log.error("实例化MapperTemplate对象失败:" + e, e);
@@ -142,7 +149,7 @@ public class MapperHelper {
     public void registerMapper(Class<?> mapperClass) {
         if (!registerMapper.containsKey(mapperClass)) {
             registerClass.add(mapperClass);
-            registerMapper.put(mapperClass,fromMapperClasses(mapperClass));
+            registerMapper.put(mapperClass, fromMapperClasses(mapperClass));
         }
         //自动注册继承的接口
         Class<?>[] interfaces = mapperClass.getInterfaces();
@@ -291,8 +298,17 @@ public class MapperHelper {
      */
     public void processMappedStatement(MappedStatement ms) {
         MapperTemplate mapperTemplate = isMapperMethod(ms.getId());
+
         if (mapperTemplate != null && ms.getSqlSource() instanceof ProviderSqlSource) {
             setSqlSource(ms, mapperTemplate);
+        }
+
+        // 如果是原生mybatisSqlSource的查询，添加ResultMap
+        if (ms.getSqlSource() instanceof RawSqlSource
+                && ms.getSqlCommandType() == SqlCommandType.SELECT) {
+            if (ms.getResultMaps() != null && !ms.getResultMaps().isEmpty()) {
+                setRawSqlSourceMapper(ms);
+            }
         }
     }
 
@@ -377,6 +393,22 @@ public class MapperHelper {
             }
         } catch (Exception e) {
             throw new MapperException(e);
+        }
+    }
+
+    /**
+     * 设置原生Mybatis查询的实体映射，
+     * </p>
+     * JPA的注解优先级将高于mybatis自动映射
+     */
+    public void setRawSqlSourceMapper(MappedStatement ms) {
+
+        EntityTable entityTable = EntityHelper.getEntityTableOrNull(ms.getResultMaps().get(0).getType());
+        if (entityTable != null) {
+            List<ResultMap> resultMaps = new ArrayList<>();
+            resultMaps.add(entityTable.getResultMap(ms.getConfiguration()));
+            MetaObject metaObject = MetaObjectUtil.forObject(ms);
+            metaObject.setValue("resultMaps", Collections.unmodifiableList(resultMaps));
         }
     }
 

@@ -72,6 +72,16 @@ public class EntityHelper {
     }
 
     /**
+     * 获取表对象，如果没有则返回Null
+     *
+     * @param entityClass
+     * @return
+     */
+    public static EntityTable getEntityTableOrNull(Class<?> entityClass) {
+        return entityTableMap.get(entityClass);
+    }
+
+    /**
      * 获取默认的orderby语句
      *
      * @param entityClass
