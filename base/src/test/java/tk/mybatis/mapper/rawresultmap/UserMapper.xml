@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="tk.mybatis.mapper.rawresultmap.UserMapper">
+    <resultMap id="BaseResultMap" type="tk.mybatis.mapper.rawresultmap.User">
+        <id column="id" jdbcType="BIGINT" property="id" />
+        <result column="name" jdbcType="VARCHAR" property="name" />
+        <result column="user_name" jdbcType="VARCHAR" property="uname" />
+        <result column="email" jdbcType="VARCHAR" property="email" />
+        <result column="age____aa" jdbcType="INTEGER" property="age" />
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    </resultMap>
+
+    <select id="fetchRawResultType" resultType = "tk.mybatis.mapper.rawresultmap.User">
+        select * from user
+    </select>
+
+    <select id="fetchRawResultMap" resultMap="BaseResultMap">
+        select * from user
+    </select>
+
+    <select id="getMapUser" resultType="Map">
+        select * from user where id = 1
+    </select>
+
+    <select id="selectCount2" resultType="java.lang.Integer">
+        SELECT count(1) from user
+    </select>
+
+</mapper>
