@@ -406,9 +406,12 @@ public class MapperHelper {
         EntityTable entityTable = EntityHelper.getEntityTableOrNull(ms.getResultMaps().get(0).getType());
         if (entityTable != null) {
             List<ResultMap> resultMaps = new ArrayList<>();
-            resultMaps.add(entityTable.getResultMap(ms.getConfiguration()));
-            MetaObject metaObject = MetaObjectUtil.forObject(ms);
-            metaObject.setValue("resultMaps", Collections.unmodifiableList(resultMaps));
+            ResultMap resultMap = entityTable.getResultMap(ms.getConfiguration());
+            if (resultMap != null) {
+                resultMaps.add(resultMap);
+                MetaObject metaObject = MetaObjectUtil.forObject(ms);
+                metaObject.setValue("resultMaps", Collections.unmodifiableList(resultMaps));
+            }
         }
     }
 
