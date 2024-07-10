@@ -46,6 +46,7 @@ public class TableClass implements Serializable {
     private String fullClassName;
     private String packageName;
     private FullyQualifiedJavaType type;
+    private String remarks;
 
     private List<ColumnField> pkFields;
     private List<ColumnField> baseFields;
@@ -146,5 +147,13 @@ public class TableClass implements Serializable {
 
     public void setVariableName(String variableName) {
         this.variableName = variableName;
+    }
+
+    public String getRemarks() {
+        return remarks;
+    }
+
+    public void setRemarks(String remarks) {
+        this.remarks = remarks;
     }
 }

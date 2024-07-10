@@ -130,8 +130,11 @@ public class TemplateFilePlugin extends PluginAdapter {
         StringBuffer stringBuffer = new StringBuffer();
         String line = reader.readLine();
         while (line != null) {
-            stringBuffer.append(line).append("\n");
+            stringBuffer.append(line);
             line = reader.readLine();
+            if (line != null) {
+                stringBuffer.append("\n");
+            }
         }
         return stringBuffer.toString();
     }
