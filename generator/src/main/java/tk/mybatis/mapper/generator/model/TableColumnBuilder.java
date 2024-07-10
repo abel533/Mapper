@@ -48,6 +48,7 @@ public class TableColumnBuilder {
     public static TableClass build(IntrospectedTable introspectedTable) {
         TableClass tableClass = new TableClass();
         tableClass.setIntrospectedTable(introspectedTable);
+        tableClass.setRemarks(introspectedTable.getRemarks());
 
         FullyQualifiedTable fullyQualifiedTable = introspectedTable.getFullyQualifiedTable();
         tableClass.setTableName(fullyQualifiedTable.getIntrospectedTableName());
