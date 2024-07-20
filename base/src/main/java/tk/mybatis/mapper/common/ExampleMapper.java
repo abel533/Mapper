@@ -35,6 +35,7 @@ import tk.mybatis.mapper.common.example.*;
 @tk.mybatis.mapper.annotation.RegisterMapper
 public interface ExampleMapper<T> extends
         SelectByExampleMapper<T>,
+        SelectRowNumberByExampleMapper<T>,
         SelectOneByExampleMapper<T>,
         SelectCountByExampleMapper<T>,
         DeleteByExampleMapper<T>,

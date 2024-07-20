@@ -29,6 +29,7 @@ import tk.mybatis.mapper.annotation.LogicDelete;
 import tk.mybatis.mapper.entity.EntityColumn;
 import tk.mybatis.mapper.entity.Example;
 import tk.mybatis.mapper.entity.IDynamicTableName;
+import tk.mybatis.mapper.entity.RowNumberExample;
 import tk.mybatis.mapper.mapperhelper.EntityHelper;
 import tk.mybatis.mapper.mapperhelper.SqlHelper;
 
@@ -279,4 +280,75 @@ public abstract class OGNL {
         return false;
     }
 
+    /**
+     * 组建 ROW_NUMBER 函数的实际调用语句
+     * @throws IllegalArgumentException 不存在 ROW_NUMBER 函数参数时抛出
+     */
+    public static String rowNumberSql(Object arg) {
+        Example example = rowNumberExample(arg);
+        checkRowNUmberParam(example);
+        RowNumberExample param = example.getRowNumberParam();
+        Class<?> clazz = example.getEntityClass();
+        StringBuilder sb = new StringBuilder();
+        List<String> partCols = convertToDbCols(param.getPartCols(), clazz);
+        List<String> sortCols = convertToDbCols(param.getSortCols(), clazz);
+        sb.append("ROW_NUMBER() OVER(PARTITION BY ")
+                .append(join(partCols)).append(" ORDER BY ")
+                .append(join(sortCols))
+                .append(param.isSortOriented() ? " ASC" : " DESC")
+                .append(") ");
+        return sb.toString();
+    }
+
+    private static List<String> convertToDbCols(List<String> fields, Class<?> clazz) {
+        if (fields == null || fields.isEmpty()) {
+            return new ArrayList<String>();
+        }
+        Set<EntityColumn> cols = EntityHelper.getColumns(clazz);
+        if (cols == null || cols.isEmpty()) {
+            return new ArrayList<String>();
+        }
+        List<String> ans = new ArrayList<String>();
+        Map<String, String> map = new HashMap<String, String>();
+        for (EntityColumn col : cols) {
+            map.put(col.getProperty(), col.getColumn());
+        }
+        for (String field : fields) {
+            ans.add(map.get(field));
+        }
+        return ans;
+    }
+
+    private static String join(List<String> ss) {
+        if (ss == null || ss.isEmpty()) return "";
+        if (ss.size() == 1) return ss.get(0);
+        int n = ss.size();
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < n; i++) {
+            sb.append(ss.get(i));
+            if (i != n - 1) sb.append(", ");
+        }
+        return sb.toString();
+    }
+
+    // 过滤条件，需要转换成对应的字符串形式
+    public static String rowNumberCondition(Object arg) {
+        Example example = rowNumberExample(arg);
+        checkRowNUmberParam(example);
+        RowNumberExample param = example.getRowNumberParam();
+        return String.valueOf(param.getRank());
+    }
+
+    private static Example rowNumberExample(Object arg) {
+        if (!(arg instanceof Example)) {
+            throw new IllegalArgumentException("查询时参数类型不一致，应为 " + Example.class);
+        }
+        return (Example) arg;
+    }
+
+    private static void checkRowNUmberParam(Example example) {
+        if (example == null || example.getRowNumberParam() == null) {
+            throw new IllegalArgumentException("生成 ROW_NUMBER 查询参数时参数对象不能为 null");
+        }
+    }
 }
