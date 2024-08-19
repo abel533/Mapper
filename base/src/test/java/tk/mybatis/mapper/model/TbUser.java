@@ -1,6 +1,6 @@
 package tk.mybatis.mapper.model;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 @Table(name = "tb_user")
 public class TbUser {

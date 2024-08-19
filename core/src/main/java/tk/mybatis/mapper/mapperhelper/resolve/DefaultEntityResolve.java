@@ -23,7 +23,7 @@ import tk.mybatis.mapper.util.SimpleTypeUtil;
 import tk.mybatis.mapper.util.SqlReservedWords;
 import tk.mybatis.mapper.util.StringUtil;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.text.MessageFormat;
 import java.util.LinkedHashSet;
 import java.util.List;

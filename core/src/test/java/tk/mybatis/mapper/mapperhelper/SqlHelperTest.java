@@ -7,7 +7,7 @@ import tk.mybatis.mapper.annotation.LogicDelete;
 import tk.mybatis.mapper.code.Style;
 import tk.mybatis.mapper.entity.Config;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 public class SqlHelperTest {
 

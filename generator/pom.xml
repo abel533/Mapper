@@ -37,8 +37,8 @@
     <description>Mybatis 通用 Mapper 代码生成器</description>
 
     <properties>
-        <freemarker.version>2.3.28</freemarker.version>
-        <generator.version>1.4.1</generator.version>
+        <freemarker.version>2.3.33</freemarker.version>
+        <generator.version>1.4.2</generator.version>
     </properties>
 
     <dependencies>
@@ -73,8 +73,8 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>javax.persistence</groupId>
-            <artifactId>javax.persistence-api</artifactId>
+            <groupId>jakarta.persistence</groupId>
+            <artifactId>jakarta.persistence-api</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>

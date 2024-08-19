@@ -24,8 +24,8 @@
 
 package tk.mybatis.mapper.additional.aggregation;
 
-import javax.persistence.Id;
-import javax.persistence.Transient;
+import jakarta.persistence.Id;
+import jakarta.persistence.Transient;
 import java.io.Serializable;
 
 /**

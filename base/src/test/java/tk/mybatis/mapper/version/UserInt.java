@@ -2,8 +2,8 @@ package tk.mybatis.mapper.version;
 
 import tk.mybatis.mapper.annotation.Version;
 
-import javax.persistence.Id;
-import javax.persistence.Table;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 /**
  * @author liuzh
