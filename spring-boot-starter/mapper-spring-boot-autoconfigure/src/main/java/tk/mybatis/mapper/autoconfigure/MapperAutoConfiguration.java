@@ -202,7 +202,7 @@ public class MapperAutoConfiguration implements InitializingBean {
 
             logger.debug("Searching for mappers annotated with @Mapper");
 
-            ClassPathMapperScanner scanner = new ClassPathMapperScanner(registry);
+            ClassPathMapperScanner scanner = new ClassPathMapperScanner(registry, environment);
             scanner.setMapperProperties(environment);
             try {
                 if (this.resourceLoader != null) {

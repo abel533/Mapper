@@ -48,7 +48,7 @@ public class SampleXmlApplication implements CommandLineRunner {
     public void run(String... args) throws Exception {
         Country c = countryMapper.selectByPrimaryKey(1);
         System.out.println("Key : 1, Country Name: " + c.getCountryname());
-        c.setId(null);
+        c.setId(1000L);
         c.setCountryname("新名字");
         countryMapper.insert(c);
         System.out.println("New Key: " + c.getId());

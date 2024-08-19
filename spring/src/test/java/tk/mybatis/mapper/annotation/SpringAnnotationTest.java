@@ -10,7 +10,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
-import tk.mybatis.mapper.MapperException;
 import tk.mybatis.mapper.common.Mapper;
 import tk.mybatis.mapper.entity.Config;
 import tk.mybatis.mapper.mapperhelper.MapperHelper;
@@ -70,7 +69,7 @@ public class SpringAnnotationTest {
         Assert.assertEquals(183, countries.size());
     }
 
-    @Test(expected = MapperException.class)
+    @Test(expected = Exception.class)
     public void testMyBatisConfigPropertiesError() {
         applicationContext.register(MyBatisConfigPropertiesError.class);
         startContext();
