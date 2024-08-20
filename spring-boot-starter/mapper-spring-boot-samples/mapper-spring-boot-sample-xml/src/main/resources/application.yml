@@ -28,6 +28,8 @@ spring:
 mybatis:
   config-location: mybatis-config.xml
   base-packages: tk.mybatis.sample.mapper
+  mapper-locations:
+    - classpath: /tk/mybatis/sample/mapper
 
 logging:
   level:

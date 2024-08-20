@@ -20,17 +20,17 @@ import org.springframework.context.annotation.Import;
 import java.lang.annotation.*;
 
 /**
- * The Container annotation that aggregates several {@link org.mybatis.spring.annotation.MapperScan} annotations.
+ * The Container annotation that aggregates several {@link tk.mybatis.spring.annotation.MapperScan} annotations.
  * <p>
- * Can be used natively, declaring several nested {@link org.mybatis.spring.annotation.MapperScan} annotations. Can also be used in conjunction with
- * Java 8's support for repeatable annotations, where {@link org.mybatis.spring.annotation.MapperScan} can simply be declared several times on the
+ * Can be used natively, declaring several nested {@link tk.mybatis.spring.annotation.MapperScan} annotations. Can also be used in conjunction with
+ * Java 8's support for repeatable annotations, where {@link tk.mybatis.spring.annotation.MapperScan} can simply be declared several times on the
  * same method, implicitly generating this container annotation.
  *
  * @author Kazuki Shimizu
  *
  * @since 2.0.0
  *
- * @see org.mybatis.spring.annotation.MapperScan
+ * @see tk.mybatis.spring.annotation.MapperScan
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)

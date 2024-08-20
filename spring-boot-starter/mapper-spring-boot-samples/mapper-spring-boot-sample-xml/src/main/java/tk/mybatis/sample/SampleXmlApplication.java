@@ -24,12 +24,14 @@
 
 package tk.mybatis.sample;
 
+import org.apache.ibatis.annotations.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import tk.mybatis.sample.domain.Country;
 import tk.mybatis.sample.mapper.CountryMapper;
+import tk.mybatis.spring.annotation.MapperScan;
 
 import java.util.List;
 
