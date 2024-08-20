@@ -16,6 +16,7 @@
 package tk.mybatis.mapper.autoconfigure;
 
 import java.beans.PropertyDescriptor;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -69,8 +70,10 @@ import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
+import tk.mybatis.spring.annotation.BaseProperties;
 import tk.mybatis.spring.mapper.MapperFactoryBean;
 import tk.mybatis.spring.mapper.MapperScannerConfigurer;
+import tk.mybatis.spring.mapper.SpringBootBindUtil;
 
 /**
  * {@link EnableAutoConfiguration Auto-Configuration} for Mybatis. Contributes a {@link SqlSessionFactory} and a
@@ -249,17 +252,27 @@ public class MapperAutoConfiguration implements InitializingBean {
                 return;
             }
 
-            logger.debug("Searching for mappers annotated with @Mapper");
+            BeanDefinitionBuilder builder = BeanDefinitionBuilder.genericBeanDefinition(MapperScannerConfigurer.class);
 
-            List<String> packages = AutoConfigurationPackages.get(this.beanFactory);
-            if (logger.isDebugEnabled()) {
-                packages.forEach(pkg -> logger.debug("Using auto-configuration base package '{}'", pkg));
+            BaseProperties properties = SpringBootBindUtil.bind(environment, BaseProperties.class, BaseProperties.MYBATIS_PREFIX);
+            if (properties != null && properties.getBasePackages() != null && properties.getBasePackages().length > 0) {
+                List<String> basePackages = Arrays.asList(properties.getBasePackages());
+                if (logger.isDebugEnabled()) {
+                    basePackages.forEach(pkg -> logger.debug("Using mybatis.basePackages configuration package '{}'", pkg));
+                }
+                builder.addPropertyValue("basePackage", StringUtils.collectionToCommaDelimitedString(basePackages));
+            } else {
+                //设置了包名的情况下，不需要指定该注解
+                logger.debug("Searching for mappers annotated with @Mapper");
+                builder.addPropertyValue("annotationClass", Mapper.class);
+                List<String> packages = AutoConfigurationPackages.get(this.beanFactory);
+                if (logger.isDebugEnabled()) {
+                    packages.forEach(pkg -> logger.debug("Using auto-configuration base package '{}'", pkg));
+                }
+                builder.addPropertyValue("basePackage", StringUtils.collectionToCommaDelimitedString(packages));
             }
 
-            BeanDefinitionBuilder builder = BeanDefinitionBuilder.genericBeanDefinition(MapperScannerConfigurer.class);
             builder.addPropertyValue("processPropertyPlaceHolders", true);
-            builder.addPropertyValue("annotationClass", Mapper.class);
-            builder.addPropertyValue("basePackage", StringUtils.collectionToCommaDelimitedString(packages));
             builder.addPropertyValue("mapperProperties", this.environment);
             BeanWrapper beanWrapper = new BeanWrapperImpl(MapperScannerConfigurer.class);
             Set<String> propertyNames = Stream.of(beanWrapper.getPropertyDescriptors()).map(PropertyDescriptor::getName)
