@@ -8,24 +8,43 @@
 
 支持单表操作，不支持通用的多表联合查询。
 
-**通用 Mapper 支持 Mybatis-3.2.4 及以上版本。**
+## 通用 Mapper 5 来了🎉🎉🎉
 
-## [下一代 通用 Mapper5？](https://mapper.mybatis.io/docs/1.getting-started.html#%E4%BB%8B%E7%BB%8D)
+基于 JDK 17 + Jakarta JPA 注解 + Spring Boot 3
 
-通用 Mapper 每次大的版本，基本上都是底层上的大变化，在使用通用 Mapper 的过程中，有很多人遇到过配置的问题，因为底层实现的方式，所以无法避免配置，而且随着功能的增加，配置也增加了不少。
+配置完全兼容，需要使用新版本的 JPA 注解，同步更新（copy） mybatis-spring 3.0.4 和 mybatis-spring-boot-starter 3.0.4。
 
-为了从根本上简化通用方法的实现，从2018年就开始思考如何让实现和MyBatis的兼容性更好，让实现变的更简单，为了从 MyBatis 根本解决问题，给官方提过好几个 PR，在 2019年3月份给 MyBatis 提交的
+此次更新主要是依赖的更新，没有增加新的功能，只是为了更好的兼容 JDK 17 和 Jakarta JPA 注解。
+
+```xml
+<dependency>
+    <groupId>tk.mybatis</groupId>
+    <artifactId>mapper</artifactId>
+    <version>5.0.0-rc2</version>
+</dependency>
+```
+
+如果你要在新项目中使用，可以看看新版本的 mybatis-mapper，完全作为 mybatis 扩展存在，
+不修改 mybatis, mybatis-spring, mybatis-spring-boot-starter 任何代码，不需要额外配置，可以快速上手。
+
+- mybatis-mapper: https://github.com/mybatis-mapper/mapper
+- mybatis-mapper 文档: https://mapper.mybatis.io
+- [mybatis-mapper 快速入门](https://mapper.mybatis.io/docs/1.getting-started.html#%E4%BB%8B%E7%BB%8D)
+
+> 通用 Mapper 每次大的版本，基本上都是底层上的大变化，在使用通用 Mapper 的过程中，有很多人遇到过配置的问题，因为底层实现的方式，所以无法避免配置，而且随着功能的增加，配置也增加了不少。
+>
+> 为了从根本上简化通用方法的实现，从2018年就开始思考如何让实现和MyBatis的兼容性更好，让实现变的更简单，为了从 MyBatis 根本解决问题，给官方提过好几个 PR，在 2019年3月份给 MyBatis 提交的
 [pr#1391](https://github.com/mybatis/mybatis-3/pull/1391) 合并后（对应 3.5.1 版本，最低要求版本），终于能以更简单的方式来实现通用 Mapper 了。
-
-由于此次变动太大，因此不打算对 **通用Mapper4** 进行任何改动，从头实现了一个新的项目，名字仍然没有新意的使用了 `mybatis-mapper`，推荐在新项目中使用：
-
-- [GitHub - https://github.com/mybatis-mapper/mapper](https://github.com/mybatis-mapper/mapper)
-- [Gitee - https://gitee.com/mybatis-mapper/mapper](https://gitee.com/mybatis-mapper/mapper)
-- [文档: https://mapper.mybatis.io](https://mapper.mybatis.io/)
-- [开发过程 - https://mapper.mybatis.io/releases/1.0.0.html](https://mapper.mybatis.io/releases/1.0.0.html)
-- [快速上手 - https://mapper.mybatis.io/docs/1.getting-started.html#%E4%BB%8B%E7%BB%8D](https://mapper.mybatis.io/docs/1.getting-started.html#%E4%BB%8B%E7%BB%8D)
-
-另外，通用 Mapper 中的大量 PR 都是增加的新方法和代码生成器相关的注解，这些和核心无关，因此 mybaits-mapper 会提供独立的项目接收所有新增的通用方法， 和代码生成器相关的 lombok
+>
+> 由于此次变动太大，因此不打算对 **通用Mapper4** 进行任何改动，从头实现了一个新的项目，名字仍然没有新意的使用了 `mybatis-mapper`，推荐在新项目中使用：
+>
+> - [GitHub - https://github.com/mybatis-mapper/mapper](https://github.com/mybatis-mapper/mapper)
+> - [Gitee - https://gitee.com/mybatis-mapper/mapper](https://gitee.com/mybatis-mapper/mapper)
+> - [文档: https://mapper.mybatis.io](https://mapper.mybatis.io/)
+> - [开发过程 - https://mapper.mybatis.io/releases/1.0.0.html](https://mapper.mybatis.io/releases/1.0.0.html)
+> - [快速上手 - https://mapper.mybatis.io/docs/1.getting-started.html#%E4%BB%8B%E7%BB%8D](https://mapper.mybatis.io/docs/1.getting-started.html#%E4%BB%8B%E7%BB%8D)
+>
+> 另外，通用 Mapper 中的大量 PR 都是增加的新方法和代码生成器相关的注解，这些和核心无关，因此 mybaits-mapper 会提供独立的项目接收所有新增的通用方法， 和代码生成器相关的 lombok
 注解完全不需要了，使用新版本中提供的代码生成器可以更方便的进行定制。
 
 ## [**快速入门 - MyBatis 为什么需要通用 Mapper ?**](https://blog.csdn.net/isea533/article/details/83045335)
@@ -52,13 +71,13 @@
 
 ## 作者信息
 
-MyBatis 工具网站:[https://mybatis.io](https://mybatis.io)
+MyBatis 工具网站：[https://mybatis.io](https://mybatis.io)
 
-作者博客：http://blog.csdn.net/isea533
+作者博客：http://blog.csdn.net/isea533 ，http://blog.mybatis.io
 
-作者邮箱： abel533@gmail.com
+作者邮箱：abel533@gmail.com
 
-推荐使用Mybatis分页插件:[PageHelper分页插件](https://github.com/pagehelper/Mybatis-PageHelper)
+推荐使用Mybatis分页插件：[PageHelper分页插件](https://github.com/pagehelper/Mybatis-PageHelper)
 
 ## 《MyBatis 从入门到精通》
 
@@ -74,10 +93,6 @@ MyBatis 工具网站:[https://mybatis.io](https://mybatis.io)
 ### 购买地址：
 
 - [京东](https://item.jd.com/12103309.html)
-
-- [当当](http://product.dangdang.com/25098208.html)
-
-- [亚马逊](https://www.amazon.cn/MyBatis从入门到精通-刘增辉/dp/B072RC11DM/ref=sr_1_18?ie=UTF8&qid=1498007125&sr=8-18&keywords=mybatis)
 
 ### 相关介绍
 
