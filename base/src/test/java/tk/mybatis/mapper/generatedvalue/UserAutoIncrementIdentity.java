@@ -1,6 +1,6 @@
 package tk.mybatis.mapper.generatedvalue;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 /**
  * @author liuzh

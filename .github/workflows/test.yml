@@ -12,7 +12,7 @@ jobs:
       - name: Set up Maven Central Repository
         uses: actions/setup-java@v2
         with:
-          java-version: '8'
+          java-version: '17'
           distribution: 'adopt'
       - name: Run the Maven verify phase
         run: mvn --batch-mode --update-snapshots -P dev test

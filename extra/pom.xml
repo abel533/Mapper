@@ -36,11 +36,6 @@
     <name>mapper-extra</name>
     <description>Mybatis 通用 Mapper 扩展方法</description>
 
-    <properties>
-        <maven.compiler.source>8</maven.compiler.source>
-        <maven.compiler.target>8</maven.compiler.target>
-    </properties>
-
     <dependencies>
         <dependency>
             <groupId>org.mybatis</groupId>

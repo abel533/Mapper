@@ -45,9 +45,8 @@
     </modules>
 
     <properties>
-        <mybatis.version>3.5.9</mybatis.version>
-        <mybatis-spring.version>2.0.7</mybatis-spring.version>
-        <spring-boot.version>2.6.4</spring-boot.version>
+        <mybatis-spring.version>3.0.4</mybatis-spring.version>
+        <spring-boot.version>3.3.2</spring-boot.version>
     </properties>
 
     <repositories>
@@ -101,11 +100,6 @@
                 <groupId>tk.mybatis</groupId>
                 <artifactId>mapper-extra</artifactId>
                 <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.mybatis</groupId>
-                <artifactId>mybatis</artifactId>
-                <version>${mybatis.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.mybatis</groupId>

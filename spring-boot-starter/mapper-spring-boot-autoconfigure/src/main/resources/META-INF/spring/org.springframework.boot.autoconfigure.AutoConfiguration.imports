@@ -1,0 +1,2 @@
+tk.mybatis.mapper.autoconfigure.MybatisLanguageDriverAutoConfiguration
+tk.mybatis.mapper.autoconfigure.MapperAutoConfiguration

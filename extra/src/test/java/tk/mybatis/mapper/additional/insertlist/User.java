@@ -26,7 +26,7 @@ package tk.mybatis.mapper.additional.insertlist;
 
 import tk.mybatis.mapper.annotation.KeySql;
 
-import javax.persistence.Id;
+import jakarta.persistence.Id;
 import java.io.Serializable;
 
 /**

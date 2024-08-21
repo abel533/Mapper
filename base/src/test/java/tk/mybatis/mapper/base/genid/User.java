@@ -2,7 +2,7 @@ package tk.mybatis.mapper.base.genid;
 
 import tk.mybatis.mapper.annotation.KeySql;
 
-import javax.persistence.Id;
+import jakarta.persistence.Id;
 
 /**
  * @author liuzh

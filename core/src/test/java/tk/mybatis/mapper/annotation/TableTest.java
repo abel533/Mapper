@@ -8,7 +8,7 @@ import tk.mybatis.mapper.entity.Config;
 import tk.mybatis.mapper.entity.EntityTable;
 import tk.mybatis.mapper.mapperhelper.EntityHelper;
 
-import javax.persistence.Table;
+import jakarta.persistence.Table;
 
 /**
  * @author liuzh

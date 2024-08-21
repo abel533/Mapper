@@ -37,8 +37,8 @@
     <description>Mybatis 通用 Mapper 代码生成器</description>
 
     <properties>
-        <freemarker.version>2.3.28</freemarker.version>
-        <generator.version>1.4.1</generator.version>
+        <freemarker.version>2.3.33</freemarker.version>
+        <generator.version>1.4.2</generator.version>
     </properties>
 
     <dependencies>
@@ -57,13 +57,13 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.16.22</version>
+            <version>1.18.34</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>io.swagger</groupId>
             <artifactId>swagger-annotations</artifactId>
-            <version>1.5.20</version>
+            <version>1.6.14</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -73,8 +73,8 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>javax.persistence</groupId>
-            <artifactId>javax.persistence-api</artifactId>
+            <groupId>jakarta.persistence</groupId>
+            <artifactId>jakarta.persistence-api</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>

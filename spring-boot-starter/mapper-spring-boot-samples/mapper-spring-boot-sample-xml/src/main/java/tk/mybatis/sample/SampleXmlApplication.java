@@ -24,12 +24,14 @@
 
 package tk.mybatis.sample;
 
+import org.apache.ibatis.annotations.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import tk.mybatis.sample.domain.Country;
 import tk.mybatis.sample.mapper.CountryMapper;
+import tk.mybatis.spring.annotation.MapperScan;
 
 import java.util.List;
 
@@ -48,7 +50,7 @@ public class SampleXmlApplication implements CommandLineRunner {
     public void run(String... args) throws Exception {
         Country c = countryMapper.selectByPrimaryKey(1);
         System.out.println("Key : 1, Country Name: " + c.getCountryname());
-        c.setId(null);
+        c.setId(1000L);
         c.setCountryname("新名字");
         countryMapper.insert(c);
         System.out.println("New Key: " + c.getId());

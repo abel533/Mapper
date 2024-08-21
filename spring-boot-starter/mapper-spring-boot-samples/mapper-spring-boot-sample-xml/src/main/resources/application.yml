@@ -22,15 +22,16 @@
 # THE SOFTWARE.
 #
 spring:
-  datasource:
-    schema: import.sql
+  sql:
+    init:
+      schema-locations: classpath:import.sql
 mybatis:
   config-location: mybatis-config.xml
   base-packages: tk.mybatis.sample.mapper
 
 logging:
   level:
-    root: WARN
+    root: DEBUG
     tk.mybatis.sample.mapper: TRACE
 mapper:
   not-empty: true

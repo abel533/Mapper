@@ -24,7 +24,7 @@
 
 package tk.mybatis.mapper.model;
 
-import javax.persistence.Table;
+import jakarta.persistence.Table;
 import java.util.Date;
 
 /**
