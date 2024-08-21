@@ -1,4 +1,4 @@
-# MyBatis 通用 Mapper4
+# MyBatis 通用 Mapper5 来了🎉🎉🎉
 
 [![Maven central](https://maven-badges.herokuapp.com/maven-central/tk.mybatis/mapper/badge.svg)](https://maven-badges.herokuapp.com/maven-central/tk.mybatis/mapper)
 
@@ -8,9 +8,7 @@
 
 支持单表操作，不支持通用的多表联合查询。
 
-## 通用 Mapper 5 来了🎉🎉🎉
-
-基于 JDK 17 + Jakarta JPA 注解 + Spring Boot 3
+## 基于 JDK 17 + Jakarta JPA 注解 + Spring Boot 3
 
 配置完全兼容，需要使用新版本的 JPA 注解，同步更新（copy） mybatis-spring 3.0.4 和 mybatis-spring-boot-starter 3.0.4。
 
@@ -30,22 +28,6 @@
 - mybatis-mapper: https://github.com/mybatis-mapper/mapper
 - mybatis-mapper 文档: https://mapper.mybatis.io
 - [mybatis-mapper 快速入门](https://mapper.mybatis.io/docs/1.getting-started.html#%E4%BB%8B%E7%BB%8D)
-
-> 通用 Mapper 每次大的版本，基本上都是底层上的大变化，在使用通用 Mapper 的过程中，有很多人遇到过配置的问题，因为底层实现的方式，所以无法避免配置，而且随着功能的增加，配置也增加了不少。
->
-> 为了从根本上简化通用方法的实现，从2018年就开始思考如何让实现和MyBatis的兼容性更好，让实现变的更简单，为了从 MyBatis 根本解决问题，给官方提过好几个 PR，在 2019年3月份给 MyBatis 提交的
-[pr#1391](https://github.com/mybatis/mybatis-3/pull/1391) 合并后（对应 3.5.1 版本，最低要求版本），终于能以更简单的方式来实现通用 Mapper 了。
->
-> 由于此次变动太大，因此不打算对 **通用Mapper4** 进行任何改动，从头实现了一个新的项目，名字仍然没有新意的使用了 `mybatis-mapper`，推荐在新项目中使用：
->
-> - [GitHub - https://github.com/mybatis-mapper/mapper](https://github.com/mybatis-mapper/mapper)
-> - [Gitee - https://gitee.com/mybatis-mapper/mapper](https://gitee.com/mybatis-mapper/mapper)
-> - [文档: https://mapper.mybatis.io](https://mapper.mybatis.io/)
-> - [开发过程 - https://mapper.mybatis.io/releases/1.0.0.html](https://mapper.mybatis.io/releases/1.0.0.html)
-> - [快速上手 - https://mapper.mybatis.io/docs/1.getting-started.html#%E4%BB%8B%E7%BB%8D](https://mapper.mybatis.io/docs/1.getting-started.html#%E4%BB%8B%E7%BB%8D)
->
-> 另外，通用 Mapper 中的大量 PR 都是增加的新方法和代码生成器相关的注解，这些和核心无关，因此 mybaits-mapper 会提供独立的项目接收所有新增的通用方法， 和代码生成器相关的 lombok
-注解完全不需要了，使用新版本中提供的代码生成器可以更方便的进行定制。
 
 ## [**快速入门 - MyBatis 为什么需要通用 Mapper ?**](https://blog.csdn.net/isea533/article/details/83045335)
 
