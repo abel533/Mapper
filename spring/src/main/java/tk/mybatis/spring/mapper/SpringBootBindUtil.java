@@ -45,8 +45,17 @@ public abstract class SpringBootBindUtil {
             Method bindMethod = binderClass.getDeclaredMethod("bind", String.class, Class.class);
             Object binder = getMethod.invoke(null, environment);
             Object bindResult = bindMethod.invoke(binder, prefix, targetClass);
-            Method getMethodResult = bindResult.getClass().getDeclaredMethod("get");
-            return (T) getMethodResult.invoke(bindResult);
+
+            // Check if the value is bound
+            Method isBoundMethod = bindResult.getClass().getDeclaredMethod("isBound");
+            boolean isBound = (boolean) isBoundMethod.invoke(bindResult);
+
+            if (isBound) {
+                Method getMethodResult = bindResult.getClass().getDeclaredMethod("get");
+                return (T) getMethodResult.invoke(bindResult);
+            } else {
+                return null;
+            }
         } catch (Exception e) {
             LOGGER.warn("Bind " + targetClass + " error", e);
             return null;
