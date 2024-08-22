@@ -13,7 +13,7 @@ ${dateTime?string["yyyy-MM-dd HH:mm:ss"]}
 
 实体和表的信息：
 表名：${tableClass.tableName}
-表注释：${tableClass.remarks}
+表注释：${tableClass.remarks!""}
 变量名：${tableClass.variableName}
 小写名：${tableClass.lowerCaseName}
 类名：${tableClass.shortClassName}
