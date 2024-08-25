@@ -18,9 +18,11 @@
 <dependency>
     <groupId>tk.mybatis</groupId>
     <artifactId>mapper</artifactId>
-    <version>5.0.0-rc3</version>
+    <version>5.0.0</version>
 </dependency>
 ```
+
+## 推荐新版本 mybatis-mapper
 
 如果你要在新项目中使用，可以看看新版本的 mybatis-mapper，完全作为 mybatis 扩展存在，
 不修改 mybatis, mybatis-spring, mybatis-spring-boot-starter 任何代码，不需要额外配置，可以快速上手。
