@@ -55,7 +55,14 @@ public class TestBasicAble {
             Assert.assertEquals(1, mapper.insert(userInfo));
 
             Assert.assertNotNull(userInfo.getId());
-            Assert.assertEquals(6, (int) userInfo.getId());
+
+            /*
+                对于表名的处理，在不存在 `@Table` 的注解修饰的实体类中，会按照陀峰式的命名规则进行表明的解析，
+                因此和 tk.mybatis.mapper.model.UserInfo 共用了一个表，并且由于操作系统的调度问题，对于 UserInfo
+                实体的插入测试可能会发生在此单元测试之前，导致本项测试未通过的情况
+             */
+            // Assert.assertEquals(6, (int) userInfo.getId());
+            Assert.assertTrue(userInfo.getId() >= 6);
 
             userInfo = mapper.selectByPrimaryKey(userInfo.getId());
             //email没有插入

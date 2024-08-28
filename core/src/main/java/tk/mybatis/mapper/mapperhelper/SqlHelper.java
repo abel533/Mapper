@@ -28,10 +28,13 @@ import tk.mybatis.mapper.LogicDeleteException;
 import tk.mybatis.mapper.annotation.LogicDelete;
 import tk.mybatis.mapper.annotation.Version;
 import tk.mybatis.mapper.entity.EntityColumn;
+import tk.mybatis.mapper.entity.Example;
 import tk.mybatis.mapper.entity.IDynamicTableName;
+import tk.mybatis.mapper.entity.RowNumberExample;
 import tk.mybatis.mapper.util.StringUtil;
 import tk.mybatis.mapper.version.VersionException;
 
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -698,18 +701,18 @@ public class SqlHelper {
      * @param entityClass
      * @return
      */
-    public static String whereVersion(Class<?> entityClass){
-        return whereVersion(entityClass,null);
+    public static String whereVersion(Class<?> entityClass) {
+        return whereVersion(entityClass, null);
     }
 
     /**
      * 乐观锁字段条件
      *
      * @param entityClass
-     * @param entityName 实体名称
+     * @param entityName  实体名称
      * @return
      */
-    public static String whereVersion(Class<?> entityClass,String entityName) {
+    public static String whereVersion(Class<?> entityClass, String entityName) {
         Set<EntityColumn> columnSet = EntityHelper.getColumns(entityClass);
         boolean hasVersion = false;
         String result = "";
@@ -1035,4 +1038,21 @@ public class SqlHelper {
                 "</where>";
     }
 
+    public static String rowNumberBefore() {
+        return "SELECT * FROM ("
+                + "<if test=\"_parameter != null\">\n"
+                + "\tSELECT *,\n"
+                + "\t\t${@tk.mybatis.mapper.util.OGNL@rowNumberSql(_parameter)} AS mapper_rank_x\n"
+                + "\tFROM (\n"
+                + "</if>\n";
+    }
+
+    public static String rowNumberAfter(Class<?> entityClass) {
+        return "<if test=\"_parameter != null\">\n"
+                + "\t) AS tmp\n"
+                + "</if>\n"
+                + ") AS tmp\n"
+                + "WHERE mapper_rank_x=${@tk.mybatis.mapper.util.OGNL@rowNumberCondition(_parameter)}\n"
+                + exampleOrderBy(entityClass) + "\n";
+    }
 }
