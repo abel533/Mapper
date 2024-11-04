@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.io.Reader;
 import java.net.URL;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author liuzh
@@ -21,6 +22,7 @@ public class RawResultMapTest extends BaseTest {
     protected Config getConfig() {
         Config config = super.getConfig();
         config.setStyle(Style.normal);
+        config.setEnableBaseResultMapFlag(true);
         return config;
     }
 
@@ -70,7 +72,7 @@ public class RawResultMapTest extends BaseTest {
             users.forEach(u -> {
                 System.out.println(u);
                 Assert.assertNotNull(u.getUname());
-                Assert.assertNotNull(u.getAge());
+                Assert.assertNull(u.getAge());
                 Assert.assertNotNull(u.getCreateTime());
                 Assert.assertNotNull(u.getEmail());
             });
@@ -88,10 +90,12 @@ public class RawResultMapTest extends BaseTest {
             System.out.println("------------");
 
             System.out.println("------getMapUser------");
-            System.out.println(mapper.getMapUser());
+            Map<String, Object> mapUser = mapper.getMapUser();
+            System.out.println(mapUser);
             System.out.println("------------");
 
-            System.out.println(mapper.selectCount2());
+            Integer x = mapper.selectCount2();
+            System.out.println(x);
         } finally {
             sqlSession.close();
         }
