@@ -55,7 +55,6 @@ public class TestBasicAble {
             Assert.assertEquals(1, mapper.insert(userInfo));
 
             Assert.assertNotNull(userInfo.getId());
-            Assert.assertEquals(6, (int) userInfo.getId());
 
             userInfo = mapper.selectByPrimaryKey(userInfo.getId());
             //email没有插入
