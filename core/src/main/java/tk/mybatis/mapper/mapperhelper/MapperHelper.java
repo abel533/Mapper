@@ -33,9 +33,9 @@ import org.apache.ibatis.logging.Log;
 import org.apache.ibatis.logging.LogFactory;
 import org.apache.ibatis.mapping.MappedStatement;
 import org.apache.ibatis.mapping.ResultMap;
+import org.apache.ibatis.mapping.ResultMapping;
 import org.apache.ibatis.mapping.SqlCommandType;
 import org.apache.ibatis.reflection.MetaObject;
-import org.apache.ibatis.scripting.defaults.RawSqlSource;
 import org.apache.ibatis.session.Configuration;
 import tk.mybatis.mapper.MapperException;
 import tk.mybatis.mapper.annotation.RegisterMapper;
@@ -303,11 +303,27 @@ public class MapperHelper {
             setSqlSource(ms, mapperTemplate);
         }
 
-        // 如果是原生mybatisSqlSource的查询，添加ResultMap
-        if (ms.getSqlSource() instanceof RawSqlSource
-                && ms.getSqlCommandType() == SqlCommandType.SELECT) {
-            if (ms.getResultMaps() != null && !ms.getResultMaps().isEmpty()) {
-                setRawSqlSourceMapper(ms);
+        // 如果没有resultMaps, 有则设置一个默认的resultMaps
+        if (ms.getSqlCommandType() == SqlCommandType.SELECT) {
+            List<ResultMap> resultMaps = ms.getResultMaps();
+            if (resultMaps != null) {
+                List<ResultMap> modifiableResultMaps = new ArrayList<>(resultMaps);
+                for (int i = 0; i < resultMaps.size(); i++) {
+                    List<ResultMapping> mappings = resultMaps.get(i).getResultMappings();
+                    // 只有type，没有mappings的情况下
+                    if (mappings == null || mappings.isEmpty()) {
+                        EntityTable entityTable = EntityHelper.getEntityTableOrNull(resultMaps.get(i).getType());
+                        // 如果有@Table注解，则可以获取到entityTable
+                        if (entityTable != null) {
+                            ResultMap resultMap = entityTable.getResultMap(ms.getConfiguration());
+                            if (resultMap != null) {
+                                modifiableResultMaps.set(i, resultMap);
+                                MetaObject metaObject = MetaObjectUtil.forObject(ms);
+                                metaObject.setValue("resultMaps", Collections.unmodifiableList(modifiableResultMaps));
+                            }
+                        }
+                    }
+                }
             }
         }
     }
@@ -393,25 +409,6 @@ public class MapperHelper {
             }
         } catch (Exception e) {
             throw new MapperException(e);
-        }
-    }
-
-    /**
-     * 设置原生Mybatis查询的实体映射，
-     * </p>
-     * JPA的注解优先级将高于mybatis自动映射
-     */
-    public void setRawSqlSourceMapper(MappedStatement ms) {
-
-        EntityTable entityTable = EntityHelper.getEntityTableOrNull(ms.getResultMaps().get(0).getType());
-        if (entityTable != null) {
-            List<ResultMap> resultMaps = new ArrayList<>();
-            ResultMap resultMap = entityTable.getResultMap(ms.getConfiguration());
-            if (resultMap != null) {
-                resultMaps.add(resultMap);
-                MetaObject metaObject = MetaObjectUtil.forObject(ms);
-                metaObject.setValue("resultMaps", Collections.unmodifiableList(resultMaps));
-            }
         }
     }
 
