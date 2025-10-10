@@ -32,7 +32,7 @@ public class TkMapperServiceTest {
     private UserMapper userMapper;
 
     @Test
-    public void all() {
+    public final void all() {
 
         userMapper.selectAll().forEach(u -> log.info(u.toString()));
     }
@@ -41,7 +41,7 @@ public class TkMapperServiceTest {
      * 根据主键查询
      */
     @Test
-    public void byId() {
+    public final void byId() {
 
         User user = userMapper.selectByPrimaryKey(1);
         log.info(user == null ? null : user.toString());
@@ -51,7 +51,7 @@ public class TkMapperServiceTest {
      * 根据example查询
      */
     @Test
-    public void exampleQuery() {
+    public final void exampleQuery() {
         Example example = new Example(User.class);
         example.and().andLike("name", "%张%");
         userMapper.selectByExample(example).forEach(u -> log.info(u.toString()));
@@ -61,7 +61,7 @@ public class TkMapperServiceTest {
      * mybatis 原生查询
      */
     @Test
-    public void rawMybatisQuery() {
+    public final void rawMybatisQuery() {
 
         userMapper.findByGTAge(11).forEach(u -> log.info(u.toString()));
     }
@@ -71,7 +71,7 @@ public class TkMapperServiceTest {
      */
     @Test
     @Rollback
-    public void logicDelInsert() {
+    public final void logicDelInsert() {
 
         List<User> users = userMapper.findByName("张麻子");
         if (!users.isEmpty()) {
