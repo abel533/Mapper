@@ -4,6 +4,9 @@ on:
     types: [ opened, reopened, edited ]
   push:
     branches: [ develop, master ]
+permissions:
+  contents: read
+
 jobs:
   mvn_verify:
     runs-on: ubuntu-latest
