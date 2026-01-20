@@ -105,11 +105,14 @@ public abstract class OGNL {
     }
 
     /**
-     * 检查 parameter 对象中指定的 fields 是否全是 null，如果是则抛出异常
+     * 检查 Example 中是否至少有一个有效的查询条件
+     * 用于 safeDelete 和 safeUpdate 的安全检查，确保不会执行全表操作
      *
-     * @param parameter
-     * @return
+     * @param parameter Example 对象或包含 getOredCriteria 方法的对象
+     * @return 如果至少有一个有效的查询条件则返回 true
+     * @throws MapperException 如果参数为 null 或没有有效的查询条件
      */
+    @SuppressWarnings("unchecked")
     public static boolean exampleHasAtLeastOneCriteriaCheck(Object parameter) {
         if (parameter != null) {
             try {
