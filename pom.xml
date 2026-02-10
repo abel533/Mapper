@@ -41,9 +41,9 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-        <jpa.version>3.1.0</jpa.version>
-        <slf4j.version>2.0.16</slf4j.version>
-        <mybatis.version>3.5.16</mybatis.version>
+        <jpa.version>3.2.0</jpa.version>
+        <slf4j.version>2.0.17</slf4j.version>
+        <mybatis.version>3.5.19</mybatis.version>
         <mybatis-freemarker.version>1.2.4</mybatis-freemarker.version>
         <mybatis-velocity.version>2.1.2</mybatis-velocity.version>
         <mybatis-thymeleaf.version>1.0.4</mybatis-thymeleaf.version>
@@ -51,7 +51,7 @@
         <!--test-->
         <junit.version>4.13.2</junit.version>
         <hsqldb.version>2.7.3</hsqldb.version>
-        <logback.version>1.5.6</logback.version>
+        <logback.version>1.5.25</logback.version>
     </properties>
 
     <licenses>

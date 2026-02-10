@@ -37,8 +37,8 @@
     <description>Mybatis 通用 Mapper 和 Spring 集成</description>
 
     <properties>
-        <spring.version>6.1.11</spring.version>
-        <mybatis-spring.version>3.0.4</mybatis-spring.version>
+        <spring.version>7.0.3</spring.version>
+        <mybatis-spring.version>4.0.0</mybatis-spring.version>
     </properties>
 
     <dependencies>
