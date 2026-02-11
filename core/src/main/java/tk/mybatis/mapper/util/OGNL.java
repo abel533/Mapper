@@ -116,13 +116,24 @@ public abstract class OGNL {
                 if (parameter instanceof Example) {
                     List<Example.Criteria> criteriaList = ((Example) parameter).getOredCriteria();
                     if (criteriaList != null && criteriaList.size() > 0) {
-                        return true;
+                        for (Example.Criteria criteria : criteriaList) {
+                            if (criteria != null && criteria.isValid()) {
+                                return true;
+                            }
+                        }
                     }
                 } else {
                     Method getter = parameter.getClass().getDeclaredMethod("getOredCriteria");
                     Object list = getter.invoke(parameter);
-                    if (list != null && list instanceof List && ((List) list).size() > 0) {
-                        return true;
+                    if (list != null && list instanceof List) {
+                        List criteriaList = (List) list;
+                        if (criteriaList.size() > 0) {
+                            for (Object criteria : criteriaList) {
+                                if (criteria instanceof Example.Criteria && ((Example.Criteria) criteria).isValid()) {
+                                    return true;
+                                }
+                            }
+                        }
                     }
                 }
             } catch (Exception e) {

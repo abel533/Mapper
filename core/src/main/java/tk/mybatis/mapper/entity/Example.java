@@ -693,7 +693,18 @@ public class Example implements IDynamicTableName {
         }
 
         public boolean isValid() {
-            return criteria.size() > 0;
+            if (criteria.size() == 0) {
+                return false;
+            }
+            if (notNull) {
+                return true;
+            }
+            for (Criterion criterion : criteria) {
+                if (criterion.isValid()) {
+                    return true;
+                }
+            }
+            return false;
         }
     }
 
@@ -820,6 +831,22 @@ public class Example implements IDynamicTableName {
 
         public boolean isSingleValue() {
             return singleValue;
+        }
+
+        public boolean isValid() {
+            if (noValue) {
+                return true;
+            }
+            if (singleValue) {
+                return value != null;
+            }
+            if (betweenValue) {
+                return value != null && secondValue != null;
+            }
+            if (listValue) {
+                return value != null;
+            }
+            return false;
         }
     }
 
@@ -1149,3 +1176,4 @@ public class Example implements IDynamicTableName {
         this.tableName = tableName;
     }
 }
+
