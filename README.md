@@ -1,4 +1,4 @@
-# MyBatis 通用 Mapper5 来了🎉🎉🎉
+# MyBatis 通用 Mapper6 来了🎉🎉🎉
 
 [![Maven central](https://maven-badges.herokuapp.com/maven-central/tk.mybatis/mapper/badge.svg)](https://maven-badges.herokuapp.com/maven-central/tk.mybatis/mapper)
 
@@ -8,17 +8,27 @@
 
 支持单表操作，不支持通用的多表联合查询。
 
-## 基于 JDK 17 + Jakarta JPA 注解 + Spring Boot 3
+## 版本匹配说明
 
-配置完全兼容，需要使用新版本的 JPA 注解，同步更新（copy） mybatis-spring 3.0.4 和 mybatis-spring-boot-starter 3.0.4。
+不同分支支持不同的 Spring Boot 版本，请根据项目实际情况选择对应分支：
 
-此次更新主要是依赖的更新，没有增加新的功能，只是为了更好的兼容 JDK 17 和 Jakarta JPA 注解。
+| 分支 | Spring Boot 版本 | JDK 版本 | Mapper 版本 |
+|------|------------------|----------|-------------|
+| master | Spring Boot 4.x | JDK 17+ | 6.0.0+ |
+| 5.x | Spring Boot 3.x | JDK 17+ | 5.0.0 |
+| 4.3.x | Spring Boot 2.x | JDK 8+ | 4.3.x |
+
+## 基于 JDK 17 + Jakarta JPA 注解 + Spring Boot 4
+
+配置完全兼容，需要使用新版本的 JPA 注解，同步更新（copy） mybatis-spring 4.0.0 和 mybatis-spring-boot-starter 4.0.0。
+
+此次更新主要是依赖的更新，适配最新的 Spring Boot 4.0.2，提供更好的兼容性和稳定性。
 
 ```xml
 <dependency>
     <groupId>tk.mybatis</groupId>
     <artifactId>mapper</artifactId>
-    <version>5.0.0</version>
+    <version>6.0.0-beta</version>
 </dependency>
 ```
 
@@ -52,6 +62,10 @@
 - [更新日志 - Gitee](https://gitee.com/free/Mapper/wikis/changelog)
 
 - [更新日志 - GitHub](https://github.com/abel533/Mapper/wiki/changelog)
+
+## 微信公众号
+
+<img src="wx-mybatis.webp" width="250"/>
 
 ## 作者信息
 
