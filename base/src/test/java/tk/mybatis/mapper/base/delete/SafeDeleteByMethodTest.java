@@ -65,4 +65,17 @@ public class SafeDeleteByMethodTest extends BaseTest {
         }
     }
 
+    @Test(expected = PersistenceException.class)
+    public void testSafeDeleteByExampleWithNullValueCriterion() {
+        SqlSession sqlSession = getSqlSession();
+        try {
+            CountryMapper mapper = sqlSession.getMapper(CountryMapper.class);
+            Example example = new Example(Country.class);
+            example.createCriteria().andEqualTo("countryname", null);
+            mapper.deleteByExample(example);
+        } finally {
+            sqlSession.close();
+        }
+    }
+
 }
