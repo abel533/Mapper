@@ -28,7 +28,7 @@
 <dependency>
     <groupId>tk.mybatis</groupId>
     <artifactId>mapper</artifactId>
-    <version>6.0.0-beta</version>
+    <version>6.0.0</version>
 </dependency>
 ```
 

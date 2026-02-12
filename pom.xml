@@ -35,7 +35,7 @@
     <url>https://mybatis.io</url>
 
     <properties>
-        <revision>6.0.0-beta</revision>
+        <revision>6.0.0</revision>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
