@@ -1,8 +1,9 @@
 package tk.mybatis.mapper.additional.aggregation;
 
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.Transient;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
+
 import java.io.Serializable;
 
 @Table(name = "user_hump")
