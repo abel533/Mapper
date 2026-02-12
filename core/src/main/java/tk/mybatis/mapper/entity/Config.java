@@ -87,6 +87,12 @@ public class Config {
      */
     private boolean safeUpdate;
     /**
+     * 控制通过主键进行操作（select, update, delete）时，是否拼接逻辑删除字段的条件（默认 true，保持兼容）
+     * <p>
+     * 设置为 false 时，通过主键查询或操作时不会追加 logicDeleteField = 0 的条件
+     */
+    private boolean logicDeleteByKey = true;
+    /**
      * 是否设置 javaType
      */
     private boolean useJavaType;
@@ -308,6 +314,14 @@ public class Config {
         this.safeUpdate = safeUpdate;
     }
 
+    public boolean isLogicDeleteByKey() {
+        return logicDeleteByKey;
+    }
+
+    public void setLogicDeleteByKey(boolean logicDeleteByKey) {
+        this.logicDeleteByKey = logicDeleteByKey;
+    }
+
     public boolean isUseJavaType() {
         return useJavaType;
     }
@@ -393,10 +407,15 @@ public class Config {
         if (StringUtil.isNotEmpty(wrapKeyword)) {
             this.wrapKeyword = wrapKeyword;
         }
-        //安全删除
+        //safeDelete
         this.safeDelete = Boolean.valueOf(properties.getProperty("safeDelete"));
-        //安全更新
+        //safeUpdate
         this.safeUpdate = Boolean.valueOf(properties.getProperty("safeUpdate"));
+        // 控制通过主键进行操作（select, update, delete）时，是否拼接逻辑删除字段的条件（默认 true，保持兼容）
+        String logicDeleteByKey = properties.getProperty("logicDeleteByKey");
+        if (StringUtil.isNotEmpty(logicDeleteByKey)) {
+            this.logicDeleteByKey = Boolean.valueOf(logicDeleteByKey);
+        }
         //是否设置 javaType，true 时如 {id, javaType=java.lang.Long}
         this.useJavaType = Boolean.valueOf(properties.getProperty("useJavaType"));
     }

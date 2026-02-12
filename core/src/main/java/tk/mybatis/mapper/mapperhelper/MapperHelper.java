@@ -352,6 +352,8 @@ public class MapperHelper {
      */
     public void setProperties(Properties properties) {
         config.setProperties(properties);
+        // 将配置同步到 SqlHelper（控制通过主键进行操作（select, update, delete）时，是否拼接逻辑删除字段的条件）
+        SqlHelper.setLogicDeleteByKey(config.isLogicDeleteByKey());
         //注册解析器
         if (properties != null) {
             String resolveClass = properties.getProperty("resolveClass");
