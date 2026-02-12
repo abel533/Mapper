@@ -43,6 +43,19 @@ import java.util.Set;
 public class SqlHelper {
 
     /**
+     * 控制通过主键进行操作（select, update, delete）时，是否拼接逻辑删除字段的条件（默认 true，保持兼容）
+     */
+    private static boolean logicDeleteByKey = true;
+
+    public static boolean isLogicDeleteByKey() {
+        return logicDeleteByKey;
+    }
+
+    public static void setLogicDeleteByKey(boolean logicDeleteByKey) {
+        SqlHelper.logicDeleteByKey = logicDeleteByKey;
+    }
+
+    /**
      * 获取表名 - 支持动态表名
      *
      * @param entityClass
@@ -635,7 +648,7 @@ public class SqlHelper {
             sql.append(whereVersion(entityClass));
         }
 
-        if (hasLogicDelete) {
+        if (hasLogicDelete && isLogicDeleteByKey()) {
             sql.append(whereLogicDelete(entityClass, false));
         }
 
