@@ -46,6 +46,7 @@
 
     <mappers>
         <mapper class="tk.mybatis.mapper.additional.aggregation.UserMapper"/>
+        <mapper class="tk.mybatis.mapper.additional.aggregation.UserHumpMapper"/>
     </mappers>
 
 </configuration>
