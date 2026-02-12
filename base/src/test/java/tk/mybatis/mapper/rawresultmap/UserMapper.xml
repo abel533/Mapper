@@ -9,7 +9,7 @@
         <result column="name" jdbcType="VARCHAR" property="name" />
         <result column="user_name" jdbcType="VARCHAR" property="uname" />
         <result column="email" jdbcType="VARCHAR" property="email" />
-        <result column="age____aa" jdbcType="INTEGER" property="age" />
+        <result column="age__int__aa" jdbcType="INTEGER" property="age" />
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     </resultMap>
 
@@ -17,9 +17,29 @@
         select * from user
     </select>
 
+    <select id="fetchDynamicSqlType" resultType = "tk.mybatis.mapper.rawresultmap.User">
+        select * from user
+        <where>
+            <if test="ids != null and ids.size() != 0">
+                id
+                <foreach collection="ids" open="in (" close=")" separator="," item="id">
+                    #{id}
+                </foreach>
+            </if>
+        </where>
+    </select>
+
     <select id="fetchRawResultMap" resultMap="BaseResultMap">
         select * from user
     </select>
+
+    <select id="fetchDynamicResultMap" resultMap="BaseResultMap">
+        select * from user
+        <where>
+            1=1
+        </where>
+    </select>
+
 
     <select id="getMapUser" resultType="Map">
         select * from user where id = 1

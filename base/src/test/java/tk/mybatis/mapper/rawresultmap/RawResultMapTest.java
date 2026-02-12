@@ -10,6 +10,7 @@ import tk.mybatis.mapper.entity.Config;
 import java.io.IOException;
 import java.io.Reader;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -45,55 +46,56 @@ public class RawResultMapTest extends BaseTest {
 
             System.out.println("------selectAll------");
             users = mapper.selectAll();
-            users.forEach(u -> {
-                System.out.println(u);
-                Assert.assertNotNull(u.getUname());
-                Assert.assertNotNull(u.getAge());
-                Assert.assertNotNull(u.getCreateTime());
-                Assert.assertNull(u.getEmail());
-            });
-            System.out.println("------------");
+            userAssert(users);
+            System.out.println("###################");
 
             System.out.println("------selectRawAnnotation------");
             users = mapper.selectRawAnnotation();
-            users.forEach(u -> {
-                System.out.println(u);
-                Assert.assertNotNull(u.getUname());
-                Assert.assertNotNull(u.getAge());
-                Assert.assertNotNull(u.getCreateTime());
-                Assert.assertNotNull(u.getEmail());
-            });
-            System.out.println("------------");
+            userAssert(users);
+            System.out.println("###################");
+
+            System.out.println("------selectRawAnnotationResultMap------");
+            users = mapper.selectRawAnnotationResultMap();
+            userAssert(users);
+            System.out.println("###################");
 
             System.out.println("------fetchRawResultMap------");
             users = mapper.fetchRawResultMap();
-            users.forEach(u -> {
-                System.out.println(u);
-                Assert.assertNotNull(u.getUname());
-                Assert.assertNotNull(u.getAge());
-                Assert.assertNotNull(u.getCreateTime());
-                Assert.assertNotNull(u.getEmail());
-            });
-            System.out.println("------------");
+            userAssert(users);
+            System.out.println("###################");
+
+            System.out.println("------fetchDynamicResultMap------");
+            users = mapper.fetchDynamicResultMap();
+            userAssert(users);
+            System.out.println("###################");
 
             System.out.println("------fetchRawResultType------");
             users = mapper.fetchRawResultType();
-            users.forEach(u -> {
-                System.out.println(u);
-                Assert.assertNotNull(u.getUname());
-                Assert.assertNotNull(u.getAge());
-                Assert.assertNotNull(u.getCreateTime());
-                Assert.assertNotNull(u.getEmail());
-            });
-            System.out.println("------------");
+            userAssert(users);
+            System.out.println("###################");
+
+            System.out.println("------fetchDynamicSqlType------");
+            users = mapper.fetchDynamicSqlType(Arrays.asList(1, 2, 3));
+            userAssert(users);
+            System.out.println("###################");
 
             System.out.println("------getMapUser------");
             System.out.println(mapper.getMapUser());
-            System.out.println("------------");
+            System.out.println("###################");
 
             System.out.println(mapper.selectCount2());
+
         } finally {
             sqlSession.close();
         }
+    }
+
+    private static void userAssert(List<User> users) {
+        users.forEach(u -> {
+            System.out.println(u);
+            Assert.assertNotNull(u.getUname());
+            Assert.assertNotNull(u.getAge());
+            Assert.assertNotNull(u.getCreateTime());
+        });
     }
 }
