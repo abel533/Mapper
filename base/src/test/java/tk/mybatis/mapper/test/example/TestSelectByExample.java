@@ -24,8 +24,11 @@
 
 package tk.mybatis.mapper.test.example;
 
+import org.apache.ibatis.io.Resources;
+import org.apache.ibatis.jdbc.ScriptRunner;
 import org.apache.ibatis.session.SqlSession;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -37,6 +40,9 @@ import tk.mybatis.mapper.mapper.MybatisHelper;
 import tk.mybatis.mapper.model.Country;
 import tk.mybatis.mapper.model.Country2;
 
+import java.io.IOException;
+import java.io.Reader;
+import java.sql.Connection;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -48,6 +54,22 @@ import java.util.Set;
 public class TestSelectByExample {
     @Rule
     public ExpectedException exception = ExpectedException.none();
+
+    @Before
+    public void setupDB() {
+        SqlSession sqlSession = MybatisHelper.getSqlSession();
+        try {
+            Connection conn = sqlSession.getConnection();
+            Reader reader = Resources.getResourceAsReader("CreateDB.sql");
+            ScriptRunner runner = new ScriptRunner(conn);
+            runner.setLogWriter(null);
+            runner.runScript(reader);
+            reader.close();
+        } catch (IOException e) {}
+        finally {
+            sqlSession.close();
+        }
+    }
 
     @Test
     public void testSelectByExample() {
