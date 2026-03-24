@@ -12,7 +12,7 @@
 
 本项目是基于MIT协议的开源项目，无任何商业盈利，**持续的维护、迭代与兼容升级全靠各位开发者和赞助者的支持**。
 
-[![Easysearch - ES 国产化的首选替代方案](https://cdn.nlark.com/yuque/0/2026/png/775247/1774234461319-11984f50-5516-4587-b82d-7ed91cb64930.png)](https://easysearch.cn/)
+[![Easysearch - ES 国产化的首选替代方案](https://infinilabs.cn//img/download/media-assets/easysearch-banner-3.svg)](https://easysearch.cn/)
 
 ## 版本匹配说明
 
