@@ -1,12 +1,18 @@
 # MyBatis 通用 Mapper6 来了🎉🎉🎉
 
-[![Maven central](https://maven-badges.herokuapp.com/maven-central/tk.mybatis/mapper/badge.svg)](https://maven-badges.herokuapp.com/maven-central/tk.mybatis/mapper)
+[![Maven Central](https://img.shields.io/maven-central/v/tk.mybatis/mapper)](https://central.sonatype.com/namespace/tk.mybatis)
 
 通用Mapper都可以极大的方便开发人员。可以随意的按照自己的需要选择通用方法，还可以很方便的开发自己的通用方法。
 
 极其方便的使用MyBatis单表的增删改查。
 
 支持单表操作，不支持通用的多表联合查询。
+
+## 🌟 赞助支持
+
+本项目是基于MIT协议的开源项目，无任何商业盈利，**持续的维护、迭代与兼容升级全靠各位开发者和赞助者的支持**。
+
+[![Easysearch - ES 国产化的首选替代方案](https://cdn.nlark.com/yuque/0/2026/png/775247/1774234461319-11984f50-5516-4587-b82d-7ed91cb64930.png)](https://easysearch.cn/)
 
 ## 版本匹配说明
 
