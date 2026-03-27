@@ -24,8 +24,11 @@
 
 package tk.mybatis.mapper.test.country;
 
+import org.apache.ibatis.io.Resources;
+import org.apache.ibatis.jdbc.ScriptRunner;
 import org.apache.ibatis.session.SqlSession;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import tk.mybatis.mapper.mapper.CountryMapper;
 import tk.mybatis.mapper.mapper.CountryVersionMapper;
@@ -33,12 +36,32 @@ import tk.mybatis.mapper.mapper.MybatisHelper;
 import tk.mybatis.mapper.model.Country;
 import tk.mybatis.mapper.model.CountryVersion;
 
+import java.io.IOException;
+import java.io.Reader;
+import java.sql.Connection;
+
 /**
  * 通过PK更新实体类全部属性
  *
  * @author liuzh
  */
 public class TestUpdateByPrimaryKey {
+
+    @Before
+    public void setupDB() {
+        SqlSession sqlSession = MybatisHelper.getSqlSession();
+        try {
+            Connection conn = sqlSession.getConnection();
+            Reader reader = Resources.getResourceAsReader("CreateDB.sql");
+            ScriptRunner runner = new ScriptRunner(conn);
+            runner.setLogWriter(null);
+            runner.runScript(reader);
+            reader.close();
+        } catch (IOException e) {}
+        finally {
+            sqlSession.close();
+        }
+    }
 
     /**
      * 更新0个

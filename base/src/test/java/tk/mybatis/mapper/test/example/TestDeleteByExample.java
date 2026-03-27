@@ -24,8 +24,11 @@
 
 package tk.mybatis.mapper.test.example;
 
+import org.apache.ibatis.io.Resources;
+import org.apache.ibatis.jdbc.ScriptRunner;
 import org.apache.ibatis.session.SqlSession;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import tk.mybatis.mapper.entity.Example;
 import tk.mybatis.mapper.entity.model.CountryExample;
@@ -33,10 +36,30 @@ import tk.mybatis.mapper.mapper.CountryMapper;
 import tk.mybatis.mapper.mapper.MybatisHelper;
 import tk.mybatis.mapper.model.Country;
 
+import java.io.IOException;
+import java.io.Reader;
+import java.sql.Connection;
+
 /**
  * @author liuzh
  */
 public class TestDeleteByExample {
+
+    @Before
+    public void setupDB() {
+        SqlSession sqlSession = MybatisHelper.getSqlSession();
+        try {
+            Connection conn = sqlSession.getConnection();
+            Reader reader = Resources.getResourceAsReader("CreateDB.sql");
+            ScriptRunner runner = new ScriptRunner(conn);
+            runner.setLogWriter(null);
+            runner.runScript(reader);
+            reader.close();
+        } catch (IOException e) {}
+        finally {
+            sqlSession.close();
+        }
+    }
 
     @Test
     public void testDeleteByExample() {
