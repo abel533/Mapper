@@ -25,13 +25,19 @@
 package tk.mybatis.mapper.test.country;
 
 import org.apache.ibatis.exceptions.PersistenceException;
+import org.apache.ibatis.io.Resources;
+import org.apache.ibatis.jdbc.ScriptRunner;
 import org.apache.ibatis.session.SqlSession;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import tk.mybatis.mapper.mapper.CountryMapper;
 import tk.mybatis.mapper.mapper.MybatisHelper;
 import tk.mybatis.mapper.model.Country;
 
+import java.io.IOException;
+import java.io.Reader;
+import java.sql.Connection;
 import java.util.List;
 
 /**
@@ -40,6 +46,22 @@ import java.util.List;
  * @author liuzh
  */
 public class TestInsert {
+
+    @Before
+    public void setupDB() {
+        SqlSession sqlSession = MybatisHelper.getSqlSession();
+        try {
+            Connection conn = sqlSession.getConnection();
+            Reader reader = Resources.getResourceAsReader("CreateDB.sql");
+            ScriptRunner runner = new ScriptRunner(conn);
+            runner.setLogWriter(null);
+            runner.runScript(reader);
+            reader.close();
+        } catch (IOException e) {}
+        finally {
+            sqlSession.close();
+        }
+    }
 
     /**
      * 插入空数据,id不能为null,会报错
