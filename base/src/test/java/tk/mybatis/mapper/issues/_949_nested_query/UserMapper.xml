@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="tk.mybatis.mapper.issues._949_nested_query.UserMapper">
+
+    <!--
+        This resultMap has EXPLICIT simple column mappings AND an association with nested select.
+        resultMappings is NOT empty (has id, name, and association).
+        setRawSqlSourceMapper must NOT replace this resultMap.
+    -->
+    <resultMap id="userWithDetailMap" type="tk.mybatis.mapper.issues._949_nested_query.User">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <association property="detail" column="id"
+                     select="tk.mybatis.mapper.issues._949_nested_query.UserMapper.selectDetailByUserId"/>
+    </resultMap>
+
+    <!--
+        This resultMap has ONLY an association with nested select and NO explicit simple mappings.
+        resultMappings is NOT empty (has the association mapping).
+        setRawSqlSourceMapper must NOT replace this resultMap.
+    -->
+    <resultMap id="userWithDetailOnlyAssocMap" type="tk.mybatis.mapper.issues._949_nested_query.User">
+        <association property="detail" column="id"
+                     select="tk.mybatis.mapper.issues._949_nested_query.UserMapper.selectDetailByUserId"/>
+    </resultMap>
+
+    <!--
+        This resultMap has ONLY a discriminator and NO explicit result mappings (resultMappings is empty).
+        This is the core bug scenario: setRawSqlSourceMapper was replacing this user-defined resultMap
+        with the JPA-generated BaseMapperResultMap, losing the discriminator entirely.
+        With the fix (check rm.getId().endsWith("-Inline")), this resultMap is preserved.
+        - user id=1 is routed to discriminatorCase1Map which loads the nested detail
+        - user id=2 is routed to discriminatorCase2Map which does not load detail
+    -->
+    <resultMap id="userDiscriminatorMap" type="tk.mybatis.mapper.issues._949_nested_query.User">
+        <discriminator javaType="int" column="id">
+            <case value="1" resultMap="discriminatorCase1Map"/>
+            <case value="2" resultMap="discriminatorCase2Map"/>
+        </discriminator>
+    </resultMap>
+
+    <!-- Case 1: loads user fields plus nested detail via nested select -->
+    <resultMap id="discriminatorCase1Map" type="tk.mybatis.mapper.issues._949_nested_query.User">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <association property="detail" column="id"
+                     select="tk.mybatis.mapper.issues._949_nested_query.UserMapper.selectDetailByUserId"/>
+    </resultMap>
+
+    <!-- Case 2: loads user fields only, no nested detail -->
+    <resultMap id="discriminatorCase2Map" type="tk.mybatis.mapper.issues._949_nested_query.User">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+    </resultMap>
+
+    <select id="selectUsersWithDetail" resultMap="userWithDetailMap">
+        SELECT id, name FROM user949
+    </select>
+
+    <select id="selectUsersWithDetailOnlyAssociation" resultMap="userWithDetailOnlyAssocMap">
+        SELECT id, name FROM user949
+    </select>
+
+    <select id="selectUsersWithDiscriminator" resultMap="userDiscriminatorMap">
+        SELECT id, name FROM user949
+    </select>
+
+    <select id="selectDetailByUserId" resultType="tk.mybatis.mapper.issues._949_nested_query.UserDetail">
+        SELECT id, user_id, email FROM user_detail949 WHERE user_id = #{userId}
+    </select>
+
+</mapper>
