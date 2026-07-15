@@ -406,8 +406,14 @@ public class MapperHelper {
      */
     public void setRawSqlSourceMapper(MappedStatement ms) {
         ResultMap rm = ms.getResultMaps().get(0);
-        //不处理已经配置映射的查询
-        if (rm.getResultMappings().isEmpty()) {
+        // Only replace auto-generated inline result maps (from XML resultType= or annotation @Select
+        // without @Results). These have IDs derived from the statement ID with a hyphen suffix, e.g.:
+        //   XML resultType= → statementId + "-Inline"
+        //   Annotation without @Results → statementId + "-void" or statementId + "-TypeName"
+        // User-defined result maps (XML <resultMap id="..."> or @ResultMap) have IDs independent of
+        // the statement ID, so they won't match and will be left intact — preserving nested queries,
+        // discriminators, and other custom configurations.
+        if (rm.getResultMappings().isEmpty() && rm.getId().startsWith(ms.getId() + "-")) {
             EntityTable entityTable = EntityHelper.getEntityTableOrNull(rm.getType());
             if (entityTable != null) {
                 List<ResultMap> resultMaps = new ArrayList<>();
