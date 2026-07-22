@@ -54,7 +54,7 @@ public class BaseDeleteProvider extends MapperTemplate {
         StringBuilder sql = new StringBuilder();
         //如果设置了安全删除，就不允许执行不带查询条件的 delete 方法
         if (getConfig().isSafeDelete()) {
-            sql.append(SqlHelper.notAllNullParameterCheck("_parameter", EntityHelper.getColumns(entityClass)));
+            sql.append(SqlHelper.notAllNullParameterCheck("_parameter", EntityHelper.getColumns(entityClass), isNotEmpty()));
         }
         // 如果是逻辑删除，则修改为更新表，修改逻辑删除字段的值
         if (SqlHelper.hasLogicDeleteColumn(entityClass)) {

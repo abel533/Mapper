@@ -25,6 +25,7 @@
 package tk.mybatis.mapper.provider.base;
 
 import org.apache.ibatis.mapping.MappedStatement;
+import tk.mybatis.mapper.mapperhelper.EntityHelper;
 import tk.mybatis.mapper.mapperhelper.MapperHelper;
 import tk.mybatis.mapper.mapperhelper.MapperTemplate;
 import tk.mybatis.mapper.mapperhelper.SqlHelper;
@@ -51,6 +52,9 @@ public class BaseSelectProvider extends MapperTemplate {
         //修改返回值类型为实体类型
         setResultType(ms, entityClass);
         StringBuilder sql = new StringBuilder();
+        if (getConfig().isSafeSelect()) {
+            sql.append(SqlHelper.notAllNullParameterCheck("_parameter", EntityHelper.getColumns(entityClass), isNotEmpty()));
+        }
         sql.append(SqlHelper.selectAllColumns(entityClass));
         sql.append(SqlHelper.fromTable(entityClass, tableName(entityClass)));
         sql.append(SqlHelper.whereAllIfColumns(entityClass, isNotEmpty()));
@@ -68,6 +72,9 @@ public class BaseSelectProvider extends MapperTemplate {
         //修改返回值类型为实体类型
         setResultType(ms, entityClass);
         StringBuilder sql = new StringBuilder();
+        if (getConfig().isSafeSelect()) {
+            sql.append(SqlHelper.notAllNullParameterCheck("_parameter", EntityHelper.getColumns(entityClass), isNotEmpty()));
+        }
         sql.append(SqlHelper.selectAllColumns(entityClass));
         sql.append(SqlHelper.fromTable(entityClass, tableName(entityClass)));
         sql.append(SqlHelper.whereAllIfColumns(entityClass, isNotEmpty()));
@@ -110,6 +117,9 @@ public class BaseSelectProvider extends MapperTemplate {
     public String selectCount(MappedStatement ms) {
         Class<?> entityClass = getEntityClass(ms);
         StringBuilder sql = new StringBuilder();
+        if (getConfig().isSafeSelect()) {
+            sql.append(SqlHelper.notAllNullParameterCheck("_parameter", EntityHelper.getColumns(entityClass), isNotEmpty()));
+        }
         sql.append(SqlHelper.selectCount(entityClass));
         sql.append(SqlHelper.fromTable(entityClass, tableName(entityClass)));
         sql.append(SqlHelper.whereAllIfColumns(entityClass, isNotEmpty()));

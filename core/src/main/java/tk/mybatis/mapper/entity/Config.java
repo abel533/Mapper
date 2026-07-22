@@ -87,6 +87,10 @@ public class Config {
      */
     private boolean safeUpdate;
     /**
+     * 安全查询，开启后，不允许执行不带查询条件的条件查询方法
+     */
+    private boolean safeSelect;
+    /**
      * 控制通过主键进行操作（select, update, delete）时，是否拼接逻辑删除字段的条件（默认 true，保持兼容）
      * <p>
      * 设置为 false 时，通过主键查询或操作时不会追加 logicDeleteField = 0 的条件
@@ -318,6 +322,14 @@ public class Config {
         this.safeUpdate = safeUpdate;
     }
 
+    public boolean isSafeSelect() {
+        return safeSelect;
+    }
+
+    public void setSafeSelect(boolean safeSelect) {
+        this.safeSelect = safeSelect;
+    }
+
     public boolean isLogicDeleteByKey() {
         return logicDeleteByKey;
     }
@@ -423,6 +435,8 @@ public class Config {
         this.safeDelete = Boolean.valueOf(properties.getProperty("safeDelete"));
         //safeUpdate
         this.safeUpdate = Boolean.valueOf(properties.getProperty("safeUpdate"));
+        //safeSelect
+        this.safeSelect = Boolean.valueOf(properties.getProperty("safeSelect"));
         // 控制通过主键进行操作（select, update, delete）时，是否拼接逻辑删除字段的条件（默认 true，保持兼容）
         String logicDeleteByKey = properties.getProperty("logicDeleteByKey");
         if (StringUtil.isNotEmpty(logicDeleteByKey)) {
