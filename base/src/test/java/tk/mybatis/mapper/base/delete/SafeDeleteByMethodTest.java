@@ -15,6 +15,7 @@ public class SafeDeleteByMethodTest extends BaseTest {
     protected Config getConfig() {
         Config config = super.getConfig();
         config.setSafeDelete(true);
+        config.setNotEmpty(true);
         //和 SafeDeleteByFieldTest 测试的区别在此，这里将会使后面调用 EntityField.getValue 时，使用 getter 方法获取值
         config.setEnableMethodAnnotation(true);
         return config;
@@ -42,6 +43,19 @@ public class SafeDeleteByMethodTest extends BaseTest {
         }
     }
 
+    @Test(expected = PersistenceException.class)
+    public void testSafeDeleteEmptyString() {
+        SqlSession sqlSession = getSqlSession();
+        try {
+            CountryMapper mapper = sqlSession.getMapper(CountryMapper.class);
+            Country country = new Country();
+            country.setCountryname("");
+            mapper.delete(country);
+        } finally {
+            sqlSession.close();
+        }
+    }
+
 
     @Test(expected = PersistenceException.class)
     public void testSafeDeleteByExample() {
@@ -60,6 +74,19 @@ public class SafeDeleteByMethodTest extends BaseTest {
         try {
             CountryMapper mapper = sqlSession.getMapper(CountryMapper.class);
             mapper.deleteByExample(null);
+        } finally {
+            sqlSession.close();
+        }
+    }
+
+    @Test(expected = PersistenceException.class)
+    public void testSafeDeleteByExampleWithEmptyStringCriterion() {
+        SqlSession sqlSession = getSqlSession();
+        try {
+            CountryMapper mapper = sqlSession.getMapper(CountryMapper.class);
+            Example example = new Example(Country.class);
+            example.createCriteria().andEqualTo("countryname", "");
+            mapper.deleteByExample(example);
         } finally {
             sqlSession.close();
         }

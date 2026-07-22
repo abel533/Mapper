@@ -32,6 +32,7 @@ import tk.mybatis.mapper.entity.IDynamicTableName;
 import tk.mybatis.mapper.mapperhelper.EntityHelper;
 import tk.mybatis.mapper.mapperhelper.SqlHelper;
 
+import java.lang.reflect.Array;
 import java.lang.reflect.Method;
 import java.util.*;
 
@@ -71,18 +72,32 @@ public abstract class OGNL {
      * @return
      */
     public static boolean notAllNullParameterCheck(Object parameter, String fields) {
+        return notAllNullParameterCheck(parameter, fields, false);
+    }
+
+    /**
+     * 检查 parameter 对象中指定的 fields 是否全是 null 或空字符串，如果是则抛出异常
+     *
+     * @param parameter
+     * @param fields
+     * @param notEmpty
+     * @return
+     */
+    public static boolean notAllNullParameterCheck(Object parameter, String fields, boolean notEmpty) {
         if (parameter != null) {
             try {
                 Set<EntityColumn> columns = EntityHelper.getColumns(parameter.getClass());
                 Set<String> fieldSet = new HashSet<String>(Arrays.asList(fields.split(",")));
                 for (EntityColumn column : columns) {
-                    if (fieldSet.contains(column.getProperty())) {
+                    if (fieldSet.contains(column.getProperty()) && !isLogicDeleteColumn(column)) {
                         Object value = column.getEntityField().getValue(parameter);
-                        if (value != null) {
+                        if (isEffectiveValue(value, notEmpty)) {
                             return true;
                         }
                     }
                 }
+            } catch (MapperException e) {
+                throw e;
             } catch (Exception e) {
                 throw new MapperException(SAFE_DELETE_ERROR, e);
             }
@@ -111,36 +126,145 @@ public abstract class OGNL {
      * @return
      */
     public static boolean exampleHasAtLeastOneCriteriaCheck(Object parameter) {
+        return exampleHasAtLeastOneCriteriaCheck(parameter, true);
+    }
+
+    public static boolean exampleHasAtLeastOneCriteriaCheck(Object parameter, boolean notEmpty) {
         if (parameter != null) {
             try {
-                if (parameter instanceof Example) {
-                    List<Example.Criteria> criteriaList = ((Example) parameter).getOredCriteria();
-                    if (criteriaList != null && criteriaList.size() > 0) {
-                        for (Example.Criteria criteria : criteriaList) {
-                            if (criteria != null && criteria.isValid()) {
-                                return true;
-                            }
+                List<?> criteriaList = getOredCriteria(parameter);
+                if (criteriaList != null && criteriaList.size() > 0) {
+                    boolean hasCriterion = false;
+                    for (Object criteria : criteriaList) {
+                        if (criteriaHasCriterion(criteria, notEmpty)) {
+                            hasCriterion = true;
                         }
                     }
-                } else {
-                    Method getter = parameter.getClass().getDeclaredMethod("getOredCriteria");
-                    Object list = getter.invoke(parameter);
-                    if (list != null && list instanceof List) {
-                        List criteriaList = (List) list;
-                        if (criteriaList.size() > 0) {
-                            for (Object criteria : criteriaList) {
-                                if (criteria instanceof Example.Criteria && ((Example.Criteria) criteria).isValid()) {
-                                    return true;
-                                }
-                            }
-                        }
+                    if (hasCriterion) {
+                        return true;
                     }
                 }
+            } catch (MapperException e) {
+                throw e;
             } catch (Exception e) {
                 throw new MapperException(SAFE_DELETE_ERROR, e);
             }
         }
         throw new MapperException(SAFE_DELETE_EXCEPTION);
+    }
+
+    private static List<?> getOredCriteria(Object parameter) throws Exception {
+        if (parameter instanceof Example) {
+            return ((Example) parameter).getOredCriteria();
+        }
+        Method getter = parameter.getClass().getMethod("getOredCriteria");
+        if (!getter.isAccessible()) {
+            getter.setAccessible(true);
+        }
+        Object list = getter.invoke(parameter);
+        if (list instanceof List) {
+            return (List<?>) list;
+        }
+        return null;
+    }
+
+    private static boolean criteriaHasCriterion(Object criteria, boolean notEmpty) throws Exception {
+        if (criteria == null) {
+            return false;
+        }
+        List<?> criterionList = getCriteriaList(criteria);
+        if (criterionList != null) {
+            boolean hasCriterion = false;
+            for (Object criterion : criterionList) {
+                if (criterion != null) {
+                    emptyCriterionValueCheck(criterion, notEmpty);
+                    hasCriterion = true;
+                }
+            }
+            return hasCriterion;
+        }
+        Boolean valid = invokeBoolean(criteria, "isValid");
+        return valid != null && valid;
+    }
+
+    private static List<?> getCriteriaList(Object criteria) throws Exception {
+        if (criteria instanceof Example.Criteria) {
+            return ((Example.Criteria) criteria).getAllCriteria();
+        }
+        Object list = invoke(criteria, "getAllCriteria");
+        if (list instanceof List) {
+            return (List<?>) list;
+        }
+        list = invoke(criteria, "getCriteria");
+        if (list instanceof List) {
+            return (List<?>) list;
+        }
+        return null;
+    }
+
+    private static void emptyCriterionValueCheck(Object criterion, boolean notEmpty) throws Exception {
+        Boolean noValue = invokeBoolean(criterion, "isNoValue");
+        if (Boolean.TRUE.equals(noValue)) {
+            return;
+        }
+        Boolean singleValue = invokeBoolean(criterion, "isSingleValue");
+        if (Boolean.TRUE.equals(singleValue) && isEmptyConditionValue(invoke(criterion, "getValue"), notEmpty)) {
+            throw new MapperException(SAFE_DELETE_EXCEPTION);
+        }
+        Boolean betweenValue = invokeBoolean(criterion, "isBetweenValue");
+        if (Boolean.TRUE.equals(betweenValue)
+                && (isEmptyConditionValue(invoke(criterion, "getValue"), notEmpty)
+                || isEmptyConditionValue(invoke(criterion, "getSecondValue"), notEmpty))) {
+            throw new MapperException(SAFE_DELETE_EXCEPTION);
+        }
+        Boolean listValue = invokeBoolean(criterion, "isListValue");
+        if (Boolean.TRUE.equals(listValue) && isEmptyConditionValue(invoke(criterion, "getValue"), notEmpty)) {
+            throw new MapperException(SAFE_DELETE_EXCEPTION);
+        }
+    }
+
+    private static Boolean invokeBoolean(Object target, String methodName) throws Exception {
+        Object value = invoke(target, methodName);
+        if (value instanceof Boolean) {
+            return (Boolean) value;
+        }
+        return null;
+    }
+
+    private static Object invoke(Object target, String methodName) throws Exception {
+        try {
+            Method method = target.getClass().getMethod(methodName);
+            if (!method.isAccessible()) {
+                method.setAccessible(true);
+            }
+            return method.invoke(target);
+        } catch (NoSuchMethodException e) {
+            return null;
+        }
+    }
+
+    private static boolean isLogicDeleteColumn(EntityColumn column) {
+        return column.getEntityField().isAnnotationPresent(LogicDelete.class);
+    }
+
+    private static boolean isEffectiveValue(Object value, boolean notEmpty) {
+        return !isEmptyConditionValue(value, notEmpty);
+    }
+
+    private static boolean isEmptyConditionValue(Object value, boolean notEmpty) {
+        if (value == null) {
+            return true;
+        }
+        if (notEmpty && value instanceof String && StringUtil.isEmpty((String) value)) {
+            return true;
+        }
+        if (value instanceof Collection && ((Collection) value).isEmpty()) {
+            return true;
+        }
+        if (value.getClass().isArray() && Array.getLength(value) == 0) {
+            return true;
+        }
+        return false;
     }
 
     /**

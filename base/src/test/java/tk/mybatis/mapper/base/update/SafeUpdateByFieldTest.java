@@ -19,11 +19,46 @@ public class SafeUpdateByFieldTest extends BaseTest {
     }
 
     @Test(expected = PersistenceException.class)
+    public void testSafeUpdateByPrimaryKeyNull() {
+        SqlSession sqlSession = getSqlSession();
+        try {
+            CountryMapper mapper = sqlSession.getMapper(CountryMapper.class);
+            mapper.updateByPrimaryKey(new Country());
+        } finally {
+            sqlSession.close();
+        }
+    }
+
+    @Test(expected = PersistenceException.class)
+    public void testSafeUpdateByPrimaryKeySelectiveNull() {
+        SqlSession sqlSession = getSqlSession();
+        try {
+            CountryMapper mapper = sqlSession.getMapper(CountryMapper.class);
+            mapper.updateByPrimaryKeySelective(new Country());
+        } finally {
+            sqlSession.close();
+        }
+    }
+
+    @Test(expected = PersistenceException.class)
     public void testSafeUpdate() {
         SqlSession sqlSession = getSqlSession();
         try {
             CountryMapper mapper = sqlSession.getMapper(CountryMapper.class);
             mapper.updateByExample(new Country(), new Example(Country.class));
+        } finally {
+            sqlSession.close();
+        }
+    }
+
+    @Test(expected = PersistenceException.class)
+    public void testSafeUpdateWithEmptyStringCriterion() {
+        SqlSession sqlSession = getSqlSession();
+        try {
+            CountryMapper mapper = sqlSession.getMapper(CountryMapper.class);
+            Example example = new Example(Country.class);
+            example.createCriteria().andEqualTo("countryname", "");
+            mapper.updateByExample(new Country(), example);
         } finally {
             sqlSession.close();
         }

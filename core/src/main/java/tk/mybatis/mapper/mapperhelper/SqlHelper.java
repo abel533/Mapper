@@ -576,6 +576,18 @@ public class SqlHelper {
      * @return
      */
     public static String notAllNullParameterCheck(String parameterName, Set<EntityColumn> columnSet) {
+        return notAllNullParameterCheck(parameterName, columnSet, false);
+    }
+
+    /**
+     * 不是所有参数都是 null 或空字符串的检查
+     *
+     * @param parameterName 参数名
+     * @param columnSet     需要检查的列
+     * @param notEmpty      是否判断 String 类型 != ''
+     * @return
+     */
+    public static String notAllNullParameterCheck(String parameterName, Set<EntityColumn> columnSet, boolean notEmpty) {
         StringBuilder sql = new StringBuilder();
         sql.append("<bind name=\"notAllNullParameterCheck\" value=\"@tk.mybatis.mapper.util.OGNL@notAllNullParameterCheck(");
         sql.append(parameterName).append(", '");
@@ -587,7 +599,9 @@ public class SqlHelper {
             fields.append(column.getProperty());
         }
         sql.append(fields);
-        sql.append("')\"/>");
+        sql.append("', ");
+        sql.append(notEmpty);
+        sql.append(")\"/>");
         return sql.toString();
     }
 
@@ -598,9 +612,22 @@ public class SqlHelper {
      * @return
      */
     public static String exampleHasAtLeastOneCriteriaCheck(String parameterName) {
+        return exampleHasAtLeastOneCriteriaCheck(parameterName, true);
+    }
+
+    /**
+     * Example 中包含至少 1 个查询条件，且查询条件的值不能为空
+     *
+     * @param parameterName 参数名
+     * @param notEmpty      是否判断 String 类型 != ''，Example 安全检查中建议使用 true
+     * @return
+     */
+    public static String exampleHasAtLeastOneCriteriaCheck(String parameterName, boolean notEmpty) {
         StringBuilder sql = new StringBuilder();
         sql.append("<bind name=\"exampleHasAtLeastOneCriteriaCheck\" value=\"@tk.mybatis.mapper.util.OGNL@exampleHasAtLeastOneCriteriaCheck(");
-        sql.append(parameterName).append(")\"/>");
+        sql.append(parameterName).append(", ");
+        sql.append(notEmpty);
+        sql.append(")\"/>");
         return sql.toString();
     }
 

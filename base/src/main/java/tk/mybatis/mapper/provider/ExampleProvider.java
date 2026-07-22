@@ -54,6 +54,9 @@ public class ExampleProvider extends MapperTemplate {
         if (isCheckExampleEntityClass()) {
             sql.append(SqlHelper.exampleCheck(entityClass));
         }
+        if (getConfig().isSafeSelect()) {
+            sql.append(SqlHelper.exampleHasAtLeastOneCriteriaCheck("_parameter"));
+        }
         sql.append(SqlHelper.exampleCountColumn(entityClass));
         sql.append(SqlHelper.fromTable(entityClass, tableName(entityClass)));
         sql.append(SqlHelper.exampleWhereClause());
@@ -104,6 +107,9 @@ public class ExampleProvider extends MapperTemplate {
         StringBuilder sql = new StringBuilder("SELECT ");
         if (isCheckExampleEntityClass()) {
             sql.append(SqlHelper.exampleCheck(entityClass));
+        }
+        if (getConfig().isSafeSelect()) {
+            sql.append(SqlHelper.exampleHasAtLeastOneCriteriaCheck("_parameter"));
         }
         sql.append("<if test=\"distinct\">distinct</if>");
         //支持查询指定列

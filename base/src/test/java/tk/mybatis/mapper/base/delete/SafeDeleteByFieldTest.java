@@ -15,6 +15,7 @@ public class SafeDeleteByFieldTest extends BaseTest {
     protected Config getConfig() {
         Config config = super.getConfig();
         config.setSafeDelete(true);
+        config.setNotEmpty(true);
         return config;
     }
 
@@ -41,6 +42,19 @@ public class SafeDeleteByFieldTest extends BaseTest {
     }
 
     @Test(expected = PersistenceException.class)
+    public void testSafeDeleteEmptyString() {
+        SqlSession sqlSession = getSqlSession();
+        try {
+            CountryMapper mapper = sqlSession.getMapper(CountryMapper.class);
+            Country country = new Country();
+            country.setCountryname("");
+            mapper.delete(country);
+        } finally {
+            sqlSession.close();
+        }
+    }
+
+    @Test(expected = PersistenceException.class)
     public void testSafeDeleteByExample() {
         SqlSession sqlSession = getSqlSession();
         try {
@@ -57,6 +71,19 @@ public class SafeDeleteByFieldTest extends BaseTest {
         try {
             CountryMapper mapper = sqlSession.getMapper(CountryMapper.class);
             mapper.deleteByExample(null);
+        } finally {
+            sqlSession.close();
+        }
+    }
+
+    @Test(expected = PersistenceException.class)
+    public void testSafeDeleteByExampleWithEmptyStringCriterion() {
+        SqlSession sqlSession = getSqlSession();
+        try {
+            CountryMapper mapper = sqlSession.getMapper(CountryMapper.class);
+            Example example = new Example(Country.class);
+            example.createCriteria().andEqualTo("countryname", "");
+            mapper.deleteByExample(example);
         } finally {
             sqlSession.close();
         }

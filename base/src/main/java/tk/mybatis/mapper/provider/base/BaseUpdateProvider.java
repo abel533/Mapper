@@ -25,6 +25,7 @@
 package tk.mybatis.mapper.provider.base;
 
 import org.apache.ibatis.mapping.MappedStatement;
+import tk.mybatis.mapper.mapperhelper.EntityHelper;
 import tk.mybatis.mapper.mapperhelper.MapperHelper;
 import tk.mybatis.mapper.mapperhelper.MapperTemplate;
 import tk.mybatis.mapper.mapperhelper.SqlHelper;
@@ -48,6 +49,9 @@ public class BaseUpdateProvider extends MapperTemplate {
     public String updateByPrimaryKey(MappedStatement ms) {
         Class<?> entityClass = getEntityClass(ms);
         StringBuilder sql = new StringBuilder();
+        if (getConfig().isSafeUpdate()) {
+            sql.append(SqlHelper.notAllNullParameterCheck("_parameter", EntityHelper.getPKColumns(entityClass), isNotEmpty()));
+        }
         sql.append(SqlHelper.updateTable(entityClass, tableName(entityClass)));
         sql.append(SqlHelper.updateSetColumns(entityClass, null, false, false));
         sql.append(SqlHelper.wherePKColumns(entityClass, true));
@@ -63,6 +67,9 @@ public class BaseUpdateProvider extends MapperTemplate {
     public String updateByPrimaryKeySelective(MappedStatement ms) {
         Class<?> entityClass = getEntityClass(ms);
         StringBuilder sql = new StringBuilder();
+        if (getConfig().isSafeUpdate()) {
+            sql.append(SqlHelper.notAllNullParameterCheck("_parameter", EntityHelper.getPKColumns(entityClass), isNotEmpty()));
+        }
         sql.append(SqlHelper.updateTable(entityClass, tableName(entityClass)));
         sql.append(SqlHelper.updateSetColumns(entityClass, null, true, isNotEmpty()));
         sql.append(SqlHelper.wherePKColumns(entityClass, true));
