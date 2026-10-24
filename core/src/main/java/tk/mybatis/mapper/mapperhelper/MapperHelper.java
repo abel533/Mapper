@@ -42,7 +42,6 @@ import tk.mybatis.mapper.annotation.RegisterMapper;
 import tk.mybatis.mapper.entity.Config;
 import tk.mybatis.mapper.entity.EntityTable;
 import tk.mybatis.mapper.mapperhelper.resolve.EntityResolve;
-import tk.mybatis.mapper.provider.EmptyProvider;
 import tk.mybatis.mapper.util.MetaObjectUtil;
 import tk.mybatis.mapper.util.StringUtil;
 
@@ -120,12 +119,16 @@ public class MapperHelper {
                 templateClass = provider.type();
             }
             if (templateClass == null || !MapperTemplate.class.isAssignableFrom(templateClass)) {
-                templateClass = EmptyProvider.class;
+                //非 tk provider 方法(用户自定义方法)不参与注册
+                continue;
             }
             MapperTemplate mapperTemplate;
             try {
-                mapperTemplate = templateMap.getOrDefault(templateClass, (MapperTemplate) templateClass.getConstructor(Class.class, MapperHelper.class).newInstance(mapperClass, this));
-                templateMap.put(templateClass, mapperTemplate);
+                mapperTemplate = templateMap.get(templateClass);
+                if (mapperTemplate == null) {
+                    mapperTemplate = (MapperTemplate) templateClass.getConstructor(Class.class, MapperHelper.class).newInstance(mapperClass, this);
+                    templateMap.put(templateClass, mapperTemplate);
+                }
             } catch (Exception e) {
                 log.error("实例化MapperTemplate对象失败:" + e, e);
                 throw new MapperException("实例化MapperTemplate对象失败:" + e.getMessage());
